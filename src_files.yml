@@ -41,8 +41,6 @@ nv_vlibs:
     rtl/vlibs/SDFQD1.v,
     rtl/vlibs/SDFSNQD1.v,
     rtl/vlibs/ScanShareSel_JTAG_reg_ext_cg.v,
-    rtl/vlibs/assertion_header.sv,
-    rtl/vlibs/assertion_task.sv,
     rtl/vlibs/no_lib_cells.vlib,
     rtl/vlibs/nv_assert_always.vlib,
     rtl/vlibs/nv_assert_at_time_interval.vlib,
