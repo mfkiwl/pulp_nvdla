@@ -1,0 +1,11 @@
+nv_vlibs:
+  incdirs: [
+    ../../rtl/includes,
+  ]
+  files: [
+    rtl/vlibs/AN2D4PO4.v,
+    rtl/vlibs/assertion_header.h,
+    rtl/vlibs/assertion_task.h
+  ]
+
+  
