@@ -217,3 +217,117 @@ nvdla_bdma:
     rtl/nvdla/bdma/NV_NVDLA_BDMA_store.v,
     rtl/nvdla/bdma/NV_NVDLA_bdma.v
   ]
+
+nvdla_cacc:
+  incdirs: [
+    ../../rtl/includes,
+    rtl/include
+  ]
+  files: [
+    rtl/nvdla/cacc/NV_NVDLA_CACC_CALC_fp_48b.v,
+    rtl/nvdla/cacc/NV_NVDLA_CACC_CALC_int16.v,
+    rtl/nvdla/cacc/NV_NVDLA_CACC_CALC_int8.v,
+    rtl/nvdla/cacc/NV_NVDLA_CACC_assembly_buffer.v,
+    rtl/nvdla/cacc/NV_NVDLA_CACC_assembly_ctrl.v,
+    rtl/nvdla/cacc/NV_NVDLA_CACC_calculator.v,
+    rtl/nvdla/cacc/NV_NVDLA_CACC_delivery_buffer.v,
+    rtl/nvdla/cacc/NV_NVDLA_CACC_delivery_ctrl.v,
+    rtl/nvdla/cacc/NV_NVDLA_CACC_dual_reg.v,
+    rtl/nvdla/cacc/NV_NVDLA_CACC_regfile.v,
+    rtl/nvdla/cacc/NV_NVDLA_CACC_single_reg.v,
+    rtl/nvdla/cacc/NV_NVDLA_CACC_slcg.v,
+    rtl/nvdla/cacc/NV_NVDLA_cacc.v
+  ]
+
+nvdla_cdma:
+  incdirs: [
+    ../../rtl/includes,
+    rtl/include
+  ]
+  files: [
+    rtl/nvdla/cdma/NV_NVDLA_CDMA_CVT_cell.v,
+    rtl/nvdla/cdma/NV_NVDLA_CDMA_DC_fifo.v,
+    rtl/nvdla/cdma/NV_NVDLA_CDMA_IMG_ctrl.v,
+    rtl/nvdla/cdma/NV_NVDLA_CDMA_IMG_fifo.v,
+    rtl/nvdla/cdma/NV_NVDLA_CDMA_IMG_pack.v,
+    rtl/nvdla/cdma/NV_NVDLA_CDMA_IMG_sg.v,
+    rtl/nvdla/cdma/NV_NVDLA_CDMA_IMG_sg2pack_fifo.v,
+    rtl/nvdla/cdma/NV_NVDLA_CDMA_WG_fifo.v,
+    rtl/nvdla/cdma/NV_NVDLA_CDMA_WT_fifo.v,
+    rtl/nvdla/cdma/NV_NVDLA_CDMA_WT_sp_arb.v,
+    rtl/nvdla/cdma/NV_NVDLA_CDMA_WT_wgs_fifo.v,
+    rtl/nvdla/cdma/NV_NVDLA_CDMA_WT_wrr_arb.v,
+    rtl/nvdla/cdma/NV_NVDLA_CDMA_cvt.v,
+    rtl/nvdla/cdma/NV_NVDLA_CDMA_dc.v,
+    rtl/nvdla/cdma/NV_NVDLA_CDMA_dma_mux.v,
+    rtl/nvdla/cdma/NV_NVDLA_CDMA_dual_reg.v,
+    rtl/nvdla/cdma/NV_NVDLA_CDMA_img.v,
+    rtl/nvdla/cdma/NV_NVDLA_CDMA_regfile.v,
+    rtl/nvdla/cdma/NV_NVDLA_CDMA_shared_buffer.v,
+    rtl/nvdla/cdma/NV_NVDLA_CDMA_single_reg.v,
+    rtl/nvdla/cdma/NV_NVDLA_CDMA_slcg.v,
+    rtl/nvdla/cdma/NV_NVDLA_CDMA_status.v,
+    rtl/nvdla/cdma/NV_NVDLA_CDMA_wg.v,
+    rtl/nvdla/cdma/NV_NVDLA_CDMA_wt.v,
+    rtl/nvdla/cdma/NV_NVDLA_cdma.v
+  ]
+
+nvdla_cdp:
+  incdirs: [
+    ../../rtl/includes,
+    rtl/include
+  ]
+  files: [
+    rtl/nvdla/cdp/NV_NVDLA_CDP_DP_INTP_unit.v,
+    rtl/nvdla/cdp/NV_NVDLA_CDP_DP_LUT_CTRL_unit.v,
+    rtl/nvdla/cdp/NV_NVDLA_CDP_DP_LUT_ctrl.v,
+    rtl/nvdla/cdp/NV_NVDLA_CDP_DP_MUL_unit.v,
+    rtl/nvdla/cdp/NV_NVDLA_CDP_DP_bufferin.v,
+    rtl/nvdla/cdp/NV_NVDLA_CDP_DP_cvtin.v,
+    rtl/nvdla/cdp/NV_NVDLA_CDP_DP_cvtout.v,
+    rtl/nvdla/cdp/NV_NVDLA_CDP_DP_intp.v,
+    rtl/nvdla/cdp/NV_NVDLA_CDP_DP_lut.v,
+    rtl/nvdla/cdp/NV_NVDLA_CDP_DP_mul.v,
+    rtl/nvdla/cdp/NV_NVDLA_CDP_DP_nan.v,
+    rtl/nvdla/cdp/NV_NVDLA_CDP_DP_sum.v,
+    rtl/nvdla/cdp/NV_NVDLA_CDP_DP_syncfifo.v,
+    rtl/nvdla/cdp/NV_NVDLA_CDP_RDMA_REG_dual.v,
+    rtl/nvdla/cdp/NV_NVDLA_CDP_RDMA_REG_single.v,
+    rtl/nvdla/cdp/NV_NVDLA_CDP_RDMA_cq.v,
+    rtl/nvdla/cdp/NV_NVDLA_CDP_RDMA_eg.v,
+    rtl/nvdla/cdp/NV_NVDLA_CDP_RDMA_ig.v,
+    rtl/nvdla/cdp/NV_NVDLA_CDP_RDMA_reg.v,
+    rtl/nvdla/cdp/NV_NVDLA_CDP_REG_dual.v,
+    rtl/nvdla/cdp/NV_NVDLA_CDP_REG_single.v,
+    rtl/nvdla/cdp/NV_NVDLA_CDP_dp.v,
+    rtl/nvdla/cdp/NV_NVDLA_CDP_rdma.v,
+    rtl/nvdla/cdp/NV_NVDLA_CDP_reg.v,
+    rtl/nvdla/cdp/NV_NVDLA_CDP_slcg.v,
+    rtl/nvdla/cdp/NV_NVDLA_CDP_wdma.v,
+    rtl/nvdla/cdp/NV_NVDLA_cdp.v,
+    rtl/nvdla/cdp/fp_format_cvt.v,
+    rtl/nvdla/cdp/fp_sum_block.v,
+    rtl/nvdla/cdp/int_sum_block.v 
+  ]
+
+nvdla_cmac:
+  incdirs: [
+    ../../rtl/includes,
+    rtl/include
+  ]
+  files: [
+    rtl/nvdla/cmac/NV_NVDLA_CMAC_CORE_MAC_exp.v,
+    rtl/nvdla/cmac/NV_NVDLA_CMAC_CORE_MAC_mul.v,
+    rtl/nvdla/cmac/NV_NVDLA_CMAC_CORE_MAC_nan.v,
+    rtl/nvdla/cmac/NV_NVDLA_CMAC_CORE_active.v,
+    rtl/nvdla/cmac/NV_NVDLA_CMAC_CORE_cfg.v,
+    rtl/nvdla/cmac/NV_NVDLA_CMAC_CORE_mac.v,
+    rtl/nvdla/cmac/NV_NVDLA_CMAC_CORE_rt_in.v,
+    rtl/nvdla/cmac/NV_NVDLA_CMAC_CORE_rt_out.v,
+    rtl/nvdla/cmac/NV_NVDLA_CMAC_CORE_slcg.v,
+    rtl/nvdla/cmac/NV_NVDLA_CMAC_REG_dual.v,
+    rtl/nvdla/cmac/NV_NVDLA_CMAC_REG_single.v,
+    rtl/nvdla/cmac/NV_NVDLA_CMAC_core.v,
+    rtl/nvdla/cmac/NV_NVDLA_CMAC_reg.v,
+    rtl/nvdla/cmac/NV_NVDLA_cmac.v
+  ]
