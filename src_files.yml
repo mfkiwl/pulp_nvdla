@@ -331,3 +331,47 @@ nvdla_cmac:
     rtl/nvdla/cmac/NV_NVDLA_CMAC_reg.v,
     rtl/nvdla/cmac/NV_NVDLA_cmac.v
   ]
+
+nvdla_csb_master:
+  incdirs: [
+    ../../rtl/includes,
+    rtl/include
+  ]
+  files: [
+    rtl/nvdla/csb_master/NV_NVDLA_CSB_MASTER_csb2falcon_fifo.v,
+    rtl/nvdla/csb_master/NV_NVDLA_CSB_MASTER_falcon2csb_fifo.v,
+    rtl/nvdla/csb_master/NV_NVDLA_csb_master.v
+  ]
+
+nvdla_csc:
+  incdirs: [
+    ../../rtl/includes,
+    rtl/include
+  ]
+  files: [
+    rtl/nvdla/csc/NV_NVDLA_CSC_SG_dat_fifo.v,
+    rtl/nvdla/csc/NV_NVDLA_CSC_SG_wt_fifo.v,
+    rtl/nvdla/csc/NV_NVDLA_CSC_WL_dec.v,
+    rtl/nvdla/csc/NV_NVDLA_CSC_dl.v,
+    rtl/nvdla/csc/NV_NVDLA_CSC_dual_reg.v,
+    rtl/nvdla/csc/NV_NVDLA_CSC_pra_cell.v,
+    rtl/nvdla/csc/NV_NVDLA_CSC_regfile.v,
+    rtl/nvdla/csc/NV_NVDLA_CSC_sg.v,
+    rtl/nvdla/csc/NV_NVDLA_CSC_single_reg.v,
+    rtl/nvdla/csc/NV_NVDLA_CSC_slcg.v,
+    rtl/nvdla/csc/NV_NVDLA_CSC_wl.v,
+    rtl/nvdla/csc/NV_NVDLA_csc.v
+  ]
+
+nvdla_glb:
+  incdirs: [
+    ../../rtl/includes,
+    rtl/include
+  ]
+  files: [
+    rtl/nvdla/glb/NV_NVDLA_GLB_CSB_reg.v,
+    rtl/nvdla/glb/NV_NVDLA_GLB_csb.v,
+    rtl/nvdla/glb/NV_NVDLA_GLB_fc.v,
+    rtl/nvdla/glb/NV_NVDLA_GLB_ic.v,
+    rtl/nvdla/glb/NV_NVDLA_glb.v
+  ]
