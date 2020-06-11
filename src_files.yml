@@ -169,3 +169,18 @@ nv_rams_synth:
     rtl/rams/synth/nv_ram_rwsthp_80x72.v,
     rtl/rams/synth/nv_ram_rwsthp_80x72_logic.v
   ]
+
+nvdla_car:
+  incdirs: [
+    ../../rtl/includes,
+    rtl/include
+  ]
+  files: [
+    rtl/nvdla/car/NV_NVDLA_core_reset.v,
+    rtl/nvdla/car/NV_NVDLA_reset.v,
+    rtl/nvdla/car/NV_NVDLA_ssync3d.v,
+    rtl/nvdla/car/NV_NVDLA_ssync3d_c.v,
+    rtl/nvdla/car/NV_NVDLA_sync3d.v,
+    rtl/nvdla/car/NV_NVDLA_sync3d_c.v,
+    rtl/nvdla/car/NV_NVDLA_sync3d_s.v
+  ]
