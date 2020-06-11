@@ -184,3 +184,36 @@ nvdla_car:
     rtl/nvdla/car/NV_NVDLA_sync3d_c.v,
     rtl/nvdla/car/NV_NVDLA_sync3d_s.v
   ]
+
+nvdla_cbuf:
+  incdirs: [
+    ../../rtl/includes,
+    rtl/include
+  ]
+  files: [
+    rtl/nvdla/cbuf/NV_NVDLA_cbuf.v
+  ]
+
+nvdla_apb2csb:
+  incdirs: [
+    ../../rtl/includes,
+    rtl/include
+  ]
+  files: [
+    rtl/nvdla/apb2csb/NV_NVDLA_apb2csb.v
+  ]
+
+nvdla_bdma:
+  incdirs: [
+    ../../rtl/includes,
+    rtl/include
+  ]
+  files: [
+    rtl/nvdla/bdma/NV_NVDLA_BDMA_cq.v,
+    rtl/nvdla/bdma/NV_NVDLA_BDMA_csb.v,
+    rtl/nvdla/bdma/NV_NVDLA_BDMA_gate.v,
+    rtl/nvdla/bdma/NV_NVDLA_BDMA_load.v,
+    rtl/nvdla/bdma/NV_NVDLA_BDMA_reg.v,
+    rtl/nvdla/bdma/NV_NVDLA_BDMA_store.v,
+    rtl/nvdla/bdma/NV_NVDLA_bdma.v
+  ]
