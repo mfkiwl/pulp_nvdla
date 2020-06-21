@@ -578,7 +578,7 @@ nvdla_hwpe:
     rtl/include
   ]
   files: [
-    rtl/nvdla/hwpe/nvdla_package.sv,
+    rtl/hwpe/nvdla_package.sv,
     rtl/hwpe/nvdla_fsm.sv,
     rtl/hwpe/nvdla_ctrl.sv,
     rtl/hwpe/nvdla_streamer.sv,
@@ -586,4 +586,8 @@ nvdla_hwpe:
     rtl/hwpe/nvdla_engine.sv,
     rtl/hwpe/nvdla_top.sv,
     rtl/hwpe/nvdla_top_wrap.sv
+  ]
+  vlog_opts : [
+    "-L hwpe_ctrl_lib",
+    "-L hwpe_stream_lib"
   ]
