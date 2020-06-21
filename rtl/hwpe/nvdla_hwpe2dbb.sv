@@ -11,11 +11,11 @@ module nvdla_hwpe2dbb (
     output ctrl_streamer_t      ctrl_streamer_o,
     input  flags_streamer_t     flags_streamer_i,
     input  ctrl_dbb_t           ctrl_i,
-    output flags_dbb_t          flags_o
+    output flags_dbb_t          flags_o,
     // input dbb stream
     hwpe_stream_intf_stream.sink   dbb_i,
     // output dbb stream
-    hwpe_stream_intf_stream.source dbb_o,
+    hwpe_stream_intf_stream.source dbb_o
 );
 
     logic [7:0] id;
