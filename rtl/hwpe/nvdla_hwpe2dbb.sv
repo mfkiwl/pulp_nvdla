@@ -26,10 +26,10 @@ module nvdla_hwpe2dbb (
     always_ff @(posedge clk_i or negedge rst_ni)
     begin : main_dbb_fsm_seq
         if(~rst_ni) begin
-            curr_state <= FSM_IDLE;
+            curr_state <= FSM_DBB_IDLE;
         end
         else if(clear_i) begin
-            curr_state <= FSM_IDLE;
+            curr_state <= FSM_DBB_IDLE;
         end
         else begin
             curr_state <= next_state;
@@ -71,7 +71,7 @@ module nvdla_hwpe2dbb (
         ctrl_streamer_o.dbb_source_ctrl.req_start = '0;
 
         case(curr_state)
-            FSM_IDLE: begin
+            FSM_DBB_IDLE: begin
                 // wait for a start signal
                 if(ctrl_i.write_request_ctrl.valid | ctrl_i.read_request_ctrl.valid) begin
                     next_state = FSM_REQUEST;
@@ -116,7 +116,7 @@ module nvdla_hwpe2dbb (
             end
             FSM_WRITE_RESPONSE: begin
                 if(ctrl_i.write_response_ctrl.ready & flags_streamer_i.dbb_sink_flags.ready_start) begin
-                    next_state = FSM_TERMINATE;
+                    next_state = FSM_DBB_TERMINATE;
                     flags_o.write_response_flags.valid = '1;
                     flags_o.write_response_flags.id = id;
                 end
@@ -134,7 +134,7 @@ module nvdla_hwpe2dbb (
                 end
                 if (dbb_i.valid & ctrl_i.read_data_ctrl.ready) begin
                     if(cnt == ctrl_i.read_request_ctrl.len - 1) begin
-                        next_state = FSM_TERMINATE;
+                        next_state = FSM_DBB_TERMINATE;
                         flags_o.read_data_flags.last = '1;
                     end
                     else begin
@@ -154,9 +154,9 @@ module nvdla_hwpe2dbb (
                     ctrl_streamer_o.dbb_source_ctrl.req_start = '1;
                 end
             end
-            FSM_TERMINATE: begin
+            FSM_DBB_TERMINATE: begin
                 if (flags_streamer_i.dbb_sink_flags.ready_start & flags_streamer_i.dbb_source_flags.ready_start) begin
-                    next_state = FSM_IDLE;
+                    next_state = FSM_DBB_IDLE;
                 end
             end
         endcase

@@ -58,9 +58,9 @@ package nvdla_package;
 
     typedef struct packed {
         logic valid;
-        logic unsigned [NVDLA_PRIMARY_MEMIF_WIDTH - 1:0] data;
+        logic unsigned [31:0] data;
         logic last;
-        logic unsigned [NVDLA_PRIMARY_MEMIF_WIDTH / 8 - 1:0] strb;
+        logic unsigned [3:0] strb;
     } ctrl_dbb_wdat_t;
 
     typedef struct packed {
@@ -73,7 +73,7 @@ package nvdla_package;
 
     typedef struct packed {
         logic valid;
-        logic unsigned [NVDLA_PRIMARY_MEMIF_WIDTH - 1:0] data;
+        logic unsigned [31:0] data;
         logic last;
         logic unsigned [7:0] id;
     } flags_dbb_rdat_t;
@@ -111,14 +111,14 @@ package nvdla_package;
     } state_fsm_t;
 
     typedef enum { 
-        FSM_IDLE,
+        FSM_DBB_IDLE,
         FSM_REQUEST,
         FSM_WRITE,
         FSM_WRITE_RESPONSE,
         FSM_READ,
         FSM_WAIT_WRITE,
         FSM_WAIT_READ,
-        FSM_TERMINATE
+        FSM_DBB_TERMINATE
     } state_dbb_fsm_t;
 
 endpackage // nvdla_package

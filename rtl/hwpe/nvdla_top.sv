@@ -29,12 +29,12 @@ module nvdla_top
     flags_engine_t   engine_flags;
 
     hwpe_stream_intf_stream #(
-        .DATA_WIDTH(NVDLA_PRIMARY_MEMIF_WIDTH)
+        .DATA_WIDTH(32)
     ) dbb_i (
         .clk ( clk_i )
     );
     hwpe_stream_intf_stream #(
-        .DATA_WIDTH(NVDLA_PRIMARY_MEMIF_WIDTH)
+        .DATA_WIDTH(32)
     ) dbb_o (
         .clk ( clk_i )
     );

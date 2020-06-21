@@ -33,12 +33,12 @@ module nvdla_streamer
     logic dbb_tcdm_fifo_ready;
 
     hwpe_stream_intf_stream #(
-    .DATA_WIDTH ( NVDLA_PRIMARY_MEMIF_WIDTH )
+    .DATA_WIDTH ( 32 )
     ) dbb_prefifo (
         .clk ( clk_i )
     );
     hwpe_stream_intf_stream #(
-        .DATA_WIDTH ( NVDLA_PRIMARY_MEMIF_WIDTH )
+        .DATA_WIDTH ( 32 )
     ) dbb_postfifo (
         .clk ( clk_i )
     );
@@ -63,7 +63,7 @@ module nvdla_streamer
 
     // source and sink modules
     hwpe_stream_source #(
-        .DATA_WIDTH ( NVDLA_PRIMARY_MEMIF_WIDTH ),
+        .DATA_WIDTH ( 32 ),
         .DECOUPLED  ( 1  )
     ) i_dbb_source (
         .clk_i              ( clk_i                    ),
@@ -78,7 +78,7 @@ module nvdla_streamer
     );
 
     hwpe_stream_sink #(
-        .DATA_WIDTH ( NVDLA_PRIMARY_MEMIF_WIDTH )
+        .DATA_WIDTH ( 32 )
     ) i_dbb_sink (
         .clk_i       ( clk_i                  ),
         .rst_ni      ( rst_ni                 ),
@@ -140,7 +140,7 @@ module nvdla_streamer
 
     // datapath-side FIFOs
     hwpe_stream_fifo #(
-        .DATA_WIDTH( NVDLA_PRIMARY_MEMIF_WIDTH ),
+        .DATA_WIDTH( 32 ),
         .FIFO_DEPTH( 2  ),
         .LATCH_FIFO( 0  )
     ) i_dbb_fifo (
@@ -153,7 +153,7 @@ module nvdla_streamer
     );
 
     hwpe_stream_fifo #(
-        .DATA_WIDTH( NVDLA_PRIMARY_MEMIF_WIDTH ),
+        .DATA_WIDTH( 32 ),
         .FIFO_DEPTH( 2  ),
         .LATCH_FIFO( 0  )
     ) i_dbb_fifo (
