@@ -38,7 +38,7 @@ package nvdla_package;
 
     typedef struct packed {
         logic valid;
-        logic unsigned [31:0] addr
+        logic unsigned [31:0] addr;
         logic unsigned [3:0] len;
         logic unsigned [7:0] id;
     } ctrl_dbb_req_t;
