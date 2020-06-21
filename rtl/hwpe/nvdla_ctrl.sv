@@ -61,7 +61,7 @@ module nvdla_ctrl
     assign static_reg_csb_wait_intr = reg_file.hwpe_params[NVDLA_REG_WAIT_INTR_FLAG][0];
 
     /* Main FSM */
-    mac_fsm i_fsm (
+    nvdla_fsm i_fsm (
         .clk_i            ( clk_i              ),
         .rst_ni           ( rst_ni             ),
         .test_mode_i      ( test_mode_i        ),
