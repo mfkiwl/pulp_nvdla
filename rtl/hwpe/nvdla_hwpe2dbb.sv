@@ -19,7 +19,7 @@ module nvdla_hwpe2dbb (
 );
 
     logic [7:0] id;
-    unsigned logic [3:0] cnt;
+    logic unsigned [3:0] cnt;
 
     state_dbb_fsm_t curr_state, next_state;
 
@@ -108,7 +108,7 @@ module nvdla_hwpe2dbb (
 
                     cnt = cnt + 1;
                     
-                    d_o.data  = ctrl_i.write_data_ctrl.data
+                    d_o.data  = ctrl_i.write_data_ctrl.data;
                     d_o.strb  = ctrl_i.write_data_ctrl.strb;
                     d_o.valid = ctrl_i.write_data_ctrl.valid;
                     flags_o.write_data_flags.ready = '0;
