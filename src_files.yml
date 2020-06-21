@@ -571,3 +571,19 @@ nvdla:
     rtl/nvdla/top/NV_NVDLA_partition_p.v,
     rtl/nvdla/top/NV_nvdla.v
   ]
+
+nvdla_hwpe:
+  incdirs: [
+    ../../rtl/includes,
+    rtl/include
+  ]
+  files: [
+    rtl/nvdla/hwpe/nvdla_package.sv,
+    rtl/hwpe/nvdla_fsm.sv,
+    rtl/hwpe/nvdla_ctrl.sv,
+    rtl/hwpe/nvdla_streamer.sv,
+    rtl/hwpe/nvdla_hwpe2dbb.sv,
+    rtl/hwpe/nvdla_engine.sv,
+    rtl/hwpe/nvdla_top.sv,
+    rtl/hwpe/nvdla_top_wrap.sv
+  ]
