@@ -55,7 +55,7 @@ module nvdla_engine
         .csb2nvdla_addr                ( ctrl_i.addr                            ),
         .csb2nvdla_wdat                ( ctrl_i.wdat                            ),
         .csb2nvdla_write               ( ctrl_i.write                           ),
-        .csb2nvdla_nposted             ( 0'b                                    ),
+        .csb2nvdla_nposted             ( 1'b0                                   ),
         .nvdla2csb_valid               ( nvdla2csb_valid                        ),
         .nvdla2csb_data                ( csb_o.data                             ),
         .nvdla2csb_wr_complete         ( flags_o.csb_wr_complete                ),

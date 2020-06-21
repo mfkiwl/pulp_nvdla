@@ -4,9 +4,9 @@ package nvdla_package;
     // registers in register file
     parameter int unsigned NVDLA_REG_CSB_WDATA = 0; // 32 bits
     parameter int unsigned NVDLA_REG_CSB_RDATA_ADDR = 1; // 32 bits
-    parameter int unsigned NVDLA_REG_CSB_ADDR = 2 // 16 bits
-    parameter int unsigned NVDLA_REG_CSB_WRITE_FLAG = 2 // 1 bit 
-    parameter int unsigned NVDLA_REG_WAIT_INTR_FLAG = 2 // 1 bit
+    parameter int unsigned NVDLA_REG_CSB_ADDR = 2; // 16 bits
+    parameter int unsigned NVDLA_REG_CSB_WRITE_FLAG = 2; // 1 bit 
+    parameter int unsigned NVDLA_REG_WAIT_INTR_FLAG = 2; // 1 bit
 
     typedef struct packed {
         logic clear;
