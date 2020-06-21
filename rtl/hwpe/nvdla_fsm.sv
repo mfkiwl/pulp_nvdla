@@ -49,7 +49,7 @@ module nvdla_fsm (
         ctrl_engine_o.clear     = '1;
         ctrl_engine_o.enable    = '1;
         ctrl_engine_o.start     = '0;
-        ctrl_engine_o.addr      = ctrl_i.addr
+        ctrl_engine_o.addr      = ctrl_i.addr;
         ctrl_engine_o.wdat      = ctrl_i.wdat;
         ctrl_engine_o.write     = ctrl_i.write;
         ctrl_engine_o.wait_intr = ctrl_i.wait_intr;
@@ -84,11 +84,12 @@ module nvdla_fsm (
                     ctrl_engine_o.clear  = 1'b0;
                     ctrl_engine_o.enable = 1'b1;
                 end
-                else if(ctrl_i.wait_intr)
+                else if(ctrl_i.wait_intr) begin
                     next_state  = FSM_WAIT_INTR;
                     ctrl_engine_o.start  = 1'b1;
                     ctrl_engine_o.clear  = 1'b0;
                     ctrl_engine_o.enable = 1'b1;
+                end
                 else begin
                     next_state = FSM_WAIT;
                 end
@@ -98,7 +99,7 @@ module nvdla_fsm (
                 if (ctrl_i.write & flags_engine_i.csb_wr_complete) begin
                     next_state = FSM_TERMINATE;
                 end
-                if (~ctrl_i.write & flags_engine_i.csb_valid) begin
+                else if (~ctrl_i.write & flags_engine_i.csb_valid) begin
                     next_state = FSM_TERMINATE;
                 end
             end

@@ -143,7 +143,7 @@ module nvdla_streamer
         .DATA_WIDTH( 32 ),
         .FIFO_DEPTH( 2  ),
         .LATCH_FIFO( 0  )
-    ) i_dbb_fifo (
+    ) i_dbb_o_fifo (
         .clk_i   ( clk_i            ),
         .rst_ni  ( rst_ni           ),
         .clear_i ( clear_i          ),
