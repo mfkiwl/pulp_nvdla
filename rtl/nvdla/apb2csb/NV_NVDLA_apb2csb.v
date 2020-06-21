@@ -7,7 +7,6 @@
 // ================================================================
 
 // File Name: NV_NVDLA_apb2csb.v
-
 module NV_NVDLA_apb2csb (
    pclk
   ,prstn

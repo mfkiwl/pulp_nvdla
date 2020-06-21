@@ -108,9 +108,9 @@ module nvdla_hwpe2dbb (
 
                     cnt = cnt + 1;
                     
-                    d_o.data  = ctrl_i.write_data_ctrl.data;
-                    d_o.strb  = ctrl_i.write_data_ctrl.strb;
-                    d_o.valid = ctrl_i.write_data_ctrl.valid;
+                    dbb_o.data  = ctrl_i.write_data_ctrl.data;
+                    dbb_o.strb  = ctrl_i.write_data_ctrl.strb;
+                    dbb_o.valid = ctrl_i.write_data_ctrl.valid;
                     flags_o.write_data_flags.ready = '0;
                 end
             end

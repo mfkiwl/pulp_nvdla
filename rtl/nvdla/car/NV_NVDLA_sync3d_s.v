@@ -8,6 +8,8 @@
 
 // File Name: NV_NVDLA_sync3d_s.v
 
+`include "nvtools_sync2d_defines.vh"
+
 module NV_NVDLA_sync3d_s (
    clk
   ,prst

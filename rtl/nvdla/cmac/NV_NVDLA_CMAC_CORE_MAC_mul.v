@@ -8,6 +8,8 @@
 
 // File Name: NV_NVDLA_CMAC_CORE_MAC_mul.v
 
+`include "designeware_defines.vh"
+
 module NV_NVDLA_CMAC_CORE_MAC_mul (
    nvdla_core_clk  //|< i
   ,nvdla_core_rstn //|< i

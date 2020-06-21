@@ -1,0 +1,3 @@
+`ifndef DESIGNWARE_NOEXIST
+    `define DESIGNWARE_NOEXIST
+`endif

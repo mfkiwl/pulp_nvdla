@@ -8,6 +8,8 @@
 
 // File Name: NV_NVDLA_CACC_CALC_fp_48b.v
 
+`include "designeware_defines.vh"
+
 module NV_NVDLA_CACC_CALC_fp_48b (
    nvdla_core_clk
   ,nvdla_core_rstn

@@ -7,7 +7,6 @@
 // ================================================================
 
 // File Name: NV_DW_lsd.v
-
 module NV_DW_lsd (a, dec, enc);
   parameter a_width = 8;
   parameter b_width = a_width-1;
