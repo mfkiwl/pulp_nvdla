@@ -124,10 +124,6 @@ wire buf_dat_rdy;
 //: my $tp = 1;
 //: my $k = (${tp}+8)*${icvto}+15;
 //: print "wire    [${k}-1:0] buffer_pd;   \n";
-//| eperl: generated_beg (DO NOT EDIT BELOW)
-wire    [96-1:0] buffer_pd;   
-
-//| eperl: generated_end (DO NOT EDIT ABOVE)
 wire buffer_valid;
 wire cube_done;
 wire data_shift_load;
@@ -167,82 +163,6 @@ parameter cvt2buf_dp_bw = cvt2buf_data_bw + cvt2buf_info_bw;
 /////////////////////////////////////////////////////////////
 //: my $k = 1*(8 +1)+15;
 //: &eperl::pipe(" -is -wid $k -do nvdla_cdp_rdma2dp_pd -vo nvdla_cdp_rdma2dp_valid -ri nvdla_cdp_rdma2dp_ready -di cdp_rdma2dp_pd -vi cdp_rdma2dp_valid -ro cdp_rdma2dp_ready ");
-//| eperl: generated_beg (DO NOT EDIT BELOW)
-// Reg
-reg cdp_rdma2dp_ready;
-reg skid_flop_cdp_rdma2dp_ready;
-reg skid_flop_cdp_rdma2dp_valid;
-reg [24-1:0] skid_flop_cdp_rdma2dp_pd;
-reg pipe_skid_cdp_rdma2dp_valid;
-reg [24-1:0] pipe_skid_cdp_rdma2dp_pd;
-// Wire
-wire skid_cdp_rdma2dp_valid;
-wire [24-1:0] skid_cdp_rdma2dp_pd;
-wire skid_cdp_rdma2dp_ready;
-wire pipe_skid_cdp_rdma2dp_ready;
-wire nvdla_cdp_rdma2dp_valid;
-wire [24-1:0] nvdla_cdp_rdma2dp_pd;
-// Code
-// SKID READY
-always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
-   if (!nvdla_core_rstn) begin
-       cdp_rdma2dp_ready <= 1'b1;
-       skid_flop_cdp_rdma2dp_ready <= 1'b1;
-   end else begin
-       cdp_rdma2dp_ready <= skid_cdp_rdma2dp_ready;
-       skid_flop_cdp_rdma2dp_ready <= skid_cdp_rdma2dp_ready;
-   end
-end
-
-// SKID VALID
-always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
-    if (!nvdla_core_rstn) begin
-        skid_flop_cdp_rdma2dp_valid <= 1'b0;
-    end else begin
-        if (skid_flop_cdp_rdma2dp_ready) begin
-            skid_flop_cdp_rdma2dp_valid <= cdp_rdma2dp_valid;
-        end
-   end
-end
-assign skid_cdp_rdma2dp_valid = (skid_flop_cdp_rdma2dp_ready) ? cdp_rdma2dp_valid : skid_flop_cdp_rdma2dp_valid;
-
-// SKID DATA
-always @(posedge nvdla_core_clk) begin
-    if (skid_flop_cdp_rdma2dp_ready & cdp_rdma2dp_valid) begin
-        skid_flop_cdp_rdma2dp_pd[24-1:0] <= cdp_rdma2dp_pd[24-1:0];
-    end
-end
-assign skid_cdp_rdma2dp_pd[24-1:0] = (skid_flop_cdp_rdma2dp_ready) ? cdp_rdma2dp_pd[24-1:0] : skid_flop_cdp_rdma2dp_pd[24-1:0];
-
-
-// PIPE READY
-assign skid_cdp_rdma2dp_ready = pipe_skid_cdp_rdma2dp_ready || !pipe_skid_cdp_rdma2dp_valid;
-
-// PIPE VALID
-always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
-    if (!nvdla_core_rstn) begin
-        pipe_skid_cdp_rdma2dp_valid <= 1'b0;
-    end else begin
-        if (skid_cdp_rdma2dp_ready) begin
-            pipe_skid_cdp_rdma2dp_valid <= skid_cdp_rdma2dp_valid;
-        end
-    end
-end
-
-// PIPE DATA
-always @(posedge nvdla_core_clk) begin
-    if (skid_cdp_rdma2dp_ready && skid_cdp_rdma2dp_valid) begin
-        pipe_skid_cdp_rdma2dp_pd[24-1:0] <= skid_cdp_rdma2dp_pd[24-1:0];
-    end
-end
-
-
-// PIPE OUTPUT
-assign pipe_skid_cdp_rdma2dp_ready = nvdla_cdp_rdma2dp_ready;
-assign nvdla_cdp_rdma2dp_valid = pipe_skid_cdp_rdma2dp_valid;
-assign nvdla_cdp_rdma2dp_pd = pipe_skid_cdp_rdma2dp_pd;
-
-//| eperl: generated_end (DO NOT EDIT ABOVE)
 //==============
 // INPUT UNPACK: from RDMA
 //==============
@@ -2321,18 +2241,6 @@ end
 //: assign buffer_pd[${k}+13] = buffer_last_h ;
 //: assign buffer_pd[${k}+14] = buffer_last_c ;
 //: );
-//| eperl: generated_beg (DO NOT EDIT BELOW)
-
-assign buffer_pd[81-1:0] = buffer_data[81-1+4*9:4*9];
-assign buffer_pd[81+3:81] = buffer_pos_w[3:0];
-assign buffer_pd[81+7:81+4] = buffer_width[3:0];
-assign buffer_pd[81+10:81+8] = buffer_pos_c[2:0];
-assign buffer_pd[81+11] = buffer_b_sync ;
-assign buffer_pd[81+12] = buffer_last_w ;
-assign buffer_pd[81+13] = buffer_last_h ;
-assign buffer_pd[81+14] = buffer_last_c ;
-
-//| eperl: generated_end (DO NOT EDIT ABOVE)
 /////////////////////////////////////////
 assign buffer_valid = buffer_data_vld;
 /////////////////////////////////////////
@@ -2341,82 +2249,6 @@ assign buffer_valid = buffer_data_vld;
 //: my $tp = 1;
 //: my $k = (${tp}+8)*${icvto}+15;
 //: &eperl::pipe(" -is -wid $k -do normalz_buf_data -vo normalz_buf_data_pvld -ri normalz_buf_data_prdy -di buffer_pd -vi buffer_valid -ro buffer_ready ");
-//| eperl: generated_beg (DO NOT EDIT BELOW)
-// Reg
-reg buffer_ready;
-reg skid_flop_buffer_ready;
-reg skid_flop_buffer_valid;
-reg [96-1:0] skid_flop_buffer_pd;
-reg pipe_skid_buffer_valid;
-reg [96-1:0] pipe_skid_buffer_pd;
-// Wire
-wire skid_buffer_valid;
-wire [96-1:0] skid_buffer_pd;
-wire skid_buffer_ready;
-wire pipe_skid_buffer_ready;
-wire normalz_buf_data_pvld;
-wire [96-1:0] normalz_buf_data;
-// Code
-// SKID READY
-always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
-   if (!nvdla_core_rstn) begin
-       buffer_ready <= 1'b1;
-       skid_flop_buffer_ready <= 1'b1;
-   end else begin
-       buffer_ready <= skid_buffer_ready;
-       skid_flop_buffer_ready <= skid_buffer_ready;
-   end
-end
-
-// SKID VALID
-always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
-    if (!nvdla_core_rstn) begin
-        skid_flop_buffer_valid <= 1'b0;
-    end else begin
-        if (skid_flop_buffer_ready) begin
-            skid_flop_buffer_valid <= buffer_valid;
-        end
-   end
-end
-assign skid_buffer_valid = (skid_flop_buffer_ready) ? buffer_valid : skid_flop_buffer_valid;
-
-// SKID DATA
-always @(posedge nvdla_core_clk) begin
-    if (skid_flop_buffer_ready & buffer_valid) begin
-        skid_flop_buffer_pd[96-1:0] <= buffer_pd[96-1:0];
-    end
-end
-assign skid_buffer_pd[96-1:0] = (skid_flop_buffer_ready) ? buffer_pd[96-1:0] : skid_flop_buffer_pd[96-1:0];
-
-
-// PIPE READY
-assign skid_buffer_ready = pipe_skid_buffer_ready || !pipe_skid_buffer_valid;
-
-// PIPE VALID
-always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
-    if (!nvdla_core_rstn) begin
-        pipe_skid_buffer_valid <= 1'b0;
-    end else begin
-        if (skid_buffer_ready) begin
-            pipe_skid_buffer_valid <= skid_buffer_valid;
-        end
-    end
-end
-
-// PIPE DATA
-always @(posedge nvdla_core_clk) begin
-    if (skid_buffer_ready && skid_buffer_valid) begin
-        pipe_skid_buffer_pd[96-1:0] <= skid_buffer_pd[96-1:0];
-    end
-end
-
-
-// PIPE OUTPUT
-assign pipe_skid_buffer_ready = normalz_buf_data_prdy;
-assign normalz_buf_data_pvld = pipe_skid_buffer_valid;
-assign normalz_buf_data = pipe_skid_buffer_pd;
-
-//| eperl: generated_end (DO NOT EDIT ABOVE)
 assign buf_dat_rdy = buffer_ready;
 /////////////////////////////////////////
 //==============

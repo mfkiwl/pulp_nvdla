@@ -162,20 +162,6 @@ reg sqsum_bypass_en;
 //: wire [${k}*(${icvto}*2+3)-1:0] sync2itp_pd;
 //: wire [${k}*${icvto}-1:0] sync2mul_pd;
 //: );
-//| eperl: generated_beg (DO NOT EDIT BELOW)
-
-wire [1*9+14:0] bufin_pd;
-wire [1*9+14:0] cvt2buf_pd;
-wire [1*9+14:0] cvt2sync_pd;
-wire [1*(9*2+3)-1:0] cvtin_out_int8_ext;
-wire [1*(9*2+3)-1:0] lutctrl_in_pd;
-wire [1*(9+16)-1:0] mul2ocvt_pd;
-wire [1*(9*2+3)-1:0] sum2itp_pd;
-wire [1*(9*2+3)-1:0] sum2sync_pd;
-wire [1*(9*2+3)-1:0] sync2itp_pd;
-wire [1*9-1:0] sync2mul_pd;
-
-//| eperl: generated_end (DO NOT EDIT ABOVE)
 wire bufin_prdy;
 wire bufin_pvld;
 wire cvt2buf_prdy;
@@ -193,15 +179,6 @@ wire cvt2sync_pvld;
 //: wire [17:0] dp2lut_Yinfo_${m} ;
 //: );
 //: }
-//| eperl: generated_beg (DO NOT EDIT BELOW)
-
-wire [9-1:0] cvtin_out_int8_0;
-wire [9:0] dp2lut_X_entry_0 ;
-wire [17:0] dp2lut_Xinfo_0 ;
-wire [9:0] dp2lut_Y_entry_0 ;
-wire [17:0] dp2lut_Yinfo_0 ;
-
-//| eperl: generated_end (DO NOT EDIT ABOVE)
 wire dp2lut_prdy;
 wire dp2lut_pvld;
 //: my $k = 1;
@@ -214,15 +191,6 @@ wire dp2lut_pvld;
 //: wire [19:0] lut2intp_X_info_${m};
 //: );
 //: }
-//| eperl: generated_beg (DO NOT EDIT BELOW)
-
-wire [16:0] intp2mul_pd_0;
-wire [31:0] lut2intp_X_data_00;
-wire [16:0] lut2intp_X_data_00_17b;
-wire [31:0] lut2intp_X_data_01;
-wire [19:0] lut2intp_X_info_0;
-
-//| eperl: generated_end (DO NOT EDIT ABOVE)
 wire intp2mul_prdy;
 wire intp2mul_pvld;
 wire [1 -1:0] lut2intp_X_sel;
@@ -236,10 +204,6 @@ wire mul2ocvt_pvld;
 //: my $tp = 1;
 //: my $k = (${tp}+8)*${icvto}+15;
 //: print "wire   [${k}-1:0] normalz_buf_data;  \n";
-//| eperl: generated_beg (DO NOT EDIT BELOW)
-wire   [96-1:0] normalz_buf_data;  
-
-//| eperl: generated_end (DO NOT EDIT ABOVE)
 wire normalz_buf_data_prdy;
 wire normalz_buf_data_pvld;
 wire sum2itp_prdy;
@@ -333,20 +297,6 @@ assign bufin_pvld = sqsum_bypass_en ? 0 : cvt2buf_pvld;
 //: );
 //: );
 //: }
-//| eperl: generated_beg (DO NOT EDIT BELOW)
-
-NV_NVDLA_CDP_DP_bufferin_tp1 u_NV_NVDLA_CDP_DP_bufferin (
-.nvdla_core_clk (nvdla_core_clk)
-,.nvdla_core_rstn (nvdla_core_rstn)
-,.cdp_rdma2dp_pd (bufin_pd)
-,.cdp_rdma2dp_valid (bufin_pvld)
-,.normalz_buf_data_prdy (normalz_buf_data_prdy)
-,.cdp_rdma2dp_ready (bufin_prdy)
-,.normalz_buf_data (normalz_buf_data)
-,.normalz_buf_data_pvld (normalz_buf_data_pvld)
-);
-
-//| eperl: generated_end (DO NOT EDIT ABOVE)
 //===== sigma squre Instance========
 NV_NVDLA_CDP_DP_sum u_NV_NVDLA_CDP_DP_sum (
    .nvdla_core_clk (nvdla_core_clk)
@@ -367,11 +317,6 @@ NV_NVDLA_CDP_DP_sum u_NV_NVDLA_CDP_DP_sum (
 //: assign cvtin_out_int8_$m = cvt2buf_pd[${m}*${icvto}+${icvto}-1:${m}*${icvto}];
 //: );
 //: }
-//| eperl: generated_beg (DO NOT EDIT BELOW)
-
-assign cvtin_out_int8_0 = cvt2buf_pd[0*9+9-1:0*9];
-
-//| eperl: generated_end (DO NOT EDIT ABOVE)
 assign cvtin_out_int8_ext = {
 //: my $k = 1;
 //: my $icvto = (8 +1);
@@ -383,10 +328,6 @@ assign cvtin_out_int8_ext = {
 //: }
 //: }
 //: print "{{(${icvto}+3){cvtin_out_int8_0[${icvto}-1]}}, cvtin_out_int8_0}};  \n";
-//| eperl: generated_beg (DO NOT EDIT BELOW)
-{{(9+3){cvtin_out_int8_0[9-1]}}, cvtin_out_int8_0}};  
-
-//| eperl: generated_end (DO NOT EDIT ABOVE)
 assign lutctrl_in_pd = sqsum_bypass_en ? cvtin_out_int8_ext : sum2itp_pd;
 assign lutctrl_in_pvld = sqsum_bypass_en ? cvt2buf_pvld : sum2itp_pvld;
 NV_NVDLA_CDP_DP_LUT_ctrl u_NV_NVDLA_CDP_DP_LUT_ctrl (
@@ -414,14 +355,6 @@ NV_NVDLA_CDP_DP_LUT_ctrl u_NV_NVDLA_CDP_DP_LUT_ctrl (
 //: ,.dp2lut_Yinfo_${m} (dp2lut_Yinfo_${m} )
 //: );
 //: }
-//| eperl: generated_beg (DO NOT EDIT BELOW)
-
-,.dp2lut_X_entry_0 (dp2lut_X_entry_0 )
-,.dp2lut_Xinfo_0 (dp2lut_Xinfo_0 )
-,.dp2lut_Y_entry_0 (dp2lut_Y_entry_0 )
-,.dp2lut_Yinfo_0 (dp2lut_Yinfo_0 )
-
-//| eperl: generated_end (DO NOT EDIT ABOVE)
   ,.dp2lut_pvld (dp2lut_pvld) //|> w
   ,.sum2itp_prdy (sum2itp_prdy) //|> w
   ,.sum2sync_pd (sum2sync_pd) //|> w
@@ -441,14 +374,6 @@ NV_NVDLA_CDP_DP_lut u_NV_NVDLA_CDP_DP_lut (
 //: ,.dp2lut_Yinfo_${m} (dp2lut_Yinfo_${m} )
 //: );
 //: }
-//| eperl: generated_beg (DO NOT EDIT BELOW)
-
-,.dp2lut_X_entry_0 (dp2lut_X_entry_0 )
-,.dp2lut_Xinfo_0 (dp2lut_Xinfo_0 )
-,.dp2lut_Y_entry_0 (dp2lut_Y_entry_0 )
-,.dp2lut_Yinfo_0 (dp2lut_Yinfo_0 )
-
-//| eperl: generated_end (DO NOT EDIT ABOVE)
   ,.dp2lut_pvld (dp2lut_pvld) //|< w
   ,.lut2intp_prdy (lut2intp_prdy) //|< w
   ,.reg2dp_lut_access_type (reg2dp_lut_access_type) //|< i
@@ -470,14 +395,6 @@ NV_NVDLA_CDP_DP_lut u_NV_NVDLA_CDP_DP_lut (
 //: ,.lut2intp_X_info_${m} (lut2intp_X_info_${m} )
 //: );
 //: }
-//| eperl: generated_beg (DO NOT EDIT BELOW)
-
-,.lut2intp_X_data_00 (lut2intp_X_data_00 )
-,.lut2intp_X_data_00_17b (lut2intp_X_data_00_17b )
-,.lut2intp_X_data_01 (lut2intp_X_data_01 )
-,.lut2intp_X_info_0 (lut2intp_X_info_0 )
-
-//| eperl: generated_end (DO NOT EDIT ABOVE)
   ,.lut2intp_X_sel (lut2intp_X_sel) //|> w
   ,.lut2intp_Y_sel (lut2intp_Y_sel) //|> w
   ,.lut2intp_pvld (lut2intp_pvld) //|> w
@@ -497,14 +414,6 @@ NV_NVDLA_CDP_DP_intp u_NV_NVDLA_CDP_DP_intp (
 //: ,.lut2intp_X_info_${m} (lut2intp_X_info_${m} )
 //: );
 //: }
-//| eperl: generated_beg (DO NOT EDIT BELOW)
-
-,.lut2intp_X_data_00 (lut2intp_X_data_00 )
-,.lut2intp_X_data_00_17b (lut2intp_X_data_00_17b )
-,.lut2intp_X_data_01 (lut2intp_X_data_01 )
-,.lut2intp_X_info_0 (lut2intp_X_info_0 )
-
-//| eperl: generated_end (DO NOT EDIT ABOVE)
   ,.lut2intp_X_sel (lut2intp_X_sel) //|< w
   ,.lut2intp_Y_sel (lut2intp_Y_sel) //|< w
   ,.lut2intp_pvld (lut2intp_pvld) //|< w
@@ -546,11 +455,6 @@ NV_NVDLA_CDP_DP_intp u_NV_NVDLA_CDP_DP_intp (
 //: ,.intp2mul_pd_$m (intp2mul_pd_${m}[16:0]) //|> w
 //: );
 //: }
-//| eperl: generated_beg (DO NOT EDIT BELOW)
-
-,.intp2mul_pd_0 (intp2mul_pd_0[16:0]) //|> w
-
-//| eperl: generated_end (DO NOT EDIT ABOVE)
   ,.intp2mul_pvld (intp2mul_pvld) //|> w
   ,.lut2intp_prdy (lut2intp_prdy) //|> w
   ,.sync2itp_prdy (sync2itp_prdy) //|> w
@@ -565,11 +469,6 @@ NV_NVDLA_CDP_DP_mul u_NV_NVDLA_CDP_DP_mul (
 //: ,.intp2mul_pd_$m (intp2mul_pd_${m}[16:0]) //|> w
 //: );
 //: }
-//| eperl: generated_beg (DO NOT EDIT BELOW)
-
-,.intp2mul_pd_0 (intp2mul_pd_0[16:0]) //|> w
-
-//| eperl: generated_end (DO NOT EDIT ABOVE)
   ,.intp2mul_pvld (intp2mul_pvld) //|< w
   ,.mul2ocvt_prdy (mul2ocvt_prdy) //|< w
   ,.reg2dp_mul_bypass (reg2dp_mul_bypass) //|< i

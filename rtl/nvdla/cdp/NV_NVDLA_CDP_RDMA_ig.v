@@ -74,11 +74,6 @@ reg [31:0] cdp_rd_stall_count;
 //: print qq(
 //: reg [12-${k}:0] channel_count;
 //: );
-//| eperl: generated_beg (DO NOT EDIT BELOW)
-
-reg [12-3:0] channel_count;
-
-//| eperl: generated_end (DO NOT EDIT ABOVE)
 reg [63:0] dma_req_addr;
 reg [31:0] dp2reg_d0_perf_read_stall;
 reg [31:0] dp2reg_d1_perf_read_stall;
@@ -276,11 +271,6 @@ end
 //: print qq(
 //: assign is_last_c = (channel_count==reg2dp_channel[12:${k}]);
 //: );
-//| eperl: generated_beg (DO NOT EDIT BELOW)
-
-assign is_last_c = (channel_count==reg2dp_channel[12:3]);
-
-//| eperl: generated_end (DO NOT EDIT ABOVE)
 // assign is_last_c = (channel_count==number_of_block_in_channel-1);
 //==============
 // WID Count: with inital value of total number in W direction, and will count-- when moving in wid direction
@@ -407,10 +397,6 @@ always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
 //: my $atm = 8;
 //: my $atmbw = int(log($atm)/log(2));
 //: print "                {mon_base_addr_c_c,base_addr_c} <= base_addr_c + {width_size_use,${atmbw}'d0}; \n";
-//| eperl: generated_beg (DO NOT EDIT BELOW)
-                {mon_base_addr_c_c,base_addr_c} <= base_addr_c + {width_size_use,3'd0}; 
-
-//| eperl: generated_end (DO NOT EDIT ABOVE)
             end
         end
     end
@@ -479,10 +465,6 @@ always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
 //: my $atm = 8;
 //: my $atmbw = int(log($atm)/log(2));
 //: print "                {mon_dma_req_addr_c,dma_req_addr} <= base_addr_c + {width_size_use,${atmbw}'d0};  \n";
-//| eperl: generated_beg (DO NOT EDIT BELOW)
-                {mon_dma_req_addr_c,dma_req_addr} <= base_addr_c + {width_size_use,3'd0};  
-
-//| eperl: generated_end (DO NOT EDIT ABOVE)
             end
         end else begin
             {mon_dma_req_addr_c,dma_req_addr} <= dma_req_addr + reg2dp_surf_stride;

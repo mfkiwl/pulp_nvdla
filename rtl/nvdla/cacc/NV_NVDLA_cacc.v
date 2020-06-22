@@ -25,17 +25,6 @@ module NV_NVDLA_cacc (
 //: ,mac_a2accu_data${i} //|< i
 //: ,mac_b2accu_data${i} //|< i )
 //: }
-//| eperl: generated_beg (DO NOT EDIT BELOW)
-
-,mac_a2accu_data0 //|< i
-,mac_b2accu_data0 //|< i 
-,mac_a2accu_data1 //|< i
-,mac_b2accu_data1 //|< i 
-,mac_a2accu_data2 //|< i
-,mac_b2accu_data2 //|< i 
-,mac_a2accu_data3 //|< i
-,mac_b2accu_data3 //|< i 
-//| eperl: generated_end (DO NOT EDIT ABOVE)
   ,mac_a2accu_mask //|< i
   ,mac_a2accu_mode //|< i
   ,mac_a2accu_pd //|< i
@@ -76,17 +65,6 @@ input mac_a2accu_mode;
 //: input [19 -1:0] mac_a2accu_data${i}; //|< i
 //: input [19 -1:0] mac_b2accu_data${i}; //|< i )
 //: }
-//| eperl: generated_beg (DO NOT EDIT BELOW)
-
-input [19 -1:0] mac_a2accu_data0; //|< i
-input [19 -1:0] mac_b2accu_data0; //|< i 
-input [19 -1:0] mac_a2accu_data1; //|< i
-input [19 -1:0] mac_b2accu_data1; //|< i 
-input [19 -1:0] mac_a2accu_data2; //|< i
-input [19 -1:0] mac_b2accu_data2; //|< i 
-input [19 -1:0] mac_a2accu_data3; //|< i
-input [19 -1:0] mac_b2accu_data3; //|< i 
-//| eperl: generated_end (DO NOT EDIT ABOVE)
 input [8:0] mac_a2accu_pd;
 input mac_b2accu_pvld; /* data valid */
 input [8/2-1:0] mac_b2accu_mask;
@@ -235,13 +213,6 @@ NV_NVDLA_CACC_calculator u_calculator (
 //: print qq(
 //: ,.mac_a2accu_data${i} (mac_a2accu_data${i}) //|< i )
 //: }
-//| eperl: generated_beg (DO NOT EDIT BELOW)
-
-,.mac_a2accu_data0 (mac_a2accu_data0) //|< i 
-,.mac_a2accu_data1 (mac_a2accu_data1) //|< i 
-,.mac_a2accu_data2 (mac_a2accu_data2) //|< i 
-,.mac_a2accu_data3 (mac_a2accu_data3) //|< i 
-//| eperl: generated_end (DO NOT EDIT ABOVE)
   ,.mac_a2accu_mask (mac_a2accu_mask) //|< i
   ,.mac_a2accu_mode (mac_a2accu_mode) //|< i
   ,.mac_a2accu_pvld (mac_a2accu_pvld) //|< i
@@ -249,13 +220,6 @@ NV_NVDLA_CACC_calculator u_calculator (
 //: print qq(
 //: ,.mac_b2accu_data${i} (mac_b2accu_data${i}) //|< i )
 //: }
-//| eperl: generated_beg (DO NOT EDIT BELOW)
-
-,.mac_b2accu_data0 (mac_b2accu_data0) //|< i 
-,.mac_b2accu_data1 (mac_b2accu_data1) //|< i 
-,.mac_b2accu_data2 (mac_b2accu_data2) //|< i 
-,.mac_b2accu_data3 (mac_b2accu_data3) //|< i 
-//| eperl: generated_end (DO NOT EDIT ABOVE)
   ,.mac_b2accu_mask (mac_b2accu_mask) //|< i
   ,.mac_b2accu_mode (mac_b2accu_mode) //|< i
   ,.mac_b2accu_pvld (mac_b2accu_pvld) //|< i

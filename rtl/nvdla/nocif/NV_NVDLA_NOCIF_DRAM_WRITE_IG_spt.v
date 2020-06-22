@@ -428,11 +428,6 @@ wire [31 : 0] pwrbus_ram_pd;
 //:print qq(
 //:NV_NVDLA_NOCIF_DRAM_WRITE_IG_SPT_dfifo_flopram_rwsa_5x${w} ram
 //:);
-//| eperl: generated_beg (DO NOT EDIT BELOW)
-
-NV_NVDLA_NOCIF_DRAM_WRITE_IG_SPT_dfifo_flopram_rwsa_5x66 ram
-
-//| eperl: generated_end (DO NOT EDIT ABOVE)
     (
       .clk( nvdla_core_clk_mgated )
     , .pwrbus_ram_pd ( pwrbus_ram_pd )
@@ -623,11 +618,6 @@ endmodule // NV_NVDLA_NOCIF_DRAM_WRITE_IG_SPT_dfifo
 //:print qq(
 //:module NV_NVDLA_NOCIF_DRAM_WRITE_IG_SPT_dfifo_flopram_rwsa_5x${w}
 //:);
-//| eperl: generated_beg (DO NOT EDIT BELOW)
-
-module NV_NVDLA_NOCIF_DRAM_WRITE_IG_SPT_dfifo_flopram_rwsa_5x66
-
-//| eperl: generated_end (DO NOT EDIT ABOVE)
     (
       clk
     , pwrbus_ram_pd

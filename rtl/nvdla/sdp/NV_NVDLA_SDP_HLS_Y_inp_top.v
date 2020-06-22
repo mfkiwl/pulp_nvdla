@@ -116,13 +116,6 @@ input nvdla_core_rstn;
 //: print "assign   inp_in_flow${i}           = chn_inp_in_pd[${i}+${bfw}]; \n";
 //: }
 //: print "\n";
-//| eperl: generated_beg (DO NOT EDIT BELOW)
-
-
-
-
-
-//| eperl: generated_end (DO NOT EDIT ABOVE)
 assign chn_inp_in_prdy = chn_inp_in_prdy0;
 assign chn_inp_out_pvld = chn_inp_out_pvld0;
 endmodule // NV_NVDLA_SDP_HLS_Y_inp_top

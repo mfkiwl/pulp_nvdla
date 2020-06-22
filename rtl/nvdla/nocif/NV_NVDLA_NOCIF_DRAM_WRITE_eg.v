@@ -29,24 +29,6 @@ module NV_NVDLA_NOCIF_DRAM_WRITE_eg (
 //: ,mcif2client${i}_wr_rsp_complete
 //:);
 //:}
-//| eperl: generated_beg (DO NOT EDIT BELOW)
-
-,cq_rd0_pvld
-,cq_rd0_pd
-,cq_rd0_prdy
-,mcif2client0_wr_rsp_complete
-
-,cq_rd1_pvld
-,cq_rd1_pd
-,cq_rd1_prdy
-,mcif2client1_wr_rsp_complete
-
-,cq_rd2_pvld
-,cq_rd2_pd
-,cq_rd2_prdy
-,mcif2client2_wr_rsp_complete
-
-//| eperl: generated_end (DO NOT EDIT ABOVE)
   ,noc2mcif_axi_b_bid
   ,noc2mcif_axi_b_bvalid
   ,eg2ig_axi_len
@@ -64,24 +46,6 @@ input nvdla_core_rstn;
 //:input [2:0] cq_rd${i}_pd;
 //:);
 //:}
-//| eperl: generated_beg (DO NOT EDIT BELOW)
-
-output mcif2client0_wr_rsp_complete;
-input cq_rd0_pvld;
-output cq_rd0_prdy;
-input [2:0] cq_rd0_pd;
-
-output mcif2client1_wr_rsp_complete;
-input cq_rd1_pvld;
-output cq_rd1_prdy;
-input [2:0] cq_rd1_pd;
-
-output mcif2client2_wr_rsp_complete;
-input cq_rd2_pvld;
-output cq_rd2_prdy;
-input [2:0] cq_rd2_pd;
-
-//| eperl: generated_end (DO NOT EDIT ABOVE)
 input noc2mcif_axi_b_bvalid; /* data valid */
 output noc2mcif_axi_b_bready; /* data return handshake */
 input [7:0] noc2mcif_axi_b_bid;
@@ -96,24 +60,6 @@ output eg2ig_axi_vld;
 //:wire dma${i}_vld;
 //:);
 //:}
-//| eperl: generated_beg (DO NOT EDIT BELOW)
-
-reg mcif2client0_wr_rsp_complete;
-wire [1:0] cq_rd0_len;
-wire cq_rd0_require_ack;
-wire dma0_vld;
-
-reg mcif2client1_wr_rsp_complete;
-wire [1:0] cq_rd1_len;
-wire cq_rd1_require_ack;
-wire dma1_vld;
-
-reg mcif2client2_wr_rsp_complete;
-wire [1:0] cq_rd2_len;
-wire cq_rd2_require_ack;
-wire dma2_vld;
-
-//| eperl: generated_end (DO NOT EDIT ABOVE)
 reg [1:0] eg2ig_axi_len;
 reg [2:0] iflop_axi_axid;
 reg iflop_axi_vld;
@@ -130,15 +76,6 @@ wire cq_vld =
 //: (!cq_rd${i}_pvld & cq_rd${i}_prdy) |
 //:);
 //:}
-//| eperl: generated_beg (DO NOT EDIT BELOW)
-
-(!cq_rd0_pvld & cq_rd0_prdy) |
-
-(!cq_rd1_pvld & cq_rd1_prdy) |
-
-(!cq_rd2_pvld & cq_rd2_prdy) |
-
-//| eperl: generated_end (DO NOT EDIT ABOVE)
 0;
 assign noc2mcif_axi_b_bready = !cq_vld;
 always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
@@ -237,45 +174,6 @@ end
 //:end
 //:);
 //:}
-//| eperl: generated_beg (DO NOT EDIT BELOW)
-
-assign dma0_vld = iflop_axi_vld & (iflop_axi_axid == 1);
-assign cq_rd0_prdy = dma0_vld;
-assign cq_rd0_require_ack = cq_rd0_pd[0:0];
-assign cq_rd0_len = cq_rd0_pd[2:1];
-always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
-if (!nvdla_core_rstn) begin
-mcif2client0_wr_rsp_complete <= 1'b0;
-end else begin
-mcif2client0_wr_rsp_complete <= dma0_vld & cq_rd0_pvld & cq_rd0_require_ack;
-end
-end
-
-assign dma1_vld = iflop_axi_vld & (iflop_axi_axid == 2);
-assign cq_rd1_prdy = dma1_vld;
-assign cq_rd1_require_ack = cq_rd1_pd[0:0];
-assign cq_rd1_len = cq_rd1_pd[2:1];
-always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
-if (!nvdla_core_rstn) begin
-mcif2client1_wr_rsp_complete <= 1'b0;
-end else begin
-mcif2client1_wr_rsp_complete <= dma1_vld & cq_rd1_pvld & cq_rd1_require_ack;
-end
-end
-
-assign dma2_vld = iflop_axi_vld & (iflop_axi_axid == 3);
-assign cq_rd2_prdy = dma2_vld;
-assign cq_rd2_require_ack = cq_rd2_pd[0:0];
-assign cq_rd2_len = cq_rd2_pd[2:1];
-always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
-if (!nvdla_core_rstn) begin
-mcif2client2_wr_rsp_complete <= 1'b0;
-end else begin
-mcif2client2_wr_rsp_complete <= dma2_vld & cq_rd2_pvld & cq_rd2_require_ack;
-end
-end
-
-//| eperl: generated_end (DO NOT EDIT ABOVE)
 // EG2IG outstanding Counting
 assign eg2ig_axi_vld = iflop_axi_vld & noc2mcif_axi_b_bready;
 always @(
@@ -288,15 +186,6 @@ cq_rd0_len
 //:or cq_rd${i}_len
 //:);
 //:}
-//| eperl: generated_beg (DO NOT EDIT BELOW)
-
-or dma1_vld
-or cq_rd1_len
-
-or dma2_vld
-or cq_rd2_len
-
-//| eperl: generated_end (DO NOT EDIT ABOVE)
 ) begin
 //spyglass disable_block W171 W226
    case (1'b1)
@@ -306,15 +195,6 @@ or cq_rd2_len
 //:dma${i}_vld: eg2ig_axi_len = cq_rd${i}_len;
 //:);
 //:}
-//| eperl: generated_beg (DO NOT EDIT BELOW)
-
-dma0_vld: eg2ig_axi_len = cq_rd0_len;
-
-dma1_vld: eg2ig_axi_len = cq_rd1_len;
-
-dma2_vld: eg2ig_axi_len = cq_rd2_len;
-
-//| eperl: generated_end (DO NOT EDIT ABOVE)
 //VCS coverage off
     default : begin
                 eg2ig_axi_len[1:0] = {2{`x_or_0}};

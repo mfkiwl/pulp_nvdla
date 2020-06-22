@@ -96,10 +96,6 @@ wire op_done;
 //: my $atomicm = 8;
 //: my $k = int( log($atomicm)/log(2) );
 //: print "reg     [12-${k}:0] count_surf;  \n";
-//| eperl: generated_beg (DO NOT EDIT BELOW)
-reg     [12-3:0] count_surf;  
-
-//| eperl: generated_end (DO NOT EDIT ABOVE)
 //wire [9:0] size_of_surf;
 //wire [10:0] size_of_surf_use;
 wire [12:0] size_of_width;
@@ -156,9 +152,6 @@ assign size_of_width = cfg_mode_split ? {3'd0,split_size_of_width} : reg2dp_cube
 //assign splitw_stride = (size_of_width+1)<<5;
 //: my $atmm_bw = int( log(8)/log(2) );
 //: print "assign splitw_stride = (size_of_width+1)<<${atmm_bw};  ";
-//| eperl: generated_beg (DO NOT EDIT BELOW)
-assign splitw_stride = (size_of_width+1)<<3;  
-//| eperl: generated_end (DO NOT EDIT ABOVE)
 // WG: WidthGroup, including one FSPT, one LSPT, and many MSPT
 always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
   if (!nvdla_core_rstn) begin
@@ -217,11 +210,6 @@ end
 //: print qq(
 //: assign is_last_surf = (count_surf== reg2dp_cube_out_channel[12:${k}]);
 //: );
-//| eperl: generated_beg (DO NOT EDIT BELOW)
-
-assign is_last_surf = (count_surf== reg2dp_cube_out_channel[12:3]);
-
-//| eperl: generated_end (DO NOT EDIT ABOVE)
 // per Surf
 always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
   if (!nvdla_core_rstn) begin

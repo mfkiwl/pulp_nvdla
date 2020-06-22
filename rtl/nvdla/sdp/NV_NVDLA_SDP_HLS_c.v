@@ -93,41 +93,6 @@ wire [16*1 -1:0] cvt_pd_out16;
 //:
 //: );
 //: }
-//| eperl: generated_beg (DO NOT EDIT BELOW)
-
-wire [31:0] cvt_data_in_0;
-wire [15:0] cvt_data_out_0;
-wire cvt_in_prdy_0;
-wire cvt_out_pvld_0;
-wire cvt_sat_out_0;
-
-assign  cvt_data_in_0 = cvt_pd_in[32*0+31:32*0]; 
-assign  cvt_pd_out8[8*0+7:8*0] = cvt_data_out_0[7:0]; 
-assign  cvt_pd_out16[16*0+15:16*0] = cvt_data_out_0; 
-
-assign  cvt_pd_out[16-1:0] = cfg_out_precision[1:0]==2'b0 ? {{(8*1){1'b0}},cvt_pd_out8[8*1-1:0]} : cvt_pd_out16[16*1-1:0]; 
-assign  cvt_pd_out[16+0] = cvt_sat_out_0; 
-
-
-NV_NVDLA_SDP_HLS_C_int c_int_0 (
-.cfg_mode_eql (cfg_mode_eql)
-,.cfg_offset (cfg_offset[31:0])
-,.cfg_out_precision (cfg_out_precision[1:0])
-,.cfg_scale (cfg_scale[15:0])
-,.cfg_truncate (cfg_truncate[5:0])
-,.cvt_data_in (cvt_data_in_0[31:0])
-,.cvt_in_pvld (cvt_in_pvld)
-,.cvt_out_prdy (cvt_out_prdy)
-,.nvdla_core_clk (nvdla_core_clk)
-,.nvdla_core_rstn (nvdla_core_rstn)
-,.cvt_data_out (cvt_data_out_0[15:0])
-,.cvt_in_prdy (cvt_in_prdy_0)
-,.cvt_out_pvld (cvt_out_pvld_0)
-,.cvt_sat_out (cvt_sat_out_0)
-);
-
-
-//| eperl: generated_end (DO NOT EDIT ABOVE)
 assign cvt_in_prdy = cvt_in_prdy_0;
 assign cvt_out_pvld = cvt_out_pvld_0;
 endmodule // NV_NVDLA_SDP_HLS_c
