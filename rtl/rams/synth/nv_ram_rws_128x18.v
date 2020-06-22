@@ -1,13 +1,11 @@
 // ================================================================
 // NVDLA Open Source Project
-// 
-// Copyright(c) 2016 - 2017 NVIDIA Corporation.  Licensed under the
-// NVDLA Open Hardware License; Check "LICENSE" which comes with 
+//
+// Copyright(c) 2016 - 2017 NVIDIA Corporation. Licensed under the
+// NVDLA Open Hardware License; Check "LICENSE" which comes with
 // this distribution for more information.
 // ================================================================
-
 // File Name: nv_ram_rws_128x18.v
-
 `timescale 1ns / 10ps
 module nv_ram_rws_128x18 (
         clk,
@@ -20,58 +18,47 @@ module nv_ram_rws_128x18 (
         pwrbus_ram_pd
         );
 parameter FORCE_CONTENTION_ASSERTION_RESET_ACTIVE=1'b0;
-
 // port list
-input           clk;
-input  [6:0]    ra;
-input           re;
-output [17:0]   dout;
-input  [6:0]    wa;
-input           we;
-input  [17:0]   di;
-input  [31:0]   pwrbus_ram_pd;
-
-
-
-// This wrapper consists of :  1 Ram cells: RAMPDP_128X18_GL_M2_D2 ;  
-
-//Wires for Misc Ports 
-wire  DFT_clamp;
-
-//Wires for Mbist Ports 
+input clk;
+input [6:0] ra;
+input re;
+output [17:0] dout;
+input [6:0] wa;
+input we;
+input [17:0] di;
+input [31:0] pwrbus_ram_pd;
+// This wrapper consists of : 1 Ram cells: RAMPDP_128X18_GL_M2_D2 ;
+//Wires for Misc Ports
+wire DFT_clamp;
+//Wires for Mbist Ports
 wire [6:0] mbist_Wa_w0;
 wire [1:0] mbist_Di_w0;
-wire  mbist_we_w0;
+wire mbist_we_w0;
 wire [6:0] mbist_Ra_r0;
-
 // verilint 528 off - Variable set but not used
 wire [17:0] mbist_Do_r0_int_net;
 // verilint 528 on - Variable set but not used
-wire  mbist_ce_r0;
-wire  mbist_en_sync;
-
-//Wires for RamAccess Ports 
-wire  SI;
-
+wire mbist_ce_r0;
+wire mbist_en_sync;
+//Wires for RamAccess Ports
+wire SI;
 // verilint 528 off - Variable set but not used
-wire  SO_int_net;
+wire SO_int_net;
 // verilint 528 on - Variable set but not used
-wire  shiftDR;
-wire  updateDR;
-wire  debug_mode;
-
-//Wires for Misc Ports 
-wire  mbist_ramaccess_rst_;
-wire  ary_atpg_ctl;
-wire  write_inh;
-wire  scan_ramtms;
-wire  iddq_mode;
-wire  jtag_readonly_mode;
-wire  ary_read_inh;
-wire  scan_en;
+wire shiftDR;
+wire updateDR;
+wire debug_mode;
+//Wires for Misc Ports
+wire mbist_ramaccess_rst_;
+wire ary_atpg_ctl;
+wire write_inh;
+wire scan_ramtms;
+wire iddq_mode;
+wire jtag_readonly_mode;
+wire ary_read_inh;
+wire scan_en;
 wire [7:0] svop;
-
-// Use Bbox and clamps to clamp and tie off the DFT signals in the wrapper 
+// Use Bbox and clamps to clamp and tie off the DFT signals in the wrapper
 NV_BLKBOX_SRC0 UI_enableDFTmode_async_ld_buf (.Y(DFT_clamp));
 wire pre_mbist_Wa_w0_0;
 NV_BLKBOX_SRC0_X testInst_mbist_Wa_w0_0 (.Y(pre_mbist_Wa_w0_0));
@@ -124,60 +111,60 @@ AN2D4PO4 UJ_DFTQUALIFIER_mbist_Ra_r0_5 (.Z(mbist_Ra_r0[5]), .A1(pre_mbist_Ra_r0_
 wire pre_mbist_Ra_r0_6;
 NV_BLKBOX_SRC0_X testInst_mbist_Ra_r0_6 (.Y(pre_mbist_Ra_r0_6));
 AN2D4PO4 UJ_DFTQUALIFIER_mbist_Ra_r0_6 (.Z(mbist_Ra_r0[6]), .A1(pre_mbist_Ra_r0_6), .A2(DFT_clamp) );
-`ifndef FPGA 
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_0 (.A(mbist_Do_r0_int_net[0]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_1 (.A(mbist_Do_r0_int_net[1]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_2 (.A(mbist_Do_r0_int_net[2]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_3 (.A(mbist_Do_r0_int_net[3]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_4 (.A(mbist_Do_r0_int_net[4]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_5 (.A(mbist_Do_r0_int_net[5]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_6 (.A(mbist_Do_r0_int_net[6]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_7 (.A(mbist_Do_r0_int_net[7]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_8 (.A(mbist_Do_r0_int_net[8]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_9 (.A(mbist_Do_r0_int_net[9]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_10 (.A(mbist_Do_r0_int_net[10]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_11 (.A(mbist_Do_r0_int_net[11]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_12 (.A(mbist_Do_r0_int_net[12]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_13 (.A(mbist_Do_r0_int_net[13]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_14 (.A(mbist_Do_r0_int_net[14]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_15 (.A(mbist_Do_r0_int_net[15]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_16 (.A(mbist_Do_r0_int_net[16]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_17 (.A(mbist_Do_r0_int_net[17]));
-`endif 
+`endif
 wire pre_mbist_ce_r0;
 NV_BLKBOX_SRC0_X testInst_mbist_ce_r0 (.Y(pre_mbist_ce_r0));
 AN2D4PO4 UJ_DFTQUALIFIER_mbist_ce_r0 (.Z(mbist_ce_r0), .A1(pre_mbist_ce_r0), .A2(DFT_clamp) );
@@ -187,9 +174,9 @@ AN2D4PO4 UJ_DFTQUALIFIER_mbist_en_sync (.Z(mbist_en_sync), .A1(pre_mbist_en_sync
 wire pre_SI;
 NV_BLKBOX_SRC0_X testInst_SI (.Y(pre_SI));
 AN2D4PO4 UJ_DFTQUALIFIER_SI (.Z(SI), .A1(pre_SI), .A2(DFT_clamp) );
-`ifndef FPGA 
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_SO (.A(SO_int_net));
-`endif 
+`endif
 wire pre_shiftDR;
 NV_BLKBOX_SRC0_X testInst_shiftDR (.Y(pre_shiftDR));
 AN2D4PO4 UJ_DFTQUALIFIER_shiftDR (.Z(shiftDR), .A1(pre_shiftDR), .A2(DFT_clamp) );
@@ -231,80 +218,65 @@ NV_BLKBOX_SRC0 testInst_svop_4 (.Y(svop[4]));
 NV_BLKBOX_SRC0 testInst_svop_5 (.Y(svop[5]));
 NV_BLKBOX_SRC0 testInst_svop_6 (.Y(svop[6]));
 NV_BLKBOX_SRC0 testInst_svop_7 (.Y(svop[7]));
-
 // Declare the wires for test signals
-
 // Instantiating the internal logic module now
 // verilint 402 off - inferred Reset must be a module port
 nv_ram_rws_128x18_logic #(FORCE_CONTENTION_ASSERTION_RESET_ACTIVE) r_nv_ram_rws_128x18 (
-                           .SI(SI), .SO_int_net(SO_int_net), 
-                           .ary_atpg_ctl(ary_atpg_ctl), 
-                           .ary_read_inh(ary_read_inh), .clk(clk), 
-                           .debug_mode(debug_mode), .di(di), .dout(dout), 
-                           .iddq_mode(iddq_mode), 
-                           .jtag_readonly_mode(jtag_readonly_mode), 
-                           .mbist_Di_w0(mbist_Di_w0), 
-                           .mbist_Do_r0_int_net(mbist_Do_r0_int_net), 
-                           .mbist_Ra_r0(mbist_Ra_r0), .mbist_Wa_w0(mbist_Wa_w0), 
-                           .mbist_ce_r0(mbist_ce_r0), 
-                           .mbist_en_sync(mbist_en_sync), 
-                           .mbist_ramaccess_rst_(mbist_ramaccess_rst_), 
-                           .mbist_we_w0(mbist_we_w0), 
-                           .pwrbus_ram_pd(pwrbus_ram_pd), .ra(ra), .re(re), 
-                           .scan_en(scan_en), .scan_ramtms(scan_ramtms), 
-                           .shiftDR(shiftDR), .svop(svop), .updateDR(updateDR), 
+                           .SI(SI), .SO_int_net(SO_int_net),
+                           .ary_atpg_ctl(ary_atpg_ctl),
+                           .ary_read_inh(ary_read_inh), .clk(clk),
+                           .debug_mode(debug_mode), .di(di), .dout(dout),
+                           .iddq_mode(iddq_mode),
+                           .jtag_readonly_mode(jtag_readonly_mode),
+                           .mbist_Di_w0(mbist_Di_w0),
+                           .mbist_Do_r0_int_net(mbist_Do_r0_int_net),
+                           .mbist_Ra_r0(mbist_Ra_r0), .mbist_Wa_w0(mbist_Wa_w0),
+                           .mbist_ce_r0(mbist_ce_r0),
+                           .mbist_en_sync(mbist_en_sync),
+                           .mbist_ramaccess_rst_(mbist_ramaccess_rst_),
+                           .mbist_we_w0(mbist_we_w0),
+                           .pwrbus_ram_pd(pwrbus_ram_pd), .ra(ra), .re(re),
+                           .scan_en(scan_en), .scan_ramtms(scan_ramtms),
+                           .shiftDR(shiftDR), .svop(svop), .updateDR(updateDR),
                            .wa(wa), .we(we), .write_inh(write_inh) );
 // verilint 402 on - inferred Reset must be a module port
-
-
 // synopsys dc_tcl_script_begin
 // synopsys dc_tcl_script_end
-
-
-
 // synopsys dc_tcl_script_begin
 // synopsys dc_tcl_script_end
-
-
 `ifndef SYNTHESIS
 task arrangement (output integer arrangment_string[17:0]);
   begin
-    arrangment_string[0] = 0  ;     
-    arrangment_string[1] = 1  ;     
-    arrangment_string[2] = 2  ;     
-    arrangment_string[3] = 3  ;     
-    arrangment_string[4] = 4  ;     
-    arrangment_string[5] = 5  ;     
-    arrangment_string[6] = 6  ;     
-    arrangment_string[7] = 7  ;     
-    arrangment_string[8] = 8  ;     
-    arrangment_string[9] = 9  ;     
-    arrangment_string[10] = 10  ;     
-    arrangment_string[11] = 11  ;     
-    arrangment_string[12] = 12  ;     
-    arrangment_string[13] = 13  ;     
-    arrangment_string[14] = 14  ;     
-    arrangment_string[15] = 15  ;     
-    arrangment_string[16] = 16  ;     
-    arrangment_string[17] = 17  ;     
+    arrangment_string[0] = 0 ;
+    arrangment_string[1] = 1 ;
+    arrangment_string[2] = 2 ;
+    arrangment_string[3] = 3 ;
+    arrangment_string[4] = 4 ;
+    arrangment_string[5] = 5 ;
+    arrangment_string[6] = 6 ;
+    arrangment_string[7] = 7 ;
+    arrangment_string[8] = 8 ;
+    arrangment_string[9] = 9 ;
+    arrangment_string[10] = 10 ;
+    arrangment_string[11] = 11 ;
+    arrangment_string[12] = 12 ;
+    arrangment_string[13] = 13 ;
+    arrangment_string[14] = 14 ;
+    arrangment_string[15] = 15 ;
+    arrangment_string[16] = 16 ;
+    arrangment_string[17] = 17 ;
   end
 endtask
 `endif
-
 `ifndef SYNTHESIS
 `ifndef NO_INIT_MEM_VAL_TASKS
-
-`ifndef MEM_REG_NAME 
+`ifndef MEM_REG_NAME
  `define MEM_REG_NAME MX.mem
 `endif
-
 // Bit vector indicating which shadow addresses have been written
 reg [127:0] shadow_written = 'b0;
-
 // Shadow ram array used to store initialization values
 reg [17:0] shadow_mem [127:0];
-
-
 `ifdef NV_RAM_EXPAND_ARRAY
 wire [17:0] shadow_mem_row0 = shadow_mem[0];
 wire [17:0] shadow_mem_row1 = shadow_mem[1];
@@ -435,7 +407,6 @@ wire [17:0] shadow_mem_row125 = shadow_mem[125];
 wire [17:0] shadow_mem_row126 = shadow_mem[126];
 wire [17:0] shadow_mem_row127 = shadow_mem[127];
 `endif
-
 task init_mem_val;
   input [6:0] row;
   input [17:0] data;
@@ -444,15 +415,12 @@ task init_mem_val;
     shadow_written[row] = 1'b1;
   end
 endtask
-
 task init_mem_commit;
 integer row;
 begin
-
 // initializing RAMPDP_128X18_GL_M2_D2
 for (row = 0; row < 128; row = row + 1)
  if (shadow_written[row]) r_nv_ram_rws_128x18.ram_Inst_128X18.mem_write(row - 0, shadow_mem[row][17:0]);
-
 shadow_written = 'b0;
 end
 endtask
@@ -461,42 +429,34 @@ endtask
 `ifndef SYNTHESIS
 `ifndef NO_INIT_MEM_VAL_TASKS
 task do_write; //(wa, we, di);
-   input  [6:0] wa;
-   input   we;
-   input  [17:0] di;
-   reg    [17:0] d;
+   input [6:0] wa;
+   input we;
+   input [17:0] di;
+   reg [17:0] d;
    begin
       d = probe_mem_val(wa);
       d = (we ? di : d);
       init_mem_val(wa,d);
    end
 endtask
-
 `endif
 `endif
-
-
 `ifndef SYNTHESIS
 `ifndef NO_INIT_MEM_VAL_TASKS
-
-`ifndef MEM_REG_NAME 
+`ifndef MEM_REG_NAME
  `define MEM_REG_NAME MX.mem
 `endif
-
 function [17:0] probe_mem_val;
 input [6:0] row;
 reg [17:0] data;
 begin
-
 // probing RAMPDP_128X18_GL_M2_D2
- if (row >=  0 &&  row < 128) data[17:0] = r_nv_ram_rws_128x18.ram_Inst_128X18.mem_read(row - 0);
+ if (row >= 0 && row < 128) data[17:0] = r_nv_ram_rws_128x18.ram_Inst_128X18.mem_read(row - 0);
     probe_mem_val = data;
-
 end
 endfunction
 `endif
 `endif
-
 `ifndef SYNTHESIS
 `ifndef NO_CLEAR_MEM_TASK
 `ifndef NO_INIT_MEM_VAL_TASKS
@@ -504,7 +464,7 @@ reg disable_clear_mem = 0;
 task clear_mem;
 integer i;
 begin
-  if (!disable_clear_mem) 
+  if (!disable_clear_mem)
   begin
     for (i = 0; i < 128; i = i + 1)
       begin
@@ -517,7 +477,6 @@ endtask
 `endif
 `endif
 `endif
-
 `ifndef SYNTHESIS
 `ifndef NO_INIT_MEM_ZERO_TASK
 `ifndef NO_INIT_MEM_VAL_TASKS
@@ -534,7 +493,6 @@ endtask
 `endif
 `endif
 `endif
-
 `ifndef SYNTHESIS
 `ifndef NO_INIT_MEM_VAL_TASKS
 `ifndef NO_INIT_MEM_FROM_FILE_TASK
@@ -542,27 +500,21 @@ task init_mem_from_file;
 input string init_file;
 integer i;
 begin
-
  $readmemh(init_file,shadow_mem);
  for (i = 0; i < 128; i = i + 1)
    begin
-
      shadow_written[i] = 1'b1;
-
    end
  init_mem_commit();
-
 end
 endtask
 `endif
 `endif
 `endif
-
 `ifndef SYNTHESIS
 `ifndef NO_INIT_MEM_RANDOM_TASK
 `ifndef NO_INIT_MEM_VAL_TASKS
 RANDFUNC rf0 ();
-
 task init_mem_random;
 reg [17:0] random_num;
 integer i;
@@ -578,13 +530,10 @@ endtask
 `endif
 `endif
 `endif
-
 `ifndef SYNTHESIS
 `ifndef NO_FLIP_TASKS
 `ifndef NO_INIT_MEM_VAL_TASKS
-
 RANDFUNC rflip ();
-
 task random_flip;
 integer random_num;
 integer row;
@@ -596,7 +545,6 @@ begin
   target_flip(row, bitnum);
 end
 endtask
-
 task target_flip;
 input [6:0] row;
 input [17:0] bitnum;
@@ -604,20 +552,15 @@ reg [17:0] data;
 begin
   if(!$test$plusargs("no_display_target_flips"))
     $display("%m: flipping row %d bit %d at time %t", row, bitnum, $time);
-
   data = probe_mem_val(row);
   data[bitnum] = ~data[bitnum];
   init_mem_val(row, data);
   init_mem_commit();
 end
 endtask
-
 `endif
 `endif
 `endif
-
 // The main module is done
 endmodule
-
 //********************************************************************************
-

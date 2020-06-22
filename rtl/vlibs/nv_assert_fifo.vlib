@@ -1,29 +1,25 @@
 // ================================================================
 // NVDLA Open Source Project
-// 
-// Copyright(c) 2016 - 2017 NVIDIA Corporation.  Licensed under the
-// NVDLA Open Hardware License; Check "LICENSE" which comes with 
+//
+// Copyright(c) 2016 - 2017 NVIDIA Corporation. Licensed under the
+// NVDLA Open Hardware License; Check "LICENSE" which comes with
 // this distribution for more information.
 // ================================================================
-
 // File Name: nv_assert_fifo.vlib
-
 `ifdef MACROMODULE
 macromodule nv_assert_fifo (
 `else
 module nv_assert_fifo (
 `endif
-  clk, 
-  reset_, 
+  clk,
+  reset_,
   push,
   pop
 `ifdef FV_ASSERT_ON
   , err
 `endif
 );
-
 //VCS coverage exclude_module
-
   parameter severity_level = 0;
   parameter depth=7;
   parameter initial_cnt=0;
@@ -37,30 +33,21 @@ module nv_assert_fifo (
     parameter msg="VIOLATION";
   `endif
 `endif
-
   input clk;
   input reset_;
   input push;
   input pop;
-
 `ifndef EMU
-
 `ifdef FV_ASSERT_ON
   output err;
-
   reg err;
 `else
-
 `ifndef SYNTHESIS
-
-//  parameter assert_name = "ASSERT_FIFO";
-
+// parameter assert_name = "ASSERT_FIFO";
   integer error_count;
   initial error_count = 0;
-
   `include "assertion_task.vh"
   `include "assertion_header.vh"
-
   `ifdef ASSERT_INIT_MSG
     initial
       assertion_init_msg; // Call the User Defined Init Message Routine
@@ -85,10 +72,8 @@ module nv_assert_fifo (
            end
    end
   `endif
-
 `endif
 `endif
-
 `ifndef SYNTHESIS
 `ifdef ASSERT_ENABLE_ZERROR
 initial begin
@@ -102,18 +87,8 @@ initial begin
 end
 `endif
 `endif
-
-`define LOG2_DEPTH (depth>=64  ? 32: \
-                   (depth>=32  ?  6: \
-                   (depth>=16  ?  5: \
-                   (depth>=8   ?  4: \
-                   (depth>=4   ?  3: \
-                   (depth>=2   ?  2: \
-                                 1  \
-                   ))))))
-
+`define LOG2_DEPTH (depth>=64 ? 32: (depth>=32 ? 6: (depth>=16 ? 5: (depth>=8 ? 4: (depth>=4 ? 3: (depth>=2 ? 2: 1 ))))))
   reg [`LOG2_DEPTH-1:0] cnt;
-
 `ifdef FV_ASSERT_SYNCH_RESET
 always @(posedge clk) begin
 `else
@@ -124,10 +99,10 @@ always @(posedge clk or negedge reset_) begin
          `ifdef FV_ASSERT_ON
            err <= 1'b0;
          `endif
-      end else begin   
-          cnt <=  cnt + push - pop;
-          if ( (cnt==depth &  push & !pop) ||
-	       (cnt==0     & !push &  pop) ) begin
+      end else begin
+          cnt <= cnt + push - pop;
+          if ( (cnt==depth & push & !pop) ||
+        (cnt==0 & !push & pop) ) begin
             `ifdef FV_ASSERT_ON
               err <= 1'b1;
             `else
@@ -136,31 +111,21 @@ always @(posedge clk or negedge reset_) begin
           end
       end
   end
-
 `endif // EMU
-
 // Instantiating a dummy buffer
 // CKBD4 UI_DummyBuf (.I(clk), .Z());
-// inside the assertion vlib, so that 
-// the assertion module is NOT optimized away 
+// inside the assertion vlib, so that
+// the assertion module is NOT optimized away
 // during DC & RC emulation physical synthesis
- 
 // Also adding embedded DC and RC dont-touch settings
 // on the assertion module
-
 `ifdef EMU
-
  CKBD4 UI_DummyBuf (.I(clk), .Z());
-
 // synopsys dc_script_begin
 // synopsys dc_script_end
-
 // g2c if { [find / -null_ok -subdesign nv_assert_fifo*] != {} } { set_attr preserve 1 [find / -subdesign nv_assert_fifo*] }
-
 `endif // ifdef EMU
-
-`ifdef FV_ASSERT_ON 
+`ifdef FV_ASSERT_ON
  `include "common_sva_assert.sva"
 `endif
-
 endmodule

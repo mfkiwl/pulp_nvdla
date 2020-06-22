@@ -1,13 +1,11 @@
 // ================================================================
 // NVDLA Open Source Project
-// 
-// Copyright(c) 2016 - 2017 NVIDIA Corporation.  Licensed under the
-// NVDLA Open Hardware License; Check "LICENSE" which comes with 
+//
+// Copyright(c) 2016 - 2017 NVIDIA Corporation. Licensed under the
+// NVDLA Open Hardware License; Check "LICENSE" which comes with
 // this distribution for more information.
 // ================================================================
-
 // File Name: NV_NVDLA_NOCIF_DRAM_READ_cq.v
-
 `include "simulate_x_tick.vh"
 `define FORCE_CONTENTION_ASSERTION_RESET_ACTIVE 1'b1
 `include "simulate_x_tick.vh"
@@ -53,197 +51,169 @@ module NV_NVDLA_NOCIF_DRAM_READ_cq (
     , cq_rd9_pd
     , pwrbus_ram_pd
     );
-
 // spyglass disable_block W401 -- clock is not input to module
-input         nvdla_core_clk;
-input         nvdla_core_rstn;
-output        cq_wr_prdy;
-input         cq_wr_pvld;
-input  [3:0] cq_wr_thread_id;
+input nvdla_core_clk;
+input nvdla_core_rstn;
+output cq_wr_prdy;
+input cq_wr_pvld;
+input [3:0] cq_wr_thread_id;
 `ifdef FV_RAND_WR_PAUSE
-input         cq_wr_pause;
+input cq_wr_pause;
 `endif
-input  [6:0] cq_wr_pd;
-input         cq_rd0_prdy;
-output        cq_rd0_pvld;
+input [6:0] cq_wr_pd;
+input cq_rd0_prdy;
+output cq_rd0_pvld;
 output [6:0] cq_rd0_pd;
-input         cq_rd1_prdy;
-output        cq_rd1_pvld;
+input cq_rd1_prdy;
+output cq_rd1_pvld;
 output [6:0] cq_rd1_pd;
-input         cq_rd2_prdy;
-output        cq_rd2_pvld;
+input cq_rd2_prdy;
+output cq_rd2_pvld;
 output [6:0] cq_rd2_pd;
-input         cq_rd3_prdy;
-output        cq_rd3_pvld;
+input cq_rd3_prdy;
+output cq_rd3_pvld;
 output [6:0] cq_rd3_pd;
-input         cq_rd4_prdy;
-output        cq_rd4_pvld;
+input cq_rd4_prdy;
+output cq_rd4_pvld;
 output [6:0] cq_rd4_pd;
-input         cq_rd5_prdy;
-output        cq_rd5_pvld;
+input cq_rd5_prdy;
+output cq_rd5_pvld;
 output [6:0] cq_rd5_pd;
-input         cq_rd6_prdy;
-output        cq_rd6_pvld;
+input cq_rd6_prdy;
+output cq_rd6_pvld;
 output [6:0] cq_rd6_pd;
-input         cq_rd7_prdy;
-output        cq_rd7_pvld;
+input cq_rd7_prdy;
+output cq_rd7_pvld;
 output [6:0] cq_rd7_pd;
-input         cq_rd8_prdy;
-output        cq_rd8_pvld;
+input cq_rd8_prdy;
+output cq_rd8_pvld;
 output [6:0] cq_rd8_pd;
-input         cq_rd9_prdy;
-output        cq_rd9_pvld;
+input cq_rd9_prdy;
+output cq_rd9_pvld;
 output [6:0] cq_rd9_pd;
-input  [31:0] pwrbus_ram_pd;
-
+input [31:0] pwrbus_ram_pd;
 // -rd_take_to_rd_busy internal credit/take/data signals (which would have been ports)
 //
 //wire [9:0] cq_rd_credit;
-wire       cq_rd_take;
+wire cq_rd_take;
 wire [6:0] cq_rd_pd_p;
 wire [3:0] cq_rd_take_thread_id;
-
 // We also declare some per-thread flags that indicate whether to have the write bypass the internal fifo.
-// These per-class wr_bypassing* flags are set by the take-side logic.  We basically pretend that we never pushed the fifo,
+// These per-class wr_bypassing* flags are set by the take-side logic. We basically pretend that we never pushed the fifo,
 // but make sure we return a credit to the sender.
 //
-wire       wr_bypassing;        // any thread bypassed
-
+wire wr_bypassing; // any thread bypassed
 // Master Clock Gating (SLCG)
 //
 // We gate the clock(s) when idle or stalled.
 // This allows us to turn off numerous miscellaneous flops
 // that don't get gated during synthesis for one reason or another.
 //
-// We gate write side and read side separately. 
+// We gate write side and read side separately.
 // If the fifo is synchronous, we also gate the ram separately, but if
-// -master_clk_gated_unified or -status_reg/-status_logic_reg is specified, 
+// -master_clk_gated_unified or -status_reg/-status_logic_reg is specified,
 // then we use one clk gate for write, ram, and read.
 //
-
 wire nvdla_core_clk_mgated_skid;
 wire nvdla_core_clk_mgated_skid_enable;
 NV_CLK_gate_power nvdla_core_clk_rd_mgate_skid( .clk(nvdla_core_clk), .reset_(nvdla_core_rstn), .clk_en(nvdla_core_clk_mgated_skid_enable), .clk_gated(nvdla_core_clk_mgated_skid) );
-
-wire nvdla_core_clk_mgated_enable;   // assigned by code at end of this module
-wire nvdla_core_clk_mgated;               // used only in synchronous fifos
+wire nvdla_core_clk_mgated_enable; // assigned by code at end of this module
+wire nvdla_core_clk_mgated; // used only in synchronous fifos
 NV_CLK_gate_power nvdla_core_clk_mgate( .clk(nvdla_core_clk), .reset_(nvdla_core_rstn), .clk_en(nvdla_core_clk_mgated_enable), .clk_gated(nvdla_core_clk_mgated) );
-
-// 
+//
 // WRITE SIDE
 //
 // synopsys translate_off
 `ifndef SYNTH_LEVEL1_COMPILE
 `ifndef SYNTHESIS
-wire wr_pause_rand;  // random stalling
-`endif	
-`endif	
+wire wr_pause_rand; // random stalling
+`endif
+`endif
 // synopsys translate_on
 wire wr_reserving;
-reg        cq_wr_busy_int;		        	// copy for internal use
-assign     cq_wr_prdy = !cq_wr_busy_int;
-assign       wr_reserving = cq_wr_pvld && !cq_wr_busy_int; // reserving write space?
-
-
-wire       wr_popping;                          // fwd: write side sees pop?
-
-reg  [8:0] cq_wr_count;			// write-side count
+reg cq_wr_busy_int; // copy for internal use
+assign cq_wr_prdy = !cq_wr_busy_int;
+assign wr_reserving = cq_wr_pvld && !cq_wr_busy_int; // reserving write space?
+wire wr_popping; // fwd: write side sees pop?
+reg [8:0] cq_wr_count; // write-side count
 wire wr_reserving_and_not_bypassing = wr_reserving && !wr_bypassing;
-
 wire [8:0] wr_count_next_wr_popping = wr_reserving_and_not_bypassing ? cq_wr_count : (cq_wr_count - 1'd1); // spyglass disable W164a W484
 wire [8:0] wr_count_next_no_wr_popping = wr_reserving_and_not_bypassing ? (cq_wr_count + 1'd1) : cq_wr_count; // spyglass disable W164a W484
-wire [8:0] wr_count_next = wr_popping ? wr_count_next_wr_popping : 
+wire [8:0] wr_count_next = wr_popping ? wr_count_next_wr_popping :
                                                wr_count_next_no_wr_popping;
-
 wire wr_count_next_no_wr_popping_is_256 = ( wr_count_next_no_wr_popping == 9'd256 );
 wire wr_count_next_is_256 = wr_popping ? 1'b0 :
                                           wr_count_next_no_wr_popping_is_256;
-wire [8:0] wr_limit_muxed;  // muxed with simulation/emulation overrides
+wire [8:0] wr_limit_muxed; // muxed with simulation/emulation overrides
 wire [8:0] wr_limit_reg = wr_limit_muxed;
 `ifdef FV_RAND_WR_PAUSE
-                          // VCS coverage off
-wire       cq_wr_busy_next = wr_count_next_is_256 || // busy next cycle?
-                          (wr_limit_reg != 9'd0 &&      // check cq_wr_limit if != 0
+// VCS coverage off
+wire cq_wr_busy_next = wr_count_next_is_256 || // busy next cycle?
+                          (wr_limit_reg != 9'd0 && // check cq_wr_limit if != 0
                            wr_count_next >= wr_limit_reg) || cq_wr_pause;
-                          // VCS coverage on
+// VCS coverage on
 `else
-                          // VCS coverage off
-wire       cq_wr_busy_next = wr_count_next_is_256 || // busy next cycle?
-                          (wr_limit_reg != 9'd0 &&      // check cq_wr_limit if != 0
-                           wr_count_next >= wr_limit_reg)  
- // synopsys translate_off
+// VCS coverage off
+wire cq_wr_busy_next = wr_count_next_is_256 || // busy next cycle?
+                          (wr_limit_reg != 9'd0 && // check cq_wr_limit if != 0
+                           wr_count_next >= wr_limit_reg)
+// synopsys translate_off
   `ifndef SYNTH_LEVEL1_COMPILE
   `ifndef SYNTHESIS
  || wr_pause_rand
   `endif
   `endif
- // synopsys translate_on
+// synopsys translate_on
 ;
-                          // VCS coverage on
+// VCS coverage on
 `endif
 always @( posedge nvdla_core_clk_mgated or negedge nvdla_core_rstn ) begin
     if ( !nvdla_core_rstn ) begin
-        cq_wr_busy_int <=  1'b0;
-        cq_wr_count <=  9'd0;
+        cq_wr_busy_int <= 1'b0;
+        cq_wr_count <= 9'd0;
     end else begin
-	cq_wr_busy_int <=  cq_wr_busy_next;
-	if ( wr_reserving_and_not_bypassing ^ wr_popping ) begin
-	    cq_wr_count <=  wr_count_next;
-        end 
-        //synopsys translate_off
+ cq_wr_busy_int <= cq_wr_busy_next;
+ if ( wr_reserving_and_not_bypassing ^ wr_popping ) begin
+     cq_wr_count <= wr_count_next;
+        end
+//synopsys translate_off
             else if ( !(wr_reserving_and_not_bypassing ^ wr_popping) ) begin
         end else begin
-            cq_wr_count <=  {9{`x_or_0}};
+            cq_wr_count <= {9{`x_or_0}};
         end
-        //synopsys translate_on
-
+//synopsys translate_on
     end
 end
-
-wire       wr_pushing = wr_reserving && !wr_bypassing;   // data pushed same cycle as cq_wr_pvld
+wire wr_pushing = wr_reserving && !wr_bypassing; // data pushed same cycle as cq_wr_pvld
 wire [3:0] wr_pushing_thread_id = cq_wr_thread_id; // thread being written
-
 //
 // RAM
 //
-
-wire wr_adr_popping = wr_pushing;	// pop free list when wr_pushing=1
-
-wire [7:0] cq_wr_adr;			// current write address
-reg  [7:0] cq_rd_adr;
-wire [7:0] cq_rd_adr_p = cq_rd_adr;		// read address to use for ram
-
+wire wr_adr_popping = wr_pushing; // pop free list when wr_pushing=1
+wire [7:0] cq_wr_adr; // current write address
+reg [7:0] cq_rd_adr;
+wire [7:0] cq_rd_adr_p = cq_rd_adr; // read address to use for ram
 wire rd_enable;
-
 wire [31 : 0] pwrbus_ram_pd;
-
 // Adding parameter for fifogen to disable wr/rd contention assertion in ramgen.
 // Fifogen handles this by ignoring the data on the ram data out for that cycle.
-
-
 nv_ram_rws_256x7 #(`FORCE_CONTENTION_ASSERTION_RESET_ACTIVE) ram (
-      .clk		 ( nvdla_core_clk )
+      .clk ( nvdla_core_clk )
     , .pwrbus_ram_pd ( pwrbus_ram_pd )
-    , .wa        ( cq_wr_adr )
-    , .we        ( wr_pushing )
-    , .di        ( cq_wr_pd )
-    , .ra        ( cq_rd_adr_p )
-    , .re        ( rd_enable )
-    , .dout        ( cq_rd_pd_p )
+    , .wa ( cq_wr_adr )
+    , .we ( wr_pushing )
+    , .di ( cq_wr_pd )
+    , .ra ( cq_rd_adr_p )
+    , .re ( rd_enable )
+    , .dout ( cq_rd_pd_p )
     );
-
-wire   rd_popping;              // read side doing pop this cycle?
-
+wire rd_popping; // read side doing pop this cycle?
 //
 // SYNCHRONOUS BOUNDARY
 //
-
-
-
-wire   rd_pushing = wr_pushing;		// let it be seen immediately
+wire rd_pushing = wr_pushing; // let it be seen immediately
 wire [3:0] rd_pushing_thread_id = wr_pushing_thread_id;
 wire [7:0] rd_pushing_adr = cq_wr_adr;
-
 //
 // MULTITHREADED FREE LIST FIFO
 //
@@ -251,37 +221,31 @@ wire [7:0] rd_pushing_adr = cq_wr_adr;
 // these are passed in a ff fifo when the fifo is popped
 //
 // there's an extra mux of the internal flops that is
-// used to determine which address to use when 
-// rd_pushing is 1 if the fifo is async.  
+// used to determine which address to use when
+// rd_pushing is 1 if the fifo is async.
 //
-wire [7:0] rd_popping_adr;   // cq_rd_adr to free up
-
+wire [7:0] rd_popping_adr; // cq_rd_adr to free up
 wire [7:0] free_adr_index;
 reg [255-1:0] free_adr_mask_next;
 reg [255-1:0] free_adr_mask;
-
 assign cq_wr_adr = free_adr_index;
-
 always @( posedge nvdla_core_clk_mgated or negedge nvdla_core_rstn ) begin
     if ( !nvdla_core_rstn ) begin
-        free_adr_mask <=  {255{1'b1}};
+        free_adr_mask <= {255{1'b1}};
     end else begin
         if ( rd_popping || wr_adr_popping ) begin
-            free_adr_mask <=  free_adr_mask_next;
-        end 
-        //synopsys translate_off
+            free_adr_mask <= free_adr_mask_next;
+        end
+//synopsys translate_off
             else if ( !(rd_popping || wr_adr_popping) ) begin
         end else begin
-            free_adr_mask <=  {255{`x_or_0}};
+            free_adr_mask <= {255{`x_or_0}};
         end
-        //synopsys translate_on
-
+//synopsys translate_on
     end
-end    
-
+end
 always @(*) begin
     free_adr_mask_next = free_adr_mask;
-
         if ( rd_popping && rd_popping_adr == 8'd0 ) begin
             free_adr_mask_next[0] = 1'b1;
         end else if ( wr_adr_popping && free_adr_index == 8'd0 ) begin
@@ -1558,7 +1522,6 @@ always @(*) begin
             free_adr_mask_next[254] = 1'b0;
         end
 end
-
 wire flag_l0_0 = free_adr_mask[1] | free_adr_mask[0];
 wire flag_l0_1 = free_adr_mask[3] | free_adr_mask[2];
 wire flag_l0_2 = free_adr_mask[5] | free_adr_mask[4];
@@ -1686,7 +1649,6 @@ wire flag_l0_123 = free_adr_mask[247] | free_adr_mask[246];
 wire flag_l0_124 = free_adr_mask[249] | free_adr_mask[248];
 wire flag_l0_125 = free_adr_mask[251] | free_adr_mask[250];
 wire flag_l0_126 = free_adr_mask[253] | free_adr_mask[252];
-
 wire flag_l1_0 = flag_l0_1 | flag_l0_0;
 wire flag_l1_1 = flag_l0_3 | flag_l0_2;
 wire flag_l1_2 = flag_l0_5 | flag_l0_4;
@@ -1750,7 +1712,6 @@ wire flag_l1_59 = flag_l0_119 | flag_l0_118;
 wire flag_l1_60 = flag_l0_121 | flag_l0_120;
 wire flag_l1_61 = flag_l0_123 | flag_l0_122;
 wire flag_l1_62 = flag_l0_125 | flag_l0_124;
-
 wire flag_l2_0 = flag_l1_1 | flag_l1_0;
 wire flag_l2_1 = flag_l1_3 | flag_l1_2;
 wire flag_l2_2 = flag_l1_5 | flag_l1_4;
@@ -1782,7 +1743,6 @@ wire flag_l2_27 = flag_l1_55 | flag_l1_54;
 wire flag_l2_28 = flag_l1_57 | flag_l1_56;
 wire flag_l2_29 = flag_l1_59 | flag_l1_58;
 wire flag_l2_30 = flag_l1_61 | flag_l1_60;
-
 wire flag_l3_0 = flag_l2_1 | flag_l2_0;
 wire flag_l3_1 = flag_l2_3 | flag_l2_2;
 wire flag_l3_2 = flag_l2_5 | flag_l2_4;
@@ -1798,7 +1758,6 @@ wire flag_l3_11 = flag_l2_23 | flag_l2_22;
 wire flag_l3_12 = flag_l2_25 | flag_l2_24;
 wire flag_l3_13 = flag_l2_27 | flag_l2_26;
 wire flag_l3_14 = flag_l2_29 | flag_l2_28;
-
 wire flag_l4_0 = flag_l3_1 | flag_l3_0;
 wire flag_l4_1 = flag_l3_3 | flag_l3_2;
 wire flag_l4_2 = flag_l3_5 | flag_l3_4;
@@ -1806,13 +1765,10 @@ wire flag_l4_3 = flag_l3_7 | flag_l3_6;
 wire flag_l4_4 = flag_l3_9 | flag_l3_8;
 wire flag_l4_5 = flag_l3_11 | flag_l3_10;
 wire flag_l4_6 = flag_l3_13 | flag_l3_12;
-
 wire flag_l5_0 = flag_l4_1 | flag_l4_0;
 wire flag_l5_1 = flag_l4_3 | flag_l4_2;
 wire flag_l5_2 = flag_l4_5 | flag_l4_4;
-
 wire flag_l6_0 = flag_l5_1 | flag_l5_0;
-
 wire index_l0_0 = !free_adr_mask[0];
 wire index_l0_1 = !free_adr_mask[2];
 wire index_l0_2 = !free_adr_mask[4];
@@ -1941,7 +1897,6 @@ wire index_l0_124 = !free_adr_mask[248];
 wire index_l0_125 = !free_adr_mask[250];
 wire index_l0_126 = !free_adr_mask[252];
 wire index_l0_127 = !free_adr_mask[254];
-
 wire [1:0] index_l1_0 = {!flag_l0_0,(flag_l0_0?index_l0_0:index_l0_1)};
 wire [1:0] index_l1_1 = {!flag_l0_2,(flag_l0_2?index_l0_2:index_l0_3)};
 wire [1:0] index_l1_2 = {!flag_l0_4,(flag_l0_4?index_l0_4:index_l0_5)};
@@ -2006,7 +1961,6 @@ wire [1:0] index_l1_60 = {!flag_l0_120,(flag_l0_120?index_l0_120:index_l0_121)};
 wire [1:0] index_l1_61 = {!flag_l0_122,(flag_l0_122?index_l0_122:index_l0_123)};
 wire [1:0] index_l1_62 = {!flag_l0_124,(flag_l0_124?index_l0_124:index_l0_125)};
 wire [1:0] index_l1_63 = {!flag_l0_126,(flag_l0_126?index_l0_126:index_l0_127)};
-
 wire [2:0] index_l2_0 = {!flag_l1_0,(flag_l1_0?index_l1_0:index_l1_1)};
 wire [2:0] index_l2_1 = {!flag_l1_2,(flag_l1_2?index_l1_2:index_l1_3)};
 wire [2:0] index_l2_2 = {!flag_l1_4,(flag_l1_4?index_l1_4:index_l1_5)};
@@ -2039,7 +1993,6 @@ wire [2:0] index_l2_28 = {!flag_l1_56,(flag_l1_56?index_l1_56:index_l1_57)};
 wire [2:0] index_l2_29 = {!flag_l1_58,(flag_l1_58?index_l1_58:index_l1_59)};
 wire [2:0] index_l2_30 = {!flag_l1_60,(flag_l1_60?index_l1_60:index_l1_61)};
 wire [2:0] index_l2_31 = {!flag_l1_62,(flag_l1_62?index_l1_62:index_l1_63)};
-
 wire [3:0] index_l3_0 = {!flag_l2_0,(flag_l2_0?index_l2_0:index_l2_1)};
 wire [3:0] index_l3_1 = {!flag_l2_2,(flag_l2_2?index_l2_2:index_l2_3)};
 wire [3:0] index_l3_2 = {!flag_l2_4,(flag_l2_4?index_l2_4:index_l2_5)};
@@ -2056,7 +2009,6 @@ wire [3:0] index_l3_12 = {!flag_l2_24,(flag_l2_24?index_l2_24:index_l2_25)};
 wire [3:0] index_l3_13 = {!flag_l2_26,(flag_l2_26?index_l2_26:index_l2_27)};
 wire [3:0] index_l3_14 = {!flag_l2_28,(flag_l2_28?index_l2_28:index_l2_29)};
 wire [3:0] index_l3_15 = {!flag_l2_30,(flag_l2_30?index_l2_30:index_l2_31)};
-
 wire [4:0] index_l4_0 = {!flag_l3_0,(flag_l3_0?index_l3_0:index_l3_1)};
 wire [4:0] index_l4_1 = {!flag_l3_2,(flag_l3_2?index_l3_2:index_l3_3)};
 wire [4:0] index_l4_2 = {!flag_l3_4,(flag_l3_4?index_l3_4:index_l3_5)};
@@ -2065,50 +2017,40 @@ wire [4:0] index_l4_4 = {!flag_l3_8,(flag_l3_8?index_l3_8:index_l3_9)};
 wire [4:0] index_l4_5 = {!flag_l3_10,(flag_l3_10?index_l3_10:index_l3_11)};
 wire [4:0] index_l4_6 = {!flag_l3_12,(flag_l3_12?index_l3_12:index_l3_13)};
 wire [4:0] index_l4_7 = {!flag_l3_14,(flag_l3_14?index_l3_14:index_l3_15)};
-
 wire [5:0] index_l5_0 = {!flag_l4_0,(flag_l4_0?index_l4_0:index_l4_1)};
 wire [5:0] index_l5_1 = {!flag_l4_2,(flag_l4_2?index_l4_2:index_l4_3)};
 wire [5:0] index_l5_2 = {!flag_l4_4,(flag_l4_4?index_l4_4:index_l4_5)};
 wire [5:0] index_l5_3 = {!flag_l4_6,(flag_l4_6?index_l4_6:index_l4_7)};
-
 wire [6:0] index_l6_0 = {!flag_l5_0,(flag_l5_0?index_l5_0:index_l5_1)};
 wire [6:0] index_l6_1 = {!flag_l5_2,(flag_l5_2?index_l5_2:index_l5_3)};
-
 wire [7:0] index_l7_0 = {!flag_l6_0,(flag_l6_0?index_l6_0:index_l6_1)};
-
 assign free_adr_index[7:0] = index_l7_0[7:0];
-
-
 assign wr_popping = rd_popping;
-
-
-
 //
 // READ SIDE
 //
-
 //
 // credits for taker are simply rd_pushing*
 //
-reg [9:0] cq_rd_credit;			// registered out take credits
+reg [9:0] cq_rd_credit; // registered out take credits
 reg rd_pushing_q;
 always @( posedge nvdla_core_clk_mgated or negedge nvdla_core_rstn ) begin
     if ( !nvdla_core_rstn ) begin
-        cq_rd_credit <=  10'd0;
-        rd_pushing_q <=  1'b0;
+        cq_rd_credit <= 10'd0;
+        rd_pushing_q <= 1'b0;
     end else begin
         if ( rd_pushing || rd_pushing_q ) begin
-            cq_rd_credit[0] <=  rd_pushing && rd_pushing_thread_id == 4'd0;
-            cq_rd_credit[1] <=  rd_pushing && rd_pushing_thread_id == 4'd1;
-            cq_rd_credit[2] <=  rd_pushing && rd_pushing_thread_id == 4'd2;
-            cq_rd_credit[3] <=  rd_pushing && rd_pushing_thread_id == 4'd3;
-            cq_rd_credit[4] <=  rd_pushing && rd_pushing_thread_id == 4'd4;
-            cq_rd_credit[5] <=  rd_pushing && rd_pushing_thread_id == 4'd5;
-            cq_rd_credit[6] <=  rd_pushing && rd_pushing_thread_id == 4'd6;
-            cq_rd_credit[7] <=  rd_pushing && rd_pushing_thread_id == 4'd7;
-            cq_rd_credit[8] <=  rd_pushing && rd_pushing_thread_id == 4'd8;
-            cq_rd_credit[9] <=  rd_pushing && rd_pushing_thread_id == 4'd9;
-            rd_pushing_q <=  rd_pushing;
+            cq_rd_credit[0] <= rd_pushing && rd_pushing_thread_id == 4'd0;
+            cq_rd_credit[1] <= rd_pushing && rd_pushing_thread_id == 4'd1;
+            cq_rd_credit[2] <= rd_pushing && rd_pushing_thread_id == 4'd2;
+            cq_rd_credit[3] <= rd_pushing && rd_pushing_thread_id == 4'd3;
+            cq_rd_credit[4] <= rd_pushing && rd_pushing_thread_id == 4'd4;
+            cq_rd_credit[5] <= rd_pushing && rd_pushing_thread_id == 4'd5;
+            cq_rd_credit[6] <= rd_pushing && rd_pushing_thread_id == 4'd6;
+            cq_rd_credit[7] <= rd_pushing && rd_pushing_thread_id == 4'd7;
+            cq_rd_credit[8] <= rd_pushing && rd_pushing_thread_id == 4'd8;
+            cq_rd_credit[9] <= rd_pushing && rd_pushing_thread_id == 4'd9;
+            rd_pushing_q <= rd_pushing;
         end
     end
 end
@@ -2122,494 +2064,407 @@ wire rd_pushing6 = rd_pushing && rd_pushing_thread_id == 4'd6;
 wire rd_pushing7 = rd_pushing && rd_pushing_thread_id == 4'd7;
 wire rd_pushing8 = rd_pushing && rd_pushing_thread_id == 4'd8;
 wire rd_pushing9 = rd_pushing && rd_pushing_thread_id == 4'd9;
-
-wire rd_take0 = cq_rd_take && cq_rd_take_thread_id == 4'd0; 
-wire rd_take1 = cq_rd_take && cq_rd_take_thread_id == 4'd1; 
-wire rd_take2 = cq_rd_take && cq_rd_take_thread_id == 4'd2; 
-wire rd_take3 = cq_rd_take && cq_rd_take_thread_id == 4'd3; 
-wire rd_take4 = cq_rd_take && cq_rd_take_thread_id == 4'd4; 
-wire rd_take5 = cq_rd_take && cq_rd_take_thread_id == 4'd5; 
-wire rd_take6 = cq_rd_take && cq_rd_take_thread_id == 4'd6; 
-wire rd_take7 = cq_rd_take && cq_rd_take_thread_id == 4'd7; 
-wire rd_take8 = cq_rd_take && cq_rd_take_thread_id == 4'd8; 
-wire rd_take9 = cq_rd_take && cq_rd_take_thread_id == 4'd9; 
-
-
+wire rd_take0 = cq_rd_take && cq_rd_take_thread_id == 4'd0;
+wire rd_take1 = cq_rd_take && cq_rd_take_thread_id == 4'd1;
+wire rd_take2 = cq_rd_take && cq_rd_take_thread_id == 4'd2;
+wire rd_take3 = cq_rd_take && cq_rd_take_thread_id == 4'd3;
+wire rd_take4 = cq_rd_take && cq_rd_take_thread_id == 4'd4;
+wire rd_take5 = cq_rd_take && cq_rd_take_thread_id == 4'd5;
+wire rd_take6 = cq_rd_take && cq_rd_take_thread_id == 4'd6;
+wire rd_take7 = cq_rd_take && cq_rd_take_thread_id == 4'd7;
+wire rd_take8 = cq_rd_take && cq_rd_take_thread_id == 4'd8;
+wire rd_take9 = cq_rd_take && cq_rd_take_thread_id == 4'd9;
 reg [7:0] head0; // thread 0's head pointer
 reg [7:0] tail0; // thread 0's tail pointer
-
 reg [7:0] head1; // thread 1's head pointer
 reg [7:0] tail1; // thread 1's tail pointer
-
 reg [7:0] head2; // thread 2's head pointer
 reg [7:0] tail2; // thread 2's tail pointer
-
 reg [7:0] head3; // thread 3's head pointer
 reg [7:0] tail3; // thread 3's tail pointer
-
 reg [7:0] head4; // thread 4's head pointer
 reg [7:0] tail4; // thread 4's tail pointer
-
 reg [7:0] head5; // thread 5's head pointer
 reg [7:0] tail5; // thread 5's tail pointer
-
 reg [7:0] head6; // thread 6's head pointer
 reg [7:0] tail6; // thread 6's tail pointer
-
 reg [7:0] head7; // thread 7's head pointer
 reg [7:0] tail7; // thread 7's tail pointer
-
 reg [7:0] head8; // thread 8's head pointer
 reg [7:0] tail8; // thread 8's tail pointer
-
 reg [7:0] head9; // thread 9's head pointer
 reg [7:0] tail9; // thread 9's tail pointer
-
 reg [9:0] rd_take_n_dly;
 reg rd_take_dly_cg;
-wire update_rd_take_n_dly = cq_rd_take || rd_take_dly_cg; 
+wire update_rd_take_n_dly = cq_rd_take || rd_take_dly_cg;
 always @( posedge nvdla_core_clk_mgated or negedge nvdla_core_rstn ) begin
     if ( !nvdla_core_rstn ) begin
-        rd_take_dly_cg <=  1'b0;
-        rd_take_n_dly <=  {10{1'b0}};
+        rd_take_dly_cg <= 1'b0;
+        rd_take_n_dly <= {10{1'b0}};
     end else begin
-        rd_take_dly_cg <=  cq_rd_take;
-
+        rd_take_dly_cg <= cq_rd_take;
         if ( update_rd_take_n_dly ) begin
-            rd_take_n_dly <=  {rd_take9,rd_take8,rd_take7,rd_take6,rd_take5,rd_take4,rd_take3,rd_take2,rd_take1,rd_take0};
+            rd_take_n_dly <= {rd_take9,rd_take8,rd_take7,rd_take6,rd_take5,rd_take4,rd_take3,rd_take2,rd_take1,rd_take0};
         end
-        //synopsys translate_off
+//synopsys translate_off
             else if ( !update_rd_take_n_dly) begin
         end else begin
-            rd_take_n_dly <=  {10{`x_or_0}};
+            rd_take_n_dly <= {10{`x_or_0}};
         end
-        //synopsys translate_on
-
+//synopsys translate_on
     end
 end
-
-reg  [7:0] adr_ram_wr_adr;
+reg [7:0] adr_ram_wr_adr;
 wire [7:0] adr_ram_wr_data;
-reg        adr_ram_wr_enable;
-reg  [7:0] adr_ram_rd_adr;
+reg adr_ram_wr_enable;
+reg [7:0] adr_ram_rd_adr;
 wire [7:0] adr_ram_rd_data;
-reg       adr_ram_rd_enable;
-
-reg  [8:0] cq_rd_count0;
+reg adr_ram_rd_enable;
+reg [8:0] cq_rd_count0;
 wire [8:0] rd_count0_next;
-reg  [8:0] cq_rd_count1;
+reg [8:0] cq_rd_count1;
 wire [8:0] rd_count1_next;
-reg  [8:0] cq_rd_count2;
+reg [8:0] cq_rd_count2;
 wire [8:0] rd_count2_next;
-reg  [8:0] cq_rd_count3;
+reg [8:0] cq_rd_count3;
 wire [8:0] rd_count3_next;
-reg  [8:0] cq_rd_count4;
+reg [8:0] cq_rd_count4;
 wire [8:0] rd_count4_next;
-reg  [8:0] cq_rd_count5;
+reg [8:0] cq_rd_count5;
 wire [8:0] rd_count5_next;
-reg  [8:0] cq_rd_count6;
+reg [8:0] cq_rd_count6;
 wire [8:0] rd_count6_next;
-reg  [8:0] cq_rd_count7;
+reg [8:0] cq_rd_count7;
 wire [8:0] rd_count7_next;
-reg  [8:0] cq_rd_count8;
+reg [8:0] cq_rd_count8;
 wire [8:0] rd_count8_next;
-reg  [8:0] cq_rd_count9;
+reg [8:0] cq_rd_count9;
 wire [8:0] rd_count9_next;
-
-assign rd_count0_next = 
-    rd_pushing0 ? ( rd_take0 ? cq_rd_count0 : cq_rd_count0 + 1'd1 ) : 
+assign rd_count0_next =
+    rd_pushing0 ? ( rd_take0 ? cq_rd_count0 : cq_rd_count0 + 1'd1 ) :
                   ( rd_take0 ? cq_rd_count0 - 1'd1 : cq_rd_count0 );
-assign rd_count1_next = 
-    rd_pushing1 ? ( rd_take1 ? cq_rd_count1 : cq_rd_count1 + 1'd1 ) : 
+assign rd_count1_next =
+    rd_pushing1 ? ( rd_take1 ? cq_rd_count1 : cq_rd_count1 + 1'd1 ) :
                   ( rd_take1 ? cq_rd_count1 - 1'd1 : cq_rd_count1 );
-assign rd_count2_next = 
-    rd_pushing2 ? ( rd_take2 ? cq_rd_count2 : cq_rd_count2 + 1'd1 ) : 
+assign rd_count2_next =
+    rd_pushing2 ? ( rd_take2 ? cq_rd_count2 : cq_rd_count2 + 1'd1 ) :
                   ( rd_take2 ? cq_rd_count2 - 1'd1 : cq_rd_count2 );
-assign rd_count3_next = 
-    rd_pushing3 ? ( rd_take3 ? cq_rd_count3 : cq_rd_count3 + 1'd1 ) : 
+assign rd_count3_next =
+    rd_pushing3 ? ( rd_take3 ? cq_rd_count3 : cq_rd_count3 + 1'd1 ) :
                   ( rd_take3 ? cq_rd_count3 - 1'd1 : cq_rd_count3 );
-assign rd_count4_next = 
-    rd_pushing4 ? ( rd_take4 ? cq_rd_count4 : cq_rd_count4 + 1'd1 ) : 
+assign rd_count4_next =
+    rd_pushing4 ? ( rd_take4 ? cq_rd_count4 : cq_rd_count4 + 1'd1 ) :
                   ( rd_take4 ? cq_rd_count4 - 1'd1 : cq_rd_count4 );
-assign rd_count5_next = 
-    rd_pushing5 ? ( rd_take5 ? cq_rd_count5 : cq_rd_count5 + 1'd1 ) : 
+assign rd_count5_next =
+    rd_pushing5 ? ( rd_take5 ? cq_rd_count5 : cq_rd_count5 + 1'd1 ) :
                   ( rd_take5 ? cq_rd_count5 - 1'd1 : cq_rd_count5 );
-assign rd_count6_next = 
-    rd_pushing6 ? ( rd_take6 ? cq_rd_count6 : cq_rd_count6 + 1'd1 ) : 
+assign rd_count6_next =
+    rd_pushing6 ? ( rd_take6 ? cq_rd_count6 : cq_rd_count6 + 1'd1 ) :
                   ( rd_take6 ? cq_rd_count6 - 1'd1 : cq_rd_count6 );
-assign rd_count7_next = 
-    rd_pushing7 ? ( rd_take7 ? cq_rd_count7 : cq_rd_count7 + 1'd1 ) : 
+assign rd_count7_next =
+    rd_pushing7 ? ( rd_take7 ? cq_rd_count7 : cq_rd_count7 + 1'd1 ) :
                   ( rd_take7 ? cq_rd_count7 - 1'd1 : cq_rd_count7 );
-assign rd_count8_next = 
-    rd_pushing8 ? ( rd_take8 ? cq_rd_count8 : cq_rd_count8 + 1'd1 ) : 
+assign rd_count8_next =
+    rd_pushing8 ? ( rd_take8 ? cq_rd_count8 : cq_rd_count8 + 1'd1 ) :
                   ( rd_take8 ? cq_rd_count8 - 1'd1 : cq_rd_count8 );
-assign rd_count9_next = 
-    rd_pushing9 ? ( rd_take9 ? cq_rd_count9 : cq_rd_count9 + 1'd1 ) : 
+assign rd_count9_next =
+    rd_pushing9 ? ( rd_take9 ? cq_rd_count9 : cq_rd_count9 + 1'd1 ) :
                   ( rd_take9 ? cq_rd_count9 - 1'd1 : cq_rd_count9 );
 always @( posedge nvdla_core_clk_mgated or negedge nvdla_core_rstn ) begin
     if ( !nvdla_core_rstn ) begin
-        cq_rd_count0 <=  9'd0;
-        cq_rd_count1 <=  9'd0;
-        cq_rd_count2 <=  9'd0;
-        cq_rd_count3 <=  9'd0;
-        cq_rd_count4 <=  9'd0;
-        cq_rd_count5 <=  9'd0;
-        cq_rd_count6 <=  9'd0;
-        cq_rd_count7 <=  9'd0;
-        cq_rd_count8 <=  9'd0;
-        cq_rd_count9 <=  9'd0;
+        cq_rd_count0 <= 9'd0;
+        cq_rd_count1 <= 9'd0;
+        cq_rd_count2 <= 9'd0;
+        cq_rd_count3 <= 9'd0;
+        cq_rd_count4 <= 9'd0;
+        cq_rd_count5 <= 9'd0;
+        cq_rd_count6 <= 9'd0;
+        cq_rd_count7 <= 9'd0;
+        cq_rd_count8 <= 9'd0;
+        cq_rd_count9 <= 9'd0;
     end else begin
         if ( rd_pushing0 ^ rd_take0 ) begin
-            cq_rd_count0 <=  rd_count0_next;
-        end 
-        //synopsys translate_off
+            cq_rd_count0 <= rd_count0_next;
+        end
+//synopsys translate_off
             else if ( !(rd_pushing0 ^ rd_take0) ) begin
         end else begin
-            cq_rd_count0 <=  {9{`x_or_0}};
+            cq_rd_count0 <= {9{`x_or_0}};
         end
-        //synopsys translate_on
-
+//synopsys translate_on
         if ( rd_pushing1 ^ rd_take1 ) begin
-            cq_rd_count1 <=  rd_count1_next;
-        end 
-        //synopsys translate_off
+            cq_rd_count1 <= rd_count1_next;
+        end
+//synopsys translate_off
             else if ( !(rd_pushing1 ^ rd_take1) ) begin
         end else begin
-            cq_rd_count1 <=  {9{`x_or_0}};
+            cq_rd_count1 <= {9{`x_or_0}};
         end
-        //synopsys translate_on
-
+//synopsys translate_on
         if ( rd_pushing2 ^ rd_take2 ) begin
-            cq_rd_count2 <=  rd_count2_next;
-        end 
-        //synopsys translate_off
+            cq_rd_count2 <= rd_count2_next;
+        end
+//synopsys translate_off
             else if ( !(rd_pushing2 ^ rd_take2) ) begin
         end else begin
-            cq_rd_count2 <=  {9{`x_or_0}};
+            cq_rd_count2 <= {9{`x_or_0}};
         end
-        //synopsys translate_on
-
+//synopsys translate_on
         if ( rd_pushing3 ^ rd_take3 ) begin
-            cq_rd_count3 <=  rd_count3_next;
-        end 
-        //synopsys translate_off
+            cq_rd_count3 <= rd_count3_next;
+        end
+//synopsys translate_off
             else if ( !(rd_pushing3 ^ rd_take3) ) begin
         end else begin
-            cq_rd_count3 <=  {9{`x_or_0}};
+            cq_rd_count3 <= {9{`x_or_0}};
         end
-        //synopsys translate_on
-
+//synopsys translate_on
         if ( rd_pushing4 ^ rd_take4 ) begin
-            cq_rd_count4 <=  rd_count4_next;
-        end 
-        //synopsys translate_off
+            cq_rd_count4 <= rd_count4_next;
+        end
+//synopsys translate_off
             else if ( !(rd_pushing4 ^ rd_take4) ) begin
         end else begin
-            cq_rd_count4 <=  {9{`x_or_0}};
+            cq_rd_count4 <= {9{`x_or_0}};
         end
-        //synopsys translate_on
-
+//synopsys translate_on
         if ( rd_pushing5 ^ rd_take5 ) begin
-            cq_rd_count5 <=  rd_count5_next;
-        end 
-        //synopsys translate_off
+            cq_rd_count5 <= rd_count5_next;
+        end
+//synopsys translate_off
             else if ( !(rd_pushing5 ^ rd_take5) ) begin
         end else begin
-            cq_rd_count5 <=  {9{`x_or_0}};
+            cq_rd_count5 <= {9{`x_or_0}};
         end
-        //synopsys translate_on
-
+//synopsys translate_on
         if ( rd_pushing6 ^ rd_take6 ) begin
-            cq_rd_count6 <=  rd_count6_next;
-        end 
-        //synopsys translate_off
+            cq_rd_count6 <= rd_count6_next;
+        end
+//synopsys translate_off
             else if ( !(rd_pushing6 ^ rd_take6) ) begin
         end else begin
-            cq_rd_count6 <=  {9{`x_or_0}};
+            cq_rd_count6 <= {9{`x_or_0}};
         end
-        //synopsys translate_on
-
+//synopsys translate_on
         if ( rd_pushing7 ^ rd_take7 ) begin
-            cq_rd_count7 <=  rd_count7_next;
-        end 
-        //synopsys translate_off
+            cq_rd_count7 <= rd_count7_next;
+        end
+//synopsys translate_off
             else if ( !(rd_pushing7 ^ rd_take7) ) begin
         end else begin
-            cq_rd_count7 <=  {9{`x_or_0}};
+            cq_rd_count7 <= {9{`x_or_0}};
         end
-        //synopsys translate_on
-
+//synopsys translate_on
         if ( rd_pushing8 ^ rd_take8 ) begin
-            cq_rd_count8 <=  rd_count8_next;
-        end 
-        //synopsys translate_off
+            cq_rd_count8 <= rd_count8_next;
+        end
+//synopsys translate_off
             else if ( !(rd_pushing8 ^ rd_take8) ) begin
         end else begin
-            cq_rd_count8 <=  {9{`x_or_0}};
+            cq_rd_count8 <= {9{`x_or_0}};
         end
-        //synopsys translate_on
-
+//synopsys translate_on
         if ( rd_pushing9 ^ rd_take9 ) begin
-            cq_rd_count9 <=  rd_count9_next;
-        end 
-        //synopsys translate_off
+            cq_rd_count9 <= rd_count9_next;
+        end
+//synopsys translate_off
             else if ( !(rd_pushing9 ^ rd_take9) ) begin
         end else begin
-            cq_rd_count9 <=  {9{`x_or_0}};
+            cq_rd_count9 <= {9{`x_or_0}};
         end
-        //synopsys translate_on
-
+//synopsys translate_on
     end
 end
-
 reg [9:0] update_head;
 wire [9:0] update_head_next;
-
-assign update_head_next[0] = (rd_take0 && cq_rd_count0 > 9'd1) ? 1'b1 : 1'b0; 
-assign update_head_next[1] = (rd_take1 && cq_rd_count1 > 9'd1) ? 1'b1 : 1'b0; 
-assign update_head_next[2] = (rd_take2 && cq_rd_count2 > 9'd1) ? 1'b1 : 1'b0; 
-assign update_head_next[3] = (rd_take3 && cq_rd_count3 > 9'd1) ? 1'b1 : 1'b0; 
-assign update_head_next[4] = (rd_take4 && cq_rd_count4 > 9'd1) ? 1'b1 : 1'b0; 
-assign update_head_next[5] = (rd_take5 && cq_rd_count5 > 9'd1) ? 1'b1 : 1'b0; 
-assign update_head_next[6] = (rd_take6 && cq_rd_count6 > 9'd1) ? 1'b1 : 1'b0; 
-assign update_head_next[7] = (rd_take7 && cq_rd_count7 > 9'd1) ? 1'b1 : 1'b0; 
-assign update_head_next[8] = (rd_take8 && cq_rd_count8 > 9'd1) ? 1'b1 : 1'b0; 
-assign update_head_next[9] = (rd_take9 && cq_rd_count9 > 9'd1) ? 1'b1 : 1'b0; 
+assign update_head_next[0] = (rd_take0 && cq_rd_count0 > 9'd1) ? 1'b1 : 1'b0;
+assign update_head_next[1] = (rd_take1 && cq_rd_count1 > 9'd1) ? 1'b1 : 1'b0;
+assign update_head_next[2] = (rd_take2 && cq_rd_count2 > 9'd1) ? 1'b1 : 1'b0;
+assign update_head_next[3] = (rd_take3 && cq_rd_count3 > 9'd1) ? 1'b1 : 1'b0;
+assign update_head_next[4] = (rd_take4 && cq_rd_count4 > 9'd1) ? 1'b1 : 1'b0;
+assign update_head_next[5] = (rd_take5 && cq_rd_count5 > 9'd1) ? 1'b1 : 1'b0;
+assign update_head_next[6] = (rd_take6 && cq_rd_count6 > 9'd1) ? 1'b1 : 1'b0;
+assign update_head_next[7] = (rd_take7 && cq_rd_count7 > 9'd1) ? 1'b1 : 1'b0;
+assign update_head_next[8] = (rd_take8 && cq_rd_count8 > 9'd1) ? 1'b1 : 1'b0;
+assign update_head_next[9] = (rd_take9 && cq_rd_count9 > 9'd1) ? 1'b1 : 1'b0;
 always @( posedge nvdla_core_clk_mgated or negedge nvdla_core_rstn ) begin
     if ( !nvdla_core_rstn ) begin
-        update_head <=  10'd0;
+        update_head <= 10'd0;
     end else begin
-
         if ( rd_pushing || cq_rd_take ) begin
-            update_head <=  update_head_next;
+            update_head <= update_head_next;
         end
-        //synopsys translate_off
+//synopsys translate_off
             else if ( !(rd_pushing || cq_rd_take) ) begin
         end else begin
-            update_head <=  {10{`x_or_0}};
+            update_head <= {10{`x_or_0}};
         end
-        //synopsys translate_on
-
-
-
-
-
-
-
-
-
-
-
+//synopsys translate_on
     end
 end
-
 always @(posedge nvdla_core_clk_mgated) begin
-
     if ( rd_pushing0 ) begin
-        tail0 <=  rd_pushing_adr;
-    end 
-    //synopsys translate_off
+        tail0 <= rd_pushing_adr;
+    end
+//synopsys translate_off
         else if ( !rd_pushing0 ) begin
     end else begin
-        tail0 <=  {8{`x_or_0}};
+        tail0 <= {8{`x_or_0}};
     end
-    //synopsys translate_on
-
-
+//synopsys translate_on
     if ( (rd_pushing0 && cq_rd_count0 == 9'd0 ) ||
          (rd_pushing0 && rd_take0 && cq_rd_count0 == 9'd1) ) begin
-        head0 <=  rd_pushing_adr;
+        head0 <= rd_pushing_adr;
     end else if ( update_head[0] ) begin
-        head0 <=  adr_ram_rd_data;
+        head0 <= adr_ram_rd_data;
     end
-
-
     if ( rd_pushing1 ) begin
-        tail1 <=  rd_pushing_adr;
-    end 
-    //synopsys translate_off
+        tail1 <= rd_pushing_adr;
+    end
+//synopsys translate_off
         else if ( !rd_pushing1 ) begin
     end else begin
-        tail1 <=  {8{`x_or_0}};
+        tail1 <= {8{`x_or_0}};
     end
-    //synopsys translate_on
-
-
+//synopsys translate_on
     if ( (rd_pushing1 && cq_rd_count1 == 9'd0 ) ||
          (rd_pushing1 && rd_take1 && cq_rd_count1 == 9'd1) ) begin
-        head1 <=  rd_pushing_adr;
+        head1 <= rd_pushing_adr;
     end else if ( update_head[1] ) begin
-        head1 <=  adr_ram_rd_data;
+        head1 <= adr_ram_rd_data;
     end
-
-
     if ( rd_pushing2 ) begin
-        tail2 <=  rd_pushing_adr;
-    end 
-    //synopsys translate_off
+        tail2 <= rd_pushing_adr;
+    end
+//synopsys translate_off
         else if ( !rd_pushing2 ) begin
     end else begin
-        tail2 <=  {8{`x_or_0}};
+        tail2 <= {8{`x_or_0}};
     end
-    //synopsys translate_on
-
-
+//synopsys translate_on
     if ( (rd_pushing2 && cq_rd_count2 == 9'd0 ) ||
          (rd_pushing2 && rd_take2 && cq_rd_count2 == 9'd1) ) begin
-        head2 <=  rd_pushing_adr;
+        head2 <= rd_pushing_adr;
     end else if ( update_head[2] ) begin
-        head2 <=  adr_ram_rd_data;
+        head2 <= adr_ram_rd_data;
     end
-
-
     if ( rd_pushing3 ) begin
-        tail3 <=  rd_pushing_adr;
-    end 
-    //synopsys translate_off
+        tail3 <= rd_pushing_adr;
+    end
+//synopsys translate_off
         else if ( !rd_pushing3 ) begin
     end else begin
-        tail3 <=  {8{`x_or_0}};
+        tail3 <= {8{`x_or_0}};
     end
-    //synopsys translate_on
-
-
+//synopsys translate_on
     if ( (rd_pushing3 && cq_rd_count3 == 9'd0 ) ||
          (rd_pushing3 && rd_take3 && cq_rd_count3 == 9'd1) ) begin
-        head3 <=  rd_pushing_adr;
+        head3 <= rd_pushing_adr;
     end else if ( update_head[3] ) begin
-        head3 <=  adr_ram_rd_data;
+        head3 <= adr_ram_rd_data;
     end
-
-
     if ( rd_pushing4 ) begin
-        tail4 <=  rd_pushing_adr;
-    end 
-    //synopsys translate_off
+        tail4 <= rd_pushing_adr;
+    end
+//synopsys translate_off
         else if ( !rd_pushing4 ) begin
     end else begin
-        tail4 <=  {8{`x_or_0}};
+        tail4 <= {8{`x_or_0}};
     end
-    //synopsys translate_on
-
-
+//synopsys translate_on
     if ( (rd_pushing4 && cq_rd_count4 == 9'd0 ) ||
          (rd_pushing4 && rd_take4 && cq_rd_count4 == 9'd1) ) begin
-        head4 <=  rd_pushing_adr;
+        head4 <= rd_pushing_adr;
     end else if ( update_head[4] ) begin
-        head4 <=  adr_ram_rd_data;
+        head4 <= adr_ram_rd_data;
     end
-
-
     if ( rd_pushing5 ) begin
-        tail5 <=  rd_pushing_adr;
-    end 
-    //synopsys translate_off
+        tail5 <= rd_pushing_adr;
+    end
+//synopsys translate_off
         else if ( !rd_pushing5 ) begin
     end else begin
-        tail5 <=  {8{`x_or_0}};
+        tail5 <= {8{`x_or_0}};
     end
-    //synopsys translate_on
-
-
+//synopsys translate_on
     if ( (rd_pushing5 && cq_rd_count5 == 9'd0 ) ||
          (rd_pushing5 && rd_take5 && cq_rd_count5 == 9'd1) ) begin
-        head5 <=  rd_pushing_adr;
+        head5 <= rd_pushing_adr;
     end else if ( update_head[5] ) begin
-        head5 <=  adr_ram_rd_data;
+        head5 <= adr_ram_rd_data;
     end
-
-
     if ( rd_pushing6 ) begin
-        tail6 <=  rd_pushing_adr;
-    end 
-    //synopsys translate_off
+        tail6 <= rd_pushing_adr;
+    end
+//synopsys translate_off
         else if ( !rd_pushing6 ) begin
     end else begin
-        tail6 <=  {8{`x_or_0}};
+        tail6 <= {8{`x_or_0}};
     end
-    //synopsys translate_on
-
-
+//synopsys translate_on
     if ( (rd_pushing6 && cq_rd_count6 == 9'd0 ) ||
          (rd_pushing6 && rd_take6 && cq_rd_count6 == 9'd1) ) begin
-        head6 <=  rd_pushing_adr;
+        head6 <= rd_pushing_adr;
     end else if ( update_head[6] ) begin
-        head6 <=  adr_ram_rd_data;
+        head6 <= adr_ram_rd_data;
     end
-
-
     if ( rd_pushing7 ) begin
-        tail7 <=  rd_pushing_adr;
-    end 
-    //synopsys translate_off
+        tail7 <= rd_pushing_adr;
+    end
+//synopsys translate_off
         else if ( !rd_pushing7 ) begin
     end else begin
-        tail7 <=  {8{`x_or_0}};
+        tail7 <= {8{`x_or_0}};
     end
-    //synopsys translate_on
-
-
+//synopsys translate_on
     if ( (rd_pushing7 && cq_rd_count7 == 9'd0 ) ||
          (rd_pushing7 && rd_take7 && cq_rd_count7 == 9'd1) ) begin
-        head7 <=  rd_pushing_adr;
+        head7 <= rd_pushing_adr;
     end else if ( update_head[7] ) begin
-        head7 <=  adr_ram_rd_data;
+        head7 <= adr_ram_rd_data;
     end
-
-
     if ( rd_pushing8 ) begin
-        tail8 <=  rd_pushing_adr;
-    end 
-    //synopsys translate_off
+        tail8 <= rd_pushing_adr;
+    end
+//synopsys translate_off
         else if ( !rd_pushing8 ) begin
     end else begin
-        tail8 <=  {8{`x_or_0}};
+        tail8 <= {8{`x_or_0}};
     end
-    //synopsys translate_on
-
-
+//synopsys translate_on
     if ( (rd_pushing8 && cq_rd_count8 == 9'd0 ) ||
          (rd_pushing8 && rd_take8 && cq_rd_count8 == 9'd1) ) begin
-        head8 <=  rd_pushing_adr;
+        head8 <= rd_pushing_adr;
     end else if ( update_head[8] ) begin
-        head8 <=  adr_ram_rd_data;
+        head8 <= adr_ram_rd_data;
     end
-
-
     if ( rd_pushing9 ) begin
-        tail9 <=  rd_pushing_adr;
-    end 
-    //synopsys translate_off
+        tail9 <= rd_pushing_adr;
+    end
+//synopsys translate_off
         else if ( !rd_pushing9 ) begin
     end else begin
-        tail9 <=  {8{`x_or_0}};
+        tail9 <= {8{`x_or_0}};
     end
-    //synopsys translate_on
-
-
+//synopsys translate_on
     if ( (rd_pushing9 && cq_rd_count9 == 9'd0 ) ||
          (rd_pushing9 && rd_take9 && cq_rd_count9 == 9'd1) ) begin
-        head9 <=  rd_pushing_adr;
+        head9 <= rd_pushing_adr;
     end else if ( update_head[9] ) begin
-        head9 <=  adr_ram_rd_data;
+        head9 <= adr_ram_rd_data;
     end
-
 end
-
-
 nv_ram_rwst_256x8 adr_ram (
-      .clk               ( nvdla_core_clk )
-    , .wa        ( adr_ram_wr_adr )
-    , .we        ( adr_ram_wr_enable  )
-    , .di        ( adr_ram_wr_data )
-    , .ra        ( adr_ram_rd_adr )
-    , .re        ( adr_ram_rd_enable  )
-    , .dout        ( adr_ram_rd_data )
+      .clk ( nvdla_core_clk )
+    , .wa ( adr_ram_wr_adr )
+    , .we ( adr_ram_wr_enable )
+    , .di ( adr_ram_wr_data )
+    , .ra ( adr_ram_rd_adr )
+    , .re ( adr_ram_rd_enable )
+    , .dout ( adr_ram_rd_data )
     , .pwrbus_ram_pd ( pwrbus_ram_pd )
     );
-
 assign adr_ram_wr_data = rd_pushing_adr;
-
 always @(*) begin
     case( rd_pushing_thread_id )
         4'd0: adr_ram_wr_adr = tail0;
@@ -2622,12 +2477,11 @@ always @(*) begin
         4'd7: adr_ram_wr_adr = tail7;
         4'd8: adr_ram_wr_adr = tail8;
         4'd9: adr_ram_wr_adr = tail9;
-        //VCS coverage off
+//VCS coverage off
         default: adr_ram_wr_adr = {8{`x_or_0}};
-        //VCS coverage on
+//VCS coverage on
     endcase
 end
-
 always @(*) begin
     case( rd_pushing_thread_id )
         4'd0: adr_ram_wr_enable = rd_pushing && cq_rd_count0 != 9'd0 ? 1'b1 : 1'b0;
@@ -2640,12 +2494,11 @@ always @(*) begin
         4'd7: adr_ram_wr_enable = rd_pushing && cq_rd_count7 != 9'd0 ? 1'b1 : 1'b0;
         4'd8: adr_ram_wr_enable = rd_pushing && cq_rd_count8 != 9'd0 ? 1'b1 : 1'b0;
         4'd9: adr_ram_wr_enable = rd_pushing && cq_rd_count9 != 9'd0 ? 1'b1 : 1'b0;
-        //VCS coverage off
+//VCS coverage off
         default: adr_ram_wr_enable = !rd_pushing ? 1'b0 : `x_or_0;
-        //VCS coverage on
+//VCS coverage on
     endcase
 end
-                    
 always @(*) begin
     case( cq_rd_take_thread_id )
         4'd0: adr_ram_rd_enable = cq_rd_take && cq_rd_count0 != 9'd0 ? 1'b1 : 1'b0;
@@ -2658,12 +2511,11 @@ always @(*) begin
         4'd7: adr_ram_rd_enable = cq_rd_take && cq_rd_count7 != 9'd0 ? 1'b1 : 1'b0;
         4'd8: adr_ram_rd_enable = cq_rd_take && cq_rd_count8 != 9'd0 ? 1'b1 : 1'b0;
         4'd9: adr_ram_rd_enable = cq_rd_take && cq_rd_count9 != 9'd0 ? 1'b1 : 1'b0;
-        //VCS coverage off
+//VCS coverage off
         default: adr_ram_rd_enable = !cq_rd_take ? 1'b0 : `x_or_0;
-        //VCS coverage on
+//VCS coverage on
     endcase
-end 
-
+end
 always @(*) begin
     case( cq_rd_take_thread_id )
         4'd0: adr_ram_rd_adr = rd_take_n_dly[0] && update_head[0] ? adr_ram_rd_data : head0;
@@ -2676,12 +2528,11 @@ always @(*) begin
         4'd7: adr_ram_rd_adr = rd_take_n_dly[7] && update_head[7] ? adr_ram_rd_data : head7;
         4'd8: adr_ram_rd_adr = rd_take_n_dly[8] && update_head[8] ? adr_ram_rd_data : head8;
         4'd9: adr_ram_rd_adr = rd_take_n_dly[9] && update_head[9] ? adr_ram_rd_data : head9;
-        //VCS coverage off
+//VCS coverage off
         default: adr_ram_rd_adr = {8{`x_or_0}};
-        //VCS coverage on
+//VCS coverage on
     endcase
 end
-
 always @(*) begin
     case( cq_rd_take_thread_id )
         4'd0: cq_rd_adr = rd_take_n_dly[0] && update_head[0] ? adr_ram_rd_data : head0;
@@ -2694,1145 +2545,1005 @@ always @(*) begin
         4'd7: cq_rd_adr = rd_take_n_dly[7] && update_head[7] ? adr_ram_rd_data : head7;
         4'd8: cq_rd_adr = rd_take_n_dly[8] && update_head[8] ? adr_ram_rd_data : head8;
         4'd9: cq_rd_adr = rd_take_n_dly[9] && update_head[9] ? adr_ram_rd_data : head9;
-        //VCS coverage off
+//VCS coverage off
         default: cq_rd_adr = {8{`x_or_0}};
-        //VCS coverage on
+//VCS coverage on
     endcase
 end
-
-
 //
 // take data comes out next cycle for non-ff rams.
 //
 reg rd_take_dly;
 assign rd_popping = rd_take_dly;
-
 reg [7:0] rd_adr_dly;
 assign rd_popping_adr = rd_adr_dly;
-assign rd_enable  = cq_rd_take;
+assign rd_enable = cq_rd_take;
 always @( posedge nvdla_core_clk_mgated or negedge nvdla_core_rstn ) begin
     if ( !nvdla_core_rstn ) begin
-        rd_take_dly <=  1'b0;
+        rd_take_dly <= 1'b0;
     end else begin
-        rd_take_dly <=  cq_rd_take;
+        rd_take_dly <= cq_rd_take;
     end
 end
-
 always @( posedge nvdla_core_clk_mgated ) begin
     if ( cq_rd_take ) begin
-        rd_adr_dly <=  cq_rd_adr;
-    end 
-    //synopsys translate_off
+        rd_adr_dly <= cq_rd_adr;
+    end
+//synopsys translate_off
         else if ( !(cq_rd_take) ) begin
     end else begin
-        rd_adr_dly <=  {8{`x_or_0}};
+        rd_adr_dly <= {8{`x_or_0}};
     end
-    //synopsys translate_on
- 
+//synopsys translate_on
 end
-
-
 //
 // -rd_take_to_rd_busy conversion (conceptually outside the fifo except for ra2 bypass)
 //
-wire [9:0] cq_rd_take_elig;   // mask of threads that can do takes this cycle
-
-wire rd_pre_bypassing0;          // bypassing is split up into two parts to avoid combinatorial loop
-wire rd_bypassing0;              //      between cq_rd0_pvld and cq_rd0_prdy when doing full bypass
-reg  [6:0] rd_skid0_0;     // head   skid reg
-reg  [6:0] rd_skid0_1;     // head+1 skid reg
-reg  [6:0] rd_skid0_2;     // head+2 skid reg (for -rd_take_reg)
-reg  rd_skid0_0_vld;             // head   skid reg has valid data
-reg  rd_skid0_1_vld;             // head+1 skid reg has valid data
-reg  rd_skid0_2_vld;             // head+2 skid reg has valid data (for -rd_take_reg)
-
-reg  cq_rd0_prdy_d;  
+wire [9:0] cq_rd_take_elig; // mask of threads that can do takes this cycle
+wire rd_pre_bypassing0; // bypassing is split up into two parts to avoid combinatorial loop
+wire rd_bypassing0; //      between cq_rd0_pvld and cq_rd0_prdy when doing full bypass
+reg [6:0] rd_skid0_0; // head   skid reg
+reg [6:0] rd_skid0_1; // head+1 skid reg
+reg [6:0] rd_skid0_2; // head+2 skid reg (for -rd_take_reg)
+reg rd_skid0_0_vld; // head   skid reg has valid data
+reg rd_skid0_1_vld; // head+1 skid reg has valid data
+reg rd_skid0_2_vld; // head+2 skid reg has valid data (for -rd_take_reg)
+reg cq_rd0_prdy_d;
 always @( posedge nvdla_core_clk or negedge nvdla_core_rstn ) begin
     if ( !nvdla_core_rstn ) begin
-        cq_rd0_prdy_d <=  1'b1;
+        cq_rd0_prdy_d <= 1'b1;
     end else begin
-
-        cq_rd0_prdy_d <=  cq_rd0_prdy;
+        cq_rd0_prdy_d <= cq_rd0_prdy;
     end
 end
-
-assign cq_rd0_pvld = rd_skid0_0_vld || rd_pre_bypassing0;  			// full bypass for 0-latency
-assign cq_rd0_pd = rd_skid0_0_vld ? rd_skid0_0 : cq_wr_pd;        // full bypass for 0-latency
-
+assign cq_rd0_pvld = rd_skid0_0_vld || rd_pre_bypassing0; // full bypass for 0-latency
+assign cq_rd0_pd = rd_skid0_0_vld ? rd_skid0_0 : cq_wr_pd; // full bypass for 0-latency
 always @( posedge nvdla_core_clk_mgated_skid ) begin
     if ( (rd_bypassing0 || rd_take_n_dly[0]) && (!rd_skid0_0_vld || (cq_rd0_pvld && cq_rd0_prdy && !rd_skid0_1_vld)) ) begin
-        rd_skid0_0 <=  rd_take_n_dly[0] ? cq_rd_pd_p : cq_wr_pd;
+        rd_skid0_0 <= rd_take_n_dly[0] ? cq_rd_pd_p : cq_wr_pd;
     end else if ( cq_rd0_pvld && cq_rd0_prdy && rd_skid0_1_vld ) begin
-        rd_skid0_0 <=  rd_skid0_1;
+        rd_skid0_0 <= rd_skid0_1;
     end
-    //synopsys translate_off
-        else if ( !((rd_bypassing0 || rd_take_n_dly[0]) && (!rd_skid0_0_vld || (cq_rd0_pvld && cq_rd0_prdy && !rd_skid0_1_vld))) && 
+//synopsys translate_off
+        else if ( !((rd_bypassing0 || rd_take_n_dly[0]) && (!rd_skid0_0_vld || (cq_rd0_pvld && cq_rd0_prdy && !rd_skid0_1_vld))) &&
                   !(cq_rd0_pvld && cq_rd0_prdy && rd_skid0_1_vld) ) begin
     end else begin
-        rd_skid0_0 <=  {7{`x_or_0}};
+        rd_skid0_0 <= {7{`x_or_0}};
     end
-    //synopsys translate_on
-
+//synopsys translate_on
     if ( (rd_bypassing0 || rd_take_n_dly[0]) && (!rd_skid0_1_vld || (cq_rd0_pvld && cq_rd0_prdy && !rd_skid0_2_vld)) ) begin
-        rd_skid0_1 <=  rd_bypassing0 ? cq_wr_pd : cq_rd_pd_p;
+        rd_skid0_1 <= rd_bypassing0 ? cq_wr_pd : cq_rd_pd_p;
     end else if ( cq_rd0_pvld && cq_rd0_prdy && rd_skid0_2_vld ) begin
-        rd_skid0_1 <=  rd_skid0_2;
+        rd_skid0_1 <= rd_skid0_2;
     end
-    //synopsys translate_off
-        else if ( !((rd_bypassing0 || rd_take_n_dly[0]) && (!rd_skid0_1_vld || (cq_rd0_pvld && cq_rd0_prdy && !rd_skid0_2_vld))) && 
+//synopsys translate_off
+        else if ( !((rd_bypassing0 || rd_take_n_dly[0]) && (!rd_skid0_1_vld || (cq_rd0_pvld && cq_rd0_prdy && !rd_skid0_2_vld))) &&
                   !(cq_rd0_pvld && cq_rd0_prdy && rd_skid0_2_vld) ) begin
     end else begin
-        rd_skid0_1 <=  {7{`x_or_0}};
+        rd_skid0_1 <= {7{`x_or_0}};
     end
-    //synopsys translate_on
-
+//synopsys translate_on
     if ( (rd_bypassing0 || rd_take_n_dly[0]) && rd_skid0_0_vld && rd_skid0_1_vld && (rd_skid0_2_vld || !(cq_rd0_pvld && cq_rd0_prdy)) ) begin
-        rd_skid0_2 <=  rd_bypassing0 ? cq_wr_pd : cq_rd_pd_p;
+        rd_skid0_2 <= rd_bypassing0 ? cq_wr_pd : cq_rd_pd_p;
     end
-    //synopsys translate_off
-        else if ( !((rd_bypassing0 || rd_take_n_dly[0]) && rd_skid0_0_vld && rd_skid0_1_vld && (rd_skid0_2_vld || !(cq_rd0_pvld && cq_rd0_prdy))) ) begin 
+//synopsys translate_off
+        else if ( !((rd_bypassing0 || rd_take_n_dly[0]) && rd_skid0_0_vld && rd_skid0_1_vld && (rd_skid0_2_vld || !(cq_rd0_pvld && cq_rd0_prdy))) ) begin
     end else begin
-        rd_skid0_2 <=  {7{`x_or_0}};
+        rd_skid0_2 <= {7{`x_or_0}};
     end
-    //synopsys translate_on
-
+//synopsys translate_on
 end
-
 always @( posedge nvdla_core_clk_mgated_skid or negedge nvdla_core_rstn ) begin
     if ( !nvdla_core_rstn ) begin
-        rd_skid0_0_vld <=  1'b0;
-        rd_skid0_1_vld <=  1'b0;
-        rd_skid0_2_vld <=  1'b0;
+        rd_skid0_0_vld <= 1'b0;
+        rd_skid0_1_vld <= 1'b0;
+        rd_skid0_2_vld <= 1'b0;
     end else begin
-        rd_skid0_0_vld <=  (cq_rd0_pvld && cq_rd0_prdy) ? (rd_skid0_1_vld || (rd_bypassing0 && rd_skid0_0_vld) || rd_take_n_dly[0]) : (rd_skid0_0_vld || rd_bypassing0 || rd_take_n_dly[0]);
-	rd_skid0_1_vld <=  (cq_rd0_pvld && cq_rd0_prdy) ? (rd_skid0_2_vld || (rd_skid0_1_vld && (rd_bypassing0 || rd_take_n_dly[0]))) : (rd_skid0_1_vld || (rd_skid0_0_vld && (rd_bypassing0 || rd_take_n_dly[0])));
-        //VCS coverage off
-	rd_skid0_2_vld <=  (cq_rd0_pvld && cq_rd0_prdy) ? (rd_skid0_2_vld && (rd_bypassing0 || rd_take_n_dly[0])) : (rd_skid0_2_vld || (rd_skid0_1_vld && (rd_bypassing0 || rd_take_n_dly[0])));
-        //VCS coverage on
+        rd_skid0_0_vld <= (cq_rd0_pvld && cq_rd0_prdy) ? (rd_skid0_1_vld || (rd_bypassing0 && rd_skid0_0_vld) || rd_take_n_dly[0]) : (rd_skid0_0_vld || rd_bypassing0 || rd_take_n_dly[0]);
+ rd_skid0_1_vld <= (cq_rd0_pvld && cq_rd0_prdy) ? (rd_skid0_2_vld || (rd_skid0_1_vld && (rd_bypassing0 || rd_take_n_dly[0]))) : (rd_skid0_1_vld || (rd_skid0_0_vld && (rd_bypassing0 || rd_take_n_dly[0])));
+//VCS coverage off
+ rd_skid0_2_vld <= (cq_rd0_pvld && cq_rd0_prdy) ? (rd_skid0_2_vld && (rd_bypassing0 || rd_take_n_dly[0])) : (rd_skid0_2_vld || (rd_skid0_1_vld && (rd_bypassing0 || rd_take_n_dly[0])));
+//VCS coverage on
     end
 end
-
 // spyglass disable_block W164a W116 W484
-reg  [8:0] cq_rd0_credits;   // unused credits
-reg             cq_rd0_credits_ne0; 
-wire [8:0] cq_rd0_credits_w_take_next  =  cq_rd0_credits + cq_rd_credit[0] - 1'b1;
-wire [8:0] cq_rd0_credits_wo_take_next =  cq_rd0_credits + cq_rd_credit[0];
-wire [8:0] cq_rd0_credits_next =  rd_take0 ? cq_rd0_credits_w_take_next : cq_rd0_credits_wo_take_next; 
+reg [8:0] cq_rd0_credits; // unused credits
+reg cq_rd0_credits_ne0;
+wire [8:0] cq_rd0_credits_w_take_next = cq_rd0_credits + cq_rd_credit[0] - 1'b1;
+wire [8:0] cq_rd0_credits_wo_take_next = cq_rd0_credits + cq_rd_credit[0];
+wire [8:0] cq_rd0_credits_next = rd_take0 ? cq_rd0_credits_w_take_next : cq_rd0_credits_wo_take_next;
 // spyglass enable_block W164a W116 W484
-
 //VCS coverage off
 assign cq_rd_take_elig[0] = (cq_rd0_prdy_d || !rd_skid0_0_vld || !rd_skid0_1_vld || (!rd_skid0_2_vld && !rd_take_n_dly[0])) && (cq_rd_credit[0] || cq_rd0_credits_ne0);
 //VCS coverage on
-
 assign rd_pre_bypassing0 = cq_wr_pvld && !cq_wr_busy_int && (cq_wr_thread_id == 4'd0) && cq_rd0_credits == 0 && !cq_rd_credit[0] && (!rd_take_n_dly[0] || rd_skid0_0_vld); // split this up to avoid combinatorial loop when full bypass is in effect
 assign rd_bypassing0 = rd_pre_bypassing0 && (!rd_skid0_2_vld || !rd_skid0_1_vld || !(!cq_rd0_prdy_d && rd_skid0_0_vld && rd_skid0_1_vld)) && !rd_take_n_dly[0];
 always @( posedge nvdla_core_clk_mgated_skid or negedge nvdla_core_rstn ) begin
     if ( !nvdla_core_rstn ) begin
-        cq_rd0_credits <=  9'd0;
-        cq_rd0_credits_ne0 <=  1'b0;
+        cq_rd0_credits <= 9'd0;
+        cq_rd0_credits_ne0 <= 1'b0;
     end else begin
-        if ( cq_rd_credit[0] |  rd_take0 ) begin
-            cq_rd0_credits <=  cq_rd0_credits_next;
-            cq_rd0_credits_ne0 <=  rd_take0 ? (cq_rd0_credits_w_take_next != 0) : (cq_rd0_credits_wo_take_next != 0);
+        if ( cq_rd_credit[0] | rd_take0 ) begin
+            cq_rd0_credits <= cq_rd0_credits_next;
+            cq_rd0_credits_ne0 <= rd_take0 ? (cq_rd0_credits_w_take_next != 0) : (cq_rd0_credits_wo_take_next != 0);
         end
-        //synopsys translate_off
-            else if ( ! (cq_rd_credit[0] |  rd_take0) ) begin
+//synopsys translate_off
+            else if ( ! (cq_rd_credit[0] | rd_take0) ) begin
         end else begin
-            cq_rd0_credits <=  {9{`x_or_0}};
-            cq_rd0_credits_ne0 <=  `x_or_0; 
+            cq_rd0_credits <= {9{`x_or_0}};
+            cq_rd0_credits_ne0 <= `x_or_0;
         end
-        //synopsys translate_on
-
+//synopsys translate_on
     end
 end
-
-wire rd_pre_bypassing1;          // bypassing is split up into two parts to avoid combinatorial loop
-wire rd_bypassing1;              //      between cq_rd1_pvld and cq_rd1_prdy when doing full bypass
-reg  [6:0] rd_skid1_0;     // head   skid reg
-reg  [6:0] rd_skid1_1;     // head+1 skid reg
-reg  [6:0] rd_skid1_2;     // head+2 skid reg (for -rd_take_reg)
-reg  rd_skid1_0_vld;             // head   skid reg has valid data
-reg  rd_skid1_1_vld;             // head+1 skid reg has valid data
-reg  rd_skid1_2_vld;             // head+2 skid reg has valid data (for -rd_take_reg)
-
-reg  cq_rd1_prdy_d;  
+wire rd_pre_bypassing1; // bypassing is split up into two parts to avoid combinatorial loop
+wire rd_bypassing1; //      between cq_rd1_pvld and cq_rd1_prdy when doing full bypass
+reg [6:0] rd_skid1_0; // head   skid reg
+reg [6:0] rd_skid1_1; // head+1 skid reg
+reg [6:0] rd_skid1_2; // head+2 skid reg (for -rd_take_reg)
+reg rd_skid1_0_vld; // head   skid reg has valid data
+reg rd_skid1_1_vld; // head+1 skid reg has valid data
+reg rd_skid1_2_vld; // head+2 skid reg has valid data (for -rd_take_reg)
+reg cq_rd1_prdy_d;
 always @( posedge nvdla_core_clk or negedge nvdla_core_rstn ) begin
     if ( !nvdla_core_rstn ) begin
-        cq_rd1_prdy_d <=  1'b1;
+        cq_rd1_prdy_d <= 1'b1;
     end else begin
-
-        cq_rd1_prdy_d <=  cq_rd1_prdy;
+        cq_rd1_prdy_d <= cq_rd1_prdy;
     end
 end
-
-assign cq_rd1_pvld = rd_skid1_0_vld || rd_pre_bypassing1;  			// full bypass for 0-latency
-assign cq_rd1_pd = rd_skid1_0_vld ? rd_skid1_0 : cq_wr_pd;        // full bypass for 0-latency
-
+assign cq_rd1_pvld = rd_skid1_0_vld || rd_pre_bypassing1; // full bypass for 0-latency
+assign cq_rd1_pd = rd_skid1_0_vld ? rd_skid1_0 : cq_wr_pd; // full bypass for 0-latency
 always @( posedge nvdla_core_clk_mgated_skid ) begin
     if ( (rd_bypassing1 || rd_take_n_dly[1]) && (!rd_skid1_0_vld || (cq_rd1_pvld && cq_rd1_prdy && !rd_skid1_1_vld)) ) begin
-        rd_skid1_0 <=  rd_take_n_dly[1] ? cq_rd_pd_p : cq_wr_pd;
+        rd_skid1_0 <= rd_take_n_dly[1] ? cq_rd_pd_p : cq_wr_pd;
     end else if ( cq_rd1_pvld && cq_rd1_prdy && rd_skid1_1_vld ) begin
-        rd_skid1_0 <=  rd_skid1_1;
+        rd_skid1_0 <= rd_skid1_1;
     end
-    //synopsys translate_off
-        else if ( !((rd_bypassing1 || rd_take_n_dly[1]) && (!rd_skid1_0_vld || (cq_rd1_pvld && cq_rd1_prdy && !rd_skid1_1_vld))) && 
+//synopsys translate_off
+        else if ( !((rd_bypassing1 || rd_take_n_dly[1]) && (!rd_skid1_0_vld || (cq_rd1_pvld && cq_rd1_prdy && !rd_skid1_1_vld))) &&
                   !(cq_rd1_pvld && cq_rd1_prdy && rd_skid1_1_vld) ) begin
     end else begin
-        rd_skid1_0 <=  {7{`x_or_0}};
+        rd_skid1_0 <= {7{`x_or_0}};
     end
-    //synopsys translate_on
-
+//synopsys translate_on
     if ( (rd_bypassing1 || rd_take_n_dly[1]) && (!rd_skid1_1_vld || (cq_rd1_pvld && cq_rd1_prdy && !rd_skid1_2_vld)) ) begin
-        rd_skid1_1 <=  rd_bypassing1 ? cq_wr_pd : cq_rd_pd_p;
+        rd_skid1_1 <= rd_bypassing1 ? cq_wr_pd : cq_rd_pd_p;
     end else if ( cq_rd1_pvld && cq_rd1_prdy && rd_skid1_2_vld ) begin
-        rd_skid1_1 <=  rd_skid1_2;
+        rd_skid1_1 <= rd_skid1_2;
     end
-    //synopsys translate_off
-        else if ( !((rd_bypassing1 || rd_take_n_dly[1]) && (!rd_skid1_1_vld || (cq_rd1_pvld && cq_rd1_prdy && !rd_skid1_2_vld))) && 
+//synopsys translate_off
+        else if ( !((rd_bypassing1 || rd_take_n_dly[1]) && (!rd_skid1_1_vld || (cq_rd1_pvld && cq_rd1_prdy && !rd_skid1_2_vld))) &&
                   !(cq_rd1_pvld && cq_rd1_prdy && rd_skid1_2_vld) ) begin
     end else begin
-        rd_skid1_1 <=  {7{`x_or_0}};
+        rd_skid1_1 <= {7{`x_or_0}};
     end
-    //synopsys translate_on
-
+//synopsys translate_on
     if ( (rd_bypassing1 || rd_take_n_dly[1]) && rd_skid1_0_vld && rd_skid1_1_vld && (rd_skid1_2_vld || !(cq_rd1_pvld && cq_rd1_prdy)) ) begin
-        rd_skid1_2 <=  rd_bypassing1 ? cq_wr_pd : cq_rd_pd_p;
+        rd_skid1_2 <= rd_bypassing1 ? cq_wr_pd : cq_rd_pd_p;
     end
-    //synopsys translate_off
-        else if ( !((rd_bypassing1 || rd_take_n_dly[1]) && rd_skid1_0_vld && rd_skid1_1_vld && (rd_skid1_2_vld || !(cq_rd1_pvld && cq_rd1_prdy))) ) begin 
+//synopsys translate_off
+        else if ( !((rd_bypassing1 || rd_take_n_dly[1]) && rd_skid1_0_vld && rd_skid1_1_vld && (rd_skid1_2_vld || !(cq_rd1_pvld && cq_rd1_prdy))) ) begin
     end else begin
-        rd_skid1_2 <=  {7{`x_or_0}};
+        rd_skid1_2 <= {7{`x_or_0}};
     end
-    //synopsys translate_on
-
+//synopsys translate_on
 end
-
 always @( posedge nvdla_core_clk_mgated_skid or negedge nvdla_core_rstn ) begin
     if ( !nvdla_core_rstn ) begin
-        rd_skid1_0_vld <=  1'b0;
-        rd_skid1_1_vld <=  1'b0;
-        rd_skid1_2_vld <=  1'b0;
+        rd_skid1_0_vld <= 1'b0;
+        rd_skid1_1_vld <= 1'b0;
+        rd_skid1_2_vld <= 1'b0;
     end else begin
-        rd_skid1_0_vld <=  (cq_rd1_pvld && cq_rd1_prdy) ? (rd_skid1_1_vld || (rd_bypassing1 && rd_skid1_0_vld) || rd_take_n_dly[1]) : (rd_skid1_0_vld || rd_bypassing1 || rd_take_n_dly[1]);
-	rd_skid1_1_vld <=  (cq_rd1_pvld && cq_rd1_prdy) ? (rd_skid1_2_vld || (rd_skid1_1_vld && (rd_bypassing1 || rd_take_n_dly[1]))) : (rd_skid1_1_vld || (rd_skid1_0_vld && (rd_bypassing1 || rd_take_n_dly[1])));
-        //VCS coverage off
-	rd_skid1_2_vld <=  (cq_rd1_pvld && cq_rd1_prdy) ? (rd_skid1_2_vld && (rd_bypassing1 || rd_take_n_dly[1])) : (rd_skid1_2_vld || (rd_skid1_1_vld && (rd_bypassing1 || rd_take_n_dly[1])));
-        //VCS coverage on
+        rd_skid1_0_vld <= (cq_rd1_pvld && cq_rd1_prdy) ? (rd_skid1_1_vld || (rd_bypassing1 && rd_skid1_0_vld) || rd_take_n_dly[1]) : (rd_skid1_0_vld || rd_bypassing1 || rd_take_n_dly[1]);
+ rd_skid1_1_vld <= (cq_rd1_pvld && cq_rd1_prdy) ? (rd_skid1_2_vld || (rd_skid1_1_vld && (rd_bypassing1 || rd_take_n_dly[1]))) : (rd_skid1_1_vld || (rd_skid1_0_vld && (rd_bypassing1 || rd_take_n_dly[1])));
+//VCS coverage off
+ rd_skid1_2_vld <= (cq_rd1_pvld && cq_rd1_prdy) ? (rd_skid1_2_vld && (rd_bypassing1 || rd_take_n_dly[1])) : (rd_skid1_2_vld || (rd_skid1_1_vld && (rd_bypassing1 || rd_take_n_dly[1])));
+//VCS coverage on
     end
 end
-
 // spyglass disable_block W164a W116 W484
-reg  [8:0] cq_rd1_credits;   // unused credits
-reg             cq_rd1_credits_ne0; 
-wire [8:0] cq_rd1_credits_w_take_next  =  cq_rd1_credits + cq_rd_credit[1] - 1'b1;
-wire [8:0] cq_rd1_credits_wo_take_next =  cq_rd1_credits + cq_rd_credit[1];
-wire [8:0] cq_rd1_credits_next =  rd_take1 ? cq_rd1_credits_w_take_next : cq_rd1_credits_wo_take_next; 
+reg [8:0] cq_rd1_credits; // unused credits
+reg cq_rd1_credits_ne0;
+wire [8:0] cq_rd1_credits_w_take_next = cq_rd1_credits + cq_rd_credit[1] - 1'b1;
+wire [8:0] cq_rd1_credits_wo_take_next = cq_rd1_credits + cq_rd_credit[1];
+wire [8:0] cq_rd1_credits_next = rd_take1 ? cq_rd1_credits_w_take_next : cq_rd1_credits_wo_take_next;
 // spyglass enable_block W164a W116 W484
-
 //VCS coverage off
 assign cq_rd_take_elig[1] = (cq_rd1_prdy_d || !rd_skid1_0_vld || !rd_skid1_1_vld || (!rd_skid1_2_vld && !rd_take_n_dly[1])) && (cq_rd_credit[1] || cq_rd1_credits_ne0);
 //VCS coverage on
-
 assign rd_pre_bypassing1 = cq_wr_pvld && !cq_wr_busy_int && (cq_wr_thread_id == 4'd1) && cq_rd1_credits == 0 && !cq_rd_credit[1] && (!rd_take_n_dly[1] || rd_skid1_0_vld); // split this up to avoid combinatorial loop when full bypass is in effect
 assign rd_bypassing1 = rd_pre_bypassing1 && (!rd_skid1_2_vld || !rd_skid1_1_vld || !(!cq_rd1_prdy_d && rd_skid1_0_vld && rd_skid1_1_vld)) && !rd_take_n_dly[1];
 always @( posedge nvdla_core_clk_mgated_skid or negedge nvdla_core_rstn ) begin
     if ( !nvdla_core_rstn ) begin
-        cq_rd1_credits <=  9'd0;
-        cq_rd1_credits_ne0 <=  1'b0;
+        cq_rd1_credits <= 9'd0;
+        cq_rd1_credits_ne0 <= 1'b0;
     end else begin
-        if ( cq_rd_credit[1] |  rd_take1 ) begin
-            cq_rd1_credits <=  cq_rd1_credits_next;
-            cq_rd1_credits_ne0 <=  rd_take1 ? (cq_rd1_credits_w_take_next != 0) : (cq_rd1_credits_wo_take_next != 0);
+        if ( cq_rd_credit[1] | rd_take1 ) begin
+            cq_rd1_credits <= cq_rd1_credits_next;
+            cq_rd1_credits_ne0 <= rd_take1 ? (cq_rd1_credits_w_take_next != 0) : (cq_rd1_credits_wo_take_next != 0);
         end
-        //synopsys translate_off
-            else if ( ! (cq_rd_credit[1] |  rd_take1) ) begin
+//synopsys translate_off
+            else if ( ! (cq_rd_credit[1] | rd_take1) ) begin
         end else begin
-            cq_rd1_credits <=  {9{`x_or_0}};
-            cq_rd1_credits_ne0 <=  `x_or_0; 
+            cq_rd1_credits <= {9{`x_or_0}};
+            cq_rd1_credits_ne0 <= `x_or_0;
         end
-        //synopsys translate_on
-
+//synopsys translate_on
     end
 end
-
-wire rd_pre_bypassing2;          // bypassing is split up into two parts to avoid combinatorial loop
-wire rd_bypassing2;              //      between cq_rd2_pvld and cq_rd2_prdy when doing full bypass
-reg  [6:0] rd_skid2_0;     // head   skid reg
-reg  [6:0] rd_skid2_1;     // head+1 skid reg
-reg  [6:0] rd_skid2_2;     // head+2 skid reg (for -rd_take_reg)
-reg  rd_skid2_0_vld;             // head   skid reg has valid data
-reg  rd_skid2_1_vld;             // head+1 skid reg has valid data
-reg  rd_skid2_2_vld;             // head+2 skid reg has valid data (for -rd_take_reg)
-
-reg  cq_rd2_prdy_d;  
+wire rd_pre_bypassing2; // bypassing is split up into two parts to avoid combinatorial loop
+wire rd_bypassing2; //      between cq_rd2_pvld and cq_rd2_prdy when doing full bypass
+reg [6:0] rd_skid2_0; // head   skid reg
+reg [6:0] rd_skid2_1; // head+1 skid reg
+reg [6:0] rd_skid2_2; // head+2 skid reg (for -rd_take_reg)
+reg rd_skid2_0_vld; // head   skid reg has valid data
+reg rd_skid2_1_vld; // head+1 skid reg has valid data
+reg rd_skid2_2_vld; // head+2 skid reg has valid data (for -rd_take_reg)
+reg cq_rd2_prdy_d;
 always @( posedge nvdla_core_clk or negedge nvdla_core_rstn ) begin
     if ( !nvdla_core_rstn ) begin
-        cq_rd2_prdy_d <=  1'b1;
+        cq_rd2_prdy_d <= 1'b1;
     end else begin
-
-        cq_rd2_prdy_d <=  cq_rd2_prdy;
+        cq_rd2_prdy_d <= cq_rd2_prdy;
     end
 end
-
-assign cq_rd2_pvld = rd_skid2_0_vld || rd_pre_bypassing2;  			// full bypass for 0-latency
-assign cq_rd2_pd = rd_skid2_0_vld ? rd_skid2_0 : cq_wr_pd;        // full bypass for 0-latency
-
+assign cq_rd2_pvld = rd_skid2_0_vld || rd_pre_bypassing2; // full bypass for 0-latency
+assign cq_rd2_pd = rd_skid2_0_vld ? rd_skid2_0 : cq_wr_pd; // full bypass for 0-latency
 always @( posedge nvdla_core_clk_mgated_skid ) begin
     if ( (rd_bypassing2 || rd_take_n_dly[2]) && (!rd_skid2_0_vld || (cq_rd2_pvld && cq_rd2_prdy && !rd_skid2_1_vld)) ) begin
-        rd_skid2_0 <=  rd_take_n_dly[2] ? cq_rd_pd_p : cq_wr_pd;
+        rd_skid2_0 <= rd_take_n_dly[2] ? cq_rd_pd_p : cq_wr_pd;
     end else if ( cq_rd2_pvld && cq_rd2_prdy && rd_skid2_1_vld ) begin
-        rd_skid2_0 <=  rd_skid2_1;
+        rd_skid2_0 <= rd_skid2_1;
     end
-    //synopsys translate_off
-        else if ( !((rd_bypassing2 || rd_take_n_dly[2]) && (!rd_skid2_0_vld || (cq_rd2_pvld && cq_rd2_prdy && !rd_skid2_1_vld))) && 
+//synopsys translate_off
+        else if ( !((rd_bypassing2 || rd_take_n_dly[2]) && (!rd_skid2_0_vld || (cq_rd2_pvld && cq_rd2_prdy && !rd_skid2_1_vld))) &&
                   !(cq_rd2_pvld && cq_rd2_prdy && rd_skid2_1_vld) ) begin
     end else begin
-        rd_skid2_0 <=  {7{`x_or_0}};
+        rd_skid2_0 <= {7{`x_or_0}};
     end
-    //synopsys translate_on
-
+//synopsys translate_on
     if ( (rd_bypassing2 || rd_take_n_dly[2]) && (!rd_skid2_1_vld || (cq_rd2_pvld && cq_rd2_prdy && !rd_skid2_2_vld)) ) begin
-        rd_skid2_1 <=  rd_bypassing2 ? cq_wr_pd : cq_rd_pd_p;
+        rd_skid2_1 <= rd_bypassing2 ? cq_wr_pd : cq_rd_pd_p;
     end else if ( cq_rd2_pvld && cq_rd2_prdy && rd_skid2_2_vld ) begin
-        rd_skid2_1 <=  rd_skid2_2;
+        rd_skid2_1 <= rd_skid2_2;
     end
-    //synopsys translate_off
-        else if ( !((rd_bypassing2 || rd_take_n_dly[2]) && (!rd_skid2_1_vld || (cq_rd2_pvld && cq_rd2_prdy && !rd_skid2_2_vld))) && 
+//synopsys translate_off
+        else if ( !((rd_bypassing2 || rd_take_n_dly[2]) && (!rd_skid2_1_vld || (cq_rd2_pvld && cq_rd2_prdy && !rd_skid2_2_vld))) &&
                   !(cq_rd2_pvld && cq_rd2_prdy && rd_skid2_2_vld) ) begin
     end else begin
-        rd_skid2_1 <=  {7{`x_or_0}};
+        rd_skid2_1 <= {7{`x_or_0}};
     end
-    //synopsys translate_on
-
+//synopsys translate_on
     if ( (rd_bypassing2 || rd_take_n_dly[2]) && rd_skid2_0_vld && rd_skid2_1_vld && (rd_skid2_2_vld || !(cq_rd2_pvld && cq_rd2_prdy)) ) begin
-        rd_skid2_2 <=  rd_bypassing2 ? cq_wr_pd : cq_rd_pd_p;
+        rd_skid2_2 <= rd_bypassing2 ? cq_wr_pd : cq_rd_pd_p;
     end
-    //synopsys translate_off
-        else if ( !((rd_bypassing2 || rd_take_n_dly[2]) && rd_skid2_0_vld && rd_skid2_1_vld && (rd_skid2_2_vld || !(cq_rd2_pvld && cq_rd2_prdy))) ) begin 
+//synopsys translate_off
+        else if ( !((rd_bypassing2 || rd_take_n_dly[2]) && rd_skid2_0_vld && rd_skid2_1_vld && (rd_skid2_2_vld || !(cq_rd2_pvld && cq_rd2_prdy))) ) begin
     end else begin
-        rd_skid2_2 <=  {7{`x_or_0}};
+        rd_skid2_2 <= {7{`x_or_0}};
     end
-    //synopsys translate_on
-
+//synopsys translate_on
 end
-
 always @( posedge nvdla_core_clk_mgated_skid or negedge nvdla_core_rstn ) begin
     if ( !nvdla_core_rstn ) begin
-        rd_skid2_0_vld <=  1'b0;
-        rd_skid2_1_vld <=  1'b0;
-        rd_skid2_2_vld <=  1'b0;
+        rd_skid2_0_vld <= 1'b0;
+        rd_skid2_1_vld <= 1'b0;
+        rd_skid2_2_vld <= 1'b0;
     end else begin
-        rd_skid2_0_vld <=  (cq_rd2_pvld && cq_rd2_prdy) ? (rd_skid2_1_vld || (rd_bypassing2 && rd_skid2_0_vld) || rd_take_n_dly[2]) : (rd_skid2_0_vld || rd_bypassing2 || rd_take_n_dly[2]);
-	rd_skid2_1_vld <=  (cq_rd2_pvld && cq_rd2_prdy) ? (rd_skid2_2_vld || (rd_skid2_1_vld && (rd_bypassing2 || rd_take_n_dly[2]))) : (rd_skid2_1_vld || (rd_skid2_0_vld && (rd_bypassing2 || rd_take_n_dly[2])));
-        //VCS coverage off
-	rd_skid2_2_vld <=  (cq_rd2_pvld && cq_rd2_prdy) ? (rd_skid2_2_vld && (rd_bypassing2 || rd_take_n_dly[2])) : (rd_skid2_2_vld || (rd_skid2_1_vld && (rd_bypassing2 || rd_take_n_dly[2])));
-        //VCS coverage on
+        rd_skid2_0_vld <= (cq_rd2_pvld && cq_rd2_prdy) ? (rd_skid2_1_vld || (rd_bypassing2 && rd_skid2_0_vld) || rd_take_n_dly[2]) : (rd_skid2_0_vld || rd_bypassing2 || rd_take_n_dly[2]);
+ rd_skid2_1_vld <= (cq_rd2_pvld && cq_rd2_prdy) ? (rd_skid2_2_vld || (rd_skid2_1_vld && (rd_bypassing2 || rd_take_n_dly[2]))) : (rd_skid2_1_vld || (rd_skid2_0_vld && (rd_bypassing2 || rd_take_n_dly[2])));
+//VCS coverage off
+ rd_skid2_2_vld <= (cq_rd2_pvld && cq_rd2_prdy) ? (rd_skid2_2_vld && (rd_bypassing2 || rd_take_n_dly[2])) : (rd_skid2_2_vld || (rd_skid2_1_vld && (rd_bypassing2 || rd_take_n_dly[2])));
+//VCS coverage on
     end
 end
-
 // spyglass disable_block W164a W116 W484
-reg  [8:0] cq_rd2_credits;   // unused credits
-reg             cq_rd2_credits_ne0; 
-wire [8:0] cq_rd2_credits_w_take_next  =  cq_rd2_credits + cq_rd_credit[2] - 1'b1;
-wire [8:0] cq_rd2_credits_wo_take_next =  cq_rd2_credits + cq_rd_credit[2];
-wire [8:0] cq_rd2_credits_next =  rd_take2 ? cq_rd2_credits_w_take_next : cq_rd2_credits_wo_take_next; 
+reg [8:0] cq_rd2_credits; // unused credits
+reg cq_rd2_credits_ne0;
+wire [8:0] cq_rd2_credits_w_take_next = cq_rd2_credits + cq_rd_credit[2] - 1'b1;
+wire [8:0] cq_rd2_credits_wo_take_next = cq_rd2_credits + cq_rd_credit[2];
+wire [8:0] cq_rd2_credits_next = rd_take2 ? cq_rd2_credits_w_take_next : cq_rd2_credits_wo_take_next;
 // spyglass enable_block W164a W116 W484
-
 //VCS coverage off
 assign cq_rd_take_elig[2] = (cq_rd2_prdy_d || !rd_skid2_0_vld || !rd_skid2_1_vld || (!rd_skid2_2_vld && !rd_take_n_dly[2])) && (cq_rd_credit[2] || cq_rd2_credits_ne0);
 //VCS coverage on
-
 assign rd_pre_bypassing2 = cq_wr_pvld && !cq_wr_busy_int && (cq_wr_thread_id == 4'd2) && cq_rd2_credits == 0 && !cq_rd_credit[2] && (!rd_take_n_dly[2] || rd_skid2_0_vld); // split this up to avoid combinatorial loop when full bypass is in effect
 assign rd_bypassing2 = rd_pre_bypassing2 && (!rd_skid2_2_vld || !rd_skid2_1_vld || !(!cq_rd2_prdy_d && rd_skid2_0_vld && rd_skid2_1_vld)) && !rd_take_n_dly[2];
 always @( posedge nvdla_core_clk_mgated_skid or negedge nvdla_core_rstn ) begin
     if ( !nvdla_core_rstn ) begin
-        cq_rd2_credits <=  9'd0;
-        cq_rd2_credits_ne0 <=  1'b0;
+        cq_rd2_credits <= 9'd0;
+        cq_rd2_credits_ne0 <= 1'b0;
     end else begin
-        if ( cq_rd_credit[2] |  rd_take2 ) begin
-            cq_rd2_credits <=  cq_rd2_credits_next;
-            cq_rd2_credits_ne0 <=  rd_take2 ? (cq_rd2_credits_w_take_next != 0) : (cq_rd2_credits_wo_take_next != 0);
+        if ( cq_rd_credit[2] | rd_take2 ) begin
+            cq_rd2_credits <= cq_rd2_credits_next;
+            cq_rd2_credits_ne0 <= rd_take2 ? (cq_rd2_credits_w_take_next != 0) : (cq_rd2_credits_wo_take_next != 0);
         end
-        //synopsys translate_off
-            else if ( ! (cq_rd_credit[2] |  rd_take2) ) begin
+//synopsys translate_off
+            else if ( ! (cq_rd_credit[2] | rd_take2) ) begin
         end else begin
-            cq_rd2_credits <=  {9{`x_or_0}};
-            cq_rd2_credits_ne0 <=  `x_or_0; 
+            cq_rd2_credits <= {9{`x_or_0}};
+            cq_rd2_credits_ne0 <= `x_or_0;
         end
-        //synopsys translate_on
-
+//synopsys translate_on
     end
 end
-
-wire rd_pre_bypassing3;          // bypassing is split up into two parts to avoid combinatorial loop
-wire rd_bypassing3;              //      between cq_rd3_pvld and cq_rd3_prdy when doing full bypass
-reg  [6:0] rd_skid3_0;     // head   skid reg
-reg  [6:0] rd_skid3_1;     // head+1 skid reg
-reg  [6:0] rd_skid3_2;     // head+2 skid reg (for -rd_take_reg)
-reg  rd_skid3_0_vld;             // head   skid reg has valid data
-reg  rd_skid3_1_vld;             // head+1 skid reg has valid data
-reg  rd_skid3_2_vld;             // head+2 skid reg has valid data (for -rd_take_reg)
-
-reg  cq_rd3_prdy_d;  
+wire rd_pre_bypassing3; // bypassing is split up into two parts to avoid combinatorial loop
+wire rd_bypassing3; //      between cq_rd3_pvld and cq_rd3_prdy when doing full bypass
+reg [6:0] rd_skid3_0; // head   skid reg
+reg [6:0] rd_skid3_1; // head+1 skid reg
+reg [6:0] rd_skid3_2; // head+2 skid reg (for -rd_take_reg)
+reg rd_skid3_0_vld; // head   skid reg has valid data
+reg rd_skid3_1_vld; // head+1 skid reg has valid data
+reg rd_skid3_2_vld; // head+2 skid reg has valid data (for -rd_take_reg)
+reg cq_rd3_prdy_d;
 always @( posedge nvdla_core_clk or negedge nvdla_core_rstn ) begin
     if ( !nvdla_core_rstn ) begin
-        cq_rd3_prdy_d <=  1'b1;
+        cq_rd3_prdy_d <= 1'b1;
     end else begin
-
-        cq_rd3_prdy_d <=  cq_rd3_prdy;
+        cq_rd3_prdy_d <= cq_rd3_prdy;
     end
 end
-
-assign cq_rd3_pvld = rd_skid3_0_vld || rd_pre_bypassing3;  			// full bypass for 0-latency
-assign cq_rd3_pd = rd_skid3_0_vld ? rd_skid3_0 : cq_wr_pd;        // full bypass for 0-latency
-
+assign cq_rd3_pvld = rd_skid3_0_vld || rd_pre_bypassing3; // full bypass for 0-latency
+assign cq_rd3_pd = rd_skid3_0_vld ? rd_skid3_0 : cq_wr_pd; // full bypass for 0-latency
 always @( posedge nvdla_core_clk_mgated_skid ) begin
     if ( (rd_bypassing3 || rd_take_n_dly[3]) && (!rd_skid3_0_vld || (cq_rd3_pvld && cq_rd3_prdy && !rd_skid3_1_vld)) ) begin
-        rd_skid3_0 <=  rd_take_n_dly[3] ? cq_rd_pd_p : cq_wr_pd;
+        rd_skid3_0 <= rd_take_n_dly[3] ? cq_rd_pd_p : cq_wr_pd;
     end else if ( cq_rd3_pvld && cq_rd3_prdy && rd_skid3_1_vld ) begin
-        rd_skid3_0 <=  rd_skid3_1;
+        rd_skid3_0 <= rd_skid3_1;
     end
-    //synopsys translate_off
-        else if ( !((rd_bypassing3 || rd_take_n_dly[3]) && (!rd_skid3_0_vld || (cq_rd3_pvld && cq_rd3_prdy && !rd_skid3_1_vld))) && 
+//synopsys translate_off
+        else if ( !((rd_bypassing3 || rd_take_n_dly[3]) && (!rd_skid3_0_vld || (cq_rd3_pvld && cq_rd3_prdy && !rd_skid3_1_vld))) &&
                   !(cq_rd3_pvld && cq_rd3_prdy && rd_skid3_1_vld) ) begin
     end else begin
-        rd_skid3_0 <=  {7{`x_or_0}};
+        rd_skid3_0 <= {7{`x_or_0}};
     end
-    //synopsys translate_on
-
+//synopsys translate_on
     if ( (rd_bypassing3 || rd_take_n_dly[3]) && (!rd_skid3_1_vld || (cq_rd3_pvld && cq_rd3_prdy && !rd_skid3_2_vld)) ) begin
-        rd_skid3_1 <=  rd_bypassing3 ? cq_wr_pd : cq_rd_pd_p;
+        rd_skid3_1 <= rd_bypassing3 ? cq_wr_pd : cq_rd_pd_p;
     end else if ( cq_rd3_pvld && cq_rd3_prdy && rd_skid3_2_vld ) begin
-        rd_skid3_1 <=  rd_skid3_2;
+        rd_skid3_1 <= rd_skid3_2;
     end
-    //synopsys translate_off
-        else if ( !((rd_bypassing3 || rd_take_n_dly[3]) && (!rd_skid3_1_vld || (cq_rd3_pvld && cq_rd3_prdy && !rd_skid3_2_vld))) && 
+//synopsys translate_off
+        else if ( !((rd_bypassing3 || rd_take_n_dly[3]) && (!rd_skid3_1_vld || (cq_rd3_pvld && cq_rd3_prdy && !rd_skid3_2_vld))) &&
                   !(cq_rd3_pvld && cq_rd3_prdy && rd_skid3_2_vld) ) begin
     end else begin
-        rd_skid3_1 <=  {7{`x_or_0}};
+        rd_skid3_1 <= {7{`x_or_0}};
     end
-    //synopsys translate_on
-
+//synopsys translate_on
     if ( (rd_bypassing3 || rd_take_n_dly[3]) && rd_skid3_0_vld && rd_skid3_1_vld && (rd_skid3_2_vld || !(cq_rd3_pvld && cq_rd3_prdy)) ) begin
-        rd_skid3_2 <=  rd_bypassing3 ? cq_wr_pd : cq_rd_pd_p;
+        rd_skid3_2 <= rd_bypassing3 ? cq_wr_pd : cq_rd_pd_p;
     end
-    //synopsys translate_off
-        else if ( !((rd_bypassing3 || rd_take_n_dly[3]) && rd_skid3_0_vld && rd_skid3_1_vld && (rd_skid3_2_vld || !(cq_rd3_pvld && cq_rd3_prdy))) ) begin 
+//synopsys translate_off
+        else if ( !((rd_bypassing3 || rd_take_n_dly[3]) && rd_skid3_0_vld && rd_skid3_1_vld && (rd_skid3_2_vld || !(cq_rd3_pvld && cq_rd3_prdy))) ) begin
     end else begin
-        rd_skid3_2 <=  {7{`x_or_0}};
+        rd_skid3_2 <= {7{`x_or_0}};
     end
-    //synopsys translate_on
-
+//synopsys translate_on
 end
-
 always @( posedge nvdla_core_clk_mgated_skid or negedge nvdla_core_rstn ) begin
     if ( !nvdla_core_rstn ) begin
-        rd_skid3_0_vld <=  1'b0;
-        rd_skid3_1_vld <=  1'b0;
-        rd_skid3_2_vld <=  1'b0;
+        rd_skid3_0_vld <= 1'b0;
+        rd_skid3_1_vld <= 1'b0;
+        rd_skid3_2_vld <= 1'b0;
     end else begin
-        rd_skid3_0_vld <=  (cq_rd3_pvld && cq_rd3_prdy) ? (rd_skid3_1_vld || (rd_bypassing3 && rd_skid3_0_vld) || rd_take_n_dly[3]) : (rd_skid3_0_vld || rd_bypassing3 || rd_take_n_dly[3]);
-	rd_skid3_1_vld <=  (cq_rd3_pvld && cq_rd3_prdy) ? (rd_skid3_2_vld || (rd_skid3_1_vld && (rd_bypassing3 || rd_take_n_dly[3]))) : (rd_skid3_1_vld || (rd_skid3_0_vld && (rd_bypassing3 || rd_take_n_dly[3])));
-        //VCS coverage off
-	rd_skid3_2_vld <=  (cq_rd3_pvld && cq_rd3_prdy) ? (rd_skid3_2_vld && (rd_bypassing3 || rd_take_n_dly[3])) : (rd_skid3_2_vld || (rd_skid3_1_vld && (rd_bypassing3 || rd_take_n_dly[3])));
-        //VCS coverage on
+        rd_skid3_0_vld <= (cq_rd3_pvld && cq_rd3_prdy) ? (rd_skid3_1_vld || (rd_bypassing3 && rd_skid3_0_vld) || rd_take_n_dly[3]) : (rd_skid3_0_vld || rd_bypassing3 || rd_take_n_dly[3]);
+ rd_skid3_1_vld <= (cq_rd3_pvld && cq_rd3_prdy) ? (rd_skid3_2_vld || (rd_skid3_1_vld && (rd_bypassing3 || rd_take_n_dly[3]))) : (rd_skid3_1_vld || (rd_skid3_0_vld && (rd_bypassing3 || rd_take_n_dly[3])));
+//VCS coverage off
+ rd_skid3_2_vld <= (cq_rd3_pvld && cq_rd3_prdy) ? (rd_skid3_2_vld && (rd_bypassing3 || rd_take_n_dly[3])) : (rd_skid3_2_vld || (rd_skid3_1_vld && (rd_bypassing3 || rd_take_n_dly[3])));
+//VCS coverage on
     end
 end
-
 // spyglass disable_block W164a W116 W484
-reg  [8:0] cq_rd3_credits;   // unused credits
-reg             cq_rd3_credits_ne0; 
-wire [8:0] cq_rd3_credits_w_take_next  =  cq_rd3_credits + cq_rd_credit[3] - 1'b1;
-wire [8:0] cq_rd3_credits_wo_take_next =  cq_rd3_credits + cq_rd_credit[3];
-wire [8:0] cq_rd3_credits_next =  rd_take3 ? cq_rd3_credits_w_take_next : cq_rd3_credits_wo_take_next; 
+reg [8:0] cq_rd3_credits; // unused credits
+reg cq_rd3_credits_ne0;
+wire [8:0] cq_rd3_credits_w_take_next = cq_rd3_credits + cq_rd_credit[3] - 1'b1;
+wire [8:0] cq_rd3_credits_wo_take_next = cq_rd3_credits + cq_rd_credit[3];
+wire [8:0] cq_rd3_credits_next = rd_take3 ? cq_rd3_credits_w_take_next : cq_rd3_credits_wo_take_next;
 // spyglass enable_block W164a W116 W484
-
 //VCS coverage off
 assign cq_rd_take_elig[3] = (cq_rd3_prdy_d || !rd_skid3_0_vld || !rd_skid3_1_vld || (!rd_skid3_2_vld && !rd_take_n_dly[3])) && (cq_rd_credit[3] || cq_rd3_credits_ne0);
 //VCS coverage on
-
 assign rd_pre_bypassing3 = cq_wr_pvld && !cq_wr_busy_int && (cq_wr_thread_id == 4'd3) && cq_rd3_credits == 0 && !cq_rd_credit[3] && (!rd_take_n_dly[3] || rd_skid3_0_vld); // split this up to avoid combinatorial loop when full bypass is in effect
 assign rd_bypassing3 = rd_pre_bypassing3 && (!rd_skid3_2_vld || !rd_skid3_1_vld || !(!cq_rd3_prdy_d && rd_skid3_0_vld && rd_skid3_1_vld)) && !rd_take_n_dly[3];
 always @( posedge nvdla_core_clk_mgated_skid or negedge nvdla_core_rstn ) begin
     if ( !nvdla_core_rstn ) begin
-        cq_rd3_credits <=  9'd0;
-        cq_rd3_credits_ne0 <=  1'b0;
+        cq_rd3_credits <= 9'd0;
+        cq_rd3_credits_ne0 <= 1'b0;
     end else begin
-        if ( cq_rd_credit[3] |  rd_take3 ) begin
-            cq_rd3_credits <=  cq_rd3_credits_next;
-            cq_rd3_credits_ne0 <=  rd_take3 ? (cq_rd3_credits_w_take_next != 0) : (cq_rd3_credits_wo_take_next != 0);
+        if ( cq_rd_credit[3] | rd_take3 ) begin
+            cq_rd3_credits <= cq_rd3_credits_next;
+            cq_rd3_credits_ne0 <= rd_take3 ? (cq_rd3_credits_w_take_next != 0) : (cq_rd3_credits_wo_take_next != 0);
         end
-        //synopsys translate_off
-            else if ( ! (cq_rd_credit[3] |  rd_take3) ) begin
+//synopsys translate_off
+            else if ( ! (cq_rd_credit[3] | rd_take3) ) begin
         end else begin
-            cq_rd3_credits <=  {9{`x_or_0}};
-            cq_rd3_credits_ne0 <=  `x_or_0; 
+            cq_rd3_credits <= {9{`x_or_0}};
+            cq_rd3_credits_ne0 <= `x_or_0;
         end
-        //synopsys translate_on
-
+//synopsys translate_on
     end
 end
-
-wire rd_pre_bypassing4;          // bypassing is split up into two parts to avoid combinatorial loop
-wire rd_bypassing4;              //      between cq_rd4_pvld and cq_rd4_prdy when doing full bypass
-reg  [6:0] rd_skid4_0;     // head   skid reg
-reg  [6:0] rd_skid4_1;     // head+1 skid reg
-reg  [6:0] rd_skid4_2;     // head+2 skid reg (for -rd_take_reg)
-reg  rd_skid4_0_vld;             // head   skid reg has valid data
-reg  rd_skid4_1_vld;             // head+1 skid reg has valid data
-reg  rd_skid4_2_vld;             // head+2 skid reg has valid data (for -rd_take_reg)
-
-reg  cq_rd4_prdy_d;  
+wire rd_pre_bypassing4; // bypassing is split up into two parts to avoid combinatorial loop
+wire rd_bypassing4; //      between cq_rd4_pvld and cq_rd4_prdy when doing full bypass
+reg [6:0] rd_skid4_0; // head   skid reg
+reg [6:0] rd_skid4_1; // head+1 skid reg
+reg [6:0] rd_skid4_2; // head+2 skid reg (for -rd_take_reg)
+reg rd_skid4_0_vld; // head   skid reg has valid data
+reg rd_skid4_1_vld; // head+1 skid reg has valid data
+reg rd_skid4_2_vld; // head+2 skid reg has valid data (for -rd_take_reg)
+reg cq_rd4_prdy_d;
 always @( posedge nvdla_core_clk or negedge nvdla_core_rstn ) begin
     if ( !nvdla_core_rstn ) begin
-        cq_rd4_prdy_d <=  1'b1;
+        cq_rd4_prdy_d <= 1'b1;
     end else begin
-
-        cq_rd4_prdy_d <=  cq_rd4_prdy;
+        cq_rd4_prdy_d <= cq_rd4_prdy;
     end
 end
-
-assign cq_rd4_pvld = rd_skid4_0_vld || rd_pre_bypassing4;  			// full bypass for 0-latency
-assign cq_rd4_pd = rd_skid4_0_vld ? rd_skid4_0 : cq_wr_pd;        // full bypass for 0-latency
-
+assign cq_rd4_pvld = rd_skid4_0_vld || rd_pre_bypassing4; // full bypass for 0-latency
+assign cq_rd4_pd = rd_skid4_0_vld ? rd_skid4_0 : cq_wr_pd; // full bypass for 0-latency
 always @( posedge nvdla_core_clk_mgated_skid ) begin
     if ( (rd_bypassing4 || rd_take_n_dly[4]) && (!rd_skid4_0_vld || (cq_rd4_pvld && cq_rd4_prdy && !rd_skid4_1_vld)) ) begin
-        rd_skid4_0 <=  rd_take_n_dly[4] ? cq_rd_pd_p : cq_wr_pd;
+        rd_skid4_0 <= rd_take_n_dly[4] ? cq_rd_pd_p : cq_wr_pd;
     end else if ( cq_rd4_pvld && cq_rd4_prdy && rd_skid4_1_vld ) begin
-        rd_skid4_0 <=  rd_skid4_1;
+        rd_skid4_0 <= rd_skid4_1;
     end
-    //synopsys translate_off
-        else if ( !((rd_bypassing4 || rd_take_n_dly[4]) && (!rd_skid4_0_vld || (cq_rd4_pvld && cq_rd4_prdy && !rd_skid4_1_vld))) && 
+//synopsys translate_off
+        else if ( !((rd_bypassing4 || rd_take_n_dly[4]) && (!rd_skid4_0_vld || (cq_rd4_pvld && cq_rd4_prdy && !rd_skid4_1_vld))) &&
                   !(cq_rd4_pvld && cq_rd4_prdy && rd_skid4_1_vld) ) begin
     end else begin
-        rd_skid4_0 <=  {7{`x_or_0}};
+        rd_skid4_0 <= {7{`x_or_0}};
     end
-    //synopsys translate_on
-
+//synopsys translate_on
     if ( (rd_bypassing4 || rd_take_n_dly[4]) && (!rd_skid4_1_vld || (cq_rd4_pvld && cq_rd4_prdy && !rd_skid4_2_vld)) ) begin
-        rd_skid4_1 <=  rd_bypassing4 ? cq_wr_pd : cq_rd_pd_p;
+        rd_skid4_1 <= rd_bypassing4 ? cq_wr_pd : cq_rd_pd_p;
     end else if ( cq_rd4_pvld && cq_rd4_prdy && rd_skid4_2_vld ) begin
-        rd_skid4_1 <=  rd_skid4_2;
+        rd_skid4_1 <= rd_skid4_2;
     end
-    //synopsys translate_off
-        else if ( !((rd_bypassing4 || rd_take_n_dly[4]) && (!rd_skid4_1_vld || (cq_rd4_pvld && cq_rd4_prdy && !rd_skid4_2_vld))) && 
+//synopsys translate_off
+        else if ( !((rd_bypassing4 || rd_take_n_dly[4]) && (!rd_skid4_1_vld || (cq_rd4_pvld && cq_rd4_prdy && !rd_skid4_2_vld))) &&
                   !(cq_rd4_pvld && cq_rd4_prdy && rd_skid4_2_vld) ) begin
     end else begin
-        rd_skid4_1 <=  {7{`x_or_0}};
+        rd_skid4_1 <= {7{`x_or_0}};
     end
-    //synopsys translate_on
-
+//synopsys translate_on
     if ( (rd_bypassing4 || rd_take_n_dly[4]) && rd_skid4_0_vld && rd_skid4_1_vld && (rd_skid4_2_vld || !(cq_rd4_pvld && cq_rd4_prdy)) ) begin
-        rd_skid4_2 <=  rd_bypassing4 ? cq_wr_pd : cq_rd_pd_p;
+        rd_skid4_2 <= rd_bypassing4 ? cq_wr_pd : cq_rd_pd_p;
     end
-    //synopsys translate_off
-        else if ( !((rd_bypassing4 || rd_take_n_dly[4]) && rd_skid4_0_vld && rd_skid4_1_vld && (rd_skid4_2_vld || !(cq_rd4_pvld && cq_rd4_prdy))) ) begin 
+//synopsys translate_off
+        else if ( !((rd_bypassing4 || rd_take_n_dly[4]) && rd_skid4_0_vld && rd_skid4_1_vld && (rd_skid4_2_vld || !(cq_rd4_pvld && cq_rd4_prdy))) ) begin
     end else begin
-        rd_skid4_2 <=  {7{`x_or_0}};
+        rd_skid4_2 <= {7{`x_or_0}};
     end
-    //synopsys translate_on
-
+//synopsys translate_on
 end
-
 always @( posedge nvdla_core_clk_mgated_skid or negedge nvdla_core_rstn ) begin
     if ( !nvdla_core_rstn ) begin
-        rd_skid4_0_vld <=  1'b0;
-        rd_skid4_1_vld <=  1'b0;
-        rd_skid4_2_vld <=  1'b0;
+        rd_skid4_0_vld <= 1'b0;
+        rd_skid4_1_vld <= 1'b0;
+        rd_skid4_2_vld <= 1'b0;
     end else begin
-        rd_skid4_0_vld <=  (cq_rd4_pvld && cq_rd4_prdy) ? (rd_skid4_1_vld || (rd_bypassing4 && rd_skid4_0_vld) || rd_take_n_dly[4]) : (rd_skid4_0_vld || rd_bypassing4 || rd_take_n_dly[4]);
-	rd_skid4_1_vld <=  (cq_rd4_pvld && cq_rd4_prdy) ? (rd_skid4_2_vld || (rd_skid4_1_vld && (rd_bypassing4 || rd_take_n_dly[4]))) : (rd_skid4_1_vld || (rd_skid4_0_vld && (rd_bypassing4 || rd_take_n_dly[4])));
-        //VCS coverage off
-	rd_skid4_2_vld <=  (cq_rd4_pvld && cq_rd4_prdy) ? (rd_skid4_2_vld && (rd_bypassing4 || rd_take_n_dly[4])) : (rd_skid4_2_vld || (rd_skid4_1_vld && (rd_bypassing4 || rd_take_n_dly[4])));
-        //VCS coverage on
+        rd_skid4_0_vld <= (cq_rd4_pvld && cq_rd4_prdy) ? (rd_skid4_1_vld || (rd_bypassing4 && rd_skid4_0_vld) || rd_take_n_dly[4]) : (rd_skid4_0_vld || rd_bypassing4 || rd_take_n_dly[4]);
+ rd_skid4_1_vld <= (cq_rd4_pvld && cq_rd4_prdy) ? (rd_skid4_2_vld || (rd_skid4_1_vld && (rd_bypassing4 || rd_take_n_dly[4]))) : (rd_skid4_1_vld || (rd_skid4_0_vld && (rd_bypassing4 || rd_take_n_dly[4])));
+//VCS coverage off
+ rd_skid4_2_vld <= (cq_rd4_pvld && cq_rd4_prdy) ? (rd_skid4_2_vld && (rd_bypassing4 || rd_take_n_dly[4])) : (rd_skid4_2_vld || (rd_skid4_1_vld && (rd_bypassing4 || rd_take_n_dly[4])));
+//VCS coverage on
     end
 end
-
 // spyglass disable_block W164a W116 W484
-reg  [8:0] cq_rd4_credits;   // unused credits
-reg             cq_rd4_credits_ne0; 
-wire [8:0] cq_rd4_credits_w_take_next  =  cq_rd4_credits + cq_rd_credit[4] - 1'b1;
-wire [8:0] cq_rd4_credits_wo_take_next =  cq_rd4_credits + cq_rd_credit[4];
-wire [8:0] cq_rd4_credits_next =  rd_take4 ? cq_rd4_credits_w_take_next : cq_rd4_credits_wo_take_next; 
+reg [8:0] cq_rd4_credits; // unused credits
+reg cq_rd4_credits_ne0;
+wire [8:0] cq_rd4_credits_w_take_next = cq_rd4_credits + cq_rd_credit[4] - 1'b1;
+wire [8:0] cq_rd4_credits_wo_take_next = cq_rd4_credits + cq_rd_credit[4];
+wire [8:0] cq_rd4_credits_next = rd_take4 ? cq_rd4_credits_w_take_next : cq_rd4_credits_wo_take_next;
 // spyglass enable_block W164a W116 W484
-
 //VCS coverage off
 assign cq_rd_take_elig[4] = (cq_rd4_prdy_d || !rd_skid4_0_vld || !rd_skid4_1_vld || (!rd_skid4_2_vld && !rd_take_n_dly[4])) && (cq_rd_credit[4] || cq_rd4_credits_ne0);
 //VCS coverage on
-
 assign rd_pre_bypassing4 = cq_wr_pvld && !cq_wr_busy_int && (cq_wr_thread_id == 4'd4) && cq_rd4_credits == 0 && !cq_rd_credit[4] && (!rd_take_n_dly[4] || rd_skid4_0_vld); // split this up to avoid combinatorial loop when full bypass is in effect
 assign rd_bypassing4 = rd_pre_bypassing4 && (!rd_skid4_2_vld || !rd_skid4_1_vld || !(!cq_rd4_prdy_d && rd_skid4_0_vld && rd_skid4_1_vld)) && !rd_take_n_dly[4];
 always @( posedge nvdla_core_clk_mgated_skid or negedge nvdla_core_rstn ) begin
     if ( !nvdla_core_rstn ) begin
-        cq_rd4_credits <=  9'd0;
-        cq_rd4_credits_ne0 <=  1'b0;
+        cq_rd4_credits <= 9'd0;
+        cq_rd4_credits_ne0 <= 1'b0;
     end else begin
-        if ( cq_rd_credit[4] |  rd_take4 ) begin
-            cq_rd4_credits <=  cq_rd4_credits_next;
-            cq_rd4_credits_ne0 <=  rd_take4 ? (cq_rd4_credits_w_take_next != 0) : (cq_rd4_credits_wo_take_next != 0);
+        if ( cq_rd_credit[4] | rd_take4 ) begin
+            cq_rd4_credits <= cq_rd4_credits_next;
+            cq_rd4_credits_ne0 <= rd_take4 ? (cq_rd4_credits_w_take_next != 0) : (cq_rd4_credits_wo_take_next != 0);
         end
-        //synopsys translate_off
-            else if ( ! (cq_rd_credit[4] |  rd_take4) ) begin
+//synopsys translate_off
+            else if ( ! (cq_rd_credit[4] | rd_take4) ) begin
         end else begin
-            cq_rd4_credits <=  {9{`x_or_0}};
-            cq_rd4_credits_ne0 <=  `x_or_0; 
+            cq_rd4_credits <= {9{`x_or_0}};
+            cq_rd4_credits_ne0 <= `x_or_0;
         end
-        //synopsys translate_on
-
+//synopsys translate_on
     end
 end
-
-wire rd_pre_bypassing5;          // bypassing is split up into two parts to avoid combinatorial loop
-wire rd_bypassing5;              //      between cq_rd5_pvld and cq_rd5_prdy when doing full bypass
-reg  [6:0] rd_skid5_0;     // head   skid reg
-reg  [6:0] rd_skid5_1;     // head+1 skid reg
-reg  [6:0] rd_skid5_2;     // head+2 skid reg (for -rd_take_reg)
-reg  rd_skid5_0_vld;             // head   skid reg has valid data
-reg  rd_skid5_1_vld;             // head+1 skid reg has valid data
-reg  rd_skid5_2_vld;             // head+2 skid reg has valid data (for -rd_take_reg)
-
-reg  cq_rd5_prdy_d;  
+wire rd_pre_bypassing5; // bypassing is split up into two parts to avoid combinatorial loop
+wire rd_bypassing5; //      between cq_rd5_pvld and cq_rd5_prdy when doing full bypass
+reg [6:0] rd_skid5_0; // head   skid reg
+reg [6:0] rd_skid5_1; // head+1 skid reg
+reg [6:0] rd_skid5_2; // head+2 skid reg (for -rd_take_reg)
+reg rd_skid5_0_vld; // head   skid reg has valid data
+reg rd_skid5_1_vld; // head+1 skid reg has valid data
+reg rd_skid5_2_vld; // head+2 skid reg has valid data (for -rd_take_reg)
+reg cq_rd5_prdy_d;
 always @( posedge nvdla_core_clk or negedge nvdla_core_rstn ) begin
     if ( !nvdla_core_rstn ) begin
-        cq_rd5_prdy_d <=  1'b1;
+        cq_rd5_prdy_d <= 1'b1;
     end else begin
-
-        cq_rd5_prdy_d <=  cq_rd5_prdy;
+        cq_rd5_prdy_d <= cq_rd5_prdy;
     end
 end
-
-assign cq_rd5_pvld = rd_skid5_0_vld || rd_pre_bypassing5;  			// full bypass for 0-latency
-assign cq_rd5_pd = rd_skid5_0_vld ? rd_skid5_0 : cq_wr_pd;        // full bypass for 0-latency
-
+assign cq_rd5_pvld = rd_skid5_0_vld || rd_pre_bypassing5; // full bypass for 0-latency
+assign cq_rd5_pd = rd_skid5_0_vld ? rd_skid5_0 : cq_wr_pd; // full bypass for 0-latency
 always @( posedge nvdla_core_clk_mgated_skid ) begin
     if ( (rd_bypassing5 || rd_take_n_dly[5]) && (!rd_skid5_0_vld || (cq_rd5_pvld && cq_rd5_prdy && !rd_skid5_1_vld)) ) begin
-        rd_skid5_0 <=  rd_take_n_dly[5] ? cq_rd_pd_p : cq_wr_pd;
+        rd_skid5_0 <= rd_take_n_dly[5] ? cq_rd_pd_p : cq_wr_pd;
     end else if ( cq_rd5_pvld && cq_rd5_prdy && rd_skid5_1_vld ) begin
-        rd_skid5_0 <=  rd_skid5_1;
+        rd_skid5_0 <= rd_skid5_1;
     end
-    //synopsys translate_off
-        else if ( !((rd_bypassing5 || rd_take_n_dly[5]) && (!rd_skid5_0_vld || (cq_rd5_pvld && cq_rd5_prdy && !rd_skid5_1_vld))) && 
+//synopsys translate_off
+        else if ( !((rd_bypassing5 || rd_take_n_dly[5]) && (!rd_skid5_0_vld || (cq_rd5_pvld && cq_rd5_prdy && !rd_skid5_1_vld))) &&
                   !(cq_rd5_pvld && cq_rd5_prdy && rd_skid5_1_vld) ) begin
     end else begin
-        rd_skid5_0 <=  {7{`x_or_0}};
+        rd_skid5_0 <= {7{`x_or_0}};
     end
-    //synopsys translate_on
-
+//synopsys translate_on
     if ( (rd_bypassing5 || rd_take_n_dly[5]) && (!rd_skid5_1_vld || (cq_rd5_pvld && cq_rd5_prdy && !rd_skid5_2_vld)) ) begin
-        rd_skid5_1 <=  rd_bypassing5 ? cq_wr_pd : cq_rd_pd_p;
+        rd_skid5_1 <= rd_bypassing5 ? cq_wr_pd : cq_rd_pd_p;
     end else if ( cq_rd5_pvld && cq_rd5_prdy && rd_skid5_2_vld ) begin
-        rd_skid5_1 <=  rd_skid5_2;
+        rd_skid5_1 <= rd_skid5_2;
     end
-    //synopsys translate_off
-        else if ( !((rd_bypassing5 || rd_take_n_dly[5]) && (!rd_skid5_1_vld || (cq_rd5_pvld && cq_rd5_prdy && !rd_skid5_2_vld))) && 
+//synopsys translate_off
+        else if ( !((rd_bypassing5 || rd_take_n_dly[5]) && (!rd_skid5_1_vld || (cq_rd5_pvld && cq_rd5_prdy && !rd_skid5_2_vld))) &&
                   !(cq_rd5_pvld && cq_rd5_prdy && rd_skid5_2_vld) ) begin
     end else begin
-        rd_skid5_1 <=  {7{`x_or_0}};
+        rd_skid5_1 <= {7{`x_or_0}};
     end
-    //synopsys translate_on
-
+//synopsys translate_on
     if ( (rd_bypassing5 || rd_take_n_dly[5]) && rd_skid5_0_vld && rd_skid5_1_vld && (rd_skid5_2_vld || !(cq_rd5_pvld && cq_rd5_prdy)) ) begin
-        rd_skid5_2 <=  rd_bypassing5 ? cq_wr_pd : cq_rd_pd_p;
+        rd_skid5_2 <= rd_bypassing5 ? cq_wr_pd : cq_rd_pd_p;
     end
-    //synopsys translate_off
-        else if ( !((rd_bypassing5 || rd_take_n_dly[5]) && rd_skid5_0_vld && rd_skid5_1_vld && (rd_skid5_2_vld || !(cq_rd5_pvld && cq_rd5_prdy))) ) begin 
+//synopsys translate_off
+        else if ( !((rd_bypassing5 || rd_take_n_dly[5]) && rd_skid5_0_vld && rd_skid5_1_vld && (rd_skid5_2_vld || !(cq_rd5_pvld && cq_rd5_prdy))) ) begin
     end else begin
-        rd_skid5_2 <=  {7{`x_or_0}};
+        rd_skid5_2 <= {7{`x_or_0}};
     end
-    //synopsys translate_on
-
+//synopsys translate_on
 end
-
 always @( posedge nvdla_core_clk_mgated_skid or negedge nvdla_core_rstn ) begin
     if ( !nvdla_core_rstn ) begin
-        rd_skid5_0_vld <=  1'b0;
-        rd_skid5_1_vld <=  1'b0;
-        rd_skid5_2_vld <=  1'b0;
+        rd_skid5_0_vld <= 1'b0;
+        rd_skid5_1_vld <= 1'b0;
+        rd_skid5_2_vld <= 1'b0;
     end else begin
-        rd_skid5_0_vld <=  (cq_rd5_pvld && cq_rd5_prdy) ? (rd_skid5_1_vld || (rd_bypassing5 && rd_skid5_0_vld) || rd_take_n_dly[5]) : (rd_skid5_0_vld || rd_bypassing5 || rd_take_n_dly[5]);
-	rd_skid5_1_vld <=  (cq_rd5_pvld && cq_rd5_prdy) ? (rd_skid5_2_vld || (rd_skid5_1_vld && (rd_bypassing5 || rd_take_n_dly[5]))) : (rd_skid5_1_vld || (rd_skid5_0_vld && (rd_bypassing5 || rd_take_n_dly[5])));
-        //VCS coverage off
-	rd_skid5_2_vld <=  (cq_rd5_pvld && cq_rd5_prdy) ? (rd_skid5_2_vld && (rd_bypassing5 || rd_take_n_dly[5])) : (rd_skid5_2_vld || (rd_skid5_1_vld && (rd_bypassing5 || rd_take_n_dly[5])));
-        //VCS coverage on
+        rd_skid5_0_vld <= (cq_rd5_pvld && cq_rd5_prdy) ? (rd_skid5_1_vld || (rd_bypassing5 && rd_skid5_0_vld) || rd_take_n_dly[5]) : (rd_skid5_0_vld || rd_bypassing5 || rd_take_n_dly[5]);
+ rd_skid5_1_vld <= (cq_rd5_pvld && cq_rd5_prdy) ? (rd_skid5_2_vld || (rd_skid5_1_vld && (rd_bypassing5 || rd_take_n_dly[5]))) : (rd_skid5_1_vld || (rd_skid5_0_vld && (rd_bypassing5 || rd_take_n_dly[5])));
+//VCS coverage off
+ rd_skid5_2_vld <= (cq_rd5_pvld && cq_rd5_prdy) ? (rd_skid5_2_vld && (rd_bypassing5 || rd_take_n_dly[5])) : (rd_skid5_2_vld || (rd_skid5_1_vld && (rd_bypassing5 || rd_take_n_dly[5])));
+//VCS coverage on
     end
 end
-
 // spyglass disable_block W164a W116 W484
-reg  [8:0] cq_rd5_credits;   // unused credits
-reg             cq_rd5_credits_ne0; 
-wire [8:0] cq_rd5_credits_w_take_next  =  cq_rd5_credits + cq_rd_credit[5] - 1'b1;
-wire [8:0] cq_rd5_credits_wo_take_next =  cq_rd5_credits + cq_rd_credit[5];
-wire [8:0] cq_rd5_credits_next =  rd_take5 ? cq_rd5_credits_w_take_next : cq_rd5_credits_wo_take_next; 
+reg [8:0] cq_rd5_credits; // unused credits
+reg cq_rd5_credits_ne0;
+wire [8:0] cq_rd5_credits_w_take_next = cq_rd5_credits + cq_rd_credit[5] - 1'b1;
+wire [8:0] cq_rd5_credits_wo_take_next = cq_rd5_credits + cq_rd_credit[5];
+wire [8:0] cq_rd5_credits_next = rd_take5 ? cq_rd5_credits_w_take_next : cq_rd5_credits_wo_take_next;
 // spyglass enable_block W164a W116 W484
-
 //VCS coverage off
 assign cq_rd_take_elig[5] = (cq_rd5_prdy_d || !rd_skid5_0_vld || !rd_skid5_1_vld || (!rd_skid5_2_vld && !rd_take_n_dly[5])) && (cq_rd_credit[5] || cq_rd5_credits_ne0);
 //VCS coverage on
-
 assign rd_pre_bypassing5 = cq_wr_pvld && !cq_wr_busy_int && (cq_wr_thread_id == 4'd5) && cq_rd5_credits == 0 && !cq_rd_credit[5] && (!rd_take_n_dly[5] || rd_skid5_0_vld); // split this up to avoid combinatorial loop when full bypass is in effect
 assign rd_bypassing5 = rd_pre_bypassing5 && (!rd_skid5_2_vld || !rd_skid5_1_vld || !(!cq_rd5_prdy_d && rd_skid5_0_vld && rd_skid5_1_vld)) && !rd_take_n_dly[5];
 always @( posedge nvdla_core_clk_mgated_skid or negedge nvdla_core_rstn ) begin
     if ( !nvdla_core_rstn ) begin
-        cq_rd5_credits <=  9'd0;
-        cq_rd5_credits_ne0 <=  1'b0;
+        cq_rd5_credits <= 9'd0;
+        cq_rd5_credits_ne0 <= 1'b0;
     end else begin
-        if ( cq_rd_credit[5] |  rd_take5 ) begin
-            cq_rd5_credits <=  cq_rd5_credits_next;
-            cq_rd5_credits_ne0 <=  rd_take5 ? (cq_rd5_credits_w_take_next != 0) : (cq_rd5_credits_wo_take_next != 0);
+        if ( cq_rd_credit[5] | rd_take5 ) begin
+            cq_rd5_credits <= cq_rd5_credits_next;
+            cq_rd5_credits_ne0 <= rd_take5 ? (cq_rd5_credits_w_take_next != 0) : (cq_rd5_credits_wo_take_next != 0);
         end
-        //synopsys translate_off
-            else if ( ! (cq_rd_credit[5] |  rd_take5) ) begin
+//synopsys translate_off
+            else if ( ! (cq_rd_credit[5] | rd_take5) ) begin
         end else begin
-            cq_rd5_credits <=  {9{`x_or_0}};
-            cq_rd5_credits_ne0 <=  `x_or_0; 
+            cq_rd5_credits <= {9{`x_or_0}};
+            cq_rd5_credits_ne0 <= `x_or_0;
         end
-        //synopsys translate_on
-
+//synopsys translate_on
     end
 end
-
-wire rd_pre_bypassing6;          // bypassing is split up into two parts to avoid combinatorial loop
-wire rd_bypassing6;              //      between cq_rd6_pvld and cq_rd6_prdy when doing full bypass
-reg  [6:0] rd_skid6_0;     // head   skid reg
-reg  [6:0] rd_skid6_1;     // head+1 skid reg
-reg  [6:0] rd_skid6_2;     // head+2 skid reg (for -rd_take_reg)
-reg  rd_skid6_0_vld;             // head   skid reg has valid data
-reg  rd_skid6_1_vld;             // head+1 skid reg has valid data
-reg  rd_skid6_2_vld;             // head+2 skid reg has valid data (for -rd_take_reg)
-
-reg  cq_rd6_prdy_d;  
+wire rd_pre_bypassing6; // bypassing is split up into two parts to avoid combinatorial loop
+wire rd_bypassing6; //      between cq_rd6_pvld and cq_rd6_prdy when doing full bypass
+reg [6:0] rd_skid6_0; // head   skid reg
+reg [6:0] rd_skid6_1; // head+1 skid reg
+reg [6:0] rd_skid6_2; // head+2 skid reg (for -rd_take_reg)
+reg rd_skid6_0_vld; // head   skid reg has valid data
+reg rd_skid6_1_vld; // head+1 skid reg has valid data
+reg rd_skid6_2_vld; // head+2 skid reg has valid data (for -rd_take_reg)
+reg cq_rd6_prdy_d;
 always @( posedge nvdla_core_clk or negedge nvdla_core_rstn ) begin
     if ( !nvdla_core_rstn ) begin
-        cq_rd6_prdy_d <=  1'b1;
+        cq_rd6_prdy_d <= 1'b1;
     end else begin
-
-        cq_rd6_prdy_d <=  cq_rd6_prdy;
+        cq_rd6_prdy_d <= cq_rd6_prdy;
     end
 end
-
-assign cq_rd6_pvld = rd_skid6_0_vld || rd_pre_bypassing6;  			// full bypass for 0-latency
-assign cq_rd6_pd = rd_skid6_0_vld ? rd_skid6_0 : cq_wr_pd;        // full bypass for 0-latency
-
+assign cq_rd6_pvld = rd_skid6_0_vld || rd_pre_bypassing6; // full bypass for 0-latency
+assign cq_rd6_pd = rd_skid6_0_vld ? rd_skid6_0 : cq_wr_pd; // full bypass for 0-latency
 always @( posedge nvdla_core_clk_mgated_skid ) begin
     if ( (rd_bypassing6 || rd_take_n_dly[6]) && (!rd_skid6_0_vld || (cq_rd6_pvld && cq_rd6_prdy && !rd_skid6_1_vld)) ) begin
-        rd_skid6_0 <=  rd_take_n_dly[6] ? cq_rd_pd_p : cq_wr_pd;
+        rd_skid6_0 <= rd_take_n_dly[6] ? cq_rd_pd_p : cq_wr_pd;
     end else if ( cq_rd6_pvld && cq_rd6_prdy && rd_skid6_1_vld ) begin
-        rd_skid6_0 <=  rd_skid6_1;
+        rd_skid6_0 <= rd_skid6_1;
     end
-    //synopsys translate_off
-        else if ( !((rd_bypassing6 || rd_take_n_dly[6]) && (!rd_skid6_0_vld || (cq_rd6_pvld && cq_rd6_prdy && !rd_skid6_1_vld))) && 
+//synopsys translate_off
+        else if ( !((rd_bypassing6 || rd_take_n_dly[6]) && (!rd_skid6_0_vld || (cq_rd6_pvld && cq_rd6_prdy && !rd_skid6_1_vld))) &&
                   !(cq_rd6_pvld && cq_rd6_prdy && rd_skid6_1_vld) ) begin
     end else begin
-        rd_skid6_0 <=  {7{`x_or_0}};
+        rd_skid6_0 <= {7{`x_or_0}};
     end
-    //synopsys translate_on
-
+//synopsys translate_on
     if ( (rd_bypassing6 || rd_take_n_dly[6]) && (!rd_skid6_1_vld || (cq_rd6_pvld && cq_rd6_prdy && !rd_skid6_2_vld)) ) begin
-        rd_skid6_1 <=  rd_bypassing6 ? cq_wr_pd : cq_rd_pd_p;
+        rd_skid6_1 <= rd_bypassing6 ? cq_wr_pd : cq_rd_pd_p;
     end else if ( cq_rd6_pvld && cq_rd6_prdy && rd_skid6_2_vld ) begin
-        rd_skid6_1 <=  rd_skid6_2;
+        rd_skid6_1 <= rd_skid6_2;
     end
-    //synopsys translate_off
-        else if ( !((rd_bypassing6 || rd_take_n_dly[6]) && (!rd_skid6_1_vld || (cq_rd6_pvld && cq_rd6_prdy && !rd_skid6_2_vld))) && 
+//synopsys translate_off
+        else if ( !((rd_bypassing6 || rd_take_n_dly[6]) && (!rd_skid6_1_vld || (cq_rd6_pvld && cq_rd6_prdy && !rd_skid6_2_vld))) &&
                   !(cq_rd6_pvld && cq_rd6_prdy && rd_skid6_2_vld) ) begin
     end else begin
-        rd_skid6_1 <=  {7{`x_or_0}};
+        rd_skid6_1 <= {7{`x_or_0}};
     end
-    //synopsys translate_on
-
+//synopsys translate_on
     if ( (rd_bypassing6 || rd_take_n_dly[6]) && rd_skid6_0_vld && rd_skid6_1_vld && (rd_skid6_2_vld || !(cq_rd6_pvld && cq_rd6_prdy)) ) begin
-        rd_skid6_2 <=  rd_bypassing6 ? cq_wr_pd : cq_rd_pd_p;
+        rd_skid6_2 <= rd_bypassing6 ? cq_wr_pd : cq_rd_pd_p;
     end
-    //synopsys translate_off
-        else if ( !((rd_bypassing6 || rd_take_n_dly[6]) && rd_skid6_0_vld && rd_skid6_1_vld && (rd_skid6_2_vld || !(cq_rd6_pvld && cq_rd6_prdy))) ) begin 
+//synopsys translate_off
+        else if ( !((rd_bypassing6 || rd_take_n_dly[6]) && rd_skid6_0_vld && rd_skid6_1_vld && (rd_skid6_2_vld || !(cq_rd6_pvld && cq_rd6_prdy))) ) begin
     end else begin
-        rd_skid6_2 <=  {7{`x_or_0}};
+        rd_skid6_2 <= {7{`x_or_0}};
     end
-    //synopsys translate_on
-
+//synopsys translate_on
 end
-
 always @( posedge nvdla_core_clk_mgated_skid or negedge nvdla_core_rstn ) begin
     if ( !nvdla_core_rstn ) begin
-        rd_skid6_0_vld <=  1'b0;
-        rd_skid6_1_vld <=  1'b0;
-        rd_skid6_2_vld <=  1'b0;
+        rd_skid6_0_vld <= 1'b0;
+        rd_skid6_1_vld <= 1'b0;
+        rd_skid6_2_vld <= 1'b0;
     end else begin
-        rd_skid6_0_vld <=  (cq_rd6_pvld && cq_rd6_prdy) ? (rd_skid6_1_vld || (rd_bypassing6 && rd_skid6_0_vld) || rd_take_n_dly[6]) : (rd_skid6_0_vld || rd_bypassing6 || rd_take_n_dly[6]);
-	rd_skid6_1_vld <=  (cq_rd6_pvld && cq_rd6_prdy) ? (rd_skid6_2_vld || (rd_skid6_1_vld && (rd_bypassing6 || rd_take_n_dly[6]))) : (rd_skid6_1_vld || (rd_skid6_0_vld && (rd_bypassing6 || rd_take_n_dly[6])));
-        //VCS coverage off
-	rd_skid6_2_vld <=  (cq_rd6_pvld && cq_rd6_prdy) ? (rd_skid6_2_vld && (rd_bypassing6 || rd_take_n_dly[6])) : (rd_skid6_2_vld || (rd_skid6_1_vld && (rd_bypassing6 || rd_take_n_dly[6])));
-        //VCS coverage on
+        rd_skid6_0_vld <= (cq_rd6_pvld && cq_rd6_prdy) ? (rd_skid6_1_vld || (rd_bypassing6 && rd_skid6_0_vld) || rd_take_n_dly[6]) : (rd_skid6_0_vld || rd_bypassing6 || rd_take_n_dly[6]);
+ rd_skid6_1_vld <= (cq_rd6_pvld && cq_rd6_prdy) ? (rd_skid6_2_vld || (rd_skid6_1_vld && (rd_bypassing6 || rd_take_n_dly[6]))) : (rd_skid6_1_vld || (rd_skid6_0_vld && (rd_bypassing6 || rd_take_n_dly[6])));
+//VCS coverage off
+ rd_skid6_2_vld <= (cq_rd6_pvld && cq_rd6_prdy) ? (rd_skid6_2_vld && (rd_bypassing6 || rd_take_n_dly[6])) : (rd_skid6_2_vld || (rd_skid6_1_vld && (rd_bypassing6 || rd_take_n_dly[6])));
+//VCS coverage on
     end
 end
-
 // spyglass disable_block W164a W116 W484
-reg  [8:0] cq_rd6_credits;   // unused credits
-reg             cq_rd6_credits_ne0; 
-wire [8:0] cq_rd6_credits_w_take_next  =  cq_rd6_credits + cq_rd_credit[6] - 1'b1;
-wire [8:0] cq_rd6_credits_wo_take_next =  cq_rd6_credits + cq_rd_credit[6];
-wire [8:0] cq_rd6_credits_next =  rd_take6 ? cq_rd6_credits_w_take_next : cq_rd6_credits_wo_take_next; 
+reg [8:0] cq_rd6_credits; // unused credits
+reg cq_rd6_credits_ne0;
+wire [8:0] cq_rd6_credits_w_take_next = cq_rd6_credits + cq_rd_credit[6] - 1'b1;
+wire [8:0] cq_rd6_credits_wo_take_next = cq_rd6_credits + cq_rd_credit[6];
+wire [8:0] cq_rd6_credits_next = rd_take6 ? cq_rd6_credits_w_take_next : cq_rd6_credits_wo_take_next;
 // spyglass enable_block W164a W116 W484
-
 //VCS coverage off
 assign cq_rd_take_elig[6] = (cq_rd6_prdy_d || !rd_skid6_0_vld || !rd_skid6_1_vld || (!rd_skid6_2_vld && !rd_take_n_dly[6])) && (cq_rd_credit[6] || cq_rd6_credits_ne0);
 //VCS coverage on
-
 assign rd_pre_bypassing6 = cq_wr_pvld && !cq_wr_busy_int && (cq_wr_thread_id == 4'd6) && cq_rd6_credits == 0 && !cq_rd_credit[6] && (!rd_take_n_dly[6] || rd_skid6_0_vld); // split this up to avoid combinatorial loop when full bypass is in effect
 assign rd_bypassing6 = rd_pre_bypassing6 && (!rd_skid6_2_vld || !rd_skid6_1_vld || !(!cq_rd6_prdy_d && rd_skid6_0_vld && rd_skid6_1_vld)) && !rd_take_n_dly[6];
 always @( posedge nvdla_core_clk_mgated_skid or negedge nvdla_core_rstn ) begin
     if ( !nvdla_core_rstn ) begin
-        cq_rd6_credits <=  9'd0;
-        cq_rd6_credits_ne0 <=  1'b0;
+        cq_rd6_credits <= 9'd0;
+        cq_rd6_credits_ne0 <= 1'b0;
     end else begin
-        if ( cq_rd_credit[6] |  rd_take6 ) begin
-            cq_rd6_credits <=  cq_rd6_credits_next;
-            cq_rd6_credits_ne0 <=  rd_take6 ? (cq_rd6_credits_w_take_next != 0) : (cq_rd6_credits_wo_take_next != 0);
+        if ( cq_rd_credit[6] | rd_take6 ) begin
+            cq_rd6_credits <= cq_rd6_credits_next;
+            cq_rd6_credits_ne0 <= rd_take6 ? (cq_rd6_credits_w_take_next != 0) : (cq_rd6_credits_wo_take_next != 0);
         end
-        //synopsys translate_off
-            else if ( ! (cq_rd_credit[6] |  rd_take6) ) begin
+//synopsys translate_off
+            else if ( ! (cq_rd_credit[6] | rd_take6) ) begin
         end else begin
-            cq_rd6_credits <=  {9{`x_or_0}};
-            cq_rd6_credits_ne0 <=  `x_or_0; 
+            cq_rd6_credits <= {9{`x_or_0}};
+            cq_rd6_credits_ne0 <= `x_or_0;
         end
-        //synopsys translate_on
-
+//synopsys translate_on
     end
 end
-
-wire rd_pre_bypassing7;          // bypassing is split up into two parts to avoid combinatorial loop
-wire rd_bypassing7;              //      between cq_rd7_pvld and cq_rd7_prdy when doing full bypass
-reg  [6:0] rd_skid7_0;     // head   skid reg
-reg  [6:0] rd_skid7_1;     // head+1 skid reg
-reg  [6:0] rd_skid7_2;     // head+2 skid reg (for -rd_take_reg)
-reg  rd_skid7_0_vld;             // head   skid reg has valid data
-reg  rd_skid7_1_vld;             // head+1 skid reg has valid data
-reg  rd_skid7_2_vld;             // head+2 skid reg has valid data (for -rd_take_reg)
-
-reg  cq_rd7_prdy_d;  
+wire rd_pre_bypassing7; // bypassing is split up into two parts to avoid combinatorial loop
+wire rd_bypassing7; //      between cq_rd7_pvld and cq_rd7_prdy when doing full bypass
+reg [6:0] rd_skid7_0; // head   skid reg
+reg [6:0] rd_skid7_1; // head+1 skid reg
+reg [6:0] rd_skid7_2; // head+2 skid reg (for -rd_take_reg)
+reg rd_skid7_0_vld; // head   skid reg has valid data
+reg rd_skid7_1_vld; // head+1 skid reg has valid data
+reg rd_skid7_2_vld; // head+2 skid reg has valid data (for -rd_take_reg)
+reg cq_rd7_prdy_d;
 always @( posedge nvdla_core_clk or negedge nvdla_core_rstn ) begin
     if ( !nvdla_core_rstn ) begin
-        cq_rd7_prdy_d <=  1'b1;
+        cq_rd7_prdy_d <= 1'b1;
     end else begin
-
-        cq_rd7_prdy_d <=  cq_rd7_prdy;
+        cq_rd7_prdy_d <= cq_rd7_prdy;
     end
 end
-
-assign cq_rd7_pvld = rd_skid7_0_vld || rd_pre_bypassing7;  			// full bypass for 0-latency
-assign cq_rd7_pd = rd_skid7_0_vld ? rd_skid7_0 : cq_wr_pd;        // full bypass for 0-latency
-
+assign cq_rd7_pvld = rd_skid7_0_vld || rd_pre_bypassing7; // full bypass for 0-latency
+assign cq_rd7_pd = rd_skid7_0_vld ? rd_skid7_0 : cq_wr_pd; // full bypass for 0-latency
 always @( posedge nvdla_core_clk_mgated_skid ) begin
     if ( (rd_bypassing7 || rd_take_n_dly[7]) && (!rd_skid7_0_vld || (cq_rd7_pvld && cq_rd7_prdy && !rd_skid7_1_vld)) ) begin
-        rd_skid7_0 <=  rd_take_n_dly[7] ? cq_rd_pd_p : cq_wr_pd;
+        rd_skid7_0 <= rd_take_n_dly[7] ? cq_rd_pd_p : cq_wr_pd;
     end else if ( cq_rd7_pvld && cq_rd7_prdy && rd_skid7_1_vld ) begin
-        rd_skid7_0 <=  rd_skid7_1;
+        rd_skid7_0 <= rd_skid7_1;
     end
-    //synopsys translate_off
-        else if ( !((rd_bypassing7 || rd_take_n_dly[7]) && (!rd_skid7_0_vld || (cq_rd7_pvld && cq_rd7_prdy && !rd_skid7_1_vld))) && 
+//synopsys translate_off
+        else if ( !((rd_bypassing7 || rd_take_n_dly[7]) && (!rd_skid7_0_vld || (cq_rd7_pvld && cq_rd7_prdy && !rd_skid7_1_vld))) &&
                   !(cq_rd7_pvld && cq_rd7_prdy && rd_skid7_1_vld) ) begin
     end else begin
-        rd_skid7_0 <=  {7{`x_or_0}};
+        rd_skid7_0 <= {7{`x_or_0}};
     end
-    //synopsys translate_on
-
+//synopsys translate_on
     if ( (rd_bypassing7 || rd_take_n_dly[7]) && (!rd_skid7_1_vld || (cq_rd7_pvld && cq_rd7_prdy && !rd_skid7_2_vld)) ) begin
-        rd_skid7_1 <=  rd_bypassing7 ? cq_wr_pd : cq_rd_pd_p;
+        rd_skid7_1 <= rd_bypassing7 ? cq_wr_pd : cq_rd_pd_p;
     end else if ( cq_rd7_pvld && cq_rd7_prdy && rd_skid7_2_vld ) begin
-        rd_skid7_1 <=  rd_skid7_2;
+        rd_skid7_1 <= rd_skid7_2;
     end
-    //synopsys translate_off
-        else if ( !((rd_bypassing7 || rd_take_n_dly[7]) && (!rd_skid7_1_vld || (cq_rd7_pvld && cq_rd7_prdy && !rd_skid7_2_vld))) && 
+//synopsys translate_off
+        else if ( !((rd_bypassing7 || rd_take_n_dly[7]) && (!rd_skid7_1_vld || (cq_rd7_pvld && cq_rd7_prdy && !rd_skid7_2_vld))) &&
                   !(cq_rd7_pvld && cq_rd7_prdy && rd_skid7_2_vld) ) begin
     end else begin
-        rd_skid7_1 <=  {7{`x_or_0}};
+        rd_skid7_1 <= {7{`x_or_0}};
     end
-    //synopsys translate_on
-
+//synopsys translate_on
     if ( (rd_bypassing7 || rd_take_n_dly[7]) && rd_skid7_0_vld && rd_skid7_1_vld && (rd_skid7_2_vld || !(cq_rd7_pvld && cq_rd7_prdy)) ) begin
-        rd_skid7_2 <=  rd_bypassing7 ? cq_wr_pd : cq_rd_pd_p;
+        rd_skid7_2 <= rd_bypassing7 ? cq_wr_pd : cq_rd_pd_p;
     end
-    //synopsys translate_off
-        else if ( !((rd_bypassing7 || rd_take_n_dly[7]) && rd_skid7_0_vld && rd_skid7_1_vld && (rd_skid7_2_vld || !(cq_rd7_pvld && cq_rd7_prdy))) ) begin 
+//synopsys translate_off
+        else if ( !((rd_bypassing7 || rd_take_n_dly[7]) && rd_skid7_0_vld && rd_skid7_1_vld && (rd_skid7_2_vld || !(cq_rd7_pvld && cq_rd7_prdy))) ) begin
     end else begin
-        rd_skid7_2 <=  {7{`x_or_0}};
+        rd_skid7_2 <= {7{`x_or_0}};
     end
-    //synopsys translate_on
-
+//synopsys translate_on
 end
-
 always @( posedge nvdla_core_clk_mgated_skid or negedge nvdla_core_rstn ) begin
     if ( !nvdla_core_rstn ) begin
-        rd_skid7_0_vld <=  1'b0;
-        rd_skid7_1_vld <=  1'b0;
-        rd_skid7_2_vld <=  1'b0;
+        rd_skid7_0_vld <= 1'b0;
+        rd_skid7_1_vld <= 1'b0;
+        rd_skid7_2_vld <= 1'b0;
     end else begin
-        rd_skid7_0_vld <=  (cq_rd7_pvld && cq_rd7_prdy) ? (rd_skid7_1_vld || (rd_bypassing7 && rd_skid7_0_vld) || rd_take_n_dly[7]) : (rd_skid7_0_vld || rd_bypassing7 || rd_take_n_dly[7]);
-	rd_skid7_1_vld <=  (cq_rd7_pvld && cq_rd7_prdy) ? (rd_skid7_2_vld || (rd_skid7_1_vld && (rd_bypassing7 || rd_take_n_dly[7]))) : (rd_skid7_1_vld || (rd_skid7_0_vld && (rd_bypassing7 || rd_take_n_dly[7])));
-        //VCS coverage off
-	rd_skid7_2_vld <=  (cq_rd7_pvld && cq_rd7_prdy) ? (rd_skid7_2_vld && (rd_bypassing7 || rd_take_n_dly[7])) : (rd_skid7_2_vld || (rd_skid7_1_vld && (rd_bypassing7 || rd_take_n_dly[7])));
-        //VCS coverage on
+        rd_skid7_0_vld <= (cq_rd7_pvld && cq_rd7_prdy) ? (rd_skid7_1_vld || (rd_bypassing7 && rd_skid7_0_vld) || rd_take_n_dly[7]) : (rd_skid7_0_vld || rd_bypassing7 || rd_take_n_dly[7]);
+ rd_skid7_1_vld <= (cq_rd7_pvld && cq_rd7_prdy) ? (rd_skid7_2_vld || (rd_skid7_1_vld && (rd_bypassing7 || rd_take_n_dly[7]))) : (rd_skid7_1_vld || (rd_skid7_0_vld && (rd_bypassing7 || rd_take_n_dly[7])));
+//VCS coverage off
+ rd_skid7_2_vld <= (cq_rd7_pvld && cq_rd7_prdy) ? (rd_skid7_2_vld && (rd_bypassing7 || rd_take_n_dly[7])) : (rd_skid7_2_vld || (rd_skid7_1_vld && (rd_bypassing7 || rd_take_n_dly[7])));
+//VCS coverage on
     end
 end
-
 // spyglass disable_block W164a W116 W484
-reg  [8:0] cq_rd7_credits;   // unused credits
-reg             cq_rd7_credits_ne0; 
-wire [8:0] cq_rd7_credits_w_take_next  =  cq_rd7_credits + cq_rd_credit[7] - 1'b1;
-wire [8:0] cq_rd7_credits_wo_take_next =  cq_rd7_credits + cq_rd_credit[7];
-wire [8:0] cq_rd7_credits_next =  rd_take7 ? cq_rd7_credits_w_take_next : cq_rd7_credits_wo_take_next; 
+reg [8:0] cq_rd7_credits; // unused credits
+reg cq_rd7_credits_ne0;
+wire [8:0] cq_rd7_credits_w_take_next = cq_rd7_credits + cq_rd_credit[7] - 1'b1;
+wire [8:0] cq_rd7_credits_wo_take_next = cq_rd7_credits + cq_rd_credit[7];
+wire [8:0] cq_rd7_credits_next = rd_take7 ? cq_rd7_credits_w_take_next : cq_rd7_credits_wo_take_next;
 // spyglass enable_block W164a W116 W484
-
 //VCS coverage off
 assign cq_rd_take_elig[7] = (cq_rd7_prdy_d || !rd_skid7_0_vld || !rd_skid7_1_vld || (!rd_skid7_2_vld && !rd_take_n_dly[7])) && (cq_rd_credit[7] || cq_rd7_credits_ne0);
 //VCS coverage on
-
 assign rd_pre_bypassing7 = cq_wr_pvld && !cq_wr_busy_int && (cq_wr_thread_id == 4'd7) && cq_rd7_credits == 0 && !cq_rd_credit[7] && (!rd_take_n_dly[7] || rd_skid7_0_vld); // split this up to avoid combinatorial loop when full bypass is in effect
 assign rd_bypassing7 = rd_pre_bypassing7 && (!rd_skid7_2_vld || !rd_skid7_1_vld || !(!cq_rd7_prdy_d && rd_skid7_0_vld && rd_skid7_1_vld)) && !rd_take_n_dly[7];
 always @( posedge nvdla_core_clk_mgated_skid or negedge nvdla_core_rstn ) begin
     if ( !nvdla_core_rstn ) begin
-        cq_rd7_credits <=  9'd0;
-        cq_rd7_credits_ne0 <=  1'b0;
+        cq_rd7_credits <= 9'd0;
+        cq_rd7_credits_ne0 <= 1'b0;
     end else begin
-        if ( cq_rd_credit[7] |  rd_take7 ) begin
-            cq_rd7_credits <=  cq_rd7_credits_next;
-            cq_rd7_credits_ne0 <=  rd_take7 ? (cq_rd7_credits_w_take_next != 0) : (cq_rd7_credits_wo_take_next != 0);
+        if ( cq_rd_credit[7] | rd_take7 ) begin
+            cq_rd7_credits <= cq_rd7_credits_next;
+            cq_rd7_credits_ne0 <= rd_take7 ? (cq_rd7_credits_w_take_next != 0) : (cq_rd7_credits_wo_take_next != 0);
         end
-        //synopsys translate_off
-            else if ( ! (cq_rd_credit[7] |  rd_take7) ) begin
+//synopsys translate_off
+            else if ( ! (cq_rd_credit[7] | rd_take7) ) begin
         end else begin
-            cq_rd7_credits <=  {9{`x_or_0}};
-            cq_rd7_credits_ne0 <=  `x_or_0; 
+            cq_rd7_credits <= {9{`x_or_0}};
+            cq_rd7_credits_ne0 <= `x_or_0;
         end
-        //synopsys translate_on
-
+//synopsys translate_on
     end
 end
-
-wire rd_pre_bypassing8;          // bypassing is split up into two parts to avoid combinatorial loop
-wire rd_bypassing8;              //      between cq_rd8_pvld and cq_rd8_prdy when doing full bypass
-reg  [6:0] rd_skid8_0;     // head   skid reg
-reg  [6:0] rd_skid8_1;     // head+1 skid reg
-reg  [6:0] rd_skid8_2;     // head+2 skid reg (for -rd_take_reg)
-reg  rd_skid8_0_vld;             // head   skid reg has valid data
-reg  rd_skid8_1_vld;             // head+1 skid reg has valid data
-reg  rd_skid8_2_vld;             // head+2 skid reg has valid data (for -rd_take_reg)
-
-reg  cq_rd8_prdy_d;  
+wire rd_pre_bypassing8; // bypassing is split up into two parts to avoid combinatorial loop
+wire rd_bypassing8; //      between cq_rd8_pvld and cq_rd8_prdy when doing full bypass
+reg [6:0] rd_skid8_0; // head   skid reg
+reg [6:0] rd_skid8_1; // head+1 skid reg
+reg [6:0] rd_skid8_2; // head+2 skid reg (for -rd_take_reg)
+reg rd_skid8_0_vld; // head   skid reg has valid data
+reg rd_skid8_1_vld; // head+1 skid reg has valid data
+reg rd_skid8_2_vld; // head+2 skid reg has valid data (for -rd_take_reg)
+reg cq_rd8_prdy_d;
 always @( posedge nvdla_core_clk or negedge nvdla_core_rstn ) begin
     if ( !nvdla_core_rstn ) begin
-        cq_rd8_prdy_d <=  1'b1;
+        cq_rd8_prdy_d <= 1'b1;
     end else begin
-
-        cq_rd8_prdy_d <=  cq_rd8_prdy;
+        cq_rd8_prdy_d <= cq_rd8_prdy;
     end
 end
-
-assign cq_rd8_pvld = rd_skid8_0_vld || rd_pre_bypassing8;  			// full bypass for 0-latency
-assign cq_rd8_pd = rd_skid8_0_vld ? rd_skid8_0 : cq_wr_pd;        // full bypass for 0-latency
-
+assign cq_rd8_pvld = rd_skid8_0_vld || rd_pre_bypassing8; // full bypass for 0-latency
+assign cq_rd8_pd = rd_skid8_0_vld ? rd_skid8_0 : cq_wr_pd; // full bypass for 0-latency
 always @( posedge nvdla_core_clk_mgated_skid ) begin
     if ( (rd_bypassing8 || rd_take_n_dly[8]) && (!rd_skid8_0_vld || (cq_rd8_pvld && cq_rd8_prdy && !rd_skid8_1_vld)) ) begin
-        rd_skid8_0 <=  rd_take_n_dly[8] ? cq_rd_pd_p : cq_wr_pd;
+        rd_skid8_0 <= rd_take_n_dly[8] ? cq_rd_pd_p : cq_wr_pd;
     end else if ( cq_rd8_pvld && cq_rd8_prdy && rd_skid8_1_vld ) begin
-        rd_skid8_0 <=  rd_skid8_1;
+        rd_skid8_0 <= rd_skid8_1;
     end
-    //synopsys translate_off
-        else if ( !((rd_bypassing8 || rd_take_n_dly[8]) && (!rd_skid8_0_vld || (cq_rd8_pvld && cq_rd8_prdy && !rd_skid8_1_vld))) && 
+//synopsys translate_off
+        else if ( !((rd_bypassing8 || rd_take_n_dly[8]) && (!rd_skid8_0_vld || (cq_rd8_pvld && cq_rd8_prdy && !rd_skid8_1_vld))) &&
                   !(cq_rd8_pvld && cq_rd8_prdy && rd_skid8_1_vld) ) begin
     end else begin
-        rd_skid8_0 <=  {7{`x_or_0}};
+        rd_skid8_0 <= {7{`x_or_0}};
     end
-    //synopsys translate_on
-
+//synopsys translate_on
     if ( (rd_bypassing8 || rd_take_n_dly[8]) && (!rd_skid8_1_vld || (cq_rd8_pvld && cq_rd8_prdy && !rd_skid8_2_vld)) ) begin
-        rd_skid8_1 <=  rd_bypassing8 ? cq_wr_pd : cq_rd_pd_p;
+        rd_skid8_1 <= rd_bypassing8 ? cq_wr_pd : cq_rd_pd_p;
     end else if ( cq_rd8_pvld && cq_rd8_prdy && rd_skid8_2_vld ) begin
-        rd_skid8_1 <=  rd_skid8_2;
+        rd_skid8_1 <= rd_skid8_2;
     end
-    //synopsys translate_off
-        else if ( !((rd_bypassing8 || rd_take_n_dly[8]) && (!rd_skid8_1_vld || (cq_rd8_pvld && cq_rd8_prdy && !rd_skid8_2_vld))) && 
+//synopsys translate_off
+        else if ( !((rd_bypassing8 || rd_take_n_dly[8]) && (!rd_skid8_1_vld || (cq_rd8_pvld && cq_rd8_prdy && !rd_skid8_2_vld))) &&
                   !(cq_rd8_pvld && cq_rd8_prdy && rd_skid8_2_vld) ) begin
     end else begin
-        rd_skid8_1 <=  {7{`x_or_0}};
+        rd_skid8_1 <= {7{`x_or_0}};
     end
-    //synopsys translate_on
-
+//synopsys translate_on
     if ( (rd_bypassing8 || rd_take_n_dly[8]) && rd_skid8_0_vld && rd_skid8_1_vld && (rd_skid8_2_vld || !(cq_rd8_pvld && cq_rd8_prdy)) ) begin
-        rd_skid8_2 <=  rd_bypassing8 ? cq_wr_pd : cq_rd_pd_p;
+        rd_skid8_2 <= rd_bypassing8 ? cq_wr_pd : cq_rd_pd_p;
     end
-    //synopsys translate_off
-        else if ( !((rd_bypassing8 || rd_take_n_dly[8]) && rd_skid8_0_vld && rd_skid8_1_vld && (rd_skid8_2_vld || !(cq_rd8_pvld && cq_rd8_prdy))) ) begin 
+//synopsys translate_off
+        else if ( !((rd_bypassing8 || rd_take_n_dly[8]) && rd_skid8_0_vld && rd_skid8_1_vld && (rd_skid8_2_vld || !(cq_rd8_pvld && cq_rd8_prdy))) ) begin
     end else begin
-        rd_skid8_2 <=  {7{`x_or_0}};
+        rd_skid8_2 <= {7{`x_or_0}};
     end
-    //synopsys translate_on
-
+//synopsys translate_on
 end
-
 always @( posedge nvdla_core_clk_mgated_skid or negedge nvdla_core_rstn ) begin
     if ( !nvdla_core_rstn ) begin
-        rd_skid8_0_vld <=  1'b0;
-        rd_skid8_1_vld <=  1'b0;
-        rd_skid8_2_vld <=  1'b0;
+        rd_skid8_0_vld <= 1'b0;
+        rd_skid8_1_vld <= 1'b0;
+        rd_skid8_2_vld <= 1'b0;
     end else begin
-        rd_skid8_0_vld <=  (cq_rd8_pvld && cq_rd8_prdy) ? (rd_skid8_1_vld || (rd_bypassing8 && rd_skid8_0_vld) || rd_take_n_dly[8]) : (rd_skid8_0_vld || rd_bypassing8 || rd_take_n_dly[8]);
-	rd_skid8_1_vld <=  (cq_rd8_pvld && cq_rd8_prdy) ? (rd_skid8_2_vld || (rd_skid8_1_vld && (rd_bypassing8 || rd_take_n_dly[8]))) : (rd_skid8_1_vld || (rd_skid8_0_vld && (rd_bypassing8 || rd_take_n_dly[8])));
-        //VCS coverage off
-	rd_skid8_2_vld <=  (cq_rd8_pvld && cq_rd8_prdy) ? (rd_skid8_2_vld && (rd_bypassing8 || rd_take_n_dly[8])) : (rd_skid8_2_vld || (rd_skid8_1_vld && (rd_bypassing8 || rd_take_n_dly[8])));
-        //VCS coverage on
+        rd_skid8_0_vld <= (cq_rd8_pvld && cq_rd8_prdy) ? (rd_skid8_1_vld || (rd_bypassing8 && rd_skid8_0_vld) || rd_take_n_dly[8]) : (rd_skid8_0_vld || rd_bypassing8 || rd_take_n_dly[8]);
+ rd_skid8_1_vld <= (cq_rd8_pvld && cq_rd8_prdy) ? (rd_skid8_2_vld || (rd_skid8_1_vld && (rd_bypassing8 || rd_take_n_dly[8]))) : (rd_skid8_1_vld || (rd_skid8_0_vld && (rd_bypassing8 || rd_take_n_dly[8])));
+//VCS coverage off
+ rd_skid8_2_vld <= (cq_rd8_pvld && cq_rd8_prdy) ? (rd_skid8_2_vld && (rd_bypassing8 || rd_take_n_dly[8])) : (rd_skid8_2_vld || (rd_skid8_1_vld && (rd_bypassing8 || rd_take_n_dly[8])));
+//VCS coverage on
     end
 end
-
 // spyglass disable_block W164a W116 W484
-reg  [8:0] cq_rd8_credits;   // unused credits
-reg             cq_rd8_credits_ne0; 
-wire [8:0] cq_rd8_credits_w_take_next  =  cq_rd8_credits + cq_rd_credit[8] - 1'b1;
-wire [8:0] cq_rd8_credits_wo_take_next =  cq_rd8_credits + cq_rd_credit[8];
-wire [8:0] cq_rd8_credits_next =  rd_take8 ? cq_rd8_credits_w_take_next : cq_rd8_credits_wo_take_next; 
+reg [8:0] cq_rd8_credits; // unused credits
+reg cq_rd8_credits_ne0;
+wire [8:0] cq_rd8_credits_w_take_next = cq_rd8_credits + cq_rd_credit[8] - 1'b1;
+wire [8:0] cq_rd8_credits_wo_take_next = cq_rd8_credits + cq_rd_credit[8];
+wire [8:0] cq_rd8_credits_next = rd_take8 ? cq_rd8_credits_w_take_next : cq_rd8_credits_wo_take_next;
 // spyglass enable_block W164a W116 W484
-
 //VCS coverage off
 assign cq_rd_take_elig[8] = (cq_rd8_prdy_d || !rd_skid8_0_vld || !rd_skid8_1_vld || (!rd_skid8_2_vld && !rd_take_n_dly[8])) && (cq_rd_credit[8] || cq_rd8_credits_ne0);
 //VCS coverage on
-
 assign rd_pre_bypassing8 = cq_wr_pvld && !cq_wr_busy_int && (cq_wr_thread_id == 4'd8) && cq_rd8_credits == 0 && !cq_rd_credit[8] && (!rd_take_n_dly[8] || rd_skid8_0_vld); // split this up to avoid combinatorial loop when full bypass is in effect
 assign rd_bypassing8 = rd_pre_bypassing8 && (!rd_skid8_2_vld || !rd_skid8_1_vld || !(!cq_rd8_prdy_d && rd_skid8_0_vld && rd_skid8_1_vld)) && !rd_take_n_dly[8];
 always @( posedge nvdla_core_clk_mgated_skid or negedge nvdla_core_rstn ) begin
     if ( !nvdla_core_rstn ) begin
-        cq_rd8_credits <=  9'd0;
-        cq_rd8_credits_ne0 <=  1'b0;
+        cq_rd8_credits <= 9'd0;
+        cq_rd8_credits_ne0 <= 1'b0;
     end else begin
-        if ( cq_rd_credit[8] |  rd_take8 ) begin
-            cq_rd8_credits <=  cq_rd8_credits_next;
-            cq_rd8_credits_ne0 <=  rd_take8 ? (cq_rd8_credits_w_take_next != 0) : (cq_rd8_credits_wo_take_next != 0);
+        if ( cq_rd_credit[8] | rd_take8 ) begin
+            cq_rd8_credits <= cq_rd8_credits_next;
+            cq_rd8_credits_ne0 <= rd_take8 ? (cq_rd8_credits_w_take_next != 0) : (cq_rd8_credits_wo_take_next != 0);
         end
-        //synopsys translate_off
-            else if ( ! (cq_rd_credit[8] |  rd_take8) ) begin
+//synopsys translate_off
+            else if ( ! (cq_rd_credit[8] | rd_take8) ) begin
         end else begin
-            cq_rd8_credits <=  {9{`x_or_0}};
-            cq_rd8_credits_ne0 <=  `x_or_0; 
+            cq_rd8_credits <= {9{`x_or_0}};
+            cq_rd8_credits_ne0 <= `x_or_0;
         end
-        //synopsys translate_on
-
+//synopsys translate_on
     end
 end
-
-wire rd_pre_bypassing9;          // bypassing is split up into two parts to avoid combinatorial loop
-wire rd_bypassing9;              //      between cq_rd9_pvld and cq_rd9_prdy when doing full bypass
-reg  [6:0] rd_skid9_0;     // head   skid reg
-reg  [6:0] rd_skid9_1;     // head+1 skid reg
-reg  [6:0] rd_skid9_2;     // head+2 skid reg (for -rd_take_reg)
-reg  rd_skid9_0_vld;             // head   skid reg has valid data
-reg  rd_skid9_1_vld;             // head+1 skid reg has valid data
-reg  rd_skid9_2_vld;             // head+2 skid reg has valid data (for -rd_take_reg)
-
-reg  cq_rd9_prdy_d;  
+wire rd_pre_bypassing9; // bypassing is split up into two parts to avoid combinatorial loop
+wire rd_bypassing9; //      between cq_rd9_pvld and cq_rd9_prdy when doing full bypass
+reg [6:0] rd_skid9_0; // head   skid reg
+reg [6:0] rd_skid9_1; // head+1 skid reg
+reg [6:0] rd_skid9_2; // head+2 skid reg (for -rd_take_reg)
+reg rd_skid9_0_vld; // head   skid reg has valid data
+reg rd_skid9_1_vld; // head+1 skid reg has valid data
+reg rd_skid9_2_vld; // head+2 skid reg has valid data (for -rd_take_reg)
+reg cq_rd9_prdy_d;
 always @( posedge nvdla_core_clk or negedge nvdla_core_rstn ) begin
     if ( !nvdla_core_rstn ) begin
-        cq_rd9_prdy_d <=  1'b1;
+        cq_rd9_prdy_d <= 1'b1;
     end else begin
-
-        cq_rd9_prdy_d <=  cq_rd9_prdy;
+        cq_rd9_prdy_d <= cq_rd9_prdy;
     end
 end
-
-assign cq_rd9_pvld = rd_skid9_0_vld || rd_pre_bypassing9;  			// full bypass for 0-latency
-assign cq_rd9_pd = rd_skid9_0_vld ? rd_skid9_0 : cq_wr_pd;        // full bypass for 0-latency
-
+assign cq_rd9_pvld = rd_skid9_0_vld || rd_pre_bypassing9; // full bypass for 0-latency
+assign cq_rd9_pd = rd_skid9_0_vld ? rd_skid9_0 : cq_wr_pd; // full bypass for 0-latency
 always @( posedge nvdla_core_clk_mgated_skid ) begin
     if ( (rd_bypassing9 || rd_take_n_dly[9]) && (!rd_skid9_0_vld || (cq_rd9_pvld && cq_rd9_prdy && !rd_skid9_1_vld)) ) begin
-        rd_skid9_0 <=  rd_take_n_dly[9] ? cq_rd_pd_p : cq_wr_pd;
+        rd_skid9_0 <= rd_take_n_dly[9] ? cq_rd_pd_p : cq_wr_pd;
     end else if ( cq_rd9_pvld && cq_rd9_prdy && rd_skid9_1_vld ) begin
-        rd_skid9_0 <=  rd_skid9_1;
+        rd_skid9_0 <= rd_skid9_1;
     end
-    //synopsys translate_off
-        else if ( !((rd_bypassing9 || rd_take_n_dly[9]) && (!rd_skid9_0_vld || (cq_rd9_pvld && cq_rd9_prdy && !rd_skid9_1_vld))) && 
+//synopsys translate_off
+        else if ( !((rd_bypassing9 || rd_take_n_dly[9]) && (!rd_skid9_0_vld || (cq_rd9_pvld && cq_rd9_prdy && !rd_skid9_1_vld))) &&
                   !(cq_rd9_pvld && cq_rd9_prdy && rd_skid9_1_vld) ) begin
     end else begin
-        rd_skid9_0 <=  {7{`x_or_0}};
+        rd_skid9_0 <= {7{`x_or_0}};
     end
-    //synopsys translate_on
-
+//synopsys translate_on
     if ( (rd_bypassing9 || rd_take_n_dly[9]) && (!rd_skid9_1_vld || (cq_rd9_pvld && cq_rd9_prdy && !rd_skid9_2_vld)) ) begin
-        rd_skid9_1 <=  rd_bypassing9 ? cq_wr_pd : cq_rd_pd_p;
+        rd_skid9_1 <= rd_bypassing9 ? cq_wr_pd : cq_rd_pd_p;
     end else if ( cq_rd9_pvld && cq_rd9_prdy && rd_skid9_2_vld ) begin
-        rd_skid9_1 <=  rd_skid9_2;
+        rd_skid9_1 <= rd_skid9_2;
     end
-    //synopsys translate_off
-        else if ( !((rd_bypassing9 || rd_take_n_dly[9]) && (!rd_skid9_1_vld || (cq_rd9_pvld && cq_rd9_prdy && !rd_skid9_2_vld))) && 
+//synopsys translate_off
+        else if ( !((rd_bypassing9 || rd_take_n_dly[9]) && (!rd_skid9_1_vld || (cq_rd9_pvld && cq_rd9_prdy && !rd_skid9_2_vld))) &&
                   !(cq_rd9_pvld && cq_rd9_prdy && rd_skid9_2_vld) ) begin
     end else begin
-        rd_skid9_1 <=  {7{`x_or_0}};
+        rd_skid9_1 <= {7{`x_or_0}};
     end
-    //synopsys translate_on
-
+//synopsys translate_on
     if ( (rd_bypassing9 || rd_take_n_dly[9]) && rd_skid9_0_vld && rd_skid9_1_vld && (rd_skid9_2_vld || !(cq_rd9_pvld && cq_rd9_prdy)) ) begin
-        rd_skid9_2 <=  rd_bypassing9 ? cq_wr_pd : cq_rd_pd_p;
+        rd_skid9_2 <= rd_bypassing9 ? cq_wr_pd : cq_rd_pd_p;
     end
-    //synopsys translate_off
-        else if ( !((rd_bypassing9 || rd_take_n_dly[9]) && rd_skid9_0_vld && rd_skid9_1_vld && (rd_skid9_2_vld || !(cq_rd9_pvld && cq_rd9_prdy))) ) begin 
+//synopsys translate_off
+        else if ( !((rd_bypassing9 || rd_take_n_dly[9]) && rd_skid9_0_vld && rd_skid9_1_vld && (rd_skid9_2_vld || !(cq_rd9_pvld && cq_rd9_prdy))) ) begin
     end else begin
-        rd_skid9_2 <=  {7{`x_or_0}};
+        rd_skid9_2 <= {7{`x_or_0}};
     end
-    //synopsys translate_on
-
+//synopsys translate_on
 end
-
 always @( posedge nvdla_core_clk_mgated_skid or negedge nvdla_core_rstn ) begin
     if ( !nvdla_core_rstn ) begin
-        rd_skid9_0_vld <=  1'b0;
-        rd_skid9_1_vld <=  1'b0;
-        rd_skid9_2_vld <=  1'b0;
+        rd_skid9_0_vld <= 1'b0;
+        rd_skid9_1_vld <= 1'b0;
+        rd_skid9_2_vld <= 1'b0;
     end else begin
-        rd_skid9_0_vld <=  (cq_rd9_pvld && cq_rd9_prdy) ? (rd_skid9_1_vld || (rd_bypassing9 && rd_skid9_0_vld) || rd_take_n_dly[9]) : (rd_skid9_0_vld || rd_bypassing9 || rd_take_n_dly[9]);
-	rd_skid9_1_vld <=  (cq_rd9_pvld && cq_rd9_prdy) ? (rd_skid9_2_vld || (rd_skid9_1_vld && (rd_bypassing9 || rd_take_n_dly[9]))) : (rd_skid9_1_vld || (rd_skid9_0_vld && (rd_bypassing9 || rd_take_n_dly[9])));
-        //VCS coverage off
-	rd_skid9_2_vld <=  (cq_rd9_pvld && cq_rd9_prdy) ? (rd_skid9_2_vld && (rd_bypassing9 || rd_take_n_dly[9])) : (rd_skid9_2_vld || (rd_skid9_1_vld && (rd_bypassing9 || rd_take_n_dly[9])));
-        //VCS coverage on
+        rd_skid9_0_vld <= (cq_rd9_pvld && cq_rd9_prdy) ? (rd_skid9_1_vld || (rd_bypassing9 && rd_skid9_0_vld) || rd_take_n_dly[9]) : (rd_skid9_0_vld || rd_bypassing9 || rd_take_n_dly[9]);
+ rd_skid9_1_vld <= (cq_rd9_pvld && cq_rd9_prdy) ? (rd_skid9_2_vld || (rd_skid9_1_vld && (rd_bypassing9 || rd_take_n_dly[9]))) : (rd_skid9_1_vld || (rd_skid9_0_vld && (rd_bypassing9 || rd_take_n_dly[9])));
+//VCS coverage off
+ rd_skid9_2_vld <= (cq_rd9_pvld && cq_rd9_prdy) ? (rd_skid9_2_vld && (rd_bypassing9 || rd_take_n_dly[9])) : (rd_skid9_2_vld || (rd_skid9_1_vld && (rd_bypassing9 || rd_take_n_dly[9])));
+//VCS coverage on
     end
 end
-
 // spyglass disable_block W164a W116 W484
-reg  [8:0] cq_rd9_credits;   // unused credits
-reg             cq_rd9_credits_ne0; 
-wire [8:0] cq_rd9_credits_w_take_next  =  cq_rd9_credits + cq_rd_credit[9] - 1'b1;
-wire [8:0] cq_rd9_credits_wo_take_next =  cq_rd9_credits + cq_rd_credit[9];
-wire [8:0] cq_rd9_credits_next =  rd_take9 ? cq_rd9_credits_w_take_next : cq_rd9_credits_wo_take_next; 
+reg [8:0] cq_rd9_credits; // unused credits
+reg cq_rd9_credits_ne0;
+wire [8:0] cq_rd9_credits_w_take_next = cq_rd9_credits + cq_rd_credit[9] - 1'b1;
+wire [8:0] cq_rd9_credits_wo_take_next = cq_rd9_credits + cq_rd_credit[9];
+wire [8:0] cq_rd9_credits_next = rd_take9 ? cq_rd9_credits_w_take_next : cq_rd9_credits_wo_take_next;
 // spyglass enable_block W164a W116 W484
-
 //VCS coverage off
 assign cq_rd_take_elig[9] = (cq_rd9_prdy_d || !rd_skid9_0_vld || !rd_skid9_1_vld || (!rd_skid9_2_vld && !rd_take_n_dly[9])) && (cq_rd_credit[9] || cq_rd9_credits_ne0);
 //VCS coverage on
-
 assign rd_pre_bypassing9 = cq_wr_pvld && !cq_wr_busy_int && (cq_wr_thread_id == 4'd9) && cq_rd9_credits == 0 && !cq_rd_credit[9] && (!rd_take_n_dly[9] || rd_skid9_0_vld); // split this up to avoid combinatorial loop when full bypass is in effect
 assign rd_bypassing9 = rd_pre_bypassing9 && (!rd_skid9_2_vld || !rd_skid9_1_vld || !(!cq_rd9_prdy_d && rd_skid9_0_vld && rd_skid9_1_vld)) && !rd_take_n_dly[9];
 always @( posedge nvdla_core_clk_mgated_skid or negedge nvdla_core_rstn ) begin
     if ( !nvdla_core_rstn ) begin
-        cq_rd9_credits <=  9'd0;
-        cq_rd9_credits_ne0 <=  1'b0;
+        cq_rd9_credits <= 9'd0;
+        cq_rd9_credits_ne0 <= 1'b0;
     end else begin
-        if ( cq_rd_credit[9] |  rd_take9 ) begin
-            cq_rd9_credits <=  cq_rd9_credits_next;
-            cq_rd9_credits_ne0 <=  rd_take9 ? (cq_rd9_credits_w_take_next != 0) : (cq_rd9_credits_wo_take_next != 0);
+        if ( cq_rd_credit[9] | rd_take9 ) begin
+            cq_rd9_credits <= cq_rd9_credits_next;
+            cq_rd9_credits_ne0 <= rd_take9 ? (cq_rd9_credits_w_take_next != 0) : (cq_rd9_credits_wo_take_next != 0);
         end
-        //synopsys translate_off
-            else if ( ! (cq_rd_credit[9] |  rd_take9) ) begin
+//synopsys translate_off
+            else if ( ! (cq_rd_credit[9] | rd_take9) ) begin
         end else begin
-            cq_rd9_credits <=  {9{`x_or_0}};
-            cq_rd9_credits_ne0 <=  `x_or_0; 
+            cq_rd9_credits <= {9{`x_or_0}};
+            cq_rd9_credits_ne0 <= `x_or_0;
         end
-        //synopsys translate_on
-
+//synopsys translate_on
     end
 end
-
 // rd_take round-robin arbiter (similar to arbgen output)
 //
-assign cq_rd_take = |cq_rd_take_elig;  // any thread is eligible to take, so issue take
-
+assign cq_rd_take = |cq_rd_take_elig; // any thread is eligible to take, so issue take
 reg [3:0] cq_rd_take_thread_id_last;
-
 wire [9:0] cq_rd_take_thread_id_is_1 = {
     cq_rd_take_elig[1] && cq_rd_take_thread_id_last == 4'd9 && !cq_rd_take_elig[0],
     cq_rd_take_elig[1] && cq_rd_take_thread_id_last == 4'd8 && !cq_rd_take_elig[9] && !cq_rd_take_elig[0],
@@ -3844,7 +3555,6 @@ wire [9:0] cq_rd_take_thread_id_is_1 = {
     cq_rd_take_elig[1] && cq_rd_take_thread_id_last == 4'd2 && !cq_rd_take_elig[3] && !cq_rd_take_elig[4] && !cq_rd_take_elig[5] && !cq_rd_take_elig[6] && !cq_rd_take_elig[7] && !cq_rd_take_elig[8] && !cq_rd_take_elig[9] && !cq_rd_take_elig[0],
     cq_rd_take_elig[1] && cq_rd_take_thread_id_last == 4'd1 && !cq_rd_take_elig[2] && !cq_rd_take_elig[3] && !cq_rd_take_elig[4] && !cq_rd_take_elig[5] && !cq_rd_take_elig[6] && !cq_rd_take_elig[7] && !cq_rd_take_elig[8] && !cq_rd_take_elig[9] && !cq_rd_take_elig[0],
     cq_rd_take_elig[1] && cq_rd_take_thread_id_last == 4'd0};
-
 wire [9:0] cq_rd_take_thread_id_is_2 = {
     cq_rd_take_elig[2] && cq_rd_take_thread_id_last == 4'd9 && !cq_rd_take_elig[0] && !cq_rd_take_elig[1],
     cq_rd_take_elig[2] && cq_rd_take_thread_id_last == 4'd8 && !cq_rd_take_elig[9] && !cq_rd_take_elig[0] && !cq_rd_take_elig[1],
@@ -3856,7 +3566,6 @@ wire [9:0] cq_rd_take_thread_id_is_2 = {
     cq_rd_take_elig[2] && cq_rd_take_thread_id_last == 4'd2 && !cq_rd_take_elig[3] && !cq_rd_take_elig[4] && !cq_rd_take_elig[5] && !cq_rd_take_elig[6] && !cq_rd_take_elig[7] && !cq_rd_take_elig[8] && !cq_rd_take_elig[9] && !cq_rd_take_elig[0] && !cq_rd_take_elig[1],
     cq_rd_take_elig[2] && cq_rd_take_thread_id_last == 4'd1,
     cq_rd_take_elig[2] && cq_rd_take_thread_id_last == 4'd0 && !cq_rd_take_elig[1]};
-
 wire [9:0] cq_rd_take_thread_id_is_3 = {
     cq_rd_take_elig[3] && cq_rd_take_thread_id_last == 4'd9 && !cq_rd_take_elig[0] && !cq_rd_take_elig[1] && !cq_rd_take_elig[2],
     cq_rd_take_elig[3] && cq_rd_take_thread_id_last == 4'd8 && !cq_rd_take_elig[9] && !cq_rd_take_elig[0] && !cq_rd_take_elig[1] && !cq_rd_take_elig[2],
@@ -3868,7 +3577,6 @@ wire [9:0] cq_rd_take_thread_id_is_3 = {
     cq_rd_take_elig[3] && cq_rd_take_thread_id_last == 4'd2,
     cq_rd_take_elig[3] && cq_rd_take_thread_id_last == 4'd1 && !cq_rd_take_elig[2],
     cq_rd_take_elig[3] && cq_rd_take_thread_id_last == 4'd0 && !cq_rd_take_elig[1] && !cq_rd_take_elig[2]};
-
 wire [9:0] cq_rd_take_thread_id_is_4 = {
     cq_rd_take_elig[4] && cq_rd_take_thread_id_last == 4'd9 && !cq_rd_take_elig[0] && !cq_rd_take_elig[1] && !cq_rd_take_elig[2] && !cq_rd_take_elig[3],
     cq_rd_take_elig[4] && cq_rd_take_thread_id_last == 4'd8 && !cq_rd_take_elig[9] && !cq_rd_take_elig[0] && !cq_rd_take_elig[1] && !cq_rd_take_elig[2] && !cq_rd_take_elig[3],
@@ -3880,7 +3588,6 @@ wire [9:0] cq_rd_take_thread_id_is_4 = {
     cq_rd_take_elig[4] && cq_rd_take_thread_id_last == 4'd2 && !cq_rd_take_elig[3],
     cq_rd_take_elig[4] && cq_rd_take_thread_id_last == 4'd1 && !cq_rd_take_elig[2] && !cq_rd_take_elig[3],
     cq_rd_take_elig[4] && cq_rd_take_thread_id_last == 4'd0 && !cq_rd_take_elig[1] && !cq_rd_take_elig[2] && !cq_rd_take_elig[3]};
-
 wire [9:0] cq_rd_take_thread_id_is_5 = {
     cq_rd_take_elig[5] && cq_rd_take_thread_id_last == 4'd9 && !cq_rd_take_elig[0] && !cq_rd_take_elig[1] && !cq_rd_take_elig[2] && !cq_rd_take_elig[3] && !cq_rd_take_elig[4],
     cq_rd_take_elig[5] && cq_rd_take_thread_id_last == 4'd8 && !cq_rd_take_elig[9] && !cq_rd_take_elig[0] && !cq_rd_take_elig[1] && !cq_rd_take_elig[2] && !cq_rd_take_elig[3] && !cq_rd_take_elig[4],
@@ -3892,7 +3599,6 @@ wire [9:0] cq_rd_take_thread_id_is_5 = {
     cq_rd_take_elig[5] && cq_rd_take_thread_id_last == 4'd2 && !cq_rd_take_elig[3] && !cq_rd_take_elig[4],
     cq_rd_take_elig[5] && cq_rd_take_thread_id_last == 4'd1 && !cq_rd_take_elig[2] && !cq_rd_take_elig[3] && !cq_rd_take_elig[4],
     cq_rd_take_elig[5] && cq_rd_take_thread_id_last == 4'd0 && !cq_rd_take_elig[1] && !cq_rd_take_elig[2] && !cq_rd_take_elig[3] && !cq_rd_take_elig[4]};
-
 wire [9:0] cq_rd_take_thread_id_is_6 = {
     cq_rd_take_elig[6] && cq_rd_take_thread_id_last == 4'd9 && !cq_rd_take_elig[0] && !cq_rd_take_elig[1] && !cq_rd_take_elig[2] && !cq_rd_take_elig[3] && !cq_rd_take_elig[4] && !cq_rd_take_elig[5],
     cq_rd_take_elig[6] && cq_rd_take_thread_id_last == 4'd8 && !cq_rd_take_elig[9] && !cq_rd_take_elig[0] && !cq_rd_take_elig[1] && !cq_rd_take_elig[2] && !cq_rd_take_elig[3] && !cq_rd_take_elig[4] && !cq_rd_take_elig[5],
@@ -3904,7 +3610,6 @@ wire [9:0] cq_rd_take_thread_id_is_6 = {
     cq_rd_take_elig[6] && cq_rd_take_thread_id_last == 4'd2 && !cq_rd_take_elig[3] && !cq_rd_take_elig[4] && !cq_rd_take_elig[5],
     cq_rd_take_elig[6] && cq_rd_take_thread_id_last == 4'd1 && !cq_rd_take_elig[2] && !cq_rd_take_elig[3] && !cq_rd_take_elig[4] && !cq_rd_take_elig[5],
     cq_rd_take_elig[6] && cq_rd_take_thread_id_last == 4'd0 && !cq_rd_take_elig[1] && !cq_rd_take_elig[2] && !cq_rd_take_elig[3] && !cq_rd_take_elig[4] && !cq_rd_take_elig[5]};
-
 wire [9:0] cq_rd_take_thread_id_is_7 = {
     cq_rd_take_elig[7] && cq_rd_take_thread_id_last == 4'd9 && !cq_rd_take_elig[0] && !cq_rd_take_elig[1] && !cq_rd_take_elig[2] && !cq_rd_take_elig[3] && !cq_rd_take_elig[4] && !cq_rd_take_elig[5] && !cq_rd_take_elig[6],
     cq_rd_take_elig[7] && cq_rd_take_thread_id_last == 4'd8 && !cq_rd_take_elig[9] && !cq_rd_take_elig[0] && !cq_rd_take_elig[1] && !cq_rd_take_elig[2] && !cq_rd_take_elig[3] && !cq_rd_take_elig[4] && !cq_rd_take_elig[5] && !cq_rd_take_elig[6],
@@ -3916,7 +3621,6 @@ wire [9:0] cq_rd_take_thread_id_is_7 = {
     cq_rd_take_elig[7] && cq_rd_take_thread_id_last == 4'd2 && !cq_rd_take_elig[3] && !cq_rd_take_elig[4] && !cq_rd_take_elig[5] && !cq_rd_take_elig[6],
     cq_rd_take_elig[7] && cq_rd_take_thread_id_last == 4'd1 && !cq_rd_take_elig[2] && !cq_rd_take_elig[3] && !cq_rd_take_elig[4] && !cq_rd_take_elig[5] && !cq_rd_take_elig[6],
     cq_rd_take_elig[7] && cq_rd_take_thread_id_last == 4'd0 && !cq_rd_take_elig[1] && !cq_rd_take_elig[2] && !cq_rd_take_elig[3] && !cq_rd_take_elig[4] && !cq_rd_take_elig[5] && !cq_rd_take_elig[6]};
-
 wire [9:0] cq_rd_take_thread_id_is_8 = {
     cq_rd_take_elig[8] && cq_rd_take_thread_id_last == 4'd9 && !cq_rd_take_elig[0] && !cq_rd_take_elig[1] && !cq_rd_take_elig[2] && !cq_rd_take_elig[3] && !cq_rd_take_elig[4] && !cq_rd_take_elig[5] && !cq_rd_take_elig[6] && !cq_rd_take_elig[7],
     cq_rd_take_elig[8] && cq_rd_take_thread_id_last == 4'd8 && !cq_rd_take_elig[9] && !cq_rd_take_elig[0] && !cq_rd_take_elig[1] && !cq_rd_take_elig[2] && !cq_rd_take_elig[3] && !cq_rd_take_elig[4] && !cq_rd_take_elig[5] && !cq_rd_take_elig[6] && !cq_rd_take_elig[7],
@@ -3928,7 +3632,6 @@ wire [9:0] cq_rd_take_thread_id_is_8 = {
     cq_rd_take_elig[8] && cq_rd_take_thread_id_last == 4'd2 && !cq_rd_take_elig[3] && !cq_rd_take_elig[4] && !cq_rd_take_elig[5] && !cq_rd_take_elig[6] && !cq_rd_take_elig[7],
     cq_rd_take_elig[8] && cq_rd_take_thread_id_last == 4'd1 && !cq_rd_take_elig[2] && !cq_rd_take_elig[3] && !cq_rd_take_elig[4] && !cq_rd_take_elig[5] && !cq_rd_take_elig[6] && !cq_rd_take_elig[7],
     cq_rd_take_elig[8] && cq_rd_take_thread_id_last == 4'd0 && !cq_rd_take_elig[1] && !cq_rd_take_elig[2] && !cq_rd_take_elig[3] && !cq_rd_take_elig[4] && !cq_rd_take_elig[5] && !cq_rd_take_elig[6] && !cq_rd_take_elig[7]};
-
 wire [9:0] cq_rd_take_thread_id_is_9 = {
     cq_rd_take_elig[9] && cq_rd_take_thread_id_last == 4'd9 && !cq_rd_take_elig[0] && !cq_rd_take_elig[1] && !cq_rd_take_elig[2] && !cq_rd_take_elig[3] && !cq_rd_take_elig[4] && !cq_rd_take_elig[5] && !cq_rd_take_elig[6] && !cq_rd_take_elig[7] && !cq_rd_take_elig[8],
     cq_rd_take_elig[9] && cq_rd_take_thread_id_last == 4'd8,
@@ -3940,57 +3643,45 @@ wire [9:0] cq_rd_take_thread_id_is_9 = {
     cq_rd_take_elig[9] && cq_rd_take_thread_id_last == 4'd2 && !cq_rd_take_elig[3] && !cq_rd_take_elig[4] && !cq_rd_take_elig[5] && !cq_rd_take_elig[6] && !cq_rd_take_elig[7] && !cq_rd_take_elig[8],
     cq_rd_take_elig[9] && cq_rd_take_thread_id_last == 4'd1 && !cq_rd_take_elig[2] && !cq_rd_take_elig[3] && !cq_rd_take_elig[4] && !cq_rd_take_elig[5] && !cq_rd_take_elig[6] && !cq_rd_take_elig[7] && !cq_rd_take_elig[8],
     cq_rd_take_elig[9] && cq_rd_take_thread_id_last == 4'd0 && !cq_rd_take_elig[1] && !cq_rd_take_elig[2] && !cq_rd_take_elig[3] && !cq_rd_take_elig[4] && !cq_rd_take_elig[5] && !cq_rd_take_elig[6] && !cq_rd_take_elig[7] && !cq_rd_take_elig[8]};
-
 assign cq_rd_take_thread_id[0] = |{cq_rd_take_thread_id_is_1,cq_rd_take_thread_id_is_3,cq_rd_take_thread_id_is_5,cq_rd_take_thread_id_is_7,cq_rd_take_thread_id_is_9};
-
 assign cq_rd_take_thread_id[1] = |{cq_rd_take_thread_id_is_2,cq_rd_take_thread_id_is_3,cq_rd_take_thread_id_is_6,cq_rd_take_thread_id_is_7};
-
 assign cq_rd_take_thread_id[2] = |{cq_rd_take_thread_id_is_4,cq_rd_take_thread_id_is_5,cq_rd_take_thread_id_is_6,cq_rd_take_thread_id_is_7};
-
 assign cq_rd_take_thread_id[3] = |{cq_rd_take_thread_id_is_8,cq_rd_take_thread_id_is_9};
-
 always @( posedge nvdla_core_clk_mgated_skid or negedge nvdla_core_rstn ) begin
     if ( !nvdla_core_rstn ) begin
-        cq_rd_take_thread_id_last <=  4'd0;
+        cq_rd_take_thread_id_last <= 4'd0;
     end else begin
         if ( cq_rd_take ) begin
-            cq_rd_take_thread_id_last <=  cq_rd_take_thread_id;
+            cq_rd_take_thread_id_last <= cq_rd_take_thread_id;
         end
-        //synopsys translate_off
+//synopsys translate_off
             else if ( !cq_rd_take ) begin
         end else begin
-            cq_rd_take_thread_id_last <=  {4{`x_or_0}};
+            cq_rd_take_thread_id_last <= {4{`x_or_0}};
         end
-        //synopsys translate_on
-
+//synopsys translate_on
     end
 end
-
 assign wr_bypassing = rd_bypassing0 || rd_bypassing1 || rd_bypassing2 || rd_bypassing3 || rd_bypassing4 || rd_bypassing5 || rd_bypassing6 || rd_bypassing7 || rd_bypassing8 || rd_bypassing9;
-
-
 // Master Clock Gating (SLCG) Enables
 //
-
 // plusarg for disabling this stuff:
-
 // synopsys translate_off
 `ifndef SYNTH_LEVEL1_COMPILE
 `ifndef SYNTHESIS
-reg master_clk_gating_disabled;  initial master_clk_gating_disabled = $test$plusargs( "fifogen_disable_master_clk_gating" ) != 0;
+reg master_clk_gating_disabled; initial master_clk_gating_disabled = $test$plusargs( "fifogen_disable_master_clk_gating" ) != 0;
 `endif
 `endif
 // synopsys translate_on
-
 // synopsys translate_off
 `ifndef SYNTH_LEVEL1_COMPILE
 `ifndef SYNTHESIS
-reg wr_pause_rand_dly;  
+reg wr_pause_rand_dly;
 always @( posedge nvdla_core_clk or negedge nvdla_core_rstn ) begin
     if ( !nvdla_core_rstn ) begin
-        wr_pause_rand_dly <=  1'b0;
+        wr_pause_rand_dly <= 1'b0;
     end else begin
-        wr_pause_rand_dly <=  wr_pause_rand;
+        wr_pause_rand_dly <= wr_pause_rand;
     end
 end
 `endif
@@ -4000,105 +3691,82 @@ assign nvdla_core_clk_mgated_enable = ((wr_reserving || wr_pushing || wr_popping
                                `ifdef FIFOGEN_MASTER_CLK_GATING_DISABLED
                                || 1'b1
                                `endif
-                               // synopsys translate_off
-			       `ifndef SYNTH_LEVEL1_COMPILE
-			       `ifndef SYNTHESIS
+// synopsys translate_off
+          `ifndef SYNTH_LEVEL1_COMPILE
+          `ifndef SYNTHESIS
                                || master_clk_gating_disabled || (wr_pause_rand != wr_pause_rand_dly)
-			       `endif
-			       `endif
-                               // synopsys translate_on
+          `endif
+          `endif
+// synopsys translate_on
                                ;
-
-
 assign nvdla_core_clk_mgated_skid_enable = nvdla_core_clk_mgated_enable || ( cq_rd0_pvld && cq_rd0_prdy ) || rd_bypassing0 || ( cq_rd1_pvld && cq_rd1_prdy ) || rd_bypassing1 || ( cq_rd2_pvld && cq_rd2_prdy ) || rd_bypassing2 || ( cq_rd3_pvld && cq_rd3_prdy ) || rd_bypassing3 || ( cq_rd4_pvld && cq_rd4_prdy ) || rd_bypassing4 || ( cq_rd5_pvld && cq_rd5_prdy ) || rd_bypassing5 || ( cq_rd6_pvld && cq_rd6_prdy ) || rd_bypassing6 || ( cq_rd7_pvld && cq_rd7_prdy ) || rd_bypassing7 || ( cq_rd8_pvld && cq_rd8_prdy ) || rd_bypassing8 || ( cq_rd9_pvld && cq_rd9_prdy ) || rd_bypassing9
                                `ifdef FIFOGEN_MASTER_CLK_GATING_DISABLED
                                || 1'b1
                                `endif
-                               // synopsys translate_off
-			       `ifndef SYNTH_LEVEL1_COMPILE
-			       `ifndef SYNTHESIS
+// synopsys translate_off
+          `ifndef SYNTH_LEVEL1_COMPILE
+          `ifndef SYNTHESIS
                                || master_clk_gating_disabled
-			       `endif
-			       `endif
-                               // synopsys translate_on
+          `endif
+          `endif
+// synopsys translate_on
                                ;
-
-
 // Simulation and Emulation Overrides of wr_limit(s)
 //
-
 `ifdef EMU
-
 `ifdef EMU_FIFO_CFG
 // Emulation Global Config Override
 //
 assign wr_limit_muxed = `EMU_FIFO_CFG.NV_NVDLA_NOCIF_DRAM_READ_cq_wr_limit_override ? `EMU_FIFO_CFG.NV_NVDLA_NOCIF_DRAM_READ_cq_wr_limit : 9'd0;
 `else
-// No Global Override for Emulation 
+// No Global Override for Emulation
 //
 assign wr_limit_muxed = 9'd0;
 `endif // EMU_FIFO_CFG
-
 `else // !EMU
 `ifdef SYNTH_LEVEL1_COMPILE
-
 // No Override for GCS Compiles
 //
 assign wr_limit_muxed = 9'd0;
 `else
 `ifdef SYNTHESIS
-
 // No Override for RTL Synthesis
 //
-
 assign wr_limit_muxed = 9'd0;
-
-`else  
-
+`else
 // RTL Simulation Plusarg Override
-
-
 // VCS coverage off
-
 reg wr_limit_override;
-reg [8:0] wr_limit_override_value; 
+reg [8:0] wr_limit_override_value;
 assign wr_limit_muxed = wr_limit_override ? wr_limit_override_value : 9'd0;
 `ifdef NV_ARCHPRO
 event reinit;
-
 initial begin
     $display("fifogen reinit initial block %m");
     -> reinit;
 end
 `endif
-
 `ifdef NV_ARCHPRO
 always @( reinit ) begin
-`else 
+`else
 initial begin
 `endif
     wr_limit_override = 0;
-    wr_limit_override_value = 0;  // to keep viva happy with dangles
+    wr_limit_override_value = 0; // to keep viva happy with dangles
     if ( $test$plusargs( "NV_NVDLA_NOCIF_DRAM_READ_cq_wr_limit" ) ) begin
         wr_limit_override = 1;
         $value$plusargs( "NV_NVDLA_NOCIF_DRAM_READ_cq_wr_limit=%d", wr_limit_override_value);
     end
 end
-
 // VCS coverage on
-
-
-`endif 
 `endif
 `endif
-
-
+`endif
 // Random Write-Side Stalling
 // synopsys translate_off
 `ifndef SYNTH_LEVEL1_COMPILE
 `ifndef SYNTHESIS
 // VCS coverage off
-
 // leda W339 OFF -- Non synthesizable operator
 // leda W372 OFF -- Undefined PLI task
 // leda W373 OFF -- Undefined PLI function
@@ -4107,20 +3775,18 @@ end
 // leda W182 OFF -- Illegal statement for synthesis
 // leda W639 OFF -- For synthesis, operands of a division or modulo operation need to be constants
 // leda DCVER_274_NV OFF -- This system task is not supported by DC
-
-integer stall_probability;      // prob of stalling
-integer stall_cycles_min;       // min cycles to stall
-integer stall_cycles_max;       // max cycles to stall
-integer stall_cycles_left;      // stall cycles left
+integer stall_probability; // prob of stalling
+integer stall_cycles_min; // min cycles to stall
+integer stall_cycles_max; // max cycles to stall
+integer stall_cycles_left; // stall cycles left
 `ifdef NV_ARCHPRO
 always @( reinit ) begin
-`else 
+`else
 initial begin
 `endif
-    stall_probability      = 0; // no stalling by default
-    stall_cycles_min       = 1;
-    stall_cycles_max       = 10;
-
+    stall_probability = 0; // no stalling by default
+    stall_cycles_min = 1;
+    stall_cycles_max = 10;
 `ifdef NO_PLI
 `else
     if ( $test$plusargs( "NV_NVDLA_NOCIF_DRAM_READ_cq_fifo_stall_probability" ) ) begin
@@ -4128,73 +3794,61 @@ initial begin
     end else if ( $test$plusargs( "default_fifo_stall_probability" ) ) begin
         $value$plusargs( "default_fifo_stall_probability=%d", stall_probability);
     end
-
     if ( $test$plusargs( "NV_NVDLA_NOCIF_DRAM_READ_cq_fifo_stall_cycles_min" ) ) begin
         $value$plusargs( "NV_NVDLA_NOCIF_DRAM_READ_cq_fifo_stall_cycles_min=%d", stall_cycles_min);
     end else if ( $test$plusargs( "default_fifo_stall_cycles_min" ) ) begin
         $value$plusargs( "default_fifo_stall_cycles_min=%d", stall_cycles_min);
     end
-
     if ( $test$plusargs( "NV_NVDLA_NOCIF_DRAM_READ_cq_fifo_stall_cycles_max" ) ) begin
         $value$plusargs( "NV_NVDLA_NOCIF_DRAM_READ_cq_fifo_stall_cycles_max=%d", stall_cycles_max);
     end else if ( $test$plusargs( "default_fifo_stall_cycles_max" ) ) begin
         $value$plusargs( "default_fifo_stall_cycles_max=%d", stall_cycles_max);
     end
 `endif
-
     if ( stall_cycles_min < 1 ) begin
         stall_cycles_min = 1;
     end
-
     if ( stall_cycles_min > stall_cycles_max ) begin
         stall_cycles_max = stall_cycles_min;
     end
-
 end
-
 `ifdef NO_PLI
 `else
-
 // randomization globals
 `ifdef SIMTOP_RANDOMIZE_STALLS
   always @( `SIMTOP_RANDOMIZE_STALLS.global_stall_event ) begin
-    if ( ! $test$plusargs( "NV_NVDLA_NOCIF_DRAM_READ_cq_fifo_stall_probability" ) ) stall_probability = `SIMTOP_RANDOMIZE_STALLS.global_stall_fifo_probability; 
-    if ( ! $test$plusargs( "NV_NVDLA_NOCIF_DRAM_READ_cq_fifo_stall_cycles_min"  ) ) stall_cycles_min  = `SIMTOP_RANDOMIZE_STALLS.global_stall_fifo_cycles_min;
-    if ( ! $test$plusargs( "NV_NVDLA_NOCIF_DRAM_READ_cq_fifo_stall_cycles_max"  ) ) stall_cycles_max  = `SIMTOP_RANDOMIZE_STALLS.global_stall_fifo_cycles_max;
+    if ( ! $test$plusargs( "NV_NVDLA_NOCIF_DRAM_READ_cq_fifo_stall_probability" ) ) stall_probability = `SIMTOP_RANDOMIZE_STALLS.global_stall_fifo_probability;
+    if ( ! $test$plusargs( "NV_NVDLA_NOCIF_DRAM_READ_cq_fifo_stall_cycles_min" ) ) stall_cycles_min = `SIMTOP_RANDOMIZE_STALLS.global_stall_fifo_cycles_min;
+    if ( ! $test$plusargs( "NV_NVDLA_NOCIF_DRAM_READ_cq_fifo_stall_cycles_max" ) ) stall_cycles_max = `SIMTOP_RANDOMIZE_STALLS.global_stall_fifo_cycles_max;
   end
 `endif
-
 `endif
-
 always @( negedge nvdla_core_clk or negedge nvdla_core_rstn ) begin
     if ( !nvdla_core_rstn ) begin
-        stall_cycles_left <=  0;
+        stall_cycles_left <= 0;
     end else begin
 `ifdef NO_PLI
-            stall_cycles_left <=  0;
+            stall_cycles_left <= 0;
 `else
             if ( cq_wr_pvld && !(!cq_wr_prdy)
                  && stall_probability != 0 ) begin
                 if ( prand_inst0(1, 100) <= stall_probability ) begin
-                    stall_cycles_left <=  prand_inst1(stall_cycles_min, stall_cycles_max);
-                end else if ( stall_cycles_left !== 0  ) begin
-                    stall_cycles_left <=  stall_cycles_left - 1;
+                    stall_cycles_left <= prand_inst1(stall_cycles_min, stall_cycles_max);
+                end else if ( stall_cycles_left !== 0 ) begin
+                    stall_cycles_left <= stall_cycles_left - 1;
                 end
-            end else if ( stall_cycles_left !== 0  ) begin
-                stall_cycles_left <=  stall_cycles_left - 1;
+            end else if ( stall_cycles_left !== 0 ) begin
+                stall_cycles_left <= stall_cycles_left - 1;
             end
 `endif
     end
 end
-
 assign wr_pause_rand = (stall_cycles_left !== 0) ;
-
 // VCS coverage on
 `endif
 `endif
 // synopsys translate_on
 // VCS coverage on
-
 // leda W339 ON
 // leda W372 ON
 // leda W373 ON
@@ -4203,135 +3857,111 @@ assign wr_pause_rand = (stall_cycles_left !== 0) ;
 // leda W182 ON
 // leda W639 ON
 // leda DCVER_274_NV ON
-
-
 //
 // Histogram of fifo depth (from write side's perspective)
 //
 // NOTE: it will reference `SIMTOP.perfmon_enabled, so that
-//       has to at least be defined, though not initialized.
-//	 tbgen testbenches have it already and various
-//	 ways to turn it on and off.
+// has to at least be defined, though not initialized.
+// tbgen testbenches have it already and various
+// ways to turn it on and off.
 //
-`ifdef PERFMON_HISTOGRAM 
+`ifdef PERFMON_HISTOGRAM
 // synopsys translate_off
 `ifndef SYNTH_LEVEL1_COMPILE
 `ifndef SYNTHESIS
 perfmon_histogram perfmon (
-      .clk	( nvdla_core_clk ) 
-    , .max      ( {23'd0, (wr_limit_reg == 9'd0) ? 9'd256 : wr_limit_reg} )
-    , .curr	( {23'd0, cq_wr_count} )
+      .clk ( nvdla_core_clk )
+    , .max ( {23'd0, (wr_limit_reg == 9'd0) ? 9'd256 : wr_limit_reg} )
+    , .curr ( {23'd0, cq_wr_count} )
     );
 `endif
 `endif
 // synopsys translate_on
 `endif
-
 // spyglass disable_block W164a W164b W116 W484 W504
-
 `ifdef SPYGLASS
 `else
-
 `ifdef FV_ASSERT_ON
 `else
 // synopsys translate_off
 `endif
-
 `ifdef ASSERT_ON
-
 `ifdef SPYGLASS
 wire disable_assert_plusarg = 1'b0;
 `else
-
 `ifdef FV_ASSERT_ON
 wire disable_assert_plusarg = 1'b0;
 `else
 wire disable_assert_plusarg = $test$plusargs("DISABLE_NESS_FLOW_ASSERTIONS");
 `endif
-
 `endif
 wire assert_enabled = 1'b1 && !disable_assert_plusarg;
-
-
-nv_assert_vld_credit_max #(0, 0, 256, 0, "FIFOGEN_ASSERTION A take occurred without credits being available") 
-    fifogen_rd_take_credit_check0  ( .clk       ( nvdla_core_clk ), 
-                                        .reset_    ( ( nvdla_core_rstn === 1'bx ? 1'b0 : nvdla_core_rstn ) & assert_enabled ), 
-                                        .vld       ( cq_rd_take  && cq_rd_take_thread_id == 4'd0 ),
-                                        .credit    ( cq_rd_credit[0] )
+nv_assert_vld_credit_max #(0, 0, 256, 0, "FIFOGEN_ASSERTION A take occurred without credits being available")
+    fifogen_rd_take_credit_check0 ( .clk ( nvdla_core_clk ),
+                                        .reset_ ( ( nvdla_core_rstn === 1'bx ? 1'b0 : nvdla_core_rstn ) & assert_enabled ),
+                                        .vld ( cq_rd_take && cq_rd_take_thread_id == 4'd0 ),
+                                        .credit ( cq_rd_credit[0] )
                                       );
-
-nv_assert_vld_credit_max #(0, 0, 256, 0, "FIFOGEN_ASSERTION A take occurred without credits being available") 
-    fifogen_rd_take_credit_check1  ( .clk       ( nvdla_core_clk ), 
-                                        .reset_    ( ( nvdla_core_rstn === 1'bx ? 1'b0 : nvdla_core_rstn ) & assert_enabled ), 
-                                        .vld       ( cq_rd_take  && cq_rd_take_thread_id == 4'd1 ),
-                                        .credit    ( cq_rd_credit[1] )
+nv_assert_vld_credit_max #(0, 0, 256, 0, "FIFOGEN_ASSERTION A take occurred without credits being available")
+    fifogen_rd_take_credit_check1 ( .clk ( nvdla_core_clk ),
+                                        .reset_ ( ( nvdla_core_rstn === 1'bx ? 1'b0 : nvdla_core_rstn ) & assert_enabled ),
+                                        .vld ( cq_rd_take && cq_rd_take_thread_id == 4'd1 ),
+                                        .credit ( cq_rd_credit[1] )
                                       );
-
-nv_assert_vld_credit_max #(0, 0, 256, 0, "FIFOGEN_ASSERTION A take occurred without credits being available") 
-    fifogen_rd_take_credit_check2  ( .clk       ( nvdla_core_clk ), 
-                                        .reset_    ( ( nvdla_core_rstn === 1'bx ? 1'b0 : nvdla_core_rstn ) & assert_enabled ), 
-                                        .vld       ( cq_rd_take  && cq_rd_take_thread_id == 4'd2 ),
-                                        .credit    ( cq_rd_credit[2] )
+nv_assert_vld_credit_max #(0, 0, 256, 0, "FIFOGEN_ASSERTION A take occurred without credits being available")
+    fifogen_rd_take_credit_check2 ( .clk ( nvdla_core_clk ),
+                                        .reset_ ( ( nvdla_core_rstn === 1'bx ? 1'b0 : nvdla_core_rstn ) & assert_enabled ),
+                                        .vld ( cq_rd_take && cq_rd_take_thread_id == 4'd2 ),
+                                        .credit ( cq_rd_credit[2] )
                                       );
-
-nv_assert_vld_credit_max #(0, 0, 256, 0, "FIFOGEN_ASSERTION A take occurred without credits being available") 
-    fifogen_rd_take_credit_check3  ( .clk       ( nvdla_core_clk ), 
-                                        .reset_    ( ( nvdla_core_rstn === 1'bx ? 1'b0 : nvdla_core_rstn ) & assert_enabled ), 
-                                        .vld       ( cq_rd_take  && cq_rd_take_thread_id == 4'd3 ),
-                                        .credit    ( cq_rd_credit[3] )
+nv_assert_vld_credit_max #(0, 0, 256, 0, "FIFOGEN_ASSERTION A take occurred without credits being available")
+    fifogen_rd_take_credit_check3 ( .clk ( nvdla_core_clk ),
+                                        .reset_ ( ( nvdla_core_rstn === 1'bx ? 1'b0 : nvdla_core_rstn ) & assert_enabled ),
+                                        .vld ( cq_rd_take && cq_rd_take_thread_id == 4'd3 ),
+                                        .credit ( cq_rd_credit[3] )
                                       );
-
-nv_assert_vld_credit_max #(0, 0, 256, 0, "FIFOGEN_ASSERTION A take occurred without credits being available") 
-    fifogen_rd_take_credit_check4  ( .clk       ( nvdla_core_clk ), 
-                                        .reset_    ( ( nvdla_core_rstn === 1'bx ? 1'b0 : nvdla_core_rstn ) & assert_enabled ), 
-                                        .vld       ( cq_rd_take  && cq_rd_take_thread_id == 4'd4 ),
-                                        .credit    ( cq_rd_credit[4] )
+nv_assert_vld_credit_max #(0, 0, 256, 0, "FIFOGEN_ASSERTION A take occurred without credits being available")
+    fifogen_rd_take_credit_check4 ( .clk ( nvdla_core_clk ),
+                                        .reset_ ( ( nvdla_core_rstn === 1'bx ? 1'b0 : nvdla_core_rstn ) & assert_enabled ),
+                                        .vld ( cq_rd_take && cq_rd_take_thread_id == 4'd4 ),
+                                        .credit ( cq_rd_credit[4] )
                                       );
-
-nv_assert_vld_credit_max #(0, 0, 256, 0, "FIFOGEN_ASSERTION A take occurred without credits being available") 
-    fifogen_rd_take_credit_check5  ( .clk       ( nvdla_core_clk ), 
-                                        .reset_    ( ( nvdla_core_rstn === 1'bx ? 1'b0 : nvdla_core_rstn ) & assert_enabled ), 
-                                        .vld       ( cq_rd_take  && cq_rd_take_thread_id == 4'd5 ),
-                                        .credit    ( cq_rd_credit[5] )
+nv_assert_vld_credit_max #(0, 0, 256, 0, "FIFOGEN_ASSERTION A take occurred without credits being available")
+    fifogen_rd_take_credit_check5 ( .clk ( nvdla_core_clk ),
+                                        .reset_ ( ( nvdla_core_rstn === 1'bx ? 1'b0 : nvdla_core_rstn ) & assert_enabled ),
+                                        .vld ( cq_rd_take && cq_rd_take_thread_id == 4'd5 ),
+                                        .credit ( cq_rd_credit[5] )
                                       );
-
-nv_assert_vld_credit_max #(0, 0, 256, 0, "FIFOGEN_ASSERTION A take occurred without credits being available") 
-    fifogen_rd_take_credit_check6  ( .clk       ( nvdla_core_clk ), 
-                                        .reset_    ( ( nvdla_core_rstn === 1'bx ? 1'b0 : nvdla_core_rstn ) & assert_enabled ), 
-                                        .vld       ( cq_rd_take  && cq_rd_take_thread_id == 4'd6 ),
-                                        .credit    ( cq_rd_credit[6] )
+nv_assert_vld_credit_max #(0, 0, 256, 0, "FIFOGEN_ASSERTION A take occurred without credits being available")
+    fifogen_rd_take_credit_check6 ( .clk ( nvdla_core_clk ),
+                                        .reset_ ( ( nvdla_core_rstn === 1'bx ? 1'b0 : nvdla_core_rstn ) & assert_enabled ),
+                                        .vld ( cq_rd_take && cq_rd_take_thread_id == 4'd6 ),
+                                        .credit ( cq_rd_credit[6] )
                                       );
-
-nv_assert_vld_credit_max #(0, 0, 256, 0, "FIFOGEN_ASSERTION A take occurred without credits being available") 
-    fifogen_rd_take_credit_check7  ( .clk       ( nvdla_core_clk ), 
-                                        .reset_    ( ( nvdla_core_rstn === 1'bx ? 1'b0 : nvdla_core_rstn ) & assert_enabled ), 
-                                        .vld       ( cq_rd_take  && cq_rd_take_thread_id == 4'd7 ),
-                                        .credit    ( cq_rd_credit[7] )
+nv_assert_vld_credit_max #(0, 0, 256, 0, "FIFOGEN_ASSERTION A take occurred without credits being available")
+    fifogen_rd_take_credit_check7 ( .clk ( nvdla_core_clk ),
+                                        .reset_ ( ( nvdla_core_rstn === 1'bx ? 1'b0 : nvdla_core_rstn ) & assert_enabled ),
+                                        .vld ( cq_rd_take && cq_rd_take_thread_id == 4'd7 ),
+                                        .credit ( cq_rd_credit[7] )
                                       );
-
-nv_assert_vld_credit_max #(0, 0, 256, 0, "FIFOGEN_ASSERTION A take occurred without credits being available") 
-    fifogen_rd_take_credit_check8  ( .clk       ( nvdla_core_clk ), 
-                                        .reset_    ( ( nvdla_core_rstn === 1'bx ? 1'b0 : nvdla_core_rstn ) & assert_enabled ), 
-                                        .vld       ( cq_rd_take  && cq_rd_take_thread_id == 4'd8 ),
-                                        .credit    ( cq_rd_credit[8] )
+nv_assert_vld_credit_max #(0, 0, 256, 0, "FIFOGEN_ASSERTION A take occurred without credits being available")
+    fifogen_rd_take_credit_check8 ( .clk ( nvdla_core_clk ),
+                                        .reset_ ( ( nvdla_core_rstn === 1'bx ? 1'b0 : nvdla_core_rstn ) & assert_enabled ),
+                                        .vld ( cq_rd_take && cq_rd_take_thread_id == 4'd8 ),
+                                        .credit ( cq_rd_credit[8] )
                                       );
-
-nv_assert_vld_credit_max #(0, 0, 256, 0, "FIFOGEN_ASSERTION A take occurred without credits being available") 
-    fifogen_rd_take_credit_check9  ( .clk       ( nvdla_core_clk ), 
-                                        .reset_    ( ( nvdla_core_rstn === 1'bx ? 1'b0 : nvdla_core_rstn ) & assert_enabled ), 
-                                        .vld       ( cq_rd_take  && cq_rd_take_thread_id == 4'd9 ),
-                                        .credit    ( cq_rd_credit[9] )
+nv_assert_vld_credit_max #(0, 0, 256, 0, "FIFOGEN_ASSERTION A take occurred without credits being available")
+    fifogen_rd_take_credit_check9 ( .clk ( nvdla_core_clk ),
+                                        .reset_ ( ( nvdla_core_rstn === 1'bx ? 1'b0 : nvdla_core_rstn ) & assert_enabled ),
+                                        .vld ( cq_rd_take && cq_rd_take_thread_id == 4'd9 ),
+                                        .credit ( cq_rd_credit[9] )
                                       );
-
 `endif
-
 `ifdef FV_ASSERT_ON
 `else
 // synopsys translate_on
 `endif
-
 `ifdef ASSERT_ON
-
 //synopsys translate_off
 `ifndef SYNTH_LEVEL1_COMPILE
 `ifndef SYNTHESIS
@@ -4343,28 +3973,19 @@ end
 `endif
 `endif
 //synopsys translate_on
-
 `endif
-
 `endif
-
 // spyglass enable_block W164a W164b W116 W484 W504
-
-
 //The NV_BLKBOX_SRC0 module is only present when the FIFOGEN_MODULE_SEARCH
-// define is set.  This is to aid fifogen team search for fifogen fifo
+// define is set. This is to aid fifogen team search for fifogen fifo
 // instance and module names in a given design.
 `ifdef FIFOGEN_MODULE_SEARCH
 NV_BLKBOX_SRC0 dummy_breadcrumb_fifogen_blkbox (.Y());
 `endif
-
 // spyglass enable_block W401 -- clock is not input to module
-
 // synopsys dc_script_begin
-//   set_boundary_optimization find(design, "NV_NVDLA_NOCIF_DRAM_READ_cq") true
+// set_boundary_optimization find(design, "NV_NVDLA_NOCIF_DRAM_READ_cq") true
 // synopsys dc_script_end
-
-
 `ifdef SYNTH_LEVEL1_COMPILE
 `else
 `ifdef SYNTHESIS
@@ -4377,13 +3998,11 @@ reg prand_no_rollpli0;
 `endif
 `endif
 `endif
-
 function [31:0] prand_inst0;
 //VCS coverage off
     input [31:0] min;
     input [31:0] max;
     reg [32:0] diff;
-    
     begin
 `ifdef SYNTH_LEVEL1_COMPILE
         prand_inst0 = min;
@@ -4403,7 +4022,7 @@ function [31:0] prand_inst0;
         end else begin
             diff = max - min + 1;
             prand_inst0 = min + prand_local_seed0[47:16] % diff;
-            // magic numbers taken from Java's random class (same as lrand48)
+// magic numbers taken from Java's random class (same as lrand48)
             prand_local_seed0 = prand_local_seed0 * 48'h5deece66d + 48'd11;
         end
 `else
@@ -4418,8 +4037,6 @@ function [31:0] prand_inst0;
     end
 //VCS coverage on
 endfunction
-
-
 `ifdef SYNTH_LEVEL1_COMPILE
 `else
 `ifdef SYNTHESIS
@@ -4432,13 +4049,11 @@ reg prand_no_rollpli1;
 `endif
 `endif
 `endif
-
 function [31:0] prand_inst1;
 //VCS coverage off
     input [31:0] min;
     input [31:0] max;
     reg [32:0] diff;
-    
     begin
 `ifdef SYNTH_LEVEL1_COMPILE
         prand_inst1 = min;
@@ -4458,7 +4073,7 @@ function [31:0] prand_inst1;
         end else begin
             diff = max - min + 1;
             prand_inst1 = min + prand_local_seed1[47:16] % diff;
-            // magic numbers taken from Java's random class (same as lrand48)
+// magic numbers taken from Java's random class (same as lrand48)
             prand_local_seed1 = prand_local_seed1 * 48'h5deece66d + 48'd11;
         end
 `else
@@ -4473,13 +4088,7 @@ function [31:0] prand_inst1;
     end
 //VCS coverage on
 endfunction
-
-
 endmodule // NV_NVDLA_NOCIF_DRAM_READ_cq
-
-
-
 //
 // generate free list fifo for use from read side to write side
 //
-

@@ -1,13 +1,11 @@
 // ================================================================
 // NVDLA Open Source Project
-// 
-// Copyright(c) 2016 - 2017 NVIDIA Corporation.  Licensed under the
-// NVDLA Open Hardware License; Check "LICENSE" which comes with 
+//
+// Copyright(c) 2016 - 2017 NVIDIA Corporation. Licensed under the
+// NVDLA Open Hardware License; Check "LICENSE" which comes with
 // this distribution for more information.
 // ================================================================
-
 // File Name: nv_ram_rws_32x256.v
-
 `timescale 1ns / 10ps
 module nv_ram_rws_32x256 (
         clk,
@@ -20,58 +18,47 @@ module nv_ram_rws_32x256 (
         pwrbus_ram_pd
         );
 parameter FORCE_CONTENTION_ASSERTION_RESET_ACTIVE=1'b0;
-
 // port list
-input           clk;
-input  [4:0]    ra;
-input           re;
-output [255:0]  dout;
-input  [4:0]    wa;
-input           we;
-input  [255:0]  di;
-input  [31:0]   pwrbus_ram_pd;
-
-
-
-// This wrapper consists of :  1 Ram cells: RAMPDP_32X256_GL_M1_D2 ;  
-
-//Wires for Misc Ports 
-wire  DFT_clamp;
-
-//Wires for Mbist Ports 
+input clk;
+input [4:0] ra;
+input re;
+output [255:0] dout;
+input [4:0] wa;
+input we;
+input [255:0] di;
+input [31:0] pwrbus_ram_pd;
+// This wrapper consists of : 1 Ram cells: RAMPDP_32X256_GL_M1_D2 ;
+//Wires for Misc Ports
+wire DFT_clamp;
+//Wires for Mbist Ports
 wire [4:0] mbist_Wa_w0;
 wire [1:0] mbist_Di_w0;
-wire  mbist_we_w0;
+wire mbist_we_w0;
 wire [4:0] mbist_Ra_r0;
-
 // verilint 528 off - Variable set but not used
 wire [255:0] mbist_Do_r0_int_net;
 // verilint 528 on - Variable set but not used
-wire  mbist_ce_r0;
-wire  mbist_en_sync;
-
-//Wires for RamAccess Ports 
-wire  SI;
-
+wire mbist_ce_r0;
+wire mbist_en_sync;
+//Wires for RamAccess Ports
+wire SI;
 // verilint 528 off - Variable set but not used
-wire  SO_int_net;
+wire SO_int_net;
 // verilint 528 on - Variable set but not used
-wire  shiftDR;
-wire  updateDR;
-wire  debug_mode;
-
-//Wires for Misc Ports 
-wire  mbist_ramaccess_rst_;
-wire  ary_atpg_ctl;
-wire  write_inh;
-wire  scan_ramtms;
-wire  iddq_mode;
-wire  jtag_readonly_mode;
-wire  ary_read_inh;
-wire  scan_en;
+wire shiftDR;
+wire updateDR;
+wire debug_mode;
+//Wires for Misc Ports
+wire mbist_ramaccess_rst_;
+wire ary_atpg_ctl;
+wire write_inh;
+wire scan_ramtms;
+wire iddq_mode;
+wire jtag_readonly_mode;
+wire ary_read_inh;
+wire scan_en;
 wire [7:0] svop;
-
-// Use Bbox and clamps to clamp and tie off the DFT signals in the wrapper 
+// Use Bbox and clamps to clamp and tie off the DFT signals in the wrapper
 NV_BLKBOX_SRC0 UI_enableDFTmode_async_ld_buf (.Y(DFT_clamp));
 wire pre_mbist_Wa_w0_0;
 NV_BLKBOX_SRC0_X testInst_mbist_Wa_w0_0 (.Y(pre_mbist_Wa_w0_0));
@@ -419,318 +406,303 @@ NV_BLKBOX_SRC0 testInst_svop_4 (.Y(svop[4]));
 NV_BLKBOX_SRC0 testInst_svop_5 (.Y(svop[5]));
 NV_BLKBOX_SRC0 testInst_svop_6 (.Y(svop[6]));
 NV_BLKBOX_SRC0 testInst_svop_7 (.Y(svop[7]));
-
 // Declare the wires for test signals
-
 // Instantiating the internal logic module now
 // verilint 402 off - inferred Reset must be a module port
 nv_ram_rws_32x256_logic #(FORCE_CONTENTION_ASSERTION_RESET_ACTIVE) r_nv_ram_rws_32x256 (
-                           .SI(SI), .SO_int_net(SO_int_net), 
-                           .ary_atpg_ctl(ary_atpg_ctl), 
-                           .ary_read_inh(ary_read_inh), .clk(clk), 
-                           .debug_mode(debug_mode), .di(di), .dout(dout), 
-                           .iddq_mode(iddq_mode), 
-                           .jtag_readonly_mode(jtag_readonly_mode), 
-                           .mbist_Di_w0(mbist_Di_w0), 
-                           .mbist_Do_r0_int_net(mbist_Do_r0_int_net), 
-                           .mbist_Ra_r0(mbist_Ra_r0), .mbist_Wa_w0(mbist_Wa_w0), 
-                           .mbist_ce_r0(mbist_ce_r0), 
-                           .mbist_en_sync(mbist_en_sync), 
-                           .mbist_ramaccess_rst_(mbist_ramaccess_rst_), 
-                           .mbist_we_w0(mbist_we_w0), 
-                           .pwrbus_ram_pd(pwrbus_ram_pd), .ra(ra), .re(re), 
-                           .scan_en(scan_en), .scan_ramtms(scan_ramtms), 
-                           .shiftDR(shiftDR), .svop(svop), .updateDR(updateDR), 
+                           .SI(SI), .SO_int_net(SO_int_net),
+                           .ary_atpg_ctl(ary_atpg_ctl),
+                           .ary_read_inh(ary_read_inh), .clk(clk),
+                           .debug_mode(debug_mode), .di(di), .dout(dout),
+                           .iddq_mode(iddq_mode),
+                           .jtag_readonly_mode(jtag_readonly_mode),
+                           .mbist_Di_w0(mbist_Di_w0),
+                           .mbist_Do_r0_int_net(mbist_Do_r0_int_net),
+                           .mbist_Ra_r0(mbist_Ra_r0), .mbist_Wa_w0(mbist_Wa_w0),
+                           .mbist_ce_r0(mbist_ce_r0),
+                           .mbist_en_sync(mbist_en_sync),
+                           .mbist_ramaccess_rst_(mbist_ramaccess_rst_),
+                           .mbist_we_w0(mbist_we_w0),
+                           .pwrbus_ram_pd(pwrbus_ram_pd), .ra(ra), .re(re),
+                           .scan_en(scan_en), .scan_ramtms(scan_ramtms),
+                           .shiftDR(shiftDR), .svop(svop), .updateDR(updateDR),
                            .wa(wa), .we(we), .write_inh(write_inh) );
 // verilint 402 on - inferred Reset must be a module port
-
-
 // synopsys dc_tcl_script_begin
 // synopsys dc_tcl_script_end
-
-
-
 // synopsys dc_tcl_script_begin
 // synopsys dc_tcl_script_end
-
-
 `ifndef SYNTHESIS
 task arrangement (output integer arrangment_string[255:0]);
   begin
-    arrangment_string[0] = 0  ;     
-    arrangment_string[1] = 1  ;     
-    arrangment_string[2] = 2  ;     
-    arrangment_string[3] = 3  ;     
-    arrangment_string[4] = 4  ;     
-    arrangment_string[5] = 5  ;     
-    arrangment_string[6] = 6  ;     
-    arrangment_string[7] = 7  ;     
-    arrangment_string[8] = 8  ;     
-    arrangment_string[9] = 9  ;     
-    arrangment_string[10] = 10  ;     
-    arrangment_string[11] = 11  ;     
-    arrangment_string[12] = 12  ;     
-    arrangment_string[13] = 13  ;     
-    arrangment_string[14] = 14  ;     
-    arrangment_string[15] = 15  ;     
-    arrangment_string[16] = 16  ;     
-    arrangment_string[17] = 17  ;     
-    arrangment_string[18] = 18  ;     
-    arrangment_string[19] = 19  ;     
-    arrangment_string[20] = 20  ;     
-    arrangment_string[21] = 21  ;     
-    arrangment_string[22] = 22  ;     
-    arrangment_string[23] = 23  ;     
-    arrangment_string[24] = 24  ;     
-    arrangment_string[25] = 25  ;     
-    arrangment_string[26] = 26  ;     
-    arrangment_string[27] = 27  ;     
-    arrangment_string[28] = 28  ;     
-    arrangment_string[29] = 29  ;     
-    arrangment_string[30] = 30  ;     
-    arrangment_string[31] = 31  ;     
-    arrangment_string[32] = 32  ;     
-    arrangment_string[33] = 33  ;     
-    arrangment_string[34] = 34  ;     
-    arrangment_string[35] = 35  ;     
-    arrangment_string[36] = 36  ;     
-    arrangment_string[37] = 37  ;     
-    arrangment_string[38] = 38  ;     
-    arrangment_string[39] = 39  ;     
-    arrangment_string[40] = 40  ;     
-    arrangment_string[41] = 41  ;     
-    arrangment_string[42] = 42  ;     
-    arrangment_string[43] = 43  ;     
-    arrangment_string[44] = 44  ;     
-    arrangment_string[45] = 45  ;     
-    arrangment_string[46] = 46  ;     
-    arrangment_string[47] = 47  ;     
-    arrangment_string[48] = 48  ;     
-    arrangment_string[49] = 49  ;     
-    arrangment_string[50] = 50  ;     
-    arrangment_string[51] = 51  ;     
-    arrangment_string[52] = 52  ;     
-    arrangment_string[53] = 53  ;     
-    arrangment_string[54] = 54  ;     
-    arrangment_string[55] = 55  ;     
-    arrangment_string[56] = 56  ;     
-    arrangment_string[57] = 57  ;     
-    arrangment_string[58] = 58  ;     
-    arrangment_string[59] = 59  ;     
-    arrangment_string[60] = 60  ;     
-    arrangment_string[61] = 61  ;     
-    arrangment_string[62] = 62  ;     
-    arrangment_string[63] = 63  ;     
-    arrangment_string[64] = 64  ;     
-    arrangment_string[65] = 65  ;     
-    arrangment_string[66] = 66  ;     
-    arrangment_string[67] = 67  ;     
-    arrangment_string[68] = 68  ;     
-    arrangment_string[69] = 69  ;     
-    arrangment_string[70] = 70  ;     
-    arrangment_string[71] = 71  ;     
-    arrangment_string[72] = 72  ;     
-    arrangment_string[73] = 73  ;     
-    arrangment_string[74] = 74  ;     
-    arrangment_string[75] = 75  ;     
-    arrangment_string[76] = 76  ;     
-    arrangment_string[77] = 77  ;     
-    arrangment_string[78] = 78  ;     
-    arrangment_string[79] = 79  ;     
-    arrangment_string[80] = 80  ;     
-    arrangment_string[81] = 81  ;     
-    arrangment_string[82] = 82  ;     
-    arrangment_string[83] = 83  ;     
-    arrangment_string[84] = 84  ;     
-    arrangment_string[85] = 85  ;     
-    arrangment_string[86] = 86  ;     
-    arrangment_string[87] = 87  ;     
-    arrangment_string[88] = 88  ;     
-    arrangment_string[89] = 89  ;     
-    arrangment_string[90] = 90  ;     
-    arrangment_string[91] = 91  ;     
-    arrangment_string[92] = 92  ;     
-    arrangment_string[93] = 93  ;     
-    arrangment_string[94] = 94  ;     
-    arrangment_string[95] = 95  ;     
-    arrangment_string[96] = 96  ;     
-    arrangment_string[97] = 97  ;     
-    arrangment_string[98] = 98  ;     
-    arrangment_string[99] = 99  ;     
-    arrangment_string[100] = 100  ;     
-    arrangment_string[101] = 101  ;     
-    arrangment_string[102] = 102  ;     
-    arrangment_string[103] = 103  ;     
-    arrangment_string[104] = 104  ;     
-    arrangment_string[105] = 105  ;     
-    arrangment_string[106] = 106  ;     
-    arrangment_string[107] = 107  ;     
-    arrangment_string[108] = 108  ;     
-    arrangment_string[109] = 109  ;     
-    arrangment_string[110] = 110  ;     
-    arrangment_string[111] = 111  ;     
-    arrangment_string[112] = 112  ;     
-    arrangment_string[113] = 113  ;     
-    arrangment_string[114] = 114  ;     
-    arrangment_string[115] = 115  ;     
-    arrangment_string[116] = 116  ;     
-    arrangment_string[117] = 117  ;     
-    arrangment_string[118] = 118  ;     
-    arrangment_string[119] = 119  ;     
-    arrangment_string[120] = 120  ;     
-    arrangment_string[121] = 121  ;     
-    arrangment_string[122] = 122  ;     
-    arrangment_string[123] = 123  ;     
-    arrangment_string[124] = 124  ;     
-    arrangment_string[125] = 125  ;     
-    arrangment_string[126] = 126  ;     
-    arrangment_string[127] = 127  ;     
-    arrangment_string[128] = 128  ;     
-    arrangment_string[129] = 129  ;     
-    arrangment_string[130] = 130  ;     
-    arrangment_string[131] = 131  ;     
-    arrangment_string[132] = 132  ;     
-    arrangment_string[133] = 133  ;     
-    arrangment_string[134] = 134  ;     
-    arrangment_string[135] = 135  ;     
-    arrangment_string[136] = 136  ;     
-    arrangment_string[137] = 137  ;     
-    arrangment_string[138] = 138  ;     
-    arrangment_string[139] = 139  ;     
-    arrangment_string[140] = 140  ;     
-    arrangment_string[141] = 141  ;     
-    arrangment_string[142] = 142  ;     
-    arrangment_string[143] = 143  ;     
-    arrangment_string[144] = 144  ;     
-    arrangment_string[145] = 145  ;     
-    arrangment_string[146] = 146  ;     
-    arrangment_string[147] = 147  ;     
-    arrangment_string[148] = 148  ;     
-    arrangment_string[149] = 149  ;     
-    arrangment_string[150] = 150  ;     
-    arrangment_string[151] = 151  ;     
-    arrangment_string[152] = 152  ;     
-    arrangment_string[153] = 153  ;     
-    arrangment_string[154] = 154  ;     
-    arrangment_string[155] = 155  ;     
-    arrangment_string[156] = 156  ;     
-    arrangment_string[157] = 157  ;     
-    arrangment_string[158] = 158  ;     
-    arrangment_string[159] = 159  ;     
-    arrangment_string[160] = 160  ;     
-    arrangment_string[161] = 161  ;     
-    arrangment_string[162] = 162  ;     
-    arrangment_string[163] = 163  ;     
-    arrangment_string[164] = 164  ;     
-    arrangment_string[165] = 165  ;     
-    arrangment_string[166] = 166  ;     
-    arrangment_string[167] = 167  ;     
-    arrangment_string[168] = 168  ;     
-    arrangment_string[169] = 169  ;     
-    arrangment_string[170] = 170  ;     
-    arrangment_string[171] = 171  ;     
-    arrangment_string[172] = 172  ;     
-    arrangment_string[173] = 173  ;     
-    arrangment_string[174] = 174  ;     
-    arrangment_string[175] = 175  ;     
-    arrangment_string[176] = 176  ;     
-    arrangment_string[177] = 177  ;     
-    arrangment_string[178] = 178  ;     
-    arrangment_string[179] = 179  ;     
-    arrangment_string[180] = 180  ;     
-    arrangment_string[181] = 181  ;     
-    arrangment_string[182] = 182  ;     
-    arrangment_string[183] = 183  ;     
-    arrangment_string[184] = 184  ;     
-    arrangment_string[185] = 185  ;     
-    arrangment_string[186] = 186  ;     
-    arrangment_string[187] = 187  ;     
-    arrangment_string[188] = 188  ;     
-    arrangment_string[189] = 189  ;     
-    arrangment_string[190] = 190  ;     
-    arrangment_string[191] = 191  ;     
-    arrangment_string[192] = 192  ;     
-    arrangment_string[193] = 193  ;     
-    arrangment_string[194] = 194  ;     
-    arrangment_string[195] = 195  ;     
-    arrangment_string[196] = 196  ;     
-    arrangment_string[197] = 197  ;     
-    arrangment_string[198] = 198  ;     
-    arrangment_string[199] = 199  ;     
-    arrangment_string[200] = 200  ;     
-    arrangment_string[201] = 201  ;     
-    arrangment_string[202] = 202  ;     
-    arrangment_string[203] = 203  ;     
-    arrangment_string[204] = 204  ;     
-    arrangment_string[205] = 205  ;     
-    arrangment_string[206] = 206  ;     
-    arrangment_string[207] = 207  ;     
-    arrangment_string[208] = 208  ;     
-    arrangment_string[209] = 209  ;     
-    arrangment_string[210] = 210  ;     
-    arrangment_string[211] = 211  ;     
-    arrangment_string[212] = 212  ;     
-    arrangment_string[213] = 213  ;     
-    arrangment_string[214] = 214  ;     
-    arrangment_string[215] = 215  ;     
-    arrangment_string[216] = 216  ;     
-    arrangment_string[217] = 217  ;     
-    arrangment_string[218] = 218  ;     
-    arrangment_string[219] = 219  ;     
-    arrangment_string[220] = 220  ;     
-    arrangment_string[221] = 221  ;     
-    arrangment_string[222] = 222  ;     
-    arrangment_string[223] = 223  ;     
-    arrangment_string[224] = 224  ;     
-    arrangment_string[225] = 225  ;     
-    arrangment_string[226] = 226  ;     
-    arrangment_string[227] = 227  ;     
-    arrangment_string[228] = 228  ;     
-    arrangment_string[229] = 229  ;     
-    arrangment_string[230] = 230  ;     
-    arrangment_string[231] = 231  ;     
-    arrangment_string[232] = 232  ;     
-    arrangment_string[233] = 233  ;     
-    arrangment_string[234] = 234  ;     
-    arrangment_string[235] = 235  ;     
-    arrangment_string[236] = 236  ;     
-    arrangment_string[237] = 237  ;     
-    arrangment_string[238] = 238  ;     
-    arrangment_string[239] = 239  ;     
-    arrangment_string[240] = 240  ;     
-    arrangment_string[241] = 241  ;     
-    arrangment_string[242] = 242  ;     
-    arrangment_string[243] = 243  ;     
-    arrangment_string[244] = 244  ;     
-    arrangment_string[245] = 245  ;     
-    arrangment_string[246] = 246  ;     
-    arrangment_string[247] = 247  ;     
-    arrangment_string[248] = 248  ;     
-    arrangment_string[249] = 249  ;     
-    arrangment_string[250] = 250  ;     
-    arrangment_string[251] = 251  ;     
-    arrangment_string[252] = 252  ;     
-    arrangment_string[253] = 253  ;     
-    arrangment_string[254] = 254  ;     
-    arrangment_string[255] = 255  ;     
+    arrangment_string[0] = 0 ;
+    arrangment_string[1] = 1 ;
+    arrangment_string[2] = 2 ;
+    arrangment_string[3] = 3 ;
+    arrangment_string[4] = 4 ;
+    arrangment_string[5] = 5 ;
+    arrangment_string[6] = 6 ;
+    arrangment_string[7] = 7 ;
+    arrangment_string[8] = 8 ;
+    arrangment_string[9] = 9 ;
+    arrangment_string[10] = 10 ;
+    arrangment_string[11] = 11 ;
+    arrangment_string[12] = 12 ;
+    arrangment_string[13] = 13 ;
+    arrangment_string[14] = 14 ;
+    arrangment_string[15] = 15 ;
+    arrangment_string[16] = 16 ;
+    arrangment_string[17] = 17 ;
+    arrangment_string[18] = 18 ;
+    arrangment_string[19] = 19 ;
+    arrangment_string[20] = 20 ;
+    arrangment_string[21] = 21 ;
+    arrangment_string[22] = 22 ;
+    arrangment_string[23] = 23 ;
+    arrangment_string[24] = 24 ;
+    arrangment_string[25] = 25 ;
+    arrangment_string[26] = 26 ;
+    arrangment_string[27] = 27 ;
+    arrangment_string[28] = 28 ;
+    arrangment_string[29] = 29 ;
+    arrangment_string[30] = 30 ;
+    arrangment_string[31] = 31 ;
+    arrangment_string[32] = 32 ;
+    arrangment_string[33] = 33 ;
+    arrangment_string[34] = 34 ;
+    arrangment_string[35] = 35 ;
+    arrangment_string[36] = 36 ;
+    arrangment_string[37] = 37 ;
+    arrangment_string[38] = 38 ;
+    arrangment_string[39] = 39 ;
+    arrangment_string[40] = 40 ;
+    arrangment_string[41] = 41 ;
+    arrangment_string[42] = 42 ;
+    arrangment_string[43] = 43 ;
+    arrangment_string[44] = 44 ;
+    arrangment_string[45] = 45 ;
+    arrangment_string[46] = 46 ;
+    arrangment_string[47] = 47 ;
+    arrangment_string[48] = 48 ;
+    arrangment_string[49] = 49 ;
+    arrangment_string[50] = 50 ;
+    arrangment_string[51] = 51 ;
+    arrangment_string[52] = 52 ;
+    arrangment_string[53] = 53 ;
+    arrangment_string[54] = 54 ;
+    arrangment_string[55] = 55 ;
+    arrangment_string[56] = 56 ;
+    arrangment_string[57] = 57 ;
+    arrangment_string[58] = 58 ;
+    arrangment_string[59] = 59 ;
+    arrangment_string[60] = 60 ;
+    arrangment_string[61] = 61 ;
+    arrangment_string[62] = 62 ;
+    arrangment_string[63] = 63 ;
+    arrangment_string[64] = 64 ;
+    arrangment_string[65] = 65 ;
+    arrangment_string[66] = 66 ;
+    arrangment_string[67] = 67 ;
+    arrangment_string[68] = 68 ;
+    arrangment_string[69] = 69 ;
+    arrangment_string[70] = 70 ;
+    arrangment_string[71] = 71 ;
+    arrangment_string[72] = 72 ;
+    arrangment_string[73] = 73 ;
+    arrangment_string[74] = 74 ;
+    arrangment_string[75] = 75 ;
+    arrangment_string[76] = 76 ;
+    arrangment_string[77] = 77 ;
+    arrangment_string[78] = 78 ;
+    arrangment_string[79] = 79 ;
+    arrangment_string[80] = 80 ;
+    arrangment_string[81] = 81 ;
+    arrangment_string[82] = 82 ;
+    arrangment_string[83] = 83 ;
+    arrangment_string[84] = 84 ;
+    arrangment_string[85] = 85 ;
+    arrangment_string[86] = 86 ;
+    arrangment_string[87] = 87 ;
+    arrangment_string[88] = 88 ;
+    arrangment_string[89] = 89 ;
+    arrangment_string[90] = 90 ;
+    arrangment_string[91] = 91 ;
+    arrangment_string[92] = 92 ;
+    arrangment_string[93] = 93 ;
+    arrangment_string[94] = 94 ;
+    arrangment_string[95] = 95 ;
+    arrangment_string[96] = 96 ;
+    arrangment_string[97] = 97 ;
+    arrangment_string[98] = 98 ;
+    arrangment_string[99] = 99 ;
+    arrangment_string[100] = 100 ;
+    arrangment_string[101] = 101 ;
+    arrangment_string[102] = 102 ;
+    arrangment_string[103] = 103 ;
+    arrangment_string[104] = 104 ;
+    arrangment_string[105] = 105 ;
+    arrangment_string[106] = 106 ;
+    arrangment_string[107] = 107 ;
+    arrangment_string[108] = 108 ;
+    arrangment_string[109] = 109 ;
+    arrangment_string[110] = 110 ;
+    arrangment_string[111] = 111 ;
+    arrangment_string[112] = 112 ;
+    arrangment_string[113] = 113 ;
+    arrangment_string[114] = 114 ;
+    arrangment_string[115] = 115 ;
+    arrangment_string[116] = 116 ;
+    arrangment_string[117] = 117 ;
+    arrangment_string[118] = 118 ;
+    arrangment_string[119] = 119 ;
+    arrangment_string[120] = 120 ;
+    arrangment_string[121] = 121 ;
+    arrangment_string[122] = 122 ;
+    arrangment_string[123] = 123 ;
+    arrangment_string[124] = 124 ;
+    arrangment_string[125] = 125 ;
+    arrangment_string[126] = 126 ;
+    arrangment_string[127] = 127 ;
+    arrangment_string[128] = 128 ;
+    arrangment_string[129] = 129 ;
+    arrangment_string[130] = 130 ;
+    arrangment_string[131] = 131 ;
+    arrangment_string[132] = 132 ;
+    arrangment_string[133] = 133 ;
+    arrangment_string[134] = 134 ;
+    arrangment_string[135] = 135 ;
+    arrangment_string[136] = 136 ;
+    arrangment_string[137] = 137 ;
+    arrangment_string[138] = 138 ;
+    arrangment_string[139] = 139 ;
+    arrangment_string[140] = 140 ;
+    arrangment_string[141] = 141 ;
+    arrangment_string[142] = 142 ;
+    arrangment_string[143] = 143 ;
+    arrangment_string[144] = 144 ;
+    arrangment_string[145] = 145 ;
+    arrangment_string[146] = 146 ;
+    arrangment_string[147] = 147 ;
+    arrangment_string[148] = 148 ;
+    arrangment_string[149] = 149 ;
+    arrangment_string[150] = 150 ;
+    arrangment_string[151] = 151 ;
+    arrangment_string[152] = 152 ;
+    arrangment_string[153] = 153 ;
+    arrangment_string[154] = 154 ;
+    arrangment_string[155] = 155 ;
+    arrangment_string[156] = 156 ;
+    arrangment_string[157] = 157 ;
+    arrangment_string[158] = 158 ;
+    arrangment_string[159] = 159 ;
+    arrangment_string[160] = 160 ;
+    arrangment_string[161] = 161 ;
+    arrangment_string[162] = 162 ;
+    arrangment_string[163] = 163 ;
+    arrangment_string[164] = 164 ;
+    arrangment_string[165] = 165 ;
+    arrangment_string[166] = 166 ;
+    arrangment_string[167] = 167 ;
+    arrangment_string[168] = 168 ;
+    arrangment_string[169] = 169 ;
+    arrangment_string[170] = 170 ;
+    arrangment_string[171] = 171 ;
+    arrangment_string[172] = 172 ;
+    arrangment_string[173] = 173 ;
+    arrangment_string[174] = 174 ;
+    arrangment_string[175] = 175 ;
+    arrangment_string[176] = 176 ;
+    arrangment_string[177] = 177 ;
+    arrangment_string[178] = 178 ;
+    arrangment_string[179] = 179 ;
+    arrangment_string[180] = 180 ;
+    arrangment_string[181] = 181 ;
+    arrangment_string[182] = 182 ;
+    arrangment_string[183] = 183 ;
+    arrangment_string[184] = 184 ;
+    arrangment_string[185] = 185 ;
+    arrangment_string[186] = 186 ;
+    arrangment_string[187] = 187 ;
+    arrangment_string[188] = 188 ;
+    arrangment_string[189] = 189 ;
+    arrangment_string[190] = 190 ;
+    arrangment_string[191] = 191 ;
+    arrangment_string[192] = 192 ;
+    arrangment_string[193] = 193 ;
+    arrangment_string[194] = 194 ;
+    arrangment_string[195] = 195 ;
+    arrangment_string[196] = 196 ;
+    arrangment_string[197] = 197 ;
+    arrangment_string[198] = 198 ;
+    arrangment_string[199] = 199 ;
+    arrangment_string[200] = 200 ;
+    arrangment_string[201] = 201 ;
+    arrangment_string[202] = 202 ;
+    arrangment_string[203] = 203 ;
+    arrangment_string[204] = 204 ;
+    arrangment_string[205] = 205 ;
+    arrangment_string[206] = 206 ;
+    arrangment_string[207] = 207 ;
+    arrangment_string[208] = 208 ;
+    arrangment_string[209] = 209 ;
+    arrangment_string[210] = 210 ;
+    arrangment_string[211] = 211 ;
+    arrangment_string[212] = 212 ;
+    arrangment_string[213] = 213 ;
+    arrangment_string[214] = 214 ;
+    arrangment_string[215] = 215 ;
+    arrangment_string[216] = 216 ;
+    arrangment_string[217] = 217 ;
+    arrangment_string[218] = 218 ;
+    arrangment_string[219] = 219 ;
+    arrangment_string[220] = 220 ;
+    arrangment_string[221] = 221 ;
+    arrangment_string[222] = 222 ;
+    arrangment_string[223] = 223 ;
+    arrangment_string[224] = 224 ;
+    arrangment_string[225] = 225 ;
+    arrangment_string[226] = 226 ;
+    arrangment_string[227] = 227 ;
+    arrangment_string[228] = 228 ;
+    arrangment_string[229] = 229 ;
+    arrangment_string[230] = 230 ;
+    arrangment_string[231] = 231 ;
+    arrangment_string[232] = 232 ;
+    arrangment_string[233] = 233 ;
+    arrangment_string[234] = 234 ;
+    arrangment_string[235] = 235 ;
+    arrangment_string[236] = 236 ;
+    arrangment_string[237] = 237 ;
+    arrangment_string[238] = 238 ;
+    arrangment_string[239] = 239 ;
+    arrangment_string[240] = 240 ;
+    arrangment_string[241] = 241 ;
+    arrangment_string[242] = 242 ;
+    arrangment_string[243] = 243 ;
+    arrangment_string[244] = 244 ;
+    arrangment_string[245] = 245 ;
+    arrangment_string[246] = 246 ;
+    arrangment_string[247] = 247 ;
+    arrangment_string[248] = 248 ;
+    arrangment_string[249] = 249 ;
+    arrangment_string[250] = 250 ;
+    arrangment_string[251] = 251 ;
+    arrangment_string[252] = 252 ;
+    arrangment_string[253] = 253 ;
+    arrangment_string[254] = 254 ;
+    arrangment_string[255] = 255 ;
   end
 endtask
 `endif
-
 `ifndef SYNTHESIS
 `ifndef NO_INIT_MEM_VAL_TASKS
-
-`ifndef MEM_REG_NAME 
+`ifndef MEM_REG_NAME
  `define MEM_REG_NAME MX.mem
 `endif
-
 // Bit vector indicating which shadow addresses have been written
 reg [31:0] shadow_written = 'b0;
-
 // Shadow ram array used to store initialization values
 reg [255:0] shadow_mem [31:0];
-
-
 `ifdef NV_RAM_EXPAND_ARRAY
 wire [255:0] shadow_mem_row0 = shadow_mem[0];
 wire [255:0] shadow_mem_row1 = shadow_mem[1];
@@ -765,7 +737,6 @@ wire [255:0] shadow_mem_row29 = shadow_mem[29];
 wire [255:0] shadow_mem_row30 = shadow_mem[30];
 wire [255:0] shadow_mem_row31 = shadow_mem[31];
 `endif
-
 task init_mem_val;
   input [4:0] row;
   input [255:0] data;
@@ -774,15 +745,12 @@ task init_mem_val;
     shadow_written[row] = 1'b1;
   end
 endtask
-
 task init_mem_commit;
 integer row;
 begin
-
 // initializing RAMPDP_32X256_GL_M1_D2
 for (row = 0; row < 32; row = row + 1)
  if (shadow_written[row]) r_nv_ram_rws_32x256.ram_Inst_32X256.mem_write(row - 0, shadow_mem[row][255:0]);
-
 shadow_written = 'b0;
 end
 endtask
@@ -791,42 +759,34 @@ endtask
 `ifndef SYNTHESIS
 `ifndef NO_INIT_MEM_VAL_TASKS
 task do_write; //(wa, we, di);
-   input  [4:0] wa;
-   input   we;
-   input  [255:0] di;
-   reg    [255:0] d;
+   input [4:0] wa;
+   input we;
+   input [255:0] di;
+   reg [255:0] d;
    begin
       d = probe_mem_val(wa);
       d = (we ? di : d);
       init_mem_val(wa,d);
    end
 endtask
-
 `endif
 `endif
-
-
 `ifndef SYNTHESIS
 `ifndef NO_INIT_MEM_VAL_TASKS
-
-`ifndef MEM_REG_NAME 
+`ifndef MEM_REG_NAME
  `define MEM_REG_NAME MX.mem
 `endif
-
 function [255:0] probe_mem_val;
 input [4:0] row;
 reg [255:0] data;
 begin
-
 // probing RAMPDP_32X256_GL_M1_D2
- if (row >=  0 &&  row < 32) data[255:0] = r_nv_ram_rws_32x256.ram_Inst_32X256.mem_read(row - 0);
+ if (row >= 0 && row < 32) data[255:0] = r_nv_ram_rws_32x256.ram_Inst_32X256.mem_read(row - 0);
     probe_mem_val = data;
-
 end
 endfunction
 `endif
 `endif
-
 `ifndef SYNTHESIS
 `ifndef NO_CLEAR_MEM_TASK
 `ifndef NO_INIT_MEM_VAL_TASKS
@@ -834,7 +794,7 @@ reg disable_clear_mem = 0;
 task clear_mem;
 integer i;
 begin
-  if (!disable_clear_mem) 
+  if (!disable_clear_mem)
   begin
     for (i = 0; i < 32; i = i + 1)
       begin
@@ -847,7 +807,6 @@ endtask
 `endif
 `endif
 `endif
-
 `ifndef SYNTHESIS
 `ifndef NO_INIT_MEM_ZERO_TASK
 `ifndef NO_INIT_MEM_VAL_TASKS
@@ -864,7 +823,6 @@ endtask
 `endif
 `endif
 `endif
-
 `ifndef SYNTHESIS
 `ifndef NO_INIT_MEM_VAL_TASKS
 `ifndef NO_INIT_MEM_FROM_FILE_TASK
@@ -872,22 +830,17 @@ task init_mem_from_file;
 input string init_file;
 integer i;
 begin
-
  $readmemh(init_file,shadow_mem);
  for (i = 0; i < 32; i = i + 1)
    begin
-
      shadow_written[i] = 1'b1;
-
    end
  init_mem_commit();
-
 end
 endtask
 `endif
 `endif
 `endif
-
 `ifndef SYNTHESIS
 `ifndef NO_INIT_MEM_RANDOM_TASK
 `ifndef NO_INIT_MEM_VAL_TASKS
@@ -899,7 +852,6 @@ RANDFUNC rf4 ();
 RANDFUNC rf5 ();
 RANDFUNC rf6 ();
 RANDFUNC rf7 ();
-
 task init_mem_random;
 reg [255:0] random_num;
 integer i;
@@ -915,13 +867,10 @@ endtask
 `endif
 `endif
 `endif
-
 `ifndef SYNTHESIS
 `ifndef NO_FLIP_TASKS
 `ifndef NO_INIT_MEM_VAL_TASKS
-
 RANDFUNC rflip ();
-
 task random_flip;
 integer random_num;
 integer row;
@@ -933,7 +882,6 @@ begin
   target_flip(row, bitnum);
 end
 endtask
-
 task target_flip;
 input [4:0] row;
 input [255:0] bitnum;
@@ -941,20 +889,15 @@ reg [255:0] data;
 begin
   if(!$test$plusargs("no_display_target_flips"))
     $display("%m: flipping row %d bit %d at time %t", row, bitnum, $time);
-
   data = probe_mem_val(row);
   data[bitnum] = ~data[bitnum];
   init_mem_val(row, data);
   init_mem_commit();
 end
 endtask
-
 `endif
 `endif
 `endif
-
 // The main module is done
 endmodule
-
 //********************************************************************************
-

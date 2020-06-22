@@ -1,42 +1,33 @@
 // ================================================================
 // NVDLA Open Source Project
-// 
-// Copyright(c) 2016 - 2017 NVIDIA Corporation.  Licensed under the
-// NVDLA Open Hardware License; Check "LICENSE" which comes with 
+//
+// Copyright(c) 2016 - 2017 NVIDIA Corporation. Licensed under the
+// NVDLA Open Hardware License; Check "LICENSE" which comes with
 // this distribution for more information.
 // ================================================================
-
 // File Name: HLS_fp32_sub.v
-
 module FP32_SUB_mgc_in_wire_wait_v1 (ld, vd, d, lz, vz, z);
-
   parameter integer rscid = 1;
   parameter integer width = 8;
-
-  input              ld;
-  output             vd;
+  input ld;
+  output vd;
   output [width-1:0] d;
-  output             lz;
-  input              vz;
-  input  [width-1:0] z;
-
-  wire               vd;
-  wire   [width-1:0] d;
-  wire               lz;
-
+  output lz;
+  input vz;
+  input [width-1:0] z;
+  wire vd;
+  wire [width-1:0] d;
+  wire lz;
   assign d = z;
   assign lz = ld;
   assign vd = vz;
-
 endmodule
-
-
-//------> /home/tools/calypto/catapult-10.0-264918/Mgc_home/pkgs/siflibs/FP32_SUB_mgc_out_stdreg_wait_v1.v 
+//------> /home/tools/calypto/catapult-10.0-264918/Mgc_home/pkgs/siflibs/FP32_SUB_mgc_out_stdreg_wait_v1.v
 //------------------------------------------------------------------------------
 // Catapult Synthesis - Sample I/O Port Library
 //
 // Copyright (c) 2003-2015 Mentor Graphics Corp.
-//       All Rights Reserved
+// All Rights Reserved
 //
 // This document may be used and distributed without restriction provided that
 // this copyright statement is not removed from the file and that any derivative
@@ -44,47 +35,35 @@ endmodule
 //
 // The design information contained in this file is intended to be an example
 // of the functionality which the end user may study in preparation for creating
-// their own custom interfaces. This design does not necessarily present a 
+// their own custom interfaces. This design does not necessarily present a
 // complete implementation of the named protocol or standard.
 //
 //------------------------------------------------------------------------------
-
-
 module FP32_SUB_mgc_out_stdreg_wait_v1 (ld, vd, d, lz, vz, z);
-
   parameter integer rscid = 1;
   parameter integer width = 8;
-
-  input              ld;
-  output             vd;
-  input  [width-1:0] d;
-  output             lz;
-  input              vz;
+  input ld;
+  output vd;
+  input [width-1:0] d;
+  output lz;
+  input vz;
   output [width-1:0] z;
-
-  wire               vd;
-  wire               lz;
-  wire   [width-1:0] z;
-
+  wire vd;
+  wire lz;
+  wire [width-1:0] z;
   assign z = d;
   assign lz = ld;
   assign vd = vz;
-
 endmodule
-
-
-
-//------> /home/tools/calypto/catapult-10.0-264918/Mgc_home/pkgs/siflibs/mgc_shift_bl_beh_v4.v 
+//------> /home/tools/calypto/catapult-10.0-264918/Mgc_home/pkgs/siflibs/mgc_shift_bl_beh_v4.v
 module FP32_SUB_mgc_shift_bl_v4(a,s,z);
-   parameter    width_a = 4;
-   parameter    signd_a = 1;
-   parameter    width_s = 2;
-   parameter    width_z = 8;
-
+   parameter width_a = 4;
+   parameter signd_a = 1;
+   parameter width_s = 2;
+   parameter width_z = 8;
    input [width_a-1:0] a;
    input [width_s-1:0] s;
    output [width_z -1:0] z;
-
    generate if ( signd_a )
    begin: SIGNED
      assign z = fshl_s(a,s,a[width_a-1]);
@@ -94,10 +73,9 @@ module FP32_SUB_mgc_shift_bl_v4(a,s,z);
      assign z = fshl_s(a,s,1'b0);
    end
    endgenerate
-
-   //Shift-left - unsigned shift argument one bit more
+//Shift-left - unsigned shift argument one bit more
    function [width_z-1:0] fshl_u_1;
-      input [width_a  :0] arg1;
+      input [width_a :0] arg1;
       input [width_s-1:0] arg2;
       input sbit;
       parameter olen = width_z;
@@ -109,19 +87,17 @@ module FP32_SUB_mgc_shift_bl_v4(a,s,z);
         result_t = {(len){sbit}};
         result_t[ilen-1:0] = arg1;
         result = result_t <<< arg2;
-        fshl_u_1 =  result[olen-1:0];
+        fshl_u_1 = result[olen-1:0];
       end
    endfunction // fshl_u
-
-   //Shift-left - unsigned shift argument
+//Shift-left - unsigned shift argument
    function [width_z-1:0] fshl_u;
       input [width_a-1:0] arg1;
       input [width_s-1:0] arg2;
       input sbit;
       fshl_u = fshl_u_1({sbit,arg1} ,arg2, sbit);
    endfunction // fshl_u
-
-   //Shift right - unsigned shift argument
+//Shift right - unsigned shift argument
    function [width_z-1:0] fshr_u;
       input [width_a-1:0] arg1;
       input [width_s-1:0] arg2;
@@ -135,19 +111,18 @@ module FP32_SUB_mgc_shift_bl_v4(a,s,z);
         result_t = $signed( {(len){sbit}} );
         result_t[width_a-1:0] = arg1;
         result = result_t >>> arg2;
-        fshr_u =  result[olen-1:0];
+        fshr_u = result[olen-1:0];
       end
    endfunction // fshl_u
-
-   //Shift left - signed shift argument
+//Shift left - signed shift argument
    function [width_z-1:0] fshl_s;
       input [width_a-1:0] arg1;
       input [width_s-1:0] arg2;
       input sbit;
       reg [width_a:0] sbit_arg1;
       begin
-        // Ignoring the possibility that arg2[width_s-1] could be X
-        // because of customer complaints regarding X'es in simulation results
+// Ignoring the possibility that arg2[width_s-1] could be X
+// because of customer complaints regarding X'es in simulation results
         if ( arg2[width_s-1] == 1'b0 )
         begin
           sbit_arg1[width_a:0] = {(width_a+1){1'b0}};
@@ -161,20 +136,16 @@ module FP32_SUB_mgc_shift_bl_v4(a,s,z);
         end
       end
    endfunction
-
 endmodule
-
-//------> /home/tools/calypto/catapult-10.0-264918/Mgc_home/pkgs/siflibs/mgc_shift_l_beh_v4.v 
+//------> /home/tools/calypto/catapult-10.0-264918/Mgc_home/pkgs/siflibs/mgc_shift_l_beh_v4.v
 module FP32_SUB_mgc_shift_l_v4(a,s,z);
-   parameter    width_a = 4;
-   parameter    signd_a = 1;
-   parameter    width_s = 2;
-   parameter    width_z = 8;
-
+   parameter width_a = 4;
+   parameter signd_a = 1;
+   parameter width_s = 2;
+   parameter width_z = 8;
    input [width_a-1:0] a;
    input [width_s-1:0] s;
    output [width_z -1:0] z;
-
    generate
    if (signd_a)
    begin: SIGNED
@@ -185,10 +156,9 @@ module FP32_SUB_mgc_shift_l_v4(a,s,z);
       assign z = fshl_u(a,s,1'b0);
    end
    endgenerate
-
-   //Shift-left - unsigned shift argument one bit more
+//Shift-left - unsigned shift argument one bit more
    function [width_z-1:0] fshl_u_1;
-      input [width_a  :0] arg1;
+      input [width_a :0] arg1;
       input [width_s-1:0] arg2;
       input sbit;
       parameter olen = width_z;
@@ -200,44 +170,36 @@ module FP32_SUB_mgc_shift_l_v4(a,s,z);
         result_t = {(len){sbit}};
         result_t[ilen-1:0] = arg1;
         result = result_t <<< arg2;
-        fshl_u_1 =  result[olen-1:0];
+        fshl_u_1 = result[olen-1:0];
       end
    endfunction // fshl_u
-
-   //Shift-left - unsigned shift argument
+//Shift-left - unsigned shift argument
    function [width_z-1:0] fshl_u;
       input [width_a-1:0] arg1;
       input [width_s-1:0] arg2;
       input sbit;
       fshl_u = fshl_u_1({sbit,arg1} ,arg2, sbit);
    endfunction // fshl_u
-
 endmodule
-
-//------> ../td_ccore_solutions/leading_sign_49_0_e47cea887f8a82708c2da9a42282cded83a3_0/rtl.v 
+//------> ../td_ccore_solutions/leading_sign_49_0_e47cea887f8a82708c2da9a42282cded83a3_0/rtl.v
 // ----------------------------------------------------------------------
-//  HLS HDL:        Verilog Netlister
-//  HLS Version:    10.0/264918 Production Release
-//  HLS Date:       Mon Aug  8 13:35:54 PDT 2016
-// 
-//  Generated by:   ezhang@hk-sim-10-184
-//  Generated date: Fri Jun 16 21:52:55 2017
+// HLS HDL: Verilog Netlister
+// HLS Version: 10.0/264918 Production Release
+// HLS Date: Mon Aug 8 13:35:54 PDT 2016
+//
+// Generated by: ezhang@hk-sim-10-184
+// Generated date: Fri Jun 16 21:52:55 2017
 // ----------------------------------------------------------------------
-
-// 
+//
 // ------------------------------------------------------------------
-//  Design Unit:    FP32_SUB_leading_sign_49_0
+// Design Unit: FP32_SUB_leading_sign_49_0
 // ------------------------------------------------------------------
-
-
 module FP32_SUB_leading_sign_49_0 (
   mantissa, rtn
 );
   input [48:0] mantissa;
   output [5:0] rtn;
-
-
-  // Interconnect Declarations
+// Interconnect Declarations
   wire IntLeadZero_49U_leading_sign_49_0_rtn_wrs_c_6_2_sdt_2;
   wire IntLeadZero_49U_leading_sign_49_0_rtn_wrs_c_18_3_sdt_3;
   wire IntLeadZero_49U_leading_sign_49_0_rtn_wrs_c_26_2_sdt_2;
@@ -274,14 +236,12 @@ module FP32_SUB_leading_sign_49_0 (
   wire c_h_1_21;
   wire c_h_1_22;
   wire c_h_1_23;
-
   wire[0:0] IntLeadZero_49U_leading_sign_49_0_rtn_and_189_nl;
   wire[0:0] IntLeadZero_49U_leading_sign_49_0_rtn_and_187_nl;
   wire[0:0] IntLeadZero_49U_leading_sign_49_0_rtn_and_194_nl;
   wire[0:0] IntLeadZero_49U_leading_sign_49_0_rtn_and_195_nl;
   wire[0:0] IntLeadZero_49U_leading_sign_49_0_rtn_IntLeadZero_49U_leading_sign_49_0_rtn_or_1_nl;
-
-  // Interconnect Declarations for Component Instantiations 
+// Interconnect Declarations for Component Instantiations
   assign IntLeadZero_49U_leading_sign_49_0_rtn_wrs_c_6_2_sdt_2 = ~((mantissa[46:45]!=2'b00));
   assign IntLeadZero_49U_leading_sign_49_0_rtn_wrs_c_6_2_sdt_1 = ~((mantissa[48:47]!=2'b00));
   assign IntLeadZero_49U_leading_sign_49_0_rtn_wrs_c_14_2_sdt_1 = ~((mantissa[44:43]!=2'b00));
@@ -362,78 +322,53 @@ module FP32_SUB_leading_sign_49_0 (
       , (IntLeadZero_49U_leading_sign_49_0_rtn_and_194_nl) , (IntLeadZero_49U_leading_sign_49_0_rtn_and_195_nl)
       , (IntLeadZero_49U_leading_sign_49_0_rtn_IntLeadZero_49U_leading_sign_49_0_rtn_or_1_nl)};
 endmodule
-
-
-
-
-//------> ./rtl.v 
+//------> ./rtl.v
 // ----------------------------------------------------------------------
-//  HLS HDL:        Verilog Netlister
-//  HLS Version:    10.0/264918 Production Release
-//  HLS Date:       Mon Aug  8 13:35:54 PDT 2016
-// 
-//  Generated by:   ezhang@hk-sim-10-184
-//  Generated date: Fri Jun 16 21:53:28 2017
+// HLS HDL: Verilog Netlister
+// HLS Version: 10.0/264918 Production Release
+// HLS Date: Mon Aug 8 13:35:54 PDT 2016
+//
+// Generated by: ezhang@hk-sim-10-184
+// Generated date: Fri Jun 16 21:53:28 2017
 // ----------------------------------------------------------------------
-
-// 
+//
 // ------------------------------------------------------------------
-//  Design Unit:    FP32_SUB_chn_o_rsci_unreg
+// Design Unit: FP32_SUB_chn_o_rsci_unreg
 // ------------------------------------------------------------------
-
-
 module FP32_SUB_chn_o_rsci_unreg (
   in_0, outsig
 );
   input in_0;
   output outsig;
-
-
-
-  // Interconnect Declarations for Component Instantiations 
+// Interconnect Declarations for Component Instantiations
   assign outsig = in_0;
 endmodule
-
 // ------------------------------------------------------------------
-//  Design Unit:    FP32_SUB_chn_b_rsci_unreg
+// Design Unit: FP32_SUB_chn_b_rsci_unreg
 // ------------------------------------------------------------------
-
-
 module FP32_SUB_chn_b_rsci_unreg (
   in_0, outsig
 );
   input in_0;
   output outsig;
-
-
-
-  // Interconnect Declarations for Component Instantiations 
+// Interconnect Declarations for Component Instantiations
   assign outsig = in_0;
 endmodule
-
 // ------------------------------------------------------------------
-//  Design Unit:    FP32_SUB_chn_a_rsci_unreg
+// Design Unit: FP32_SUB_chn_a_rsci_unreg
 // ------------------------------------------------------------------
-
-
 module FP32_SUB_chn_a_rsci_unreg (
   in_0, outsig
 );
   input in_0;
   output outsig;
-
-
-
-  // Interconnect Declarations for Component Instantiations 
+// Interconnect Declarations for Component Instantiations
   assign outsig = in_0;
 endmodule
-
 // ------------------------------------------------------------------
-//  Design Unit:    HLS_fp32_sub_core_core_fsm
-//  FSM Module
+// Design Unit: HLS_fp32_sub_core_core_fsm
+// FSM Module
 // ------------------------------------------------------------------
-
-
 module HLS_fp32_sub_core_core_fsm (
   nvdla_core_clk, nvdla_core_rstn, core_wen, fsm_output
 );
@@ -442,18 +377,13 @@ module HLS_fp32_sub_core_core_fsm (
   input core_wen;
   output [1:0] fsm_output;
   reg [1:0] fsm_output;
-
-
-  // FSM State Type Declaration for HLS_fp32_sub_core_core_fsm_1
+// FSM State Type Declaration for HLS_fp32_sub_core_core_fsm_1
   parameter
     core_rlp_C_0 = 1'd0,
     main_C_0 = 1'd1;
-
   reg [0:0] state_var;
   reg [0:0] state_var_NS;
-
-
-  // Interconnect Declarations for Component Instantiations 
+// Interconnect Declarations for Component Instantiations
   always @(*)
   begin : HLS_fp32_sub_core_core_fsm_1
     case (state_var)
@@ -461,14 +391,13 @@ module HLS_fp32_sub_core_core_fsm (
         fsm_output = 2'b10;
         state_var_NS = main_C_0;
       end
-      // core_rlp_C_0
+// core_rlp_C_0
       default : begin
         fsm_output = 2'b1;
         state_var_NS = main_C_0;
       end
     endcase
   end
-
   always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
     if ( ~ nvdla_core_rstn ) begin
       state_var <= core_rlp_C_0;
@@ -477,14 +406,10 @@ module HLS_fp32_sub_core_core_fsm (
       state_var <= state_var_NS;
     end
   end
-
 endmodule
-
 // ------------------------------------------------------------------
-//  Design Unit:    HLS_fp32_sub_core_staller
+// Design Unit: HLS_fp32_sub_core_staller
 // ------------------------------------------------------------------
-
-
 module HLS_fp32_sub_core_staller (
   nvdla_core_clk, nvdla_core_rstn, core_wen, chn_a_rsci_wen_comp, core_wten, chn_b_rsci_wen_comp,
       chn_o_rsci_wen_comp
@@ -497,10 +422,7 @@ module HLS_fp32_sub_core_staller (
   reg core_wten;
   input chn_b_rsci_wen_comp;
   input chn_o_rsci_wen_comp;
-
-
-
-  // Interconnect Declarations for Component Instantiations 
+// Interconnect Declarations for Component Instantiations
   assign core_wen = chn_a_rsci_wen_comp & chn_b_rsci_wen_comp & chn_o_rsci_wen_comp;
   always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
     if ( ~ nvdla_core_rstn ) begin
@@ -511,12 +433,9 @@ module HLS_fp32_sub_core_staller (
     end
   end
 endmodule
-
 // ------------------------------------------------------------------
-//  Design Unit:    HLS_fp32_sub_core_chn_o_rsci_chn_o_wait_dp
+// Design Unit: HLS_fp32_sub_core_chn_o_rsci_chn_o_wait_dp
 // ------------------------------------------------------------------
-
-
 module HLS_fp32_sub_core_chn_o_rsci_chn_o_wait_dp (
   nvdla_core_clk, nvdla_core_rstn, chn_o_rsci_oswt, chn_o_rsci_bawt, chn_o_rsci_wen_comp,
       chn_o_rsci_biwt, chn_o_rsci_bdwt
@@ -528,13 +447,9 @@ module HLS_fp32_sub_core_chn_o_rsci_chn_o_wait_dp (
   output chn_o_rsci_wen_comp;
   input chn_o_rsci_biwt;
   input chn_o_rsci_bdwt;
-
-
-  // Interconnect Declarations
+// Interconnect Declarations
   reg chn_o_rsci_bcwt;
-
-
-  // Interconnect Declarations for Component Instantiations 
+// Interconnect Declarations for Component Instantiations
   assign chn_o_rsci_bawt = chn_o_rsci_biwt | chn_o_rsci_bcwt;
   assign chn_o_rsci_wen_comp = (~ chn_o_rsci_oswt) | chn_o_rsci_bawt;
   always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
@@ -546,12 +461,9 @@ module HLS_fp32_sub_core_chn_o_rsci_chn_o_wait_dp (
     end
   end
 endmodule
-
 // ------------------------------------------------------------------
-//  Design Unit:    HLS_fp32_sub_core_chn_o_rsci_chn_o_wait_ctrl
+// Design Unit: HLS_fp32_sub_core_chn_o_rsci_chn_o_wait_ctrl
 // ------------------------------------------------------------------
-
-
 module HLS_fp32_sub_core_chn_o_rsci_chn_o_wait_ctrl (
   nvdla_core_clk, nvdla_core_rstn, chn_o_rsci_oswt, core_wen, core_wten, chn_o_rsci_iswt0,
       chn_o_rsci_ld_core_psct, chn_o_rsci_biwt, chn_o_rsci_bdwt, chn_o_rsci_ld_core_sct,
@@ -568,15 +480,11 @@ module HLS_fp32_sub_core_chn_o_rsci_chn_o_wait_ctrl (
   output chn_o_rsci_bdwt;
   output chn_o_rsci_ld_core_sct;
   input chn_o_rsci_vd;
-
-
-  // Interconnect Declarations
+// Interconnect Declarations
   wire chn_o_rsci_ogwt;
   wire chn_o_rsci_pdswt0;
   reg chn_o_rsci_icwt;
-
-
-  // Interconnect Declarations for Component Instantiations 
+// Interconnect Declarations for Component Instantiations
   assign chn_o_rsci_pdswt0 = (~ core_wten) & chn_o_rsci_iswt0;
   assign chn_o_rsci_biwt = chn_o_rsci_ogwt & chn_o_rsci_vd;
   assign chn_o_rsci_ogwt = chn_o_rsci_pdswt0 | chn_o_rsci_icwt;
@@ -591,12 +499,9 @@ module HLS_fp32_sub_core_chn_o_rsci_chn_o_wait_ctrl (
     end
   end
 endmodule
-
 // ------------------------------------------------------------------
-//  Design Unit:    HLS_fp32_sub_core_chn_b_rsci_chn_b_wait_dp
+// Design Unit: HLS_fp32_sub_core_chn_b_rsci_chn_b_wait_dp
 // ------------------------------------------------------------------
-
-
 module HLS_fp32_sub_core_chn_b_rsci_chn_b_wait_dp (
   nvdla_core_clk, nvdla_core_rstn, chn_b_rsci_oswt, chn_b_rsci_bawt, chn_b_rsci_wen_comp,
       chn_b_rsci_d_mxwt, chn_b_rsci_biwt, chn_b_rsci_bdwt, chn_b_rsci_d
@@ -610,14 +515,10 @@ module HLS_fp32_sub_core_chn_b_rsci_chn_b_wait_dp (
   input chn_b_rsci_biwt;
   input chn_b_rsci_bdwt;
   input [31:0] chn_b_rsci_d;
-
-
-  // Interconnect Declarations
+// Interconnect Declarations
   reg chn_b_rsci_bcwt;
   reg [31:0] chn_b_rsci_d_bfwt;
-
-
-  // Interconnect Declarations for Component Instantiations 
+// Interconnect Declarations for Component Instantiations
   assign chn_b_rsci_bawt = chn_b_rsci_biwt | chn_b_rsci_bcwt;
   assign chn_b_rsci_wen_comp = (~ chn_b_rsci_oswt) | chn_b_rsci_bawt;
   assign chn_b_rsci_d_mxwt = MUX_v_32_2_2(chn_b_rsci_d, chn_b_rsci_d_bfwt, chn_b_rsci_bcwt);
@@ -631,7 +532,6 @@ module HLS_fp32_sub_core_chn_b_rsci_chn_b_wait_dp (
       chn_b_rsci_d_bfwt <= chn_b_rsci_d_mxwt;
     end
   end
-
   function [31:0] MUX_v_32_2_2;
     input [31:0] input_0;
     input [31:0] input_1;
@@ -649,14 +549,10 @@ module HLS_fp32_sub_core_chn_b_rsci_chn_b_wait_dp (
     MUX_v_32_2_2 = result;
   end
   endfunction
-
 endmodule
-
 // ------------------------------------------------------------------
-//  Design Unit:    HLS_fp32_sub_core_chn_b_rsci_chn_b_wait_ctrl
+// Design Unit: HLS_fp32_sub_core_chn_b_rsci_chn_b_wait_ctrl
 // ------------------------------------------------------------------
-
-
 module HLS_fp32_sub_core_chn_b_rsci_chn_b_wait_ctrl (
   nvdla_core_clk, nvdla_core_rstn, chn_b_rsci_oswt, core_wen, core_wten, chn_b_rsci_iswt0,
       chn_b_rsci_ld_core_psct, chn_b_rsci_biwt, chn_b_rsci_bdwt, chn_b_rsci_ld_core_sct,
@@ -673,15 +569,11 @@ module HLS_fp32_sub_core_chn_b_rsci_chn_b_wait_ctrl (
   output chn_b_rsci_bdwt;
   output chn_b_rsci_ld_core_sct;
   input chn_b_rsci_vd;
-
-
-  // Interconnect Declarations
+// Interconnect Declarations
   wire chn_b_rsci_ogwt;
   wire chn_b_rsci_pdswt0;
   reg chn_b_rsci_icwt;
-
-
-  // Interconnect Declarations for Component Instantiations 
+// Interconnect Declarations for Component Instantiations
   assign chn_b_rsci_pdswt0 = (~ core_wten) & chn_b_rsci_iswt0;
   assign chn_b_rsci_biwt = chn_b_rsci_ogwt & chn_b_rsci_vd;
   assign chn_b_rsci_ogwt = chn_b_rsci_pdswt0 | chn_b_rsci_icwt;
@@ -696,12 +588,9 @@ module HLS_fp32_sub_core_chn_b_rsci_chn_b_wait_ctrl (
     end
   end
 endmodule
-
 // ------------------------------------------------------------------
-//  Design Unit:    HLS_fp32_sub_core_chn_a_rsci_chn_a_wait_dp
+// Design Unit: HLS_fp32_sub_core_chn_a_rsci_chn_a_wait_dp
 // ------------------------------------------------------------------
-
-
 module HLS_fp32_sub_core_chn_a_rsci_chn_a_wait_dp (
   nvdla_core_clk, nvdla_core_rstn, chn_a_rsci_oswt, chn_a_rsci_bawt, chn_a_rsci_wen_comp,
       chn_a_rsci_d_mxwt, chn_a_rsci_biwt, chn_a_rsci_bdwt, chn_a_rsci_d
@@ -715,14 +604,10 @@ module HLS_fp32_sub_core_chn_a_rsci_chn_a_wait_dp (
   input chn_a_rsci_biwt;
   input chn_a_rsci_bdwt;
   input [31:0] chn_a_rsci_d;
-
-
-  // Interconnect Declarations
+// Interconnect Declarations
   reg chn_a_rsci_bcwt;
   reg [31:0] chn_a_rsci_d_bfwt;
-
-
-  // Interconnect Declarations for Component Instantiations 
+// Interconnect Declarations for Component Instantiations
   assign chn_a_rsci_bawt = chn_a_rsci_biwt | chn_a_rsci_bcwt;
   assign chn_a_rsci_wen_comp = (~ chn_a_rsci_oswt) | chn_a_rsci_bawt;
   assign chn_a_rsci_d_mxwt = MUX_v_32_2_2(chn_a_rsci_d, chn_a_rsci_d_bfwt, chn_a_rsci_bcwt);
@@ -736,7 +621,6 @@ module HLS_fp32_sub_core_chn_a_rsci_chn_a_wait_dp (
       chn_a_rsci_d_bfwt <= chn_a_rsci_d_mxwt;
     end
   end
-
   function [31:0] MUX_v_32_2_2;
     input [31:0] input_0;
     input [31:0] input_1;
@@ -754,14 +638,10 @@ module HLS_fp32_sub_core_chn_a_rsci_chn_a_wait_dp (
     MUX_v_32_2_2 = result;
   end
   endfunction
-
 endmodule
-
 // ------------------------------------------------------------------
-//  Design Unit:    HLS_fp32_sub_core_chn_a_rsci_chn_a_wait_ctrl
+// Design Unit: HLS_fp32_sub_core_chn_a_rsci_chn_a_wait_ctrl
 // ------------------------------------------------------------------
-
-
 module HLS_fp32_sub_core_chn_a_rsci_chn_a_wait_ctrl (
   nvdla_core_clk, nvdla_core_rstn, chn_a_rsci_oswt, core_wen, chn_a_rsci_iswt0, chn_a_rsci_ld_core_psct,
       core_wten, chn_a_rsci_biwt, chn_a_rsci_bdwt, chn_a_rsci_ld_core_sct, chn_a_rsci_vd
@@ -777,15 +657,11 @@ module HLS_fp32_sub_core_chn_a_rsci_chn_a_wait_ctrl (
   output chn_a_rsci_bdwt;
   output chn_a_rsci_ld_core_sct;
   input chn_a_rsci_vd;
-
-
-  // Interconnect Declarations
+// Interconnect Declarations
   wire chn_a_rsci_ogwt;
   wire chn_a_rsci_pdswt0;
   reg chn_a_rsci_icwt;
-
-
-  // Interconnect Declarations for Component Instantiations 
+// Interconnect Declarations for Component Instantiations
   assign chn_a_rsci_pdswt0 = (~ core_wten) & chn_a_rsci_iswt0;
   assign chn_a_rsci_biwt = chn_a_rsci_ogwt & chn_a_rsci_vd;
   assign chn_a_rsci_ogwt = chn_a_rsci_pdswt0 | chn_a_rsci_icwt;
@@ -800,12 +676,9 @@ module HLS_fp32_sub_core_chn_a_rsci_chn_a_wait_ctrl (
     end
   end
 endmodule
-
 // ------------------------------------------------------------------
-//  Design Unit:    HLS_fp32_sub_core_chn_o_rsci
+// Design Unit: HLS_fp32_sub_core_chn_o_rsci
 // ------------------------------------------------------------------
-
-
 module HLS_fp32_sub_core_chn_o_rsci (
   nvdla_core_clk, nvdla_core_rstn, chn_o_rsc_z, chn_o_rsc_vz, chn_o_rsc_lz, chn_o_rsci_oswt,
       core_wen, core_wten, chn_o_rsci_iswt0, chn_o_rsci_bawt, chn_o_rsci_wen_comp,
@@ -824,16 +697,12 @@ module HLS_fp32_sub_core_chn_o_rsci (
   output chn_o_rsci_wen_comp;
   input chn_o_rsci_ld_core_psct;
   input [31:0] chn_o_rsci_d;
-
-
-  // Interconnect Declarations
+// Interconnect Declarations
   wire chn_o_rsci_biwt;
   wire chn_o_rsci_bdwt;
   wire chn_o_rsci_ld_core_sct;
   wire chn_o_rsci_vd;
-
-
-  // Interconnect Declarations for Component Instantiations 
+// Interconnect Declarations for Component Instantiations
   FP32_SUB_mgc_out_stdreg_wait_v1 #(.rscid(32'sd3),
   .width(32'sd32)) chn_o_rsci (
       .ld(chn_o_rsci_ld_core_sct),
@@ -868,12 +737,9 @@ module HLS_fp32_sub_core_chn_o_rsci (
       .chn_o_rsci_bdwt(chn_o_rsci_bdwt)
     );
 endmodule
-
 // ------------------------------------------------------------------
-//  Design Unit:    HLS_fp32_sub_core_chn_b_rsci
+// Design Unit: HLS_fp32_sub_core_chn_b_rsci
 // ------------------------------------------------------------------
-
-
 module HLS_fp32_sub_core_chn_b_rsci (
   nvdla_core_clk, nvdla_core_rstn, chn_b_rsc_z, chn_b_rsc_vz, chn_b_rsc_lz, chn_b_rsci_oswt,
       core_wen, core_wten, chn_b_rsci_iswt0, chn_b_rsci_bawt, chn_b_rsci_wen_comp,
@@ -892,17 +758,13 @@ module HLS_fp32_sub_core_chn_b_rsci (
   output chn_b_rsci_wen_comp;
   input chn_b_rsci_ld_core_psct;
   output [31:0] chn_b_rsci_d_mxwt;
-
-
-  // Interconnect Declarations
+// Interconnect Declarations
   wire chn_b_rsci_biwt;
   wire chn_b_rsci_bdwt;
   wire chn_b_rsci_ld_core_sct;
   wire chn_b_rsci_vd;
   wire [31:0] chn_b_rsci_d;
-
-
-  // Interconnect Declarations for Component Instantiations 
+// Interconnect Declarations for Component Instantiations
   FP32_SUB_mgc_in_wire_wait_v1 #(.rscid(32'sd2),
   .width(32'sd32)) chn_b_rsci (
       .ld(chn_b_rsci_ld_core_sct),
@@ -939,12 +801,9 @@ module HLS_fp32_sub_core_chn_b_rsci (
       .chn_b_rsci_d(chn_b_rsci_d)
     );
 endmodule
-
 // ------------------------------------------------------------------
-//  Design Unit:    HLS_fp32_sub_core_chn_a_rsci
+// Design Unit: HLS_fp32_sub_core_chn_a_rsci
 // ------------------------------------------------------------------
-
-
 module HLS_fp32_sub_core_chn_a_rsci (
   nvdla_core_clk, nvdla_core_rstn, chn_a_rsc_z, chn_a_rsc_vz, chn_a_rsc_lz, chn_a_rsci_oswt,
       core_wen, chn_a_rsci_iswt0, chn_a_rsci_bawt, chn_a_rsci_wen_comp, chn_a_rsci_ld_core_psct,
@@ -963,17 +822,13 @@ module HLS_fp32_sub_core_chn_a_rsci (
   input chn_a_rsci_ld_core_psct;
   output [31:0] chn_a_rsci_d_mxwt;
   input core_wten;
-
-
-  // Interconnect Declarations
+// Interconnect Declarations
   wire chn_a_rsci_biwt;
   wire chn_a_rsci_bdwt;
   wire chn_a_rsci_ld_core_sct;
   wire chn_a_rsci_vd;
   wire [31:0] chn_a_rsci_d;
-
-
-  // Interconnect Declarations for Component Instantiations 
+// Interconnect Declarations for Component Instantiations
   FP32_SUB_mgc_in_wire_wait_v1 #(.rscid(32'sd1),
   .width(32'sd32)) chn_a_rsci (
       .ld(chn_a_rsci_ld_core_sct),
@@ -1010,12 +865,9 @@ module HLS_fp32_sub_core_chn_a_rsci (
       .chn_a_rsci_d(chn_a_rsci_d)
     );
 endmodule
-
 // ------------------------------------------------------------------
-//  Design Unit:    HLS_fp32_sub_core
+// Design Unit: HLS_fp32_sub_core
 // ------------------------------------------------------------------
-
-
 module HLS_fp32_sub_core (
   nvdla_core_clk, nvdla_core_rstn, chn_a_rsc_z, chn_a_rsc_vz, chn_a_rsc_lz, chn_b_rsc_z,
       chn_b_rsc_vz, chn_b_rsc_lz, chn_o_rsc_z, chn_o_rsc_vz, chn_o_rsc_lz, chn_a_rsci_oswt,
@@ -1037,9 +889,7 @@ module HLS_fp32_sub_core (
   input chn_o_rsci_oswt;
   output chn_o_rsci_oswt_unreg;
   output chn_a_rsci_oswt_unreg_pff;
-
-
-  // Interconnect Declarations
+// Interconnect Declarations
   wire core_wen;
   wire chn_a_rsci_bawt;
   wire chn_a_rsci_wen_comp;
@@ -1157,7 +1007,6 @@ module HLS_fp32_sub_core (
   wire FpAdd_8U_23U_if_3_if_acc_1_itm_7_1;
   wire FpAdd_8U_23U_if_4_if_acc_1_itm_7_1;
   wire FpAdd_8U_23U_is_a_greater_oif_aelse_acc_itm_23_1;
-
   wire[22:0] FpAdd_8U_23U_FpAdd_8U_23U_or_1_nl;
   wire[22:0] FpMantRNE_49U_24U_else_acc_nl;
   wire[23:0] nl_FpMantRNE_49U_24U_else_acc_nl;
@@ -1214,8 +1063,7 @@ module HLS_fp32_sub_core (
   wire[0:0] nor_38_nl;
   wire[23:0] FpAdd_8U_23U_is_a_greater_oif_aelse_acc_nl;
   wire[25:0] nl_FpAdd_8U_23U_is_a_greater_oif_aelse_acc_nl;
-
-  // Interconnect Declarations for Component Instantiations 
+// Interconnect Declarations for Component Instantiations
   wire [23:0] nl_FpAdd_8U_23U_a_int_mant_p1_lshift_rg_a;
   assign nl_FpAdd_8U_23U_a_int_mant_p1_lshift_rg_a = {FpAdd_8U_23U_IsZero_8U_23U_or_itm_2
       , (FpAdd_8U_23U_a_sva_36[22:0])};
@@ -1269,7 +1117,7 @@ module HLS_fp32_sub_core (
       .s(libraries_leading_sign_49_0_e47cea887f8a82708c2da9a42282cded83a3_1),
       .z(FpNormalize_8U_49U_else_lshift_itm)
     );
-  FP32_SUB_leading_sign_49_0  leading_sign_49_0_rg (
+  FP32_SUB_leading_sign_49_0 leading_sign_49_0_rg (
       .mantissa(nl_leading_sign_49_0_rg_mantissa[48:0]),
       .rtn(libraries_leading_sign_49_0_e47cea887f8a82708c2da9a42282cded83a3_1)
     );
@@ -1728,7 +1576,6 @@ module HLS_fp32_sub_core (
   assign nor_29_nl = ~((~(IsNaN_8U_23U_1_IsNaN_8U_23U_1_nand_tmp | IsNaN_8U_23U_1_nor_tmp))
       | IsNaN_8U_23U_IsNaN_8U_23U_nor_tmp | (~ nor_tmp_1));
   assign mux_27_nl = MUX_s_1_2_2((nor_29_nl), (nor_28_nl), nor_36_cse);
-
   function [0:0] MUX1HOT_s_1_3_2;
     input [0:0] input_2;
     input [0:0] input_1;
@@ -1742,8 +1589,6 @@ module HLS_fp32_sub_core (
     MUX1HOT_s_1_3_2 = result;
   end
   endfunction
-
-
   function [7:0] MUX1HOT_v_8_3_2;
     input [7:0] input_2;
     input [7:0] input_1;
@@ -1757,8 +1602,6 @@ module HLS_fp32_sub_core (
     MUX1HOT_v_8_3_2 = result;
   end
   endfunction
-
-
   function [7:0] MUX1HOT_v_8_4_2;
     input [7:0] input_3;
     input [7:0] input_2;
@@ -1774,8 +1617,6 @@ module HLS_fp32_sub_core (
     MUX1HOT_v_8_4_2 = result;
   end
   endfunction
-
-
   function [0:0] MUX_s_1_2_2;
     input [0:0] input_0;
     input [0:0] input_1;
@@ -1793,8 +1634,6 @@ module HLS_fp32_sub_core (
     MUX_s_1_2_2 = result;
   end
   endfunction
-
-
   function [22:0] MUX_v_23_2_2;
     input [22:0] input_0;
     input [22:0] input_1;
@@ -1812,8 +1651,6 @@ module HLS_fp32_sub_core (
     MUX_v_23_2_2 = result;
   end
   endfunction
-
-
   function [48:0] MUX_v_49_2_2;
     input [48:0] input_0;
     input [48:0] input_1;
@@ -1831,8 +1668,6 @@ module HLS_fp32_sub_core (
     MUX_v_49_2_2 = result;
   end
   endfunction
-
-
   function [49:0] MUX_v_50_2_2;
     input [49:0] input_0;
     input [49:0] input_1;
@@ -1850,8 +1685,6 @@ module HLS_fp32_sub_core (
     MUX_v_50_2_2 = result;
   end
   endfunction
-
-
   function [7:0] MUX_v_8_2_2;
     input [7:0] input_0;
     input [7:0] input_1;
@@ -1869,8 +1702,6 @@ module HLS_fp32_sub_core (
     MUX_v_8_2_2 = result;
   end
   endfunction
-
-
   function [0:0] readslicef_24_1_23;
     input [23:0] vector;
     reg [23:0] tmp;
@@ -1879,8 +1710,6 @@ module HLS_fp32_sub_core (
     readslicef_24_1_23 = tmp[0:0];
   end
   endfunction
-
-
   function [0:0] readslicef_8_1_7;
     input [7:0] vector;
     reg [7:0] tmp;
@@ -1889,8 +1718,6 @@ module HLS_fp32_sub_core (
     readslicef_8_1_7 = tmp[0:0];
   end
   endfunction
-
-
   function [0:0] readslicef_9_1_8;
     input [8:0] vector;
     reg [8:0] tmp;
@@ -1899,54 +1726,40 @@ module HLS_fp32_sub_core (
     readslicef_9_1_8 = tmp[0:0];
   end
   endfunction
-
-
-  function  [8:0] conv_u2s_6_9 ;
-    input [5:0]  vector ;
+  function [8:0] conv_u2s_6_9 ;
+    input [5:0] vector ;
   begin
     conv_u2s_6_9 = {{3{1'b0}}, vector};
   end
   endfunction
-
-
-  function  [22:0] conv_u2u_1_23 ;
-    input [0:0]  vector ;
+  function [22:0] conv_u2u_1_23 ;
+    input [0:0] vector ;
   begin
     conv_u2u_1_23 = {{22{1'b0}}, vector};
   end
   endfunction
-
-
-  function  [8:0] conv_u2u_8_9 ;
-    input [7:0]  vector ;
+  function [8:0] conv_u2u_8_9 ;
+    input [7:0] vector ;
   begin
     conv_u2u_8_9 = {1'b0, vector};
   end
   endfunction
-
-
-  function  [23:0] conv_u2u_23_24 ;
-    input [22:0]  vector ;
+  function [23:0] conv_u2u_23_24 ;
+    input [22:0] vector ;
   begin
     conv_u2u_23_24 = {1'b0, vector};
   end
   endfunction
-
-
-  function  [49:0] conv_u2u_49_50 ;
-    input [48:0]  vector ;
+  function [49:0] conv_u2u_49_50 ;
+    input [48:0] vector ;
   begin
     conv_u2u_49_50 = {1'b0, vector};
   end
   endfunction
-
 endmodule
-
 // ------------------------------------------------------------------
-//  Design Unit:    HLS_fp32_sub
+// Design Unit: HLS_fp32_sub
 // ------------------------------------------------------------------
-
-
 module HLS_fp32_sub (
   nvdla_core_clk, nvdla_core_rstn, chn_a_rsc_z, chn_a_rsc_vz, chn_a_rsc_lz, chn_b_rsc_z,
       chn_b_rsc_vz, chn_b_rsc_lz, chn_o_rsc_z, chn_o_rsc_vz, chn_o_rsc_lz
@@ -1962,17 +1775,13 @@ module HLS_fp32_sub (
   output [31:0] chn_o_rsc_z;
   input chn_o_rsc_vz;
   output chn_o_rsc_lz;
-
-
-  // Interconnect Declarations
+// Interconnect Declarations
   wire chn_a_rsci_oswt;
   wire chn_b_rsci_oswt;
   wire chn_o_rsci_oswt;
   wire chn_o_rsci_oswt_unreg;
   wire chn_a_rsci_oswt_unreg_iff;
-
-
-  // Interconnect Declarations for Component Instantiations 
+// Interconnect Declarations for Component Instantiations
   FP32_SUB_chn_a_rsci_unreg chn_a_rsci_unreg_inst (
       .in_0(chn_a_rsci_oswt_unreg_iff),
       .outsig(chn_a_rsci_oswt)
@@ -2004,6 +1813,3 @@ module HLS_fp32_sub (
       .chn_a_rsci_oswt_unreg_pff(chn_a_rsci_oswt_unreg_iff)
     );
 endmodule
-
-
-

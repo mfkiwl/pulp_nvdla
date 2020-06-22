@@ -1,13 +1,11 @@
 // ================================================================
 // NVDLA Open Source Project
-// 
-// Copyright(c) 2016 - 2017 NVIDIA Corporation.  Licensed under the
-// NVDLA Open Hardware License; Check "LICENSE" which comes with 
+//
+// Copyright(c) 2016 - 2017 NVIDIA Corporation. Licensed under the
+// NVDLA Open Hardware License; Check "LICENSE" which comes with
 // this distribution for more information.
 // ================================================================
-
 // File Name: nv_ram_rwsthp_60x168.v
-
 `timescale 1ns / 10ps
 module nv_ram_rwsthp_60x168 (
         clk,
@@ -23,62 +21,51 @@ module nv_ram_rwsthp_60x168 (
         pwrbus_ram_pd
         );
 parameter FORCE_CONTENTION_ASSERTION_RESET_ACTIVE=1'b0;
-
 // port list
-input           clk;
-input  [5:0]    ra;
-input           re;
-input           ore;
-output [167:0]  dout;
-input  [5:0]    wa;
-input           we;
-input  [167:0]  di;
-input           byp_sel;
-input  [167:0]  dbyp;
-input  [31:0]   pwrbus_ram_pd;
-
-
-
-// This wrapper consists of :  1 Ram cells: RAMPDP_60X168_GL_M1_D2 ;  
-
-//Wires for Misc Ports 
-wire  DFT_clamp;
-
-//Wires for Mbist Ports 
+input clk;
+input [5:0] ra;
+input re;
+input ore;
+output [167:0] dout;
+input [5:0] wa;
+input we;
+input [167:0] di;
+input byp_sel;
+input [167:0] dbyp;
+input [31:0] pwrbus_ram_pd;
+// This wrapper consists of : 1 Ram cells: RAMPDP_60X168_GL_M1_D2 ;
+//Wires for Misc Ports
+wire DFT_clamp;
+//Wires for Mbist Ports
 wire [5:0] mbist_Wa_w0;
 wire [1:0] mbist_Di_w0;
-wire  mbist_we_w0;
+wire mbist_we_w0;
 wire [5:0] mbist_Ra_r0;
-
 // verilint 528 off - Variable set but not used
 wire [167:0] mbist_Do_r0_int_net;
 // verilint 528 on - Variable set but not used
-wire  mbist_ce_r0;
-wire  mbist_en_sync;
-
-//Wires for RamAccess Ports 
-wire  SI;
-
+wire mbist_ce_r0;
+wire mbist_en_sync;
+//Wires for RamAccess Ports
+wire SI;
 // verilint 528 off - Variable set but not used
-wire  SO_int_net;
+wire SO_int_net;
 // verilint 528 on - Variable set but not used
-wire  shiftDR;
-wire  updateDR;
-wire  debug_mode;
-
-//Wires for Misc Ports 
-wire  mbist_ramaccess_rst_;
-wire  ary_atpg_ctl;
-wire  write_inh;
-wire  scan_ramtms;
-wire  iddq_mode;
-wire  jtag_readonly_mode;
-wire  ary_read_inh;
-wire  test_mode;
-wire  scan_en;
+wire shiftDR;
+wire updateDR;
+wire debug_mode;
+//Wires for Misc Ports
+wire mbist_ramaccess_rst_;
+wire ary_atpg_ctl;
+wire write_inh;
+wire scan_ramtms;
+wire iddq_mode;
+wire jtag_readonly_mode;
+wire ary_read_inh;
+wire test_mode;
+wire scan_en;
 wire [7:0] svop;
-
-// Use Bbox and clamps to clamp and tie off the DFT signals in the wrapper 
+// Use Bbox and clamps to clamp and tie off the DFT signals in the wrapper
 NV_BLKBOX_SRC0 UI_enableDFTmode_async_ld_buf (.Y(DFT_clamp));
 wire pre_mbist_Wa_w0_0;
 NV_BLKBOX_SRC0_X testInst_mbist_Wa_w0_0 (.Y(pre_mbist_Wa_w0_0));
@@ -125,510 +112,510 @@ AN2D4PO4 UJ_DFTQUALIFIER_mbist_Ra_r0_4 (.Z(mbist_Ra_r0[4]), .A1(pre_mbist_Ra_r0_
 wire pre_mbist_Ra_r0_5;
 NV_BLKBOX_SRC0_X testInst_mbist_Ra_r0_5 (.Y(pre_mbist_Ra_r0_5));
 AN2D4PO4 UJ_DFTQUALIFIER_mbist_Ra_r0_5 (.Z(mbist_Ra_r0[5]), .A1(pre_mbist_Ra_r0_5), .A2(DFT_clamp) );
-`ifndef FPGA 
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_0 (.A(mbist_Do_r0_int_net[0]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_1 (.A(mbist_Do_r0_int_net[1]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_2 (.A(mbist_Do_r0_int_net[2]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_3 (.A(mbist_Do_r0_int_net[3]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_4 (.A(mbist_Do_r0_int_net[4]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_5 (.A(mbist_Do_r0_int_net[5]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_6 (.A(mbist_Do_r0_int_net[6]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_7 (.A(mbist_Do_r0_int_net[7]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_8 (.A(mbist_Do_r0_int_net[8]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_9 (.A(mbist_Do_r0_int_net[9]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_10 (.A(mbist_Do_r0_int_net[10]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_11 (.A(mbist_Do_r0_int_net[11]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_12 (.A(mbist_Do_r0_int_net[12]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_13 (.A(mbist_Do_r0_int_net[13]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_14 (.A(mbist_Do_r0_int_net[14]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_15 (.A(mbist_Do_r0_int_net[15]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_16 (.A(mbist_Do_r0_int_net[16]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_17 (.A(mbist_Do_r0_int_net[17]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_18 (.A(mbist_Do_r0_int_net[18]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_19 (.A(mbist_Do_r0_int_net[19]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_20 (.A(mbist_Do_r0_int_net[20]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_21 (.A(mbist_Do_r0_int_net[21]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_22 (.A(mbist_Do_r0_int_net[22]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_23 (.A(mbist_Do_r0_int_net[23]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_24 (.A(mbist_Do_r0_int_net[24]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_25 (.A(mbist_Do_r0_int_net[25]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_26 (.A(mbist_Do_r0_int_net[26]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_27 (.A(mbist_Do_r0_int_net[27]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_28 (.A(mbist_Do_r0_int_net[28]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_29 (.A(mbist_Do_r0_int_net[29]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_30 (.A(mbist_Do_r0_int_net[30]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_31 (.A(mbist_Do_r0_int_net[31]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_32 (.A(mbist_Do_r0_int_net[32]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_33 (.A(mbist_Do_r0_int_net[33]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_34 (.A(mbist_Do_r0_int_net[34]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_35 (.A(mbist_Do_r0_int_net[35]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_36 (.A(mbist_Do_r0_int_net[36]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_37 (.A(mbist_Do_r0_int_net[37]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_38 (.A(mbist_Do_r0_int_net[38]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_39 (.A(mbist_Do_r0_int_net[39]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_40 (.A(mbist_Do_r0_int_net[40]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_41 (.A(mbist_Do_r0_int_net[41]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_42 (.A(mbist_Do_r0_int_net[42]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_43 (.A(mbist_Do_r0_int_net[43]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_44 (.A(mbist_Do_r0_int_net[44]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_45 (.A(mbist_Do_r0_int_net[45]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_46 (.A(mbist_Do_r0_int_net[46]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_47 (.A(mbist_Do_r0_int_net[47]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_48 (.A(mbist_Do_r0_int_net[48]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_49 (.A(mbist_Do_r0_int_net[49]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_50 (.A(mbist_Do_r0_int_net[50]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_51 (.A(mbist_Do_r0_int_net[51]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_52 (.A(mbist_Do_r0_int_net[52]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_53 (.A(mbist_Do_r0_int_net[53]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_54 (.A(mbist_Do_r0_int_net[54]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_55 (.A(mbist_Do_r0_int_net[55]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_56 (.A(mbist_Do_r0_int_net[56]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_57 (.A(mbist_Do_r0_int_net[57]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_58 (.A(mbist_Do_r0_int_net[58]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_59 (.A(mbist_Do_r0_int_net[59]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_60 (.A(mbist_Do_r0_int_net[60]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_61 (.A(mbist_Do_r0_int_net[61]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_62 (.A(mbist_Do_r0_int_net[62]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_63 (.A(mbist_Do_r0_int_net[63]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_64 (.A(mbist_Do_r0_int_net[64]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_65 (.A(mbist_Do_r0_int_net[65]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_66 (.A(mbist_Do_r0_int_net[66]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_67 (.A(mbist_Do_r0_int_net[67]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_68 (.A(mbist_Do_r0_int_net[68]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_69 (.A(mbist_Do_r0_int_net[69]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_70 (.A(mbist_Do_r0_int_net[70]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_71 (.A(mbist_Do_r0_int_net[71]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_72 (.A(mbist_Do_r0_int_net[72]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_73 (.A(mbist_Do_r0_int_net[73]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_74 (.A(mbist_Do_r0_int_net[74]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_75 (.A(mbist_Do_r0_int_net[75]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_76 (.A(mbist_Do_r0_int_net[76]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_77 (.A(mbist_Do_r0_int_net[77]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_78 (.A(mbist_Do_r0_int_net[78]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_79 (.A(mbist_Do_r0_int_net[79]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_80 (.A(mbist_Do_r0_int_net[80]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_81 (.A(mbist_Do_r0_int_net[81]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_82 (.A(mbist_Do_r0_int_net[82]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_83 (.A(mbist_Do_r0_int_net[83]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_84 (.A(mbist_Do_r0_int_net[84]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_85 (.A(mbist_Do_r0_int_net[85]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_86 (.A(mbist_Do_r0_int_net[86]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_87 (.A(mbist_Do_r0_int_net[87]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_88 (.A(mbist_Do_r0_int_net[88]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_89 (.A(mbist_Do_r0_int_net[89]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_90 (.A(mbist_Do_r0_int_net[90]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_91 (.A(mbist_Do_r0_int_net[91]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_92 (.A(mbist_Do_r0_int_net[92]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_93 (.A(mbist_Do_r0_int_net[93]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_94 (.A(mbist_Do_r0_int_net[94]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_95 (.A(mbist_Do_r0_int_net[95]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_96 (.A(mbist_Do_r0_int_net[96]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_97 (.A(mbist_Do_r0_int_net[97]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_98 (.A(mbist_Do_r0_int_net[98]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_99 (.A(mbist_Do_r0_int_net[99]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_100 (.A(mbist_Do_r0_int_net[100]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_101 (.A(mbist_Do_r0_int_net[101]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_102 (.A(mbist_Do_r0_int_net[102]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_103 (.A(mbist_Do_r0_int_net[103]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_104 (.A(mbist_Do_r0_int_net[104]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_105 (.A(mbist_Do_r0_int_net[105]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_106 (.A(mbist_Do_r0_int_net[106]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_107 (.A(mbist_Do_r0_int_net[107]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_108 (.A(mbist_Do_r0_int_net[108]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_109 (.A(mbist_Do_r0_int_net[109]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_110 (.A(mbist_Do_r0_int_net[110]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_111 (.A(mbist_Do_r0_int_net[111]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_112 (.A(mbist_Do_r0_int_net[112]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_113 (.A(mbist_Do_r0_int_net[113]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_114 (.A(mbist_Do_r0_int_net[114]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_115 (.A(mbist_Do_r0_int_net[115]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_116 (.A(mbist_Do_r0_int_net[116]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_117 (.A(mbist_Do_r0_int_net[117]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_118 (.A(mbist_Do_r0_int_net[118]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_119 (.A(mbist_Do_r0_int_net[119]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_120 (.A(mbist_Do_r0_int_net[120]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_121 (.A(mbist_Do_r0_int_net[121]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_122 (.A(mbist_Do_r0_int_net[122]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_123 (.A(mbist_Do_r0_int_net[123]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_124 (.A(mbist_Do_r0_int_net[124]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_125 (.A(mbist_Do_r0_int_net[125]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_126 (.A(mbist_Do_r0_int_net[126]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_127 (.A(mbist_Do_r0_int_net[127]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_128 (.A(mbist_Do_r0_int_net[128]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_129 (.A(mbist_Do_r0_int_net[129]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_130 (.A(mbist_Do_r0_int_net[130]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_131 (.A(mbist_Do_r0_int_net[131]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_132 (.A(mbist_Do_r0_int_net[132]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_133 (.A(mbist_Do_r0_int_net[133]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_134 (.A(mbist_Do_r0_int_net[134]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_135 (.A(mbist_Do_r0_int_net[135]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_136 (.A(mbist_Do_r0_int_net[136]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_137 (.A(mbist_Do_r0_int_net[137]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_138 (.A(mbist_Do_r0_int_net[138]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_139 (.A(mbist_Do_r0_int_net[139]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_140 (.A(mbist_Do_r0_int_net[140]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_141 (.A(mbist_Do_r0_int_net[141]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_142 (.A(mbist_Do_r0_int_net[142]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_143 (.A(mbist_Do_r0_int_net[143]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_144 (.A(mbist_Do_r0_int_net[144]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_145 (.A(mbist_Do_r0_int_net[145]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_146 (.A(mbist_Do_r0_int_net[146]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_147 (.A(mbist_Do_r0_int_net[147]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_148 (.A(mbist_Do_r0_int_net[148]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_149 (.A(mbist_Do_r0_int_net[149]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_150 (.A(mbist_Do_r0_int_net[150]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_151 (.A(mbist_Do_r0_int_net[151]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_152 (.A(mbist_Do_r0_int_net[152]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_153 (.A(mbist_Do_r0_int_net[153]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_154 (.A(mbist_Do_r0_int_net[154]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_155 (.A(mbist_Do_r0_int_net[155]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_156 (.A(mbist_Do_r0_int_net[156]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_157 (.A(mbist_Do_r0_int_net[157]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_158 (.A(mbist_Do_r0_int_net[158]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_159 (.A(mbist_Do_r0_int_net[159]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_160 (.A(mbist_Do_r0_int_net[160]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_161 (.A(mbist_Do_r0_int_net[161]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_162 (.A(mbist_Do_r0_int_net[162]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_163 (.A(mbist_Do_r0_int_net[163]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_164 (.A(mbist_Do_r0_int_net[164]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_165 (.A(mbist_Do_r0_int_net[165]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_166 (.A(mbist_Do_r0_int_net[166]));
-`endif 
-`ifndef FPGA 
+`endif
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_mbist_Do_r0_167 (.A(mbist_Do_r0_int_net[167]));
-`endif 
+`endif
 wire pre_mbist_ce_r0;
 NV_BLKBOX_SRC0_X testInst_mbist_ce_r0 (.Y(pre_mbist_ce_r0));
 AN2D4PO4 UJ_DFTQUALIFIER_mbist_ce_r0 (.Z(mbist_ce_r0), .A1(pre_mbist_ce_r0), .A2(DFT_clamp) );
@@ -638,9 +625,9 @@ AN2D4PO4 UJ_DFTQUALIFIER_mbist_en_sync (.Z(mbist_en_sync), .A1(pre_mbist_en_sync
 wire pre_SI;
 NV_BLKBOX_SRC0_X testInst_SI (.Y(pre_SI));
 AN2D4PO4 UJ_DFTQUALIFIER_SI (.Z(SI), .A1(pre_SI), .A2(DFT_clamp) );
-`ifndef FPGA 
+`ifndef FPGA
 NV_BLKBOX_SINK testInst_SO (.A(SO_int_net));
-`endif 
+`endif
 wire pre_shiftDR;
 NV_BLKBOX_SRC0_X testInst_shiftDR (.Y(pre_shiftDR));
 AN2D4PO4 UJ_DFTQUALIFIER_shiftDR (.Z(shiftDR), .A1(pre_shiftDR), .A2(DFT_clamp) );
@@ -685,231 +672,216 @@ NV_BLKBOX_SRC0 testInst_svop_4 (.Y(svop[4]));
 NV_BLKBOX_SRC0 testInst_svop_5 (.Y(svop[5]));
 NV_BLKBOX_SRC0 testInst_svop_6 (.Y(svop[6]));
 NV_BLKBOX_SRC0 testInst_svop_7 (.Y(svop[7]));
-
 // Declare the wires for test signals
-
 // Instantiating the internal logic module now
 // verilint 402 off - inferred Reset must be a module port
 nv_ram_rwsthp_60x168_logic #(FORCE_CONTENTION_ASSERTION_RESET_ACTIVE) r_nv_ram_rwsthp_60x168 (
-                           .SI(SI), .SO_int_net(SO_int_net), 
-                           .ary_atpg_ctl(ary_atpg_ctl), 
-                           .ary_read_inh(ary_read_inh), .byp_sel(byp_sel), 
-                           .clk(clk), .dbyp(dbyp), .debug_mode(debug_mode), 
-                           .di(di), .dout(dout), .iddq_mode(iddq_mode), 
-                           .jtag_readonly_mode(jtag_readonly_mode), 
-                           .mbist_Di_w0(mbist_Di_w0), 
-                           .mbist_Do_r0_int_net(mbist_Do_r0_int_net), 
-                           .mbist_Ra_r0(mbist_Ra_r0), .mbist_Wa_w0(mbist_Wa_w0), 
-                           .mbist_ce_r0(mbist_ce_r0), 
-                           .mbist_en_sync(mbist_en_sync), 
-                           .mbist_ramaccess_rst_(mbist_ramaccess_rst_), 
-                           .mbist_we_w0(mbist_we_w0), .ore(ore), 
-                           .pwrbus_ram_pd(pwrbus_ram_pd), .ra(ra), .re(re), 
-                           .scan_en(scan_en), .scan_ramtms(scan_ramtms), 
-                           .shiftDR(shiftDR), .svop(svop), .test_mode(test_mode), 
-                           .updateDR(updateDR), .wa(wa), .we(we), 
+                           .SI(SI), .SO_int_net(SO_int_net),
+                           .ary_atpg_ctl(ary_atpg_ctl),
+                           .ary_read_inh(ary_read_inh), .byp_sel(byp_sel),
+                           .clk(clk), .dbyp(dbyp), .debug_mode(debug_mode),
+                           .di(di), .dout(dout), .iddq_mode(iddq_mode),
+                           .jtag_readonly_mode(jtag_readonly_mode),
+                           .mbist_Di_w0(mbist_Di_w0),
+                           .mbist_Do_r0_int_net(mbist_Do_r0_int_net),
+                           .mbist_Ra_r0(mbist_Ra_r0), .mbist_Wa_w0(mbist_Wa_w0),
+                           .mbist_ce_r0(mbist_ce_r0),
+                           .mbist_en_sync(mbist_en_sync),
+                           .mbist_ramaccess_rst_(mbist_ramaccess_rst_),
+                           .mbist_we_w0(mbist_we_w0), .ore(ore),
+                           .pwrbus_ram_pd(pwrbus_ram_pd), .ra(ra), .re(re),
+                           .scan_en(scan_en), .scan_ramtms(scan_ramtms),
+                           .shiftDR(shiftDR), .svop(svop), .test_mode(test_mode),
+                           .updateDR(updateDR), .wa(wa), .we(we),
                            .write_inh(write_inh) );
 // verilint 402 on - inferred Reset must be a module port
-
-
 // synopsys dc_tcl_script_begin
 // synopsys dc_tcl_script_end
-
-
-
 // synopsys dc_tcl_script_begin
 // synopsys dc_tcl_script_end
-
-
 `ifndef SYNTHESIS
 task arrangement (output integer arrangment_string[167:0]);
   begin
-    arrangment_string[0] = 0  ;     
-    arrangment_string[1] = 1  ;     
-    arrangment_string[2] = 2  ;     
-    arrangment_string[3] = 3  ;     
-    arrangment_string[4] = 4  ;     
-    arrangment_string[5] = 5  ;     
-    arrangment_string[6] = 6  ;     
-    arrangment_string[7] = 7  ;     
-    arrangment_string[8] = 8  ;     
-    arrangment_string[9] = 9  ;     
-    arrangment_string[10] = 10  ;     
-    arrangment_string[11] = 11  ;     
-    arrangment_string[12] = 12  ;     
-    arrangment_string[13] = 13  ;     
-    arrangment_string[14] = 14  ;     
-    arrangment_string[15] = 15  ;     
-    arrangment_string[16] = 16  ;     
-    arrangment_string[17] = 17  ;     
-    arrangment_string[18] = 18  ;     
-    arrangment_string[19] = 19  ;     
-    arrangment_string[20] = 20  ;     
-    arrangment_string[21] = 21  ;     
-    arrangment_string[22] = 22  ;     
-    arrangment_string[23] = 23  ;     
-    arrangment_string[24] = 24  ;     
-    arrangment_string[25] = 25  ;     
-    arrangment_string[26] = 26  ;     
-    arrangment_string[27] = 27  ;     
-    arrangment_string[28] = 28  ;     
-    arrangment_string[29] = 29  ;     
-    arrangment_string[30] = 30  ;     
-    arrangment_string[31] = 31  ;     
-    arrangment_string[32] = 32  ;     
-    arrangment_string[33] = 33  ;     
-    arrangment_string[34] = 34  ;     
-    arrangment_string[35] = 35  ;     
-    arrangment_string[36] = 36  ;     
-    arrangment_string[37] = 37  ;     
-    arrangment_string[38] = 38  ;     
-    arrangment_string[39] = 39  ;     
-    arrangment_string[40] = 40  ;     
-    arrangment_string[41] = 41  ;     
-    arrangment_string[42] = 42  ;     
-    arrangment_string[43] = 43  ;     
-    arrangment_string[44] = 44  ;     
-    arrangment_string[45] = 45  ;     
-    arrangment_string[46] = 46  ;     
-    arrangment_string[47] = 47  ;     
-    arrangment_string[48] = 48  ;     
-    arrangment_string[49] = 49  ;     
-    arrangment_string[50] = 50  ;     
-    arrangment_string[51] = 51  ;     
-    arrangment_string[52] = 52  ;     
-    arrangment_string[53] = 53  ;     
-    arrangment_string[54] = 54  ;     
-    arrangment_string[55] = 55  ;     
-    arrangment_string[56] = 56  ;     
-    arrangment_string[57] = 57  ;     
-    arrangment_string[58] = 58  ;     
-    arrangment_string[59] = 59  ;     
-    arrangment_string[60] = 60  ;     
-    arrangment_string[61] = 61  ;     
-    arrangment_string[62] = 62  ;     
-    arrangment_string[63] = 63  ;     
-    arrangment_string[64] = 64  ;     
-    arrangment_string[65] = 65  ;     
-    arrangment_string[66] = 66  ;     
-    arrangment_string[67] = 67  ;     
-    arrangment_string[68] = 68  ;     
-    arrangment_string[69] = 69  ;     
-    arrangment_string[70] = 70  ;     
-    arrangment_string[71] = 71  ;     
-    arrangment_string[72] = 72  ;     
-    arrangment_string[73] = 73  ;     
-    arrangment_string[74] = 74  ;     
-    arrangment_string[75] = 75  ;     
-    arrangment_string[76] = 76  ;     
-    arrangment_string[77] = 77  ;     
-    arrangment_string[78] = 78  ;     
-    arrangment_string[79] = 79  ;     
-    arrangment_string[80] = 80  ;     
-    arrangment_string[81] = 81  ;     
-    arrangment_string[82] = 82  ;     
-    arrangment_string[83] = 83  ;     
-    arrangment_string[84] = 84  ;     
-    arrangment_string[85] = 85  ;     
-    arrangment_string[86] = 86  ;     
-    arrangment_string[87] = 87  ;     
-    arrangment_string[88] = 88  ;     
-    arrangment_string[89] = 89  ;     
-    arrangment_string[90] = 90  ;     
-    arrangment_string[91] = 91  ;     
-    arrangment_string[92] = 92  ;     
-    arrangment_string[93] = 93  ;     
-    arrangment_string[94] = 94  ;     
-    arrangment_string[95] = 95  ;     
-    arrangment_string[96] = 96  ;     
-    arrangment_string[97] = 97  ;     
-    arrangment_string[98] = 98  ;     
-    arrangment_string[99] = 99  ;     
-    arrangment_string[100] = 100  ;     
-    arrangment_string[101] = 101  ;     
-    arrangment_string[102] = 102  ;     
-    arrangment_string[103] = 103  ;     
-    arrangment_string[104] = 104  ;     
-    arrangment_string[105] = 105  ;     
-    arrangment_string[106] = 106  ;     
-    arrangment_string[107] = 107  ;     
-    arrangment_string[108] = 108  ;     
-    arrangment_string[109] = 109  ;     
-    arrangment_string[110] = 110  ;     
-    arrangment_string[111] = 111  ;     
-    arrangment_string[112] = 112  ;     
-    arrangment_string[113] = 113  ;     
-    arrangment_string[114] = 114  ;     
-    arrangment_string[115] = 115  ;     
-    arrangment_string[116] = 116  ;     
-    arrangment_string[117] = 117  ;     
-    arrangment_string[118] = 118  ;     
-    arrangment_string[119] = 119  ;     
-    arrangment_string[120] = 120  ;     
-    arrangment_string[121] = 121  ;     
-    arrangment_string[122] = 122  ;     
-    arrangment_string[123] = 123  ;     
-    arrangment_string[124] = 124  ;     
-    arrangment_string[125] = 125  ;     
-    arrangment_string[126] = 126  ;     
-    arrangment_string[127] = 127  ;     
-    arrangment_string[128] = 128  ;     
-    arrangment_string[129] = 129  ;     
-    arrangment_string[130] = 130  ;     
-    arrangment_string[131] = 131  ;     
-    arrangment_string[132] = 132  ;     
-    arrangment_string[133] = 133  ;     
-    arrangment_string[134] = 134  ;     
-    arrangment_string[135] = 135  ;     
-    arrangment_string[136] = 136  ;     
-    arrangment_string[137] = 137  ;     
-    arrangment_string[138] = 138  ;     
-    arrangment_string[139] = 139  ;     
-    arrangment_string[140] = 140  ;     
-    arrangment_string[141] = 141  ;     
-    arrangment_string[142] = 142  ;     
-    arrangment_string[143] = 143  ;     
-    arrangment_string[144] = 144  ;     
-    arrangment_string[145] = 145  ;     
-    arrangment_string[146] = 146  ;     
-    arrangment_string[147] = 147  ;     
-    arrangment_string[148] = 148  ;     
-    arrangment_string[149] = 149  ;     
-    arrangment_string[150] = 150  ;     
-    arrangment_string[151] = 151  ;     
-    arrangment_string[152] = 152  ;     
-    arrangment_string[153] = 153  ;     
-    arrangment_string[154] = 154  ;     
-    arrangment_string[155] = 155  ;     
-    arrangment_string[156] = 156  ;     
-    arrangment_string[157] = 157  ;     
-    arrangment_string[158] = 158  ;     
-    arrangment_string[159] = 159  ;     
-    arrangment_string[160] = 160  ;     
-    arrangment_string[161] = 161  ;     
-    arrangment_string[162] = 162  ;     
-    arrangment_string[163] = 163  ;     
-    arrangment_string[164] = 164  ;     
-    arrangment_string[165] = 165  ;     
-    arrangment_string[166] = 166  ;     
-    arrangment_string[167] = 167  ;     
+    arrangment_string[0] = 0 ;
+    arrangment_string[1] = 1 ;
+    arrangment_string[2] = 2 ;
+    arrangment_string[3] = 3 ;
+    arrangment_string[4] = 4 ;
+    arrangment_string[5] = 5 ;
+    arrangment_string[6] = 6 ;
+    arrangment_string[7] = 7 ;
+    arrangment_string[8] = 8 ;
+    arrangment_string[9] = 9 ;
+    arrangment_string[10] = 10 ;
+    arrangment_string[11] = 11 ;
+    arrangment_string[12] = 12 ;
+    arrangment_string[13] = 13 ;
+    arrangment_string[14] = 14 ;
+    arrangment_string[15] = 15 ;
+    arrangment_string[16] = 16 ;
+    arrangment_string[17] = 17 ;
+    arrangment_string[18] = 18 ;
+    arrangment_string[19] = 19 ;
+    arrangment_string[20] = 20 ;
+    arrangment_string[21] = 21 ;
+    arrangment_string[22] = 22 ;
+    arrangment_string[23] = 23 ;
+    arrangment_string[24] = 24 ;
+    arrangment_string[25] = 25 ;
+    arrangment_string[26] = 26 ;
+    arrangment_string[27] = 27 ;
+    arrangment_string[28] = 28 ;
+    arrangment_string[29] = 29 ;
+    arrangment_string[30] = 30 ;
+    arrangment_string[31] = 31 ;
+    arrangment_string[32] = 32 ;
+    arrangment_string[33] = 33 ;
+    arrangment_string[34] = 34 ;
+    arrangment_string[35] = 35 ;
+    arrangment_string[36] = 36 ;
+    arrangment_string[37] = 37 ;
+    arrangment_string[38] = 38 ;
+    arrangment_string[39] = 39 ;
+    arrangment_string[40] = 40 ;
+    arrangment_string[41] = 41 ;
+    arrangment_string[42] = 42 ;
+    arrangment_string[43] = 43 ;
+    arrangment_string[44] = 44 ;
+    arrangment_string[45] = 45 ;
+    arrangment_string[46] = 46 ;
+    arrangment_string[47] = 47 ;
+    arrangment_string[48] = 48 ;
+    arrangment_string[49] = 49 ;
+    arrangment_string[50] = 50 ;
+    arrangment_string[51] = 51 ;
+    arrangment_string[52] = 52 ;
+    arrangment_string[53] = 53 ;
+    arrangment_string[54] = 54 ;
+    arrangment_string[55] = 55 ;
+    arrangment_string[56] = 56 ;
+    arrangment_string[57] = 57 ;
+    arrangment_string[58] = 58 ;
+    arrangment_string[59] = 59 ;
+    arrangment_string[60] = 60 ;
+    arrangment_string[61] = 61 ;
+    arrangment_string[62] = 62 ;
+    arrangment_string[63] = 63 ;
+    arrangment_string[64] = 64 ;
+    arrangment_string[65] = 65 ;
+    arrangment_string[66] = 66 ;
+    arrangment_string[67] = 67 ;
+    arrangment_string[68] = 68 ;
+    arrangment_string[69] = 69 ;
+    arrangment_string[70] = 70 ;
+    arrangment_string[71] = 71 ;
+    arrangment_string[72] = 72 ;
+    arrangment_string[73] = 73 ;
+    arrangment_string[74] = 74 ;
+    arrangment_string[75] = 75 ;
+    arrangment_string[76] = 76 ;
+    arrangment_string[77] = 77 ;
+    arrangment_string[78] = 78 ;
+    arrangment_string[79] = 79 ;
+    arrangment_string[80] = 80 ;
+    arrangment_string[81] = 81 ;
+    arrangment_string[82] = 82 ;
+    arrangment_string[83] = 83 ;
+    arrangment_string[84] = 84 ;
+    arrangment_string[85] = 85 ;
+    arrangment_string[86] = 86 ;
+    arrangment_string[87] = 87 ;
+    arrangment_string[88] = 88 ;
+    arrangment_string[89] = 89 ;
+    arrangment_string[90] = 90 ;
+    arrangment_string[91] = 91 ;
+    arrangment_string[92] = 92 ;
+    arrangment_string[93] = 93 ;
+    arrangment_string[94] = 94 ;
+    arrangment_string[95] = 95 ;
+    arrangment_string[96] = 96 ;
+    arrangment_string[97] = 97 ;
+    arrangment_string[98] = 98 ;
+    arrangment_string[99] = 99 ;
+    arrangment_string[100] = 100 ;
+    arrangment_string[101] = 101 ;
+    arrangment_string[102] = 102 ;
+    arrangment_string[103] = 103 ;
+    arrangment_string[104] = 104 ;
+    arrangment_string[105] = 105 ;
+    arrangment_string[106] = 106 ;
+    arrangment_string[107] = 107 ;
+    arrangment_string[108] = 108 ;
+    arrangment_string[109] = 109 ;
+    arrangment_string[110] = 110 ;
+    arrangment_string[111] = 111 ;
+    arrangment_string[112] = 112 ;
+    arrangment_string[113] = 113 ;
+    arrangment_string[114] = 114 ;
+    arrangment_string[115] = 115 ;
+    arrangment_string[116] = 116 ;
+    arrangment_string[117] = 117 ;
+    arrangment_string[118] = 118 ;
+    arrangment_string[119] = 119 ;
+    arrangment_string[120] = 120 ;
+    arrangment_string[121] = 121 ;
+    arrangment_string[122] = 122 ;
+    arrangment_string[123] = 123 ;
+    arrangment_string[124] = 124 ;
+    arrangment_string[125] = 125 ;
+    arrangment_string[126] = 126 ;
+    arrangment_string[127] = 127 ;
+    arrangment_string[128] = 128 ;
+    arrangment_string[129] = 129 ;
+    arrangment_string[130] = 130 ;
+    arrangment_string[131] = 131 ;
+    arrangment_string[132] = 132 ;
+    arrangment_string[133] = 133 ;
+    arrangment_string[134] = 134 ;
+    arrangment_string[135] = 135 ;
+    arrangment_string[136] = 136 ;
+    arrangment_string[137] = 137 ;
+    arrangment_string[138] = 138 ;
+    arrangment_string[139] = 139 ;
+    arrangment_string[140] = 140 ;
+    arrangment_string[141] = 141 ;
+    arrangment_string[142] = 142 ;
+    arrangment_string[143] = 143 ;
+    arrangment_string[144] = 144 ;
+    arrangment_string[145] = 145 ;
+    arrangment_string[146] = 146 ;
+    arrangment_string[147] = 147 ;
+    arrangment_string[148] = 148 ;
+    arrangment_string[149] = 149 ;
+    arrangment_string[150] = 150 ;
+    arrangment_string[151] = 151 ;
+    arrangment_string[152] = 152 ;
+    arrangment_string[153] = 153 ;
+    arrangment_string[154] = 154 ;
+    arrangment_string[155] = 155 ;
+    arrangment_string[156] = 156 ;
+    arrangment_string[157] = 157 ;
+    arrangment_string[158] = 158 ;
+    arrangment_string[159] = 159 ;
+    arrangment_string[160] = 160 ;
+    arrangment_string[161] = 161 ;
+    arrangment_string[162] = 162 ;
+    arrangment_string[163] = 163 ;
+    arrangment_string[164] = 164 ;
+    arrangment_string[165] = 165 ;
+    arrangment_string[166] = 166 ;
+    arrangment_string[167] = 167 ;
   end
 endtask
 `endif
-
 `ifndef SYNTHESIS
 `ifndef NO_INIT_MEM_VAL_TASKS
-
-`ifndef MEM_REG_NAME 
+`ifndef MEM_REG_NAME
  `define MEM_REG_NAME MX.mem
 `endif
-
 // Bit vector indicating which shadow addresses have been written
 reg [59:0] shadow_written = 'b0;
-
 // Shadow ram array used to store initialization values
 reg [167:0] shadow_mem [59:0];
-
-
 `ifdef NV_RAM_EXPAND_ARRAY
 wire [167:0] shadow_mem_row0 = shadow_mem[0];
 wire [167:0] shadow_mem_row1 = shadow_mem[1];
@@ -972,7 +944,6 @@ wire [167:0] shadow_mem_row57 = shadow_mem[57];
 wire [167:0] shadow_mem_row58 = shadow_mem[58];
 wire [167:0] shadow_mem_row59 = shadow_mem[59];
 `endif
-
 task init_mem_val;
   input [5:0] row;
   input [167:0] data;
@@ -981,15 +952,12 @@ task init_mem_val;
     shadow_written[row] = 1'b1;
   end
 endtask
-
 task init_mem_commit;
 integer row;
 begin
-
 // initializing RAMPDP_60X168_GL_M1_D2
 for (row = 0; row < 60; row = row + 1)
  if (shadow_written[row]) r_nv_ram_rwsthp_60x168.ram_Inst_60X168.mem_write(row - 0, shadow_mem[row][167:0]);
-
 shadow_written = 'b0;
 end
 endtask
@@ -998,42 +966,34 @@ endtask
 `ifndef SYNTHESIS
 `ifndef NO_INIT_MEM_VAL_TASKS
 task do_write; //(wa, we, di);
-   input  [5:0] wa;
-   input   we;
-   input  [167:0] di;
-   reg    [167:0] d;
+   input [5:0] wa;
+   input we;
+   input [167:0] di;
+   reg [167:0] d;
    begin
       d = probe_mem_val(wa);
       d = (we ? di : d);
       init_mem_val(wa,d);
    end
 endtask
-
 `endif
 `endif
-
-
 `ifndef SYNTHESIS
 `ifndef NO_INIT_MEM_VAL_TASKS
-
-`ifndef MEM_REG_NAME 
+`ifndef MEM_REG_NAME
  `define MEM_REG_NAME MX.mem
 `endif
-
 function [167:0] probe_mem_val;
 input [5:0] row;
 reg [167:0] data;
 begin
-
 // probing RAMPDP_60X168_GL_M1_D2
- if (row >=  0 &&  row < 60) data[167:0] = r_nv_ram_rwsthp_60x168.ram_Inst_60X168.mem_read(row - 0);
+ if (row >= 0 && row < 60) data[167:0] = r_nv_ram_rwsthp_60x168.ram_Inst_60X168.mem_read(row - 0);
     probe_mem_val = data;
-
 end
 endfunction
 `endif
 `endif
-
 `ifndef SYNTHESIS
 `ifndef NO_CLEAR_MEM_TASK
 `ifndef NO_INIT_MEM_VAL_TASKS
@@ -1041,7 +1001,7 @@ reg disable_clear_mem = 0;
 task clear_mem;
 integer i;
 begin
-  if (!disable_clear_mem) 
+  if (!disable_clear_mem)
   begin
     for (i = 0; i < 60; i = i + 1)
       begin
@@ -1054,7 +1014,6 @@ endtask
 `endif
 `endif
 `endif
-
 `ifndef SYNTHESIS
 `ifndef NO_INIT_MEM_ZERO_TASK
 `ifndef NO_INIT_MEM_VAL_TASKS
@@ -1071,7 +1030,6 @@ endtask
 `endif
 `endif
 `endif
-
 `ifndef SYNTHESIS
 `ifndef NO_INIT_MEM_VAL_TASKS
 `ifndef NO_INIT_MEM_FROM_FILE_TASK
@@ -1079,22 +1037,17 @@ task init_mem_from_file;
 input string init_file;
 integer i;
 begin
-
  $readmemh(init_file,shadow_mem);
  for (i = 0; i < 60; i = i + 1)
    begin
-
      shadow_written[i] = 1'b1;
-
    end
  init_mem_commit();
-
 end
 endtask
 `endif
 `endif
 `endif
-
 `ifndef SYNTHESIS
 `ifndef NO_INIT_MEM_RANDOM_TASK
 `ifndef NO_INIT_MEM_VAL_TASKS
@@ -1104,7 +1057,6 @@ RANDFUNC rf2 ();
 RANDFUNC rf3 ();
 RANDFUNC rf4 ();
 RANDFUNC rf5 ();
-
 task init_mem_random;
 reg [167:0] random_num;
 integer i;
@@ -1120,13 +1072,10 @@ endtask
 `endif
 `endif
 `endif
-
 `ifndef SYNTHESIS
 `ifndef NO_FLIP_TASKS
 `ifndef NO_INIT_MEM_VAL_TASKS
-
 RANDFUNC rflip ();
-
 task random_flip;
 integer random_num;
 integer row;
@@ -1138,7 +1087,6 @@ begin
   target_flip(row, bitnum);
 end
 endtask
-
 task target_flip;
 input [5:0] row;
 input [167:0] bitnum;
@@ -1146,20 +1094,15 @@ reg [167:0] data;
 begin
   if(!$test$plusargs("no_display_target_flips"))
     $display("%m: flipping row %d bit %d at time %t", row, bitnum, $time);
-
   data = probe_mem_val(row);
   data[bitnum] = ~data[bitnum];
   init_mem_val(row, data);
   init_mem_commit();
 end
 endtask
-
 `endif
 `endif
 `endif
-
 // The main module is done
 endmodule
-
 //********************************************************************************
-

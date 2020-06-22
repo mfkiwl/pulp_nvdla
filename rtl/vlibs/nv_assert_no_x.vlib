@@ -1,21 +1,17 @@
 // ================================================================
 // NVDLA Open Source Project
-// 
-// Copyright(c) 2016 - 2017 NVIDIA Corporation.  Licensed under the
-// NVDLA Open Hardware License; Check "LICENSE" which comes with 
+//
+// Copyright(c) 2016 - 2017 NVIDIA Corporation. Licensed under the
+// NVDLA Open Hardware License; Check "LICENSE" which comes with
 // this distribution for more information.
 // ================================================================
-
 // File Name: nv_assert_no_x.vlib
-
 `ifdef MACROMODULE
 macromodule nv_assert_no_x (clk, reset_, start_event, test_expr);
 `else
 module nv_assert_no_x (clk, reset_, start_event, test_expr);
 `endif
-
 //VCS coverage exclude_module
-
 // synopsys template
   parameter severity_level = 0;
   parameter width=32;
@@ -30,9 +26,8 @@ module nv_assert_no_x (clk, reset_, start_event, test_expr);
   `endif
 `endif
   input clk, reset_;
-  input [width-1:0] test_expr; 
+  input [width-1:0] test_expr;
   input start_event;
-
 `ifndef SYNTHESIS
 `ifdef ASSERT_ENABLE_ZERROR
 initial begin
@@ -46,17 +41,13 @@ initial begin
 end
 `endif
 `endif
-
 `ifndef DISABLE_ASSERT_NO_X
 `ifndef SYNTHESIS
-
-//  parameter assert_name = "ASSERT_NO_X";
-
+// parameter assert_name = "ASSERT_NO_X";
   integer error_count;
   initial error_count = 0;
   `include "assertion_header.vh"
   `include "assertion_task.vh"
-  
   `ifdef ASSERT_INIT_MSG
     initial
       assertion_init_msg; // Call the User Defined Init Message Routine
@@ -83,7 +74,6 @@ end
            end
    end
   `endif
-
   reg reset_occurred;
   initial
   begin
@@ -91,9 +81,7 @@ end
     wait (reset_ == 0);
     reset_occurred = 1'b1;
   end
-
   wire start_event_qual = reset_occurred & start_event;
-
 `ifdef FV_ASSERT_SYNCH_RESET
 always @(posedge clk) begin
 `else
@@ -103,40 +91,29 @@ always @(posedge clk or negedge reset_) begin
         if (start_event_qual && (^test_expr === 1'bx)) begin
             assertion_error;
             if (!assertion_off && ($time>start_assertion_check) &&
-	        (error_count <= `ASSERT_MAX_REPORT_ERROR) && (warning_count <= `ASSERT_MAX_REPORT_WARN)) begin
+         (error_count <= `ASSERT_MAX_REPORT_ERROR) && (warning_count <= `ASSERT_MAX_REPORT_WARN)) begin
               $display("%m: Value of the signal = %d`h%h", width, test_expr);
             end
         end
     end
   end // always
-
 `endif // SYNTHESIS
 `endif // DISABLE_ASSERT_NO_X
-
-
 // Instantiating a dummy buffer
 // CKBD4 UI_DummyBuf (.I(clk), .Z());
 // inside the assertion vlib, so that
 // the assertion module is NOT optimized away
 // during DC & RC emulation physical synthesis
-
 // Also adding embedded DC and RC dont-touch settings
 // on the assertion module
-
 `ifdef EMU
-
  CKBD4 UI_DummyBuf (.I(clk), .Z());
-
 // synopsys dc_script_begin
 // synopsys dc_script_end
-
 // g2c if { [find / -null_ok -subdesign nv_assert_no_x*] != {} } { set_attr preserve 1 [find / -subdesign nv_assert_no_x*] }
-
 `endif // ifdef EMU
-
 // no_x check should not be done by FV. err in the include file is not defined here
-//`ifdef FV_ASSERT_ON 
+//`ifdef FV_ASSERT_ON
 // `include "common_sva_assert.sva"
 //`endif
-
 endmodule

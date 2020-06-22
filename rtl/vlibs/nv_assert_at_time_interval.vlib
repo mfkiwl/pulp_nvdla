@@ -1,48 +1,38 @@
 // ================================================================
 // NVDLA Open Source Project
-// 
-// Copyright(c) 2016 - 2017 NVIDIA Corporation.  Licensed under the
-// NVDLA Open Hardware License; Check "LICENSE" which comes with 
+//
+// Copyright(c) 2016 - 2017 NVIDIA Corporation. Licensed under the
+// NVDLA Open Hardware License; Check "LICENSE" which comes with
 // this distribution for more information.
 // ================================================================
-
 // File Name: nv_assert_at_time_interval.vlib
-
 module nv_assert_at_time_interval (
-  clk, 
-  reset_, 
-  start_event, 
+  clk,
+  reset_,
+  start_event,
   test_expr
 `ifdef FV_ASSERT_ON
   , err
 `endif
 );
-
 //VCS coverage exclude_module
-
 // synopsys template
   parameter severity_level = 0;
   parameter num_cks=1;
   parameter check_overlapping=1;
-  parameter only_if=0;  // if 1, test_expr can only appear if a corresponding
-                        // start_event occurs
+  parameter only_if=0; // if 1, test_expr can only appear if a corresponding
+// start_event occurs
   parameter options = 0;
   parameter msg="VIOLATION";
   input clk, reset_, start_event, test_expr;
-
 `ifndef EMU
-  
   reg [((num_cks>0)?num_cks-1:0):0] monitor;
-  
   wire [((num_cks>0)?num_cks-1:0):0] monitor_1 = (monitor << 1);
-
 `ifdef FV_ASSERT_ON
   output err;
   reg err;
 `else
-
 `ifndef SYNTHESIS
-
   initial begin
     if (num_cks <= 0) begin
       `ifndef SYNTHESIS
@@ -51,18 +41,13 @@ module nv_assert_at_time_interval (
       begin
       end
       `endif
-
     end
   end
-
   parameter assert_name = "ASSERT_AT_TIME_INTERVAL";
-
   integer error_count;
   initial error_count = 0;
-
   `include "assertion_header.vh"
   `include "assertion_task.vh"
-  
   `ifdef ASSERT_INIT_MSG
     initial
       assertion_init_msg; // Call the User Defined Init Message Routine
@@ -87,12 +72,9 @@ module nv_assert_at_time_interval (
            end
    end
   `endif
-
   initial monitor = 0;
-
 `endif
 `endif
-  
 `ifdef FV_ASSERT_SYNCH_RESET
 always @(posedge clk) begin
 `else
@@ -103,7 +85,7 @@ always @(posedge clk or negedge reset_) begin
          `ifdef FV_ASSERT_ON
            err <= 1'b0;
          `endif
-       end else begin 
+       end else begin
          monitor <= (monitor_1 | start_event);
          if ((check_overlapping == 0) && (monitor_1 != 0) && start_event) begin
            `ifdef FV_ASSERT_ON
@@ -115,7 +97,6 @@ always @(posedge clk or negedge reset_) begin
              begin
              end
              `endif
-
            `endif
          end
          else if (only_if && ~monitor[num_cks-1] && test_expr) begin
@@ -128,50 +109,37 @@ always @(posedge clk or negedge reset_) begin
              begin
              end
              `endif
-
            `endif
-         end 
+         end
          else if (monitor[num_cks-1] && ~test_expr) begin
            `ifdef FV_ASSERT_ON
              err <= 1'b1;
-           `else 
+           `else
              `ifndef SYNTHESIS
              assertion_error_msg("start_event without test_expr");
              `else
              begin
              end
              `endif
-
            `endif
          end
        end
   end // always
-
 `endif // EMU
-
-
 // Instantiating a dummy buffer
 // CKBD4 UI_DummyBuf (.I(clk), .Z());
-// inside the assertion vlib, so that 
-// the assertion module is NOT optimized away 
+// inside the assertion vlib, so that
+// the assertion module is NOT optimized away
 // during DC & RC emulation physical synthesis
- 
 // Also adding embedded DC and RC dont-touch settings
 // on the assertion module
-
 `ifdef EMU
-
  CKBD4 UI_DummyBuf (.I(clk), .Z());
-
 // synopsys dc_script_begin
 // synopsys dc_script_end
-
 // g2c if { [find / -null_ok -subdesign nv_assert_at_time_interval*] != {} } { set_attr preserve 1 [find / -subdesign nv_assert_at_time_interval*] }
-
 `endif // ifdef EMU
-
 `ifdef FV_ASSERT_ON
  `include "common_sva_assert.sva"
 `endif
-
 endmodule
