@@ -27,6 +27,17 @@ module NV_NVDLA_partition_m (
 //: print qq(
 //: ,sc2mac_dat_data${i} //|< i )
 //: }
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+
+,sc2mac_dat_data0 //|< i 
+,sc2mac_dat_data1 //|< i 
+,sc2mac_dat_data2 //|< i 
+,sc2mac_dat_data3 //|< i 
+,sc2mac_dat_data4 //|< i 
+,sc2mac_dat_data5 //|< i 
+,sc2mac_dat_data6 //|< i 
+,sc2mac_dat_data7 //|< i 
+//| eperl: generated_end (DO NOT EDIT ABOVE)
   ,sc2mac_dat_mask //|< i
   ,sc2mac_dat_pd //|< i
   ,sc2mac_dat_pvld //|< i
@@ -34,6 +45,17 @@ module NV_NVDLA_partition_m (
 //: print qq(
 //: ,sc2mac_wt_data${i} //|< i )
 //: }
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+
+,sc2mac_wt_data0 //|< i 
+,sc2mac_wt_data1 //|< i 
+,sc2mac_wt_data2 //|< i 
+,sc2mac_wt_data3 //|< i 
+,sc2mac_wt_data4 //|< i 
+,sc2mac_wt_data5 //|< i 
+,sc2mac_wt_data6 //|< i 
+,sc2mac_wt_data7 //|< i 
+//| eperl: generated_end (DO NOT EDIT ABOVE)
   ,sc2mac_wt_mask //|< i
   ,sc2mac_wt_pvld //|< i
   ,sc2mac_wt_sel //|< i
@@ -46,6 +68,13 @@ module NV_NVDLA_partition_m (
 //: print qq(
 //: ,mac2accu_data${i} //|> o )
 //: }
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+
+,mac2accu_data0 //|> o 
+,mac2accu_data1 //|> o 
+,mac2accu_data2 //|> o 
+,mac2accu_data3 //|> o 
+//| eperl: generated_end (DO NOT EDIT ABOVE)
   ,mac2accu_mask //|> o
   ,mac2accu_mode //|> o
   ,mac2accu_pd //|> o
@@ -67,6 +96,17 @@ input [8 -1:0] sc2mac_wt_mask;
 //: print qq(
 //: input [8 -1:0] sc2mac_wt_data${i}; //|< i )
 //: }
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+
+input [8 -1:0] sc2mac_wt_data0; //|< i 
+input [8 -1:0] sc2mac_wt_data1; //|< i 
+input [8 -1:0] sc2mac_wt_data2; //|< i 
+input [8 -1:0] sc2mac_wt_data3; //|< i 
+input [8 -1:0] sc2mac_wt_data4; //|< i 
+input [8 -1:0] sc2mac_wt_data5; //|< i 
+input [8 -1:0] sc2mac_wt_data6; //|< i 
+input [8 -1:0] sc2mac_wt_data7; //|< i 
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 input [8/2 -1:0] sc2mac_wt_sel;
 input sc2mac_dat_pvld; /* data valid */
 input [8 -1:0] sc2mac_dat_mask;
@@ -74,6 +114,17 @@ input [8 -1:0] sc2mac_dat_mask;
 //: print qq(
 //: input [8 -1:0] sc2mac_dat_data${i}; //|< i )
 //: }
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+
+input [8 -1:0] sc2mac_dat_data0; //|< i 
+input [8 -1:0] sc2mac_dat_data1; //|< i 
+input [8 -1:0] sc2mac_dat_data2; //|< i 
+input [8 -1:0] sc2mac_dat_data3; //|< i 
+input [8 -1:0] sc2mac_dat_data4; //|< i 
+input [8 -1:0] sc2mac_dat_data5; //|< i 
+input [8 -1:0] sc2mac_dat_data6; //|< i 
+input [8 -1:0] sc2mac_dat_data7; //|< i 
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 input [8:0] sc2mac_dat_pd;
 output mac2accu_pvld; /* data valid */
 output [8/2 -1:0] mac2accu_mask;
@@ -82,6 +133,13 @@ output mac2accu_mode;
 //: print qq(
 //: output [19 -1:0] mac2accu_data${i}; )
 //: }
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+
+output [19 -1:0] mac2accu_data0; 
+output [19 -1:0] mac2accu_data1; 
+output [19 -1:0] mac2accu_data2; 
+output [19 -1:0] mac2accu_data3; 
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 output [8:0] mac2accu_pd;
 input global_clk_ovr_on;
 input tmc2slcg_disable_clock_gating;
@@ -133,6 +191,13 @@ NV_NVDLA_cmac u_NV_NVDLA_cmac (
 //: print qq(
 //: ,.mac2accu_data${i} (mac2accu_data${i}) //|> o )
 //: }
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+
+,.mac2accu_data0 (mac2accu_data0) //|> o 
+,.mac2accu_data1 (mac2accu_data1) //|> o 
+,.mac2accu_data2 (mac2accu_data2) //|> o 
+,.mac2accu_data3 (mac2accu_data3) //|> o 
+//| eperl: generated_end (DO NOT EDIT ABOVE)
   ,.mac2accu_pd (mac2accu_pd) //|> o
   ,.sc2mac_dat_pvld (sc2mac_dat_pvld) //|< i
   ,.sc2mac_dat_mask (sc2mac_dat_mask) //|< i
@@ -140,6 +205,17 @@ NV_NVDLA_cmac u_NV_NVDLA_cmac (
 //: print qq(
 //: ,.sc2mac_dat_data${i} (sc2mac_dat_data${i}) //|< i )
 //: }
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+
+,.sc2mac_dat_data0 (sc2mac_dat_data0) //|< i 
+,.sc2mac_dat_data1 (sc2mac_dat_data1) //|< i 
+,.sc2mac_dat_data2 (sc2mac_dat_data2) //|< i 
+,.sc2mac_dat_data3 (sc2mac_dat_data3) //|< i 
+,.sc2mac_dat_data4 (sc2mac_dat_data4) //|< i 
+,.sc2mac_dat_data5 (sc2mac_dat_data5) //|< i 
+,.sc2mac_dat_data6 (sc2mac_dat_data6) //|< i 
+,.sc2mac_dat_data7 (sc2mac_dat_data7) //|< i 
+//| eperl: generated_end (DO NOT EDIT ABOVE)
   ,.sc2mac_dat_pd (sc2mac_dat_pd) //|< i
   ,.sc2mac_wt_pvld (sc2mac_wt_pvld) //|< i
   ,.sc2mac_wt_mask (sc2mac_wt_mask) //|< i
@@ -147,6 +223,17 @@ NV_NVDLA_cmac u_NV_NVDLA_cmac (
 //: print qq(
 //: ,.sc2mac_wt_data${i} (sc2mac_wt_data${i}) //|< i )
 //: }
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+
+,.sc2mac_wt_data0 (sc2mac_wt_data0) //|< i 
+,.sc2mac_wt_data1 (sc2mac_wt_data1) //|< i 
+,.sc2mac_wt_data2 (sc2mac_wt_data2) //|< i 
+,.sc2mac_wt_data3 (sc2mac_wt_data3) //|< i 
+,.sc2mac_wt_data4 (sc2mac_wt_data4) //|< i 
+,.sc2mac_wt_data5 (sc2mac_wt_data5) //|< i 
+,.sc2mac_wt_data6 (sc2mac_wt_data6) //|< i 
+,.sc2mac_wt_data7 (sc2mac_wt_data7) //|< i 
+//| eperl: generated_end (DO NOT EDIT ABOVE)
   ,.sc2mac_wt_sel (sc2mac_wt_sel) //|< i
   ,.dla_clk_ovr_on_sync (dla_clk_ovr_on_sync) //|< w
   ,.global_clk_ovr_on_sync (global_clk_ovr_on_sync) //|< w

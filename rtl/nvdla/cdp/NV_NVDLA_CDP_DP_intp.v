@@ -29,6 +29,14 @@ module NV_NVDLA_CDP_DP_intp (
 //: ,lut2intp_X_info_${m} //|> o
 //: );
 //: }
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+
+,lut2intp_X_data_00 //|> o
+,lut2intp_X_data_00_17b //|> o
+,lut2intp_X_data_01 //|> o
+,lut2intp_X_info_0 //|> o
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
   ,lut2intp_X_sel //|< i
   ,lut2intp_Y_sel //|< i
   ,lut2intp_pvld //|< i
@@ -70,6 +78,11 @@ module NV_NVDLA_CDP_DP_intp (
 //: ,intp2mul_pd_$m //|> o
 //: );
 //: }
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+
+,intp2mul_pd_0 //|> o
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
   ,intp2mul_pvld //|> o
   ,lut2intp_prdy //|> o
   ,sync2itp_prdy //|> o
@@ -88,6 +101,14 @@ input intp2mul_prdy;
 //: input [19:0] lut2intp_X_info_${m};
 //: );
 //: }
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+
+input [31:0] lut2intp_X_data_00;
+input [16:0] lut2intp_X_data_00_17b;
+input [31:0] lut2intp_X_data_01;
+input [19:0] lut2intp_X_info_0;
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 input [1 -1:0] lut2intp_X_sel;
 input [1 -1:0] lut2intp_Y_sel;
 input lut2intp_pvld;
@@ -114,6 +135,10 @@ input reg2dp_sqsum_bypass;
 //: my $k = 1;
 //: my $icvto = (8 +1);
 //: print "input  [${k}*(${icvto}*2+3)-1:0] sync2itp_pd;  \n";
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+input  [1*(9*2+3)-1:0] sync2itp_pd;  
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 input sync2itp_pvld;
 output [31:0] dp2reg_d0_perf_lut_hybrid;
 output [31:0] dp2reg_d0_perf_lut_le_hit;
@@ -131,6 +156,11 @@ output [31:0] dp2reg_d1_perf_lut_uflow;
 //: output [16:0] intp2mul_pd_$m;
 //: );
 //: }
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+
+output [16:0] intp2mul_pd_0;
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 output intp2mul_pvld;
 output lut2intp_prdy;
 output sync2itp_prdy;
@@ -146,6 +176,15 @@ reg X_exp;
 //: reg [5:0] Xinterp_in_shift_$m;
 //: );
 //: }
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+
+reg [38:0] Xinterp_in0_pd_0;
+reg [37:0] Xinterp_in1_pd_0;
+reg [16:0] Xinterp_in_pd_0;
+reg [16:0] Xinterp_in_scale_0;
+reg [5:0] Xinterp_in_shift_0;
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 reg [31:0] both_hybrid_counter;
 reg [1 -1:0] both_hybrid_flag;
 reg [31:0] both_of_counter;
@@ -171,6 +210,11 @@ reg intp_pvld_d;
 //: reg [16:0] ip2mul_pd_$m;
 //: );
 //: }
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+
+reg [16:0] ip2mul_pd_0;
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 //reg ip2mul_prdy;
 reg layer_flg;
 //reg [1*103-1:0] lut2intp_data;
@@ -206,6 +250,18 @@ reg sqsum_bypass_enable;
 //: wire [37:0] hit_in1_pd_$m;
 //: );
 //: }
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+
+wire [1:0] X_info_0;
+wire X_oflow_0;
+wire X_uflow_0;
+wire [1:0] Y_info_0;
+wire Y_oflow_0;
+wire Y_uflow_0;
+wire [16:0] Xinterp_out_pd_0;
+wire [37:0] hit_in1_pd_0;
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 wire [1 -1:0] Xinterp_in_rdy;
 wire [1 -1:0] Xinterp_in_vld;
 wire [1 -1:0] Xinterp_out_rdy;
@@ -250,6 +306,14 @@ wire lut2intp_ready;
 //: wire [19:0] lut2ip_X_info_$m;
 //: );
 //: }
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+
+wire [31:0] lut2ip_X_data_00;
+wire [16:0] lut2ip_X_data_00_17b;
+wire [31:0] lut2ip_X_data_01;
+wire [19:0] lut2ip_X_info_0;
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 wire [1 -1:0] lut2ip_X_sel;
 wire [1 -1:0] lut2ip_Y_sel;
 wire [37:0] lut_le_end;
@@ -358,11 +422,94 @@ assign lut2intp_pd = {
 //: lut2intp_X_info_${m}[19:0],
 //: );
 //: }
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+
+lut2intp_X_data_00[31:0],lut2intp_X_data_00_17b[16:0],lut2intp_X_data_01[31:0],
+
+lut2intp_X_info_0[19:0],
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
                lut2intp_X_sel,
                lut2intp_Y_sel
                };
 //: my $k = 1*103;
 //: &eperl::pipe(" -is -wid $k -do lut2intp_data -vo lut2intp_valid -ri lut2intp_ready -di lut2intp_pd -vi lut2intp_pvld -ro lut2intp_prdy ");
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+// Reg
+reg lut2intp_prdy;
+reg skid_flop_lut2intp_prdy;
+reg skid_flop_lut2intp_pvld;
+reg [103-1:0] skid_flop_lut2intp_pd;
+reg pipe_skid_lut2intp_pvld;
+reg [103-1:0] pipe_skid_lut2intp_pd;
+// Wire
+wire skid_lut2intp_pvld;
+wire [103-1:0] skid_lut2intp_pd;
+wire skid_lut2intp_prdy;
+wire pipe_skid_lut2intp_prdy;
+wire lut2intp_valid;
+wire [103-1:0] lut2intp_data;
+// Code
+// SKID READY
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+   if (!nvdla_core_rstn) begin
+       lut2intp_prdy <= 1'b1;
+       skid_flop_lut2intp_prdy <= 1'b1;
+   end else begin
+       lut2intp_prdy <= skid_lut2intp_prdy;
+       skid_flop_lut2intp_prdy <= skid_lut2intp_prdy;
+   end
+end
+
+// SKID VALID
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+    if (!nvdla_core_rstn) begin
+        skid_flop_lut2intp_pvld <= 1'b0;
+    end else begin
+        if (skid_flop_lut2intp_prdy) begin
+            skid_flop_lut2intp_pvld <= lut2intp_pvld;
+        end
+   end
+end
+assign skid_lut2intp_pvld = (skid_flop_lut2intp_prdy) ? lut2intp_pvld : skid_flop_lut2intp_pvld;
+
+// SKID DATA
+always @(posedge nvdla_core_clk) begin
+    if (skid_flop_lut2intp_prdy & lut2intp_pvld) begin
+        skid_flop_lut2intp_pd[103-1:0] <= lut2intp_pd[103-1:0];
+    end
+end
+assign skid_lut2intp_pd[103-1:0] = (skid_flop_lut2intp_prdy) ? lut2intp_pd[103-1:0] : skid_flop_lut2intp_pd[103-1:0];
+
+
+// PIPE READY
+assign skid_lut2intp_prdy = pipe_skid_lut2intp_prdy || !pipe_skid_lut2intp_pvld;
+
+// PIPE VALID
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+    if (!nvdla_core_rstn) begin
+        pipe_skid_lut2intp_pvld <= 1'b0;
+    end else begin
+        if (skid_lut2intp_prdy) begin
+            pipe_skid_lut2intp_pvld <= skid_lut2intp_pvld;
+        end
+    end
+end
+
+// PIPE DATA
+always @(posedge nvdla_core_clk) begin
+    if (skid_lut2intp_prdy && skid_lut2intp_pvld) begin
+        pipe_skid_lut2intp_pd[103-1:0] <= skid_lut2intp_pd[103-1:0];
+    end
+end
+
+
+// PIPE OUTPUT
+assign pipe_skid_lut2intp_prdy = lut2intp_ready;
+assign lut2intp_valid = pipe_skid_lut2intp_pvld;
+assign lut2intp_data = pipe_skid_lut2intp_pd;
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 assign {
 //: my $k = 1;
 //: foreach my $m (0..$k-1) {
@@ -376,6 +523,13 @@ assign {
 //: lut2ip_X_info_${m}[19:0],
 //: );
 //: }
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+
+lut2ip_X_data_00[31:0],lut2ip_X_data_00_17b[16:0],lut2ip_X_data_01[31:0],
+
+lut2ip_X_info_0[19:0],
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
         lut2ip_X_sel,
         lut2ip_Y_sel} = lut2intp_data;
 ///////////////////////////////////////////
@@ -394,6 +548,11 @@ assign intp_in_prdy = (&Xinterp_in_rdy) & info_in_rdy;
 //: assign hit_in1_pd_$m = (sqsum_bypass_enable ? {{(38-${sqbw}){sync2itp_pd[${sqbw}*$m+${sqbw}-1]}} ,sync2itp_pd[${sqbw}*$m+${sqbw}-1:${sqbw}*$m]} : {17'd0,sync2itp_pd[${sqbw}*$m+${sqbw}-1:${sqbw}*$m] });
 //: );
 //: }
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+
+assign hit_in1_pd_0 = (sqsum_bypass_enable ? {{(38-21){sync2itp_pd[21*0+21-1]}} ,sync2itp_pd[21*0+21-1:21*0]} : {17'd0,sync2itp_pd[21*0+21-1:21*0] });
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 /////////////////////////////////////////////////
 //start/end prepare for out of range interpolation
 /////////////////////////////////////////////////
@@ -593,6 +752,116 @@ end
 //: ;
 //: );
 //: }
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+
+assign X_uflow_0 = lut2ip_X_info_0[16];
+assign X_oflow_0 = lut2ip_X_info_0[17];
+assign Y_uflow_0 = lut2ip_X_info_0[18];
+assign Y_oflow_0 = lut2ip_X_info_0[19];
+
+always @(*) begin
+if(lut2ip_X_sel[0]) begin
+if(X_uflow_0)
+Xinterp_in0_pd_0 = lut_le_min[38:0];
+else if(X_oflow_0)
+Xinterp_in0_pd_0 = {lut_le_max[37],lut_le_max[37:0]};
+else
+Xinterp_in0_pd_0 = {{7{lut2ip_X_data_00[31]}},lut2ip_X_data_00[31:0]};
+end else if(lut2ip_Y_sel[0]) begin
+if(Y_uflow_0)
+Xinterp_in0_pd_0 = {lut_lo_min[37],lut_lo_min[37:0]};
+else if(Y_oflow_0)
+Xinterp_in0_pd_0 = {lut_lo_max[37],lut_lo_max[37:0]};
+else
+Xinterp_in0_pd_0 = {{7{lut2ip_X_data_00[31]}},lut2ip_X_data_00[31:0]};
+end else
+Xinterp_in0_pd_0 = 39'd0;
+end
+
+always @(*) begin
+if(lut2ip_X_sel[0]) begin
+if(X_uflow_0 | X_oflow_0)
+Xinterp_in1_pd_0 = hit_in1_pd_0;
+else
+Xinterp_in1_pd_0 = {{6{lut2ip_X_data_01[31]}},lut2ip_X_data_01[31:0]};
+end else if(lut2ip_Y_sel[0]) begin
+if(Y_uflow_0 | Y_oflow_0)
+Xinterp_in1_pd_0 = hit_in1_pd_0;
+else
+Xinterp_in1_pd_0 = {{6{lut2ip_X_data_01[31]}},lut2ip_X_data_01[31:0]};
+end else
+Xinterp_in1_pd_0 = 38'd0;
+end
+
+always @(*) begin
+if(lut2ip_X_sel[0] | lut2ip_Y_sel[0])
+Xinterp_in_pd_0 = lut2ip_X_data_00_17b[16:0];
+else
+Xinterp_in_pd_0 = 17'd0;
+end
+
+always @(*) begin
+if(lut2ip_X_sel[0]) begin
+if(X_uflow_0)
+Xinterp_in_scale_0 = le_slope_uflow_scale[16:0];
+else if(X_oflow_0)
+Xinterp_in_scale_0 = le_slope_oflow_scale[16:0];
+else
+Xinterp_in_scale_0 = {1'b0,lut2ip_X_info_0[15:0]};
+end else if(lut2ip_Y_sel[0]) begin
+if(Y_uflow_0)
+Xinterp_in_scale_0 = lo_slope_uflow_scale[16:0];
+else if(Y_oflow_0)
+Xinterp_in_scale_0 = lo_slope_oflow_scale[16:0];
+else
+Xinterp_in_scale_0 = {1'b0,lut2ip_X_info_0[15:0]};
+end else
+Xinterp_in_scale_0 = 17'd0;
+end
+
+always @(*) begin
+if(lut2ip_X_sel[0]) begin
+if(X_uflow_0)
+Xinterp_in_shift_0 = {{1{reg2dp_lut_le_slope_uflow_shift_sync[4]}}, reg2dp_lut_le_slope_uflow_shift_sync[4:0]};
+else if(X_oflow_0)
+Xinterp_in_shift_0 = {{1{reg2dp_lut_le_slope_oflow_shift_sync[4]}}, reg2dp_lut_le_slope_oflow_shift_sync[4:0]};
+else
+Xinterp_in_shift_0 = {1'b0,5'd16};
+end else if(lut2ip_Y_sel[0]) begin
+if(Y_uflow_0)
+Xinterp_in_shift_0 = {{1{reg2dp_lut_lo_slope_uflow_shift_sync[4]}}, reg2dp_lut_lo_slope_uflow_shift_sync[4:0]};
+else if(Y_oflow_0)
+Xinterp_in_shift_0 = {{1{reg2dp_lut_lo_slope_oflow_shift_sync[4]}}, reg2dp_lut_lo_slope_oflow_shift_sync[4:0]};
+else
+Xinterp_in_shift_0 = {1'b0,5'd16};
+end else
+Xinterp_in_shift_0 = 6'd0;
+end
+
+assign Xinterp_in_vld[0] = intp_in_pvld & info_in_rdy
+
+;
+
+NV_NVDLA_CDP_DP_INTP_unit u_interp_X0 (
+.nvdla_core_clk (nvdla_core_clk)
+,.nvdla_core_rstn (nvdla_core_rstn)
+,.interp_in0_pd (Xinterp_in0_pd_0[38:0])
+,.interp_in1_pd (Xinterp_in1_pd_0[37:0])
+,.interp_in_pd (Xinterp_in_pd_0[16:0])
+,.interp_in_scale (Xinterp_in_scale_0[16:0])
+,.interp_in_shift (Xinterp_in_shift_0[5:0])
+,.interp_in_vld (Xinterp_in_vld[0])
+,.interp_out_rdy (Xinterp_out_rdy[0])
+,.interp_in_rdy (Xinterp_in_rdy[0])
+,.interp_out_pd (Xinterp_out_pd_0[16:0])
+,.interp_out_vld (Xinterp_out_vld[0])
+);
+
+assign Xinterp_out_rdy[0] = intp_prdy & info_o_vld
+
+;
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 assign info_o_rdy = intp_prdy & ((&Xinterp_out_vld));
 ///////////////////////////////////////////////
 //process for normal uflow/oflow info
@@ -607,6 +876,9 @@ assign info_Xin_pd = {
 //: );
 //: }
 //: }
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
         lut2ip_X_info_0[17:16]};
 assign info_Yin_pd = {
 //: my $k = 1;
@@ -618,6 +890,9 @@ assign info_Yin_pd = {
 //: );
 //: }
 //: }
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
             lut2ip_X_info_0[19:18]};
 assign dat_info_in = {info_Yin_pd,info_Xin_pd};
 assign info_in_pd = dat_info_in;
@@ -640,6 +915,12 @@ NV_NVDLA_CDP_DP_intpinfo_fifo u_intpinfo_sync_fifo (
 //: assign Y_info_$m = info_o_pd[${k}*2+${m}*2+1:${k}*2+${m}*2];
 //: );
 //: }
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+
+assign X_info_0 = info_o_pd[0*2+1:0*2];
+assign Y_info_0 = info_o_pd[1*2+0*2+1:1*2+0*2];
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 ////////////////////////////////////////////////
 assign intp_pvld = info_o_vld & ((&Xinterp_out_vld));
 assign intp_prdy = ~intp_pvld_d | intp_prdy_d;
@@ -668,6 +949,17 @@ assign ip2mul_pvld = intp_pvld_d;
 //: end
 //: );
 //: }
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+if (!nvdla_core_rstn) begin
+ip2mul_pd_0 <= {17{1'b0}};
+end else if(intp_pvld & intp_prdy) begin
+ip2mul_pd_0 <= Xinterp_out_pd_0;
+end
+end
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 ////////////////////////////////////////////////
 //LUT perf counters
 ////////////////////////////////////////////////
@@ -694,6 +986,27 @@ assign layer_done = dp2reg_done;
 //: end
 //: );
 //: }
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+if (!nvdla_core_rstn) begin
+both_hybrid_flag[0] <= 1'b0;
+both_of_flag[0] <= 1'b0;
+both_uf_flag[0] <= 1'b0;
+only_le_hit[0] <= 1'b0;
+only_lo_hit[0] <= 1'b0;
+end else begin
+if(intp_pvld & intp_prdy) begin
+both_hybrid_flag[0] <= ({X_info_0,Y_info_0} == 4'b0000) | ({X_info_0,Y_info_0} == 4'b0110) | ({X_info_0,Y_info_0} == 4'b1001);
+both_of_flag[0] <= ({X_info_0,Y_info_0} == 4'b1010);
+both_uf_flag[0] <= ({X_info_0,Y_info_0} == 4'b0101);
+only_le_hit[0] <= ({X_info_0,Y_info_0} == 4'b0001) | ({X_info_0,Y_info_0} == 4'b0010);
+only_lo_hit[0] <= ({X_info_0,Y_info_0} == 4'b0100) | ({X_info_0,Y_info_0} == 4'b1000);
+end
+end
+end
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 function [3:0] fun_bit_sum_8;
   input [7:0] idata;
   reg [3:0] ocnt;
@@ -1427,10 +1740,89 @@ assign ip2mul_pd = {
 //: );
 //: }
 //: }
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 ip2mul_pd_0[16:0]};
 ////////::pipe -bc -is intp2mul_pd(intp2mul_pvld,intp2mul_prdy) <= ip2mul_pd(ip2mul_pvld,ip2mul_prdy);
 //: my $k = 1*17;
 //: &eperl::pipe(" -wid $k -is -do intp2mul_pd -vo intp2mul_pvld -ri intp2mul_prdy -di ip2mul_pd -vi ip2mul_pvld -ro ip2mul_prdy ");
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+// Reg
+reg ip2mul_prdy;
+reg skid_flop_ip2mul_prdy;
+reg skid_flop_ip2mul_pvld;
+reg [17-1:0] skid_flop_ip2mul_pd;
+reg pipe_skid_ip2mul_pvld;
+reg [17-1:0] pipe_skid_ip2mul_pd;
+// Wire
+wire skid_ip2mul_pvld;
+wire [17-1:0] skid_ip2mul_pd;
+wire skid_ip2mul_prdy;
+wire pipe_skid_ip2mul_prdy;
+wire intp2mul_pvld;
+wire [17-1:0] intp2mul_pd;
+// Code
+// SKID READY
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+   if (!nvdla_core_rstn) begin
+       ip2mul_prdy <= 1'b1;
+       skid_flop_ip2mul_prdy <= 1'b1;
+   end else begin
+       ip2mul_prdy <= skid_ip2mul_prdy;
+       skid_flop_ip2mul_prdy <= skid_ip2mul_prdy;
+   end
+end
+
+// SKID VALID
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+    if (!nvdla_core_rstn) begin
+        skid_flop_ip2mul_pvld <= 1'b0;
+    end else begin
+        if (skid_flop_ip2mul_prdy) begin
+            skid_flop_ip2mul_pvld <= ip2mul_pvld;
+        end
+   end
+end
+assign skid_ip2mul_pvld = (skid_flop_ip2mul_prdy) ? ip2mul_pvld : skid_flop_ip2mul_pvld;
+
+// SKID DATA
+always @(posedge nvdla_core_clk) begin
+    if (skid_flop_ip2mul_prdy & ip2mul_pvld) begin
+        skid_flop_ip2mul_pd[17-1:0] <= ip2mul_pd[17-1:0];
+    end
+end
+assign skid_ip2mul_pd[17-1:0] = (skid_flop_ip2mul_prdy) ? ip2mul_pd[17-1:0] : skid_flop_ip2mul_pd[17-1:0];
+
+
+// PIPE READY
+assign skid_ip2mul_prdy = pipe_skid_ip2mul_prdy || !pipe_skid_ip2mul_pvld;
+
+// PIPE VALID
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+    if (!nvdla_core_rstn) begin
+        pipe_skid_ip2mul_pvld <= 1'b0;
+    end else begin
+        if (skid_ip2mul_prdy) begin
+            pipe_skid_ip2mul_pvld <= skid_ip2mul_pvld;
+        end
+    end
+end
+
+// PIPE DATA
+always @(posedge nvdla_core_clk) begin
+    if (skid_ip2mul_prdy && skid_ip2mul_pvld) begin
+        pipe_skid_ip2mul_pd[17-1:0] <= skid_ip2mul_pd[17-1:0];
+    end
+end
+
+
+// PIPE OUTPUT
+assign pipe_skid_ip2mul_prdy = intp2mul_prdy;
+assign intp2mul_pvld = pipe_skid_ip2mul_pvld;
+assign intp2mul_pd = pipe_skid_ip2mul_pd;
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 assign intp_prdy_d = ip2mul_prdy;
 assign {
 //: my $k = 1;
@@ -1442,6 +1834,9 @@ assign {
 //: );
 //: }
 //: }
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 intp2mul_pd_0[16:0]} = intp2mul_pd;
 ////////////////////////////////////////////////
 endmodule // NV_NVDLA_CDP_DP_intp

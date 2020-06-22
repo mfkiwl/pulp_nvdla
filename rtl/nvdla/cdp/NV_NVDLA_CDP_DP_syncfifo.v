@@ -77,6 +77,79 @@ wire info_vld;
 //: my $dbw = 1 * (8 +1);
 //: &eperl::pipe(" -wid $dbw -do data_sync_wr_pd -vo data_sync_wr_pvld -ri data_sync_wr_prdy -di data_pd -vi data_vld -ro data_rdy ");
 //: &eperl::pipe(" -wid 15   -do info_sync_wr_pd -vo info_sync_wr_pvld -ri info_sync_wr_prdy -di info_pd -vi info_vld -ro info_rdy ");
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+// Reg
+reg pipe_data_vld;
+reg [9-1:0] pipe_data_pd;
+// Wire
+wire data_rdy;
+wire pipe_data_rdy;
+wire data_sync_wr_pvld;
+wire [9-1:0] data_sync_wr_pd;
+// Code
+// PIPE READY
+assign data_rdy = pipe_data_rdy || !pipe_data_vld;
+
+// PIPE VALID
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+    if (!nvdla_core_rstn) begin
+        pipe_data_vld <= 1'b0;
+    end else begin
+        if (data_rdy) begin
+            pipe_data_vld <= data_vld;
+        end
+    end
+end
+
+// PIPE DATA
+always @(posedge nvdla_core_clk) begin
+    if (data_rdy && data_vld) begin
+        pipe_data_pd[9-1:0] <= data_pd[9-1:0];
+    end
+end
+
+
+// PIPE OUTPUT
+assign pipe_data_rdy = data_sync_wr_prdy;
+assign data_sync_wr_pvld = pipe_data_vld;
+assign data_sync_wr_pd = pipe_data_pd;
+// Reg
+reg pipe_info_vld;
+reg [15-1:0] pipe_info_pd;
+// Wire
+wire info_rdy;
+wire pipe_info_rdy;
+wire info_sync_wr_pvld;
+wire [15-1:0] info_sync_wr_pd;
+// Code
+// PIPE READY
+assign info_rdy = pipe_info_rdy || !pipe_info_vld;
+
+// PIPE VALID
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+    if (!nvdla_core_rstn) begin
+        pipe_info_vld <= 1'b0;
+    end else begin
+        if (info_rdy) begin
+            pipe_info_vld <= info_vld;
+        end
+    end
+end
+
+// PIPE DATA
+always @(posedge nvdla_core_clk) begin
+    if (info_rdy && info_vld) begin
+        pipe_info_pd[15-1:0] <= info_pd[15-1:0];
+    end
+end
+
+
+// PIPE OUTPUT
+assign pipe_info_rdy = info_sync_wr_prdy;
+assign info_sync_wr_pvld = pipe_info_vld;
+assign info_sync_wr_pd = pipe_info_pd;
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 //////////////////////////////////////////////
 //datin sync fifo
 assign cvt2sync_prdy = data_rdy & info_rdy;

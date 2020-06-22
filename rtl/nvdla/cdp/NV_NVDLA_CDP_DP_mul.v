@@ -24,6 +24,11 @@ module NV_NVDLA_CDP_DP_mul (
 //: ,intp2mul_pd_$m
 //: );
 //: }
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+
+,intp2mul_pd_0
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
   ,intp2mul_pvld //|< i
   ,mul2ocvt_prdy //|< i
   ,reg2dp_mul_bypass //|< i
@@ -48,6 +53,14 @@ input nvdla_core_rstn;
 //: input [${k}*${icvto}-1:0] sync2mul_pd;
 //: output [${k}*(${icvto}+16)-1:0] mul2ocvt_pd;
 //: );
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+
+input [16:0] intp2mul_pd_0;
+
+input [1*9-1:0] sync2mul_pd;
+output [1*(9+16)-1:0] mul2ocvt_pd;
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 input intp2mul_pvld;
 input mul2ocvt_prdy;
 input reg2dp_mul_bypass;
@@ -71,6 +84,13 @@ wire mul_in_vld;
 //: wire [15:0] mul_inb_pd_$m;
 //: );
 //: }
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+
+wire [(9+16)-1:0] mul_unit_pd_0;
+wire [9-1:0] mul_ina_pd_0;
+wire [15:0] mul_inb_pd_0;
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 wire [1 -1:0] mul_unit_rdy;
 wire [1 -1:0] mul_unit_vld;
 wire [1 -1:0] mul_vld;
@@ -78,6 +98,82 @@ wire [1 -1:0] mul_rdy;
 ///////////////////////////////////////////
 //: my $k = 1*((8 +1)+16);
 //: &eperl::pipe(" -wid $k -is -do mul2ocvt_pd -vo mul2ocvt_pvld -ri mul2ocvt_prdy -di mul2ocvt_pd_f -vi mul2ocvt_pvld_f -ro mul2ocvt_prdy_f ");
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+// Reg
+reg mul2ocvt_prdy_f;
+reg skid_flop_mul2ocvt_prdy_f;
+reg skid_flop_mul2ocvt_pvld_f;
+reg [25-1:0] skid_flop_mul2ocvt_pd_f;
+reg pipe_skid_mul2ocvt_pvld_f;
+reg [25-1:0] pipe_skid_mul2ocvt_pd_f;
+// Wire
+wire skid_mul2ocvt_pvld_f;
+wire [25-1:0] skid_mul2ocvt_pd_f;
+wire skid_mul2ocvt_prdy_f;
+wire pipe_skid_mul2ocvt_prdy_f;
+wire mul2ocvt_pvld;
+wire [25-1:0] mul2ocvt_pd;
+// Code
+// SKID READY
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+   if (!nvdla_core_rstn) begin
+       mul2ocvt_prdy_f <= 1'b1;
+       skid_flop_mul2ocvt_prdy_f <= 1'b1;
+   end else begin
+       mul2ocvt_prdy_f <= skid_mul2ocvt_prdy_f;
+       skid_flop_mul2ocvt_prdy_f <= skid_mul2ocvt_prdy_f;
+   end
+end
+
+// SKID VALID
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+    if (!nvdla_core_rstn) begin
+        skid_flop_mul2ocvt_pvld_f <= 1'b0;
+    end else begin
+        if (skid_flop_mul2ocvt_prdy_f) begin
+            skid_flop_mul2ocvt_pvld_f <= mul2ocvt_pvld_f;
+        end
+   end
+end
+assign skid_mul2ocvt_pvld_f = (skid_flop_mul2ocvt_prdy_f) ? mul2ocvt_pvld_f : skid_flop_mul2ocvt_pvld_f;
+
+// SKID DATA
+always @(posedge nvdla_core_clk) begin
+    if (skid_flop_mul2ocvt_prdy_f & mul2ocvt_pvld_f) begin
+        skid_flop_mul2ocvt_pd_f[25-1:0] <= mul2ocvt_pd_f[25-1:0];
+    end
+end
+assign skid_mul2ocvt_pd_f[25-1:0] = (skid_flop_mul2ocvt_prdy_f) ? mul2ocvt_pd_f[25-1:0] : skid_flop_mul2ocvt_pd_f[25-1:0];
+
+
+// PIPE READY
+assign skid_mul2ocvt_prdy_f = pipe_skid_mul2ocvt_prdy_f || !pipe_skid_mul2ocvt_pvld_f;
+
+// PIPE VALID
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+    if (!nvdla_core_rstn) begin
+        pipe_skid_mul2ocvt_pvld_f <= 1'b0;
+    end else begin
+        if (skid_mul2ocvt_prdy_f) begin
+            pipe_skid_mul2ocvt_pvld_f <= skid_mul2ocvt_pvld_f;
+        end
+    end
+end
+
+// PIPE DATA
+always @(posedge nvdla_core_clk) begin
+    if (skid_mul2ocvt_prdy_f && skid_mul2ocvt_pvld_f) begin
+        pipe_skid_mul2ocvt_pd_f[25-1:0] <= skid_mul2ocvt_pd_f[25-1:0];
+    end
+end
+
+
+// PIPE OUTPUT
+assign pipe_skid_mul2ocvt_prdy_f = mul2ocvt_prdy;
+assign mul2ocvt_pvld = pipe_skid_mul2ocvt_pvld_f;
+assign mul2ocvt_pd = pipe_skid_mul2ocvt_pd_f;
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 ///////////////////////////////////////////////////////////////////
 always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
   if (!nvdla_core_rstn) begin
@@ -143,6 +239,36 @@ assign mul_in_rdy = &mul_rdy;
 //: ;
 //: );
 //: }
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+
+assign mul_vld[0] = mul_in_vld
+
+& mul_rdy[0]
+
+;
+
+assign mul_inb_pd_0 = intp2mul_pd_0[15:0];
+
+assign mul_ina_pd_0 = sync2mul_pd[0*9+9-1:0*9];
+NV_NVDLA_CDP_DP_MUL_unit u_mul_unit0 (
+.nvdla_core_clk (nvdla_core_clk)
+,.nvdla_core_rstn (nvdla_core_rstn)
+,.mul_vld (mul_vld[0])
+,.mul_rdy (mul_rdy[0])
+,.mul_ina_pd (mul_ina_pd_0)
+,.mul_inb_pd (mul_inb_pd_0)
+,.mul_unit_vld (mul_unit_vld[0])
+,.mul_unit_rdy (mul_unit_rdy[0])
+,.mul_unit_pd (mul_unit_pd_0)
+);
+
+assign mul_unit_rdy[0] = mul2ocvt_prdy_f
+
+& mul_unit_vld[0]
+
+;
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 ///////////////////
 //NaN propagation for mul_bypass condition
 ///////////////////
@@ -165,6 +291,11 @@ assign intp_out_ext = {
 //: }
 //: }
 //: print " mul_unit_pd_0};  \n";
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+{{(9+16-17){intp2mul_pd_0[16]}}, intp2mul_pd_0[16:0]}};  
+assign mul2ocvt_pd_f = mul_bypass_en ? intp_out_ext : {  mul_unit_pd_0};  
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 //output select
 assign mul2ocvt_pvld_f = mul_bypass_en ? (sync2mul_pvld & intp2mul_pvld) : (&mul_unit_vld);
 // ///////////////////////////////////////////

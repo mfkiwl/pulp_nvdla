@@ -31,6 +31,37 @@ module NV_NVDLA_NOCIF_DRAM_READ_IG_arb (
 //:print(",bpt2arb_req${i}_ready\n");
 //:print(",client${i}2mcif_rd_wt\n");
 //:}
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+,bpt2arb_req0_pd
+,bpt2arb_req0_valid
+,bpt2arb_req0_ready
+,client02mcif_rd_wt
+,bpt2arb_req1_pd
+,bpt2arb_req1_valid
+,bpt2arb_req1_ready
+,client12mcif_rd_wt
+,bpt2arb_req2_pd
+,bpt2arb_req2_valid
+,bpt2arb_req2_ready
+,client22mcif_rd_wt
+,bpt2arb_req3_pd
+,bpt2arb_req3_valid
+,bpt2arb_req3_ready
+,client32mcif_rd_wt
+,bpt2arb_req4_pd
+,bpt2arb_req4_valid
+,bpt2arb_req4_ready
+,client42mcif_rd_wt
+,bpt2arb_req5_pd
+,bpt2arb_req5_valid
+,bpt2arb_req5_ready
+,client52mcif_rd_wt
+,bpt2arb_req6_pd
+,bpt2arb_req6_valid
+,bpt2arb_req6_ready
+,client62mcif_rd_wt
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 );
 input nvdla_core_clk;
 input nvdla_core_rstn;
@@ -47,6 +78,44 @@ output [32 +10:0] arb2spt_req_pd;
 //:);
 //:print("input [7:0] client${i}2mcif_rd_wt;\n");
 //:}
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+input bpt2arb_req0_valid;
+output bpt2arb_req0_ready;
+
+input [32 +10:0] bpt2arb_req0_pd;
+input [7:0] client02mcif_rd_wt;
+input bpt2arb_req1_valid;
+output bpt2arb_req1_ready;
+
+input [32 +10:0] bpt2arb_req1_pd;
+input [7:0] client12mcif_rd_wt;
+input bpt2arb_req2_valid;
+output bpt2arb_req2_ready;
+
+input [32 +10:0] bpt2arb_req2_pd;
+input [7:0] client22mcif_rd_wt;
+input bpt2arb_req3_valid;
+output bpt2arb_req3_ready;
+
+input [32 +10:0] bpt2arb_req3_pd;
+input [7:0] client32mcif_rd_wt;
+input bpt2arb_req4_valid;
+output bpt2arb_req4_ready;
+
+input [32 +10:0] bpt2arb_req4_pd;
+input [7:0] client42mcif_rd_wt;
+input bpt2arb_req5_valid;
+output bpt2arb_req5_ready;
+
+input [32 +10:0] bpt2arb_req5_pd;
+input [7:0] client52mcif_rd_wt;
+input bpt2arb_req6_valid;
+output bpt2arb_req6_ready;
+
+input [32 +10:0] bpt2arb_req6_pd;
+input [7:0] client62mcif_rd_wt;
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 reg [32 +10:0] arb_pd;
 wire [7 -1:0] arb_gnt;
 wire gnt_busy;
@@ -59,6 +128,37 @@ wire gnt_busy;
 //:print("wire [7:0]  wt${i};\n");
 //: print("wire [$w:0] arb_src${i}_pd;\n");
 //:}
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+wire  src0_req;
+wire  src0_gnt;
+wire [7:0]  wt0;
+wire [42:0] arb_src0_pd;
+wire  src1_req;
+wire  src1_gnt;
+wire [7:0]  wt1;
+wire [42:0] arb_src1_pd;
+wire  src2_req;
+wire  src2_gnt;
+wire [7:0]  wt2;
+wire [42:0] arb_src2_pd;
+wire  src3_req;
+wire  src3_gnt;
+wire [7:0]  wt3;
+wire [42:0] arb_src3_pd;
+wire  src4_req;
+wire  src4_gnt;
+wire [7:0]  wt4;
+wire [42:0] arb_src4_pd;
+wire  src5_req;
+wire  src5_gnt;
+wire [7:0]  wt5;
+wire [42:0] arb_src5_pd;
+wire  src6_req;
+wire  src6_gnt;
+wire [7:0]  wt6;
+wire [42:0] arb_src6_pd;
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 //
 //:my $k=7;
 //:my $i;
@@ -90,6 +190,141 @@ wire gnt_busy;
 //: assign arb_src${i}_rdy = src${i}_gnt;
 //:);
 //:}
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+wire [42:0] arb_src7_pd;
+wire  src7_req;
+wire  src7_gnt;
+wire [42:0] arb_src8_pd;
+wire  src8_req;
+wire  src8_gnt;
+wire [42:0] arb_src9_pd;
+wire  src9_req;
+wire  src9_gnt;
+wire [42:0] arb_src10_pd;
+wire  src10_req;
+wire  src10_gnt;
+wire [42:0] arb_src11_pd;
+wire  src11_req;
+wire  src11_gnt;
+wire [42:0] arb_src12_pd;
+wire  src12_req;
+wire  src12_gnt;
+wire [42:0] arb_src13_pd;
+wire  src13_req;
+wire  src13_gnt;
+wire [42:0] arb_src14_pd;
+wire  src14_req;
+wire  src14_gnt;
+wire [42:0] arb_src15_pd;
+wire  src15_req;
+wire  src15_gnt;
+
+wire arb_src0_rdy, arb_src0_vld;
+NV_NVDLA_NOCIF_DRAM_READ_IG_ARB_pipe_p1 pipe_p1_0 (
+.nvdla_core_clk(nvdla_core_clk)
+,.nvdla_core_rstn(nvdla_core_rstn)
+,.arb_src0_rdy(arb_src0_rdy)
+,.bpt2arb_req0_pd(bpt2arb_req0_pd)
+,.bpt2arb_req0_valid(bpt2arb_req0_valid)
+,.arb_src0_pd(arb_src0_pd)
+,.arb_src0_vld(arb_src0_vld)
+,.bpt2arb_req0_ready(bpt2arb_req0_ready)
+);
+
+assign src0_req = arb_src0_vld;
+assign arb_src0_rdy = src0_gnt;
+
+wire arb_src1_rdy, arb_src1_vld;
+NV_NVDLA_NOCIF_DRAM_READ_IG_ARB_pipe_p1 pipe_p1_1 (
+.nvdla_core_clk(nvdla_core_clk)
+,.nvdla_core_rstn(nvdla_core_rstn)
+,.arb_src0_rdy(arb_src1_rdy)
+,.bpt2arb_req0_pd(bpt2arb_req1_pd)
+,.bpt2arb_req0_valid(bpt2arb_req1_valid)
+,.arb_src0_pd(arb_src1_pd)
+,.arb_src0_vld(arb_src1_vld)
+,.bpt2arb_req0_ready(bpt2arb_req1_ready)
+);
+
+assign src1_req = arb_src1_vld;
+assign arb_src1_rdy = src1_gnt;
+
+wire arb_src2_rdy, arb_src2_vld;
+NV_NVDLA_NOCIF_DRAM_READ_IG_ARB_pipe_p1 pipe_p1_2 (
+.nvdla_core_clk(nvdla_core_clk)
+,.nvdla_core_rstn(nvdla_core_rstn)
+,.arb_src0_rdy(arb_src2_rdy)
+,.bpt2arb_req0_pd(bpt2arb_req2_pd)
+,.bpt2arb_req0_valid(bpt2arb_req2_valid)
+,.arb_src0_pd(arb_src2_pd)
+,.arb_src0_vld(arb_src2_vld)
+,.bpt2arb_req0_ready(bpt2arb_req2_ready)
+);
+
+assign src2_req = arb_src2_vld;
+assign arb_src2_rdy = src2_gnt;
+
+wire arb_src3_rdy, arb_src3_vld;
+NV_NVDLA_NOCIF_DRAM_READ_IG_ARB_pipe_p1 pipe_p1_3 (
+.nvdla_core_clk(nvdla_core_clk)
+,.nvdla_core_rstn(nvdla_core_rstn)
+,.arb_src0_rdy(arb_src3_rdy)
+,.bpt2arb_req0_pd(bpt2arb_req3_pd)
+,.bpt2arb_req0_valid(bpt2arb_req3_valid)
+,.arb_src0_pd(arb_src3_pd)
+,.arb_src0_vld(arb_src3_vld)
+,.bpt2arb_req0_ready(bpt2arb_req3_ready)
+);
+
+assign src3_req = arb_src3_vld;
+assign arb_src3_rdy = src3_gnt;
+
+wire arb_src4_rdy, arb_src4_vld;
+NV_NVDLA_NOCIF_DRAM_READ_IG_ARB_pipe_p1 pipe_p1_4 (
+.nvdla_core_clk(nvdla_core_clk)
+,.nvdla_core_rstn(nvdla_core_rstn)
+,.arb_src0_rdy(arb_src4_rdy)
+,.bpt2arb_req0_pd(bpt2arb_req4_pd)
+,.bpt2arb_req0_valid(bpt2arb_req4_valid)
+,.arb_src0_pd(arb_src4_pd)
+,.arb_src0_vld(arb_src4_vld)
+,.bpt2arb_req0_ready(bpt2arb_req4_ready)
+);
+
+assign src4_req = arb_src4_vld;
+assign arb_src4_rdy = src4_gnt;
+
+wire arb_src5_rdy, arb_src5_vld;
+NV_NVDLA_NOCIF_DRAM_READ_IG_ARB_pipe_p1 pipe_p1_5 (
+.nvdla_core_clk(nvdla_core_clk)
+,.nvdla_core_rstn(nvdla_core_rstn)
+,.arb_src0_rdy(arb_src5_rdy)
+,.bpt2arb_req0_pd(bpt2arb_req5_pd)
+,.bpt2arb_req0_valid(bpt2arb_req5_valid)
+,.arb_src0_pd(arb_src5_pd)
+,.arb_src0_vld(arb_src5_vld)
+,.bpt2arb_req0_ready(bpt2arb_req5_ready)
+);
+
+assign src5_req = arb_src5_vld;
+assign arb_src5_rdy = src5_gnt;
+
+wire arb_src6_rdy, arb_src6_vld;
+NV_NVDLA_NOCIF_DRAM_READ_IG_ARB_pipe_p1 pipe_p1_6 (
+.nvdla_core_clk(nvdla_core_clk)
+,.nvdla_core_rstn(nvdla_core_rstn)
+,.arb_src0_rdy(arb_src6_rdy)
+,.bpt2arb_req0_pd(bpt2arb_req6_pd)
+,.bpt2arb_req0_valid(bpt2arb_req6_valid)
+,.arb_src0_pd(arb_src6_pd)
+,.arb_src0_vld(arb_src6_vld)
+,.bpt2arb_req0_ready(bpt2arb_req6_ready)
+);
+
+assign src6_req = arb_src6_vld;
+assign arb_src6_rdy = src6_gnt;
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 //&eperl::pipe("-is -wid 75 -do arb_src${i}_pd -vo arb_src${i}_vld -ri  bpt2arb_req${i}_ready -di bpt2arb_req${i}_pd -vi bpt2arb_req${i}_valid -ro arc_src${i}_rdy");
 //:my $k=7;
 //:my $i;
@@ -102,6 +337,22 @@ wire gnt_busy;
 //:for ($i=0;$i<$k;$i++) {
 //:print("assign wt${i} = client${i}2mcif_rd_wt;\n");
 //:}
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+assign src7_req = 1'b0;
+wire [7:0] wt7 = 0;
+assign src8_req = 1'b0;
+wire [7:0] wt8 = 0;
+assign src9_req = 1'b0;
+wire [7:0] wt9 = 0;
+assign wt0 = client02mcif_rd_wt;
+assign wt1 = client12mcif_rd_wt;
+assign wt2 = client22mcif_rd_wt;
+assign wt3 = client32mcif_rd_wt;
+assign wt4 = client42mcif_rd_wt;
+assign wt5 = client52mcif_rd_wt;
+assign wt6 = client62mcif_rd_wt;
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 read_ig_arb u_read_ig_arb (
    .req0 (src0_req) //|< w
   ,.req1 (src1_req) //|< w

@@ -28,6 +28,10 @@ input reg2dp_dst_ram_type;
 //: my $mask = int($dmaif/8/8);
 //: my $dmabw = ( $dmaif + $mask );
 //: print qq( output [${dmabw}:0] mcif_wr_req_pd; \n);
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+ output [65:0] mcif_wr_req_pd; 
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 output mcif_wr_req_valid;
 input mcif_wr_req_ready;
 input mcif_wr_rsp_complete;
@@ -35,6 +39,10 @@ input mcif_wr_rsp_complete;
 //: my $mask = int($dmaif/8/8);
 //: my $dmabw = ( $dmaif + $mask );
 //: print qq( input [${dmabw}:0] dmaif_wr_req_pd; \n);
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+ input [65:0] dmaif_wr_req_pd; 
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 input dmaif_wr_req_pvld;
 output dmaif_wr_req_prdy;
 output dmaif_wr_rsp_complete;
@@ -58,6 +66,82 @@ assign dmaif_wr_req_prdy= wr_req_rdyi;
 //: my $mask = int($dmaif/8/8);
 //: my $dmabw = ( $dmaif + $mask + 1 );
 //: &eperl::pipe(" -wid $dmabw -is -do mcif_wr_req_pd -vo mcif_wr_req_valid -ri mcif_wr_req_ready -di dmaif_wr_req_pd -vi mc_dma_wr_req_vld -ro mc_dma_wr_req_rdy_f  ");
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+// Reg
+reg mc_dma_wr_req_rdy_f;
+reg skid_flop_mc_dma_wr_req_rdy_f;
+reg skid_flop_mc_dma_wr_req_vld;
+reg [66-1:0] skid_flop_dmaif_wr_req_pd;
+reg pipe_skid_mc_dma_wr_req_vld;
+reg [66-1:0] pipe_skid_dmaif_wr_req_pd;
+// Wire
+wire skid_mc_dma_wr_req_vld;
+wire [66-1:0] skid_dmaif_wr_req_pd;
+wire skid_mc_dma_wr_req_rdy_f;
+wire pipe_skid_mc_dma_wr_req_rdy_f;
+wire mcif_wr_req_valid;
+wire [66-1:0] mcif_wr_req_pd;
+// Code
+// SKID READY
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+   if (!nvdla_core_rstn) begin
+       mc_dma_wr_req_rdy_f <= 1'b1;
+       skid_flop_mc_dma_wr_req_rdy_f <= 1'b1;
+   end else begin
+       mc_dma_wr_req_rdy_f <= skid_mc_dma_wr_req_rdy_f;
+       skid_flop_mc_dma_wr_req_rdy_f <= skid_mc_dma_wr_req_rdy_f;
+   end
+end
+
+// SKID VALID
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+    if (!nvdla_core_rstn) begin
+        skid_flop_mc_dma_wr_req_vld <= 1'b0;
+    end else begin
+        if (skid_flop_mc_dma_wr_req_rdy_f) begin
+            skid_flop_mc_dma_wr_req_vld <= mc_dma_wr_req_vld;
+        end
+   end
+end
+assign skid_mc_dma_wr_req_vld = (skid_flop_mc_dma_wr_req_rdy_f) ? mc_dma_wr_req_vld : skid_flop_mc_dma_wr_req_vld;
+
+// SKID DATA
+always @(posedge nvdla_core_clk) begin
+    if (skid_flop_mc_dma_wr_req_rdy_f & mc_dma_wr_req_vld) begin
+        skid_flop_dmaif_wr_req_pd[66-1:0] <= dmaif_wr_req_pd[66-1:0];
+    end
+end
+assign skid_dmaif_wr_req_pd[66-1:0] = (skid_flop_mc_dma_wr_req_rdy_f) ? dmaif_wr_req_pd[66-1:0] : skid_flop_dmaif_wr_req_pd[66-1:0];
+
+
+// PIPE READY
+assign skid_mc_dma_wr_req_rdy_f = pipe_skid_mc_dma_wr_req_rdy_f || !pipe_skid_mc_dma_wr_req_vld;
+
+// PIPE VALID
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+    if (!nvdla_core_rstn) begin
+        pipe_skid_mc_dma_wr_req_vld <= 1'b0;
+    end else begin
+        if (skid_mc_dma_wr_req_rdy_f) begin
+            pipe_skid_mc_dma_wr_req_vld <= skid_mc_dma_wr_req_vld;
+        end
+    end
+end
+
+// PIPE DATA
+always @(posedge nvdla_core_clk) begin
+    if (skid_mc_dma_wr_req_rdy_f && skid_mc_dma_wr_req_vld) begin
+        pipe_skid_dmaif_wr_req_pd[66-1:0] <= skid_dmaif_wr_req_pd[66-1:0];
+    end
+end
+
+
+// PIPE OUTPUT
+assign pipe_skid_mc_dma_wr_req_rdy_f = mcif_wr_req_ready;
+assign mcif_wr_req_valid = pipe_skid_mc_dma_wr_req_vld;
+assign mcif_wr_req_pd = pipe_skid_dmaif_wr_req_pd;
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 assign mc_dma_wr_req_rdy = mc_dma_wr_req_rdy_f;
 // wr Channel: Response
 wire ack_top_rdy;
@@ -81,6 +165,10 @@ assign mc_int_wr_rsp_complete = mcif_wr_rsp_complete;
 //: } else {
 //: print qq( assign require_ack = (dmaif_wr_req_pd[${dmabw}-1]==0) & (dmaif_wr_req_pd[45]==1); \n);
 //: }
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+ assign require_ack = (dmaif_wr_req_pd[66-1]==0) & (dmaif_wr_req_pd[45]==1); 
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 // assign require_ack = (dmaif_wr_req_pd[${dmabw}-1]==0) & (dmaif_wr_req_pd[77:77]==1);
 assign ack_raw_vld = dmaif_wr_req_pvld & wr_req_rdyi & require_ack;
 assign ack_raw_id = dma_wr_req_type;

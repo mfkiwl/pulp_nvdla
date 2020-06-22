@@ -168,6 +168,42 @@ wire cnt_inc;
 //: );
 //: }
 //: }
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+wire   [8*8-1:0] dat0_data; 
+
+wire [8-1:0]dat0_fifo0_rd_pd;
+wire dat0_fifo0_rd_prdy;
+wire dat0_fifo0_rd_pvld;
+
+wire [8-1:0]dat0_fifo1_rd_pd;
+wire dat0_fifo1_rd_prdy;
+wire dat0_fifo1_rd_pvld;
+
+wire [8-1:0]dat0_fifo2_rd_pd;
+wire dat0_fifo2_rd_prdy;
+wire dat0_fifo2_rd_pvld;
+
+wire [8-1:0]dat0_fifo3_rd_pd;
+wire dat0_fifo3_rd_prdy;
+wire dat0_fifo3_rd_pvld;
+
+wire [8-1:0]dat0_fifo4_rd_pd;
+wire dat0_fifo4_rd_prdy;
+wire dat0_fifo4_rd_pvld;
+
+wire [8-1:0]dat0_fifo5_rd_pd;
+wire dat0_fifo5_rd_prdy;
+wire dat0_fifo5_rd_pvld;
+
+wire [8-1:0]dat0_fifo6_rd_pd;
+wire dat0_fifo6_rd_prdy;
+wire dat0_fifo6_rd_pvld;
+
+wire [8-1:0]dat0_fifo7_rd_pd;
+wire dat0_fifo7_rd_prdy;
+wire dat0_fifo7_rd_pvld;
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 wire dat_accept;
 wire [64 -1:0] dat_data;
 reg dat_fifo_rd_last_pvld;
@@ -265,6 +301,82 @@ end
 //==============
 //: my $k = 1*8;
 //: &eperl::pipe("-wid $k -is -do dp2wdma_pd -vo dp2wdma_vld -ri dp2wdma_rdy -di pdp_dp2wdma_pd -vi pdp_dp2wdma_valid -ro pdp_dp2wdma_ready_ff ");
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+// Reg
+reg pdp_dp2wdma_ready_ff;
+reg skid_flop_pdp_dp2wdma_ready_ff;
+reg skid_flop_pdp_dp2wdma_valid;
+reg [8-1:0] skid_flop_pdp_dp2wdma_pd;
+reg pipe_skid_pdp_dp2wdma_valid;
+reg [8-1:0] pipe_skid_pdp_dp2wdma_pd;
+// Wire
+wire skid_pdp_dp2wdma_valid;
+wire [8-1:0] skid_pdp_dp2wdma_pd;
+wire skid_pdp_dp2wdma_ready_ff;
+wire pipe_skid_pdp_dp2wdma_ready_ff;
+wire dp2wdma_vld;
+wire [8-1:0] dp2wdma_pd;
+// Code
+// SKID READY
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+   if (!nvdla_core_rstn) begin
+       pdp_dp2wdma_ready_ff <= 1'b1;
+       skid_flop_pdp_dp2wdma_ready_ff <= 1'b1;
+   end else begin
+       pdp_dp2wdma_ready_ff <= skid_pdp_dp2wdma_ready_ff;
+       skid_flop_pdp_dp2wdma_ready_ff <= skid_pdp_dp2wdma_ready_ff;
+   end
+end
+
+// SKID VALID
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+    if (!nvdla_core_rstn) begin
+        skid_flop_pdp_dp2wdma_valid <= 1'b0;
+    end else begin
+        if (skid_flop_pdp_dp2wdma_ready_ff) begin
+            skid_flop_pdp_dp2wdma_valid <= pdp_dp2wdma_valid;
+        end
+   end
+end
+assign skid_pdp_dp2wdma_valid = (skid_flop_pdp_dp2wdma_ready_ff) ? pdp_dp2wdma_valid : skid_flop_pdp_dp2wdma_valid;
+
+// SKID DATA
+always @(posedge nvdla_core_clk) begin
+    if (skid_flop_pdp_dp2wdma_ready_ff & pdp_dp2wdma_valid) begin
+        skid_flop_pdp_dp2wdma_pd[8-1:0] <= pdp_dp2wdma_pd[8-1:0];
+    end
+end
+assign skid_pdp_dp2wdma_pd[8-1:0] = (skid_flop_pdp_dp2wdma_ready_ff) ? pdp_dp2wdma_pd[8-1:0] : skid_flop_pdp_dp2wdma_pd[8-1:0];
+
+
+// PIPE READY
+assign skid_pdp_dp2wdma_ready_ff = pipe_skid_pdp_dp2wdma_ready_ff || !pipe_skid_pdp_dp2wdma_valid;
+
+// PIPE VALID
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+    if (!nvdla_core_rstn) begin
+        pipe_skid_pdp_dp2wdma_valid <= 1'b0;
+    end else begin
+        if (skid_pdp_dp2wdma_ready_ff) begin
+            pipe_skid_pdp_dp2wdma_valid <= skid_pdp_dp2wdma_valid;
+        end
+    end
+end
+
+// PIPE DATA
+always @(posedge nvdla_core_clk) begin
+    if (skid_pdp_dp2wdma_ready_ff && skid_pdp_dp2wdma_valid) begin
+        pipe_skid_pdp_dp2wdma_pd[8-1:0] <= skid_pdp_dp2wdma_pd[8-1:0];
+    end
+end
+
+
+// PIPE OUTPUT
+assign pipe_skid_pdp_dp2wdma_ready_ff = dp2wdma_rdy;
+assign dp2wdma_vld = pipe_skid_pdp_dp2wdma_valid;
+assign dp2wdma_pd = pipe_skid_pdp_dp2wdma_pd;
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 assign pdp_dp2wdma_ready = pdp_dp2wdma_ready_ff;
 //==============
 // Instance CMD
@@ -298,6 +410,41 @@ NV_NVDLA_PDP_WDMA_dat u_dat (
 //: );
 //: }
 //: }
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+
+,.dat0_fifo0_rd_pd (dat0_fifo0_rd_pd )
+,.dat0_fifo0_rd_prdy (dat0_fifo0_rd_prdy )
+,.dat0_fifo0_rd_pvld (dat0_fifo0_rd_pvld )
+
+,.dat0_fifo1_rd_pd (dat0_fifo1_rd_pd )
+,.dat0_fifo1_rd_prdy (dat0_fifo1_rd_prdy )
+,.dat0_fifo1_rd_pvld (dat0_fifo1_rd_pvld )
+
+,.dat0_fifo2_rd_pd (dat0_fifo2_rd_pd )
+,.dat0_fifo2_rd_prdy (dat0_fifo2_rd_prdy )
+,.dat0_fifo2_rd_pvld (dat0_fifo2_rd_pvld )
+
+,.dat0_fifo3_rd_pd (dat0_fifo3_rd_pd )
+,.dat0_fifo3_rd_prdy (dat0_fifo3_rd_prdy )
+,.dat0_fifo3_rd_pvld (dat0_fifo3_rd_pvld )
+
+,.dat0_fifo4_rd_pd (dat0_fifo4_rd_pd )
+,.dat0_fifo4_rd_prdy (dat0_fifo4_rd_prdy )
+,.dat0_fifo4_rd_pvld (dat0_fifo4_rd_pvld )
+
+,.dat0_fifo5_rd_pd (dat0_fifo5_rd_pd )
+,.dat0_fifo5_rd_prdy (dat0_fifo5_rd_prdy )
+,.dat0_fifo5_rd_pvld (dat0_fifo5_rd_pvld )
+
+,.dat0_fifo6_rd_pd (dat0_fifo6_rd_pd )
+,.dat0_fifo6_rd_prdy (dat0_fifo6_rd_prdy )
+,.dat0_fifo6_rd_pvld (dat0_fifo6_rd_pvld )
+
+,.dat0_fifo7_rd_pd (dat0_fifo7_rd_pd )
+,.dat0_fifo7_rd_prdy (dat0_fifo7_rd_prdy )
+,.dat0_fifo7_rd_pvld (dat0_fifo7_rd_pvld )
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
   ,.wdma_done (wdma_done)
   ,.op_load (op_load)
   );
@@ -367,6 +514,60 @@ NV_NVDLA_PDP_WDMA_dat u_dat (
 //: print qq(
 //: end
 //: );
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+reg  [1-1:0] atomm_invld; 
+
+always @(*) begin
+case (reg_lenb)
+
+5'd0: dat0_fifo_rd_pvld = dat0_fifo0_rd_pvld;
+
+5'd1: dat0_fifo_rd_pvld = dat0_fifo1_rd_pvld;
+
+5'd2: dat0_fifo_rd_pvld = dat0_fifo2_rd_pvld;
+
+5'd3: dat0_fifo_rd_pvld = dat0_fifo3_rd_pvld;
+
+5'd4: dat0_fifo_rd_pvld = dat0_fifo4_rd_pvld;
+
+5'd5: dat0_fifo_rd_pvld = dat0_fifo5_rd_pvld;
+
+5'd6: dat0_fifo_rd_pvld = dat0_fifo6_rd_pvld;
+
+5'd7: dat0_fifo_rd_pvld = dat0_fifo7_rd_pvld;
+
+//VCS coverage off
+default : begin
+dat0_fifo_rd_pvld = {1{`x_or_0}};
+end
+//VCS coverage on
+endcase
+end
+
+assign dat0_fifo0_rd_prdy = (atomm_invld[0] & is_last_beat)? 1'b0 : (dat_rdy & dat_fifo_rd_last_pvld);
+
+assign dat0_fifo1_rd_prdy = (atomm_invld[0] & is_last_beat)? 1'b0 : (dat_rdy & dat_fifo_rd_last_pvld);
+
+assign dat0_fifo2_rd_prdy = (atomm_invld[0] & is_last_beat)? 1'b0 : (dat_rdy & dat_fifo_rd_last_pvld);
+
+assign dat0_fifo3_rd_prdy = (atomm_invld[0] & is_last_beat)? 1'b0 : (dat_rdy & dat_fifo_rd_last_pvld);
+
+assign dat0_fifo4_rd_prdy = (atomm_invld[0] & is_last_beat)? 1'b0 : (dat_rdy & dat_fifo_rd_last_pvld);
+
+assign dat0_fifo5_rd_prdy = (atomm_invld[0] & is_last_beat)? 1'b0 : (dat_rdy & dat_fifo_rd_last_pvld);
+
+assign dat0_fifo6_rd_prdy = (atomm_invld[0] & is_last_beat)? 1'b0 : (dat_rdy & dat_fifo_rd_last_pvld);
+
+assign dat0_fifo7_rd_prdy = (atomm_invld[0] & is_last_beat)? 1'b0 : (dat_rdy & dat_fifo_rd_last_pvld);
+
+always @(*) begin
+
+atomm_invld[0] = 1'b0;
+dat_fifo_rd_last_pvld = dat0_fifo_rd_pvld;
+
+end
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 // assign is_size_odd = (reg_size[0]==0);
 // assign dat0_fifo0_rd_prdy = dat_rdy & dat_fifo_rd_last_pvld;
 // assign dat0_fifo1_rd_prdy = dat_rdy & dat_fifo_rd_last_pvld;
@@ -404,6 +605,11 @@ NV_NVDLA_PDP_WDMA_dat u_dat (
 //: }
 //: }
 //: print "dat0_data}; \n";
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+assign dat0_data = { dat0_fifo7_rd_pd, dat0_fifo6_rd_pd, dat0_fifo5_rd_pd, dat0_fifo4_rd_pd, dat0_fifo3_rd_pd, dat0_fifo2_rd_pd, dat0_fifo1_rd_pd, dat0_fifo0_rd_pd}; 
+assign dat_data = { dat0_data}; 
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 //==============
 // output NaN counter
 //==============
@@ -608,6 +814,9 @@ always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
 //: my $pdpbw = 1*8;
 //: my $Bnum = int($atomicm/$pdpbw);
 //: print "reg_lenb <= ${Bnum} - 1;";
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+reg_lenb <= 8 - 1;
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 //reg_lenb <= cmd_fifo_rd_lenb;
   end
   end
@@ -648,6 +857,10 @@ always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
     end else if (dat_accept) begin
 //: my $Wnum= 64/8/8;
 //: print "    count_w <= count_w + ${Wnum};   \n";
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+    count_w <= count_w + 1;   
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
     end
   end
 end
@@ -665,6 +878,11 @@ end
 //: assign is_last_beat = (count_w==reg_size || count_w==reg_size-1 || count_w==reg_size-2 || count_w==reg_size-3);
 //: );
 //: }
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+
+assign is_last_beat = (count_w==reg_size);
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
   if (!nvdla_core_rstn) begin
     cmd_en <= 1'b1;
@@ -764,6 +982,10 @@ end
 //: print "                          ((cmd_fifo_rd_size_use[1:0]==2'b01) && is_last_beat) ? 4'b0011 :  \n";
 //: print "                          ((cmd_fifo_rd_size_use[1:0]==2'b10) && is_last_beat) ? 4'b0111 : 4'b1111;  \n";
 //: }
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+ assign dma_wr_dat_mask = 2'b1;  
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 // PKT_PACK_WIRE( dma_write_data , dma_wr_dat_ , dma_wr_dat_pd )
 assign dma_wr_dat_pd[64 -1:0] = dma_wr_dat_data[64 -1:0];
 assign dma_wr_dat_pd[64 +(64/8/8)-1:64] = dma_wr_dat_mask[(64/8/8)-1:0];

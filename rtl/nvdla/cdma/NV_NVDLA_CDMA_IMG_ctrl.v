@@ -100,6 +100,12 @@ output [3:0] pixel_planar0_bundle_limit_1st;
 //: output [${atmmbw}-1:0] pixel_planar0_byte_sft;
 //: output [${atmmbw}-1:0] pixel_planar1_byte_sft;
 //: );
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+
+output [3-1:0] pixel_planar0_byte_sft;
+output [3-1:0] pixel_planar1_byte_sft;
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 output [3:0] pixel_planar0_lp_burst;
 output pixel_planar0_lp_vld;
 output [3:0] pixel_planar0_rp_burst;
@@ -225,6 +231,15 @@ wire pixel_early_end_w;
 //: reg [${atmmbw}-1:0] pixel_planar0_byte_sft;
 //: reg [${atmmbw}-1:0] pixel_planar1_byte_sft;
 //: );
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+
+wire [3-1:0] pixel_element_sft_w ;
+wire [3-1:0] pixel_planar0_byte_sft_w;
+wire [3-1:0] pixel_planar1_byte_sft_w;
+reg [3-1:0] pixel_planar0_byte_sft;
+reg [3-1:0] pixel_planar1_byte_sft;
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 wire [3:0] pixel_planar0_bundle_limit_1st_w;
 wire [3:0] pixel_planar0_bundle_limit_w;
 wire [13:0] pixel_planar0_burst_need_w;
@@ -251,6 +266,12 @@ wire [1:0] pixel_planar1_total_burst_w;
 //: wire [${dmaif_bw}-1:0] pixel_planar1_total_width_w;
 //: wire [${dmaif_bw}-1:0] mon_pixel_planar1_tail_width_w;
 //: );
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+
+wire [3-1:0] pixel_planar1_total_width_w;
+wire [3-1:0] mon_pixel_planar1_tail_width_w;
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 wire [13:0] pixel_planar1_width_burst_w;
 wire [4:0] pixel_planar1_x_offset;
 wire [13:0] pixel_store_width;
@@ -301,6 +322,16 @@ always @(*) begin
     end
 end
 //: &eperl::flop("-nodeclare   -rval \"IMG_STATE_IDLE\"   -d \"nxt_state\" -q cur_state");
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+   if (!nvdla_core_rstn) begin
+       cur_state <= IMG_STATE_IDLE;
+   end else begin
+       cur_state <= nxt_state;
+   end
+end
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 ////////////////////////////////////////////////////////////////////////
 // FSM output signals //
 ////////////////////////////////////////////////////////////////////////
@@ -316,6 +347,23 @@ assign img2status_state_w = (nxt_state == IMG_STATE_PEND) ? 1 :
 assign is_first_running = is_running & ~is_running_d1;
 //: &eperl::flop("-nodeclare   -rval \"0\"   -d \"img2status_state_w\" -q img2status_state");
 //: &eperl::flop("-nodeclare   -rval \"1'b0\"   -d \"is_running\" -q is_running_d1");
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+   if (!nvdla_core_rstn) begin
+       img2status_state <= 'b0;
+   end else begin
+       img2status_state <= img2status_state_w;
+   end
+end
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+   if (!nvdla_core_rstn) begin
+       is_running_d1 <= 1'b0;
+   end else begin
+       is_running_d1 <= is_running;
+   end
+end
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 ////////////////////////////////////////////////////////////////////////
 // registers to keep last layer status //
 ////////////////////////////////////////////////////////////////////////
@@ -326,6 +374,65 @@ assign pending_req_end = pending_req_d1 & ~pending_req;
 //: &eperl::flop("-nodeclare -clk nvdla_core_ng_clk  -rval \"1'b0\"  -en \"reg2dp_op_en & is_idle\" -d \"img_en & reg2dp_skip_data_rls\" -q last_skip_data_rls");
 //: &eperl::flop("-nodeclare -clk nvdla_core_ng_clk  -rval \"1'b0\"   -d \"sc2cdma_dat_pending_req\" -q pending_req");
 //: &eperl::flop("-nodeclare -clk nvdla_core_ng_clk  -rval \"1'b0\"   -d \"pending_req\" -q pending_req_d1");
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+always @(posedge nvdla_core_ng_clk or negedge nvdla_core_rstn) begin
+   if (!nvdla_core_rstn) begin
+       last_img <= 1'b0;
+   end else begin
+       if ((reg2dp_op_en & is_idle) == 1'b1) begin
+           last_img <= img_en;
+       // VCS coverage off
+       end else if ((reg2dp_op_en & is_idle) == 1'b0) begin
+       end else begin
+           last_img <= 'bx;
+       // VCS coverage on
+       end
+   end
+end
+always @(posedge nvdla_core_ng_clk or negedge nvdla_core_rstn) begin
+   if (!nvdla_core_rstn) begin
+       last_data_bank <= {5{1'b1}};
+   end else begin
+       if ((reg2dp_op_en & is_idle) == 1'b1) begin
+           last_data_bank <= reg2dp_data_bank;
+       // VCS coverage off
+       end else if ((reg2dp_op_en & is_idle) == 1'b0) begin
+       end else begin
+           last_data_bank <= 'bx;
+       // VCS coverage on
+       end
+   end
+end
+always @(posedge nvdla_core_ng_clk or negedge nvdla_core_rstn) begin
+   if (!nvdla_core_rstn) begin
+       last_skip_data_rls <= 1'b0;
+   end else begin
+       if ((reg2dp_op_en & is_idle) == 1'b1) begin
+           last_skip_data_rls <= img_en & reg2dp_skip_data_rls;
+       // VCS coverage off
+       end else if ((reg2dp_op_en & is_idle) == 1'b0) begin
+       end else begin
+           last_skip_data_rls <= 'bx;
+       // VCS coverage on
+       end
+   end
+end
+always @(posedge nvdla_core_ng_clk or negedge nvdla_core_rstn) begin
+   if (!nvdla_core_rstn) begin
+       pending_req <= 1'b0;
+   end else begin
+       pending_req <= sc2cdma_dat_pending_req;
+   end
+end
+always @(posedge nvdla_core_ng_clk or negedge nvdla_core_rstn) begin
+   if (!nvdla_core_rstn) begin
+       pending_req_d1 <= 1'b0;
+   end else begin
+       pending_req_d1 <= pending_req;
+   end
+end
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 ////////////////////////////////////////////////////////////////////////
 // SLCG control signal //
 ////////////////////////////////////////////////////////////////////////
@@ -334,6 +441,30 @@ assign slcg_img_gate_w = {2{~slcg_img_en_w}};
 //: &eperl::flop("-nodeclare -clk nvdla_core_ng_clk  -rval \"{2{1'b1}}\"   -d \"slcg_img_gate_w\" -q slcg_img_gate_d1");
 //: &eperl::flop("-nodeclare -clk nvdla_core_ng_clk  -rval \"{2{1'b1}}\"   -d \"slcg_img_gate_d1\" -q slcg_img_gate_d2");
 //: &eperl::flop("-nodeclare -clk nvdla_core_ng_clk  -rval \"{2{1'b1}}\"   -d \"slcg_img_gate_d2\" -q slcg_img_gate_d3");
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+always @(posedge nvdla_core_ng_clk or negedge nvdla_core_rstn) begin
+   if (!nvdla_core_rstn) begin
+       slcg_img_gate_d1 <= {2{1'b1}};
+   end else begin
+       slcg_img_gate_d1 <= slcg_img_gate_w;
+   end
+end
+always @(posedge nvdla_core_ng_clk or negedge nvdla_core_rstn) begin
+   if (!nvdla_core_rstn) begin
+       slcg_img_gate_d2 <= {2{1'b1}};
+   end else begin
+       slcg_img_gate_d2 <= slcg_img_gate_d1;
+   end
+end
+always @(posedge nvdla_core_ng_clk or negedge nvdla_core_rstn) begin
+   if (!nvdla_core_rstn) begin
+       slcg_img_gate_d3 <= {2{1'b1}};
+   end else begin
+       slcg_img_gate_d3 <= slcg_img_gate_d2;
+   end
+end
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 assign slcg_img_gate_dc = slcg_img_gate_d3[0];
 assign slcg_img_gate_wg = slcg_img_gate_d3[1];
 //================ Non-SLCG clock domain end ================//
@@ -352,6 +483,23 @@ assign is_dc = (reg2dp_conv_mode == 1'h0 );
 assign is_pixel = (reg2dp_datain_format == 1'h1 );
 assign img_en = reg2dp_op_en & is_dc & is_pixel;
 //: &eperl::flop("-nodeclare   -rval \"{5{1'b0}}\"  -en \"img_end | is_done\" -d \"delay_cnt_w\" -q delay_cnt");
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+   if (!nvdla_core_rstn) begin
+       delay_cnt <= {5{1'b0}};
+   end else begin
+       if ((img_end | is_done) == 1'b1) begin
+           delay_cnt <= delay_cnt_w;
+       // VCS coverage off
+       end else if ((img_end | is_done) == 1'b0) begin
+       end else begin
+           delay_cnt <= 'bx;
+       // VCS coverage on
+       end
+   end
+end
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 ////////////////////////////////////////////////////////////////////////
 // pixel format parser //
 ////////////////////////////////////////////////////////////////////////
@@ -478,6 +626,14 @@ assign byte_per_pixel = ~(|pixel_precision_nxt) ? 3'h3 : 3'h6;
 //: assign {pixel_planar1_tail_width_w,
 //: mon_pixel_planar1_tail_width_w} = pixel_planar1_total_width_w * byte_per_pixel + {${dmaif_bw}{1'b1}};
 //: );
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+
+assign {mon_pixel_planar1_total_width_w,
+pixel_planar1_total_width_w} = reg2dp_pad_left + reg2dp_datain_width[3-1:0] + reg2dp_pad_right + 1;
+assign {pixel_planar1_tail_width_w,
+mon_pixel_planar1_tail_width_w} = pixel_planar1_total_width_w * byte_per_pixel + {3{1'b1}};
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 /////////////////////////////
 //: my $dmaif = 64/8;
 //: my $atmm = 8;
@@ -495,6 +651,11 @@ assign byte_per_pixel = ~(|pixel_precision_nxt) ? 3'h3 : 3'h6;
 //: );
 //: } elsif($dmaif/$atmm == 4 ) {
 //: }
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+
+assign pixel_early_end_w = pixel_planar_nxt & ((pixel_planar1_tail_width_w==3'd1) | (pixel_planar1_tail_width_w==3'd4) | ((pixel_planar1_tail_width_w==3'd2) & {pixel_planar1_total_width_w,1'b0} > 8) );
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 ////////////////////////////////////////////////
 ////////////////////////////////////////////////
 // assign {mon_pixel_element_sft_w,
@@ -513,6 +674,16 @@ assign byte_per_pixel = ~(|pixel_precision_nxt) ? 3'h3 : 3'h6;
 //: assign {mon_pixel_planar1_byte_sft_w[2:0],
 //: pixel_planar1_byte_sft_w} = {pixel_element_sft_w, ${atmmbw}'b0} >> pixel_planar1_sft_nxt;
 //: );
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+
+assign {mon_pixel_element_sft_w,
+pixel_element_sft_w} = (reg2dp_pixel_x_offset - {2'd0,reg2dp_pad_left[3-1:0]});
+assign {mon_pixel_planar0_byte_sft_w[2:0],
+pixel_planar0_byte_sft_w} = {pixel_element_sft_w, 3'b0} >> pixel_planar0_sft_nxt;
+assign {mon_pixel_planar1_byte_sft_w[2:0],
+pixel_planar1_byte_sft_w} = {pixel_element_sft_w, 3'b0} >> pixel_planar1_sft_nxt;
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 assign pixel_planar0_bundle_limit_w = 4'h8;
 assign pixel_planar0_bundle_limit_1st_w = 4'h9;
 assign pixel_planar1_bundle_limit_w = 5'h10;
@@ -550,6 +721,387 @@ assign pixel_planar1_rp_vld_w = (|pixel_planar1_rp_burst_w);
 //: &eperl::flop("-nodeclare   -rval \"{5{1'b0}}\"  -en \"layer_st & planar1_vld_w\" -d \"pixel_planar1_bundle_limit_w\" -q pixel_planar1_bundle_limit");
 //: &eperl::flop("-nodeclare   -rval \"{4{1'b0}}\"  -en \"layer_st\" -d \"pixel_planar0_bundle_limit_1st_w\" -q pixel_planar0_bundle_limit_1st");
 //: &eperl::flop("-nodeclare   -rval \"{5{1'b0}}\"  -en \"layer_st & planar1_vld_w\" -d \"pixel_planar1_bundle_limit_1st_w\" -q pixel_planar1_bundle_limit_1st");
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+   if (!nvdla_core_rstn) begin
+       pixel_planar <= 1'b0;
+   end else begin
+       if ((layer_st) == 1'b1) begin
+           pixel_planar <= pixel_planar_nxt;
+       // VCS coverage off
+       end else if ((layer_st) == 1'b0) begin
+       end else begin
+           pixel_planar <= 'bx;
+       // VCS coverage on
+       end
+   end
+end
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+   if (!nvdla_core_rstn) begin
+       pixel_precision <= {2{1'b0}};
+   end else begin
+       if ((layer_st) == 1'b1) begin
+           pixel_precision <= pixel_precision_nxt;
+       // VCS coverage off
+       end else if ((layer_st) == 1'b0) begin
+       end else begin
+           pixel_precision <= 'bx;
+       // VCS coverage on
+       end
+   end
+end
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+   if (!nvdla_core_rstn) begin
+       pixel_order <= {11{1'b0}};
+   end else begin
+       if ((layer_st) == 1'b1) begin
+           pixel_order <= pixel_order_nxt;
+       // VCS coverage off
+       end else if ((layer_st) == 1'b0) begin
+       end else begin
+           pixel_order <= 'bx;
+       // VCS coverage on
+       end
+   end
+end
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+   if (!nvdla_core_rstn) begin
+       pixel_packed_10b <= 1'b0;
+   end else begin
+       if ((layer_st) == 1'b1) begin
+           pixel_packed_10b <= pixel_packed_10b_nxt;
+       // VCS coverage off
+       end else if ((layer_st) == 1'b0) begin
+       end else begin
+           pixel_packed_10b <= 'bx;
+       // VCS coverage on
+       end
+   end
+end
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+   if (!nvdla_core_rstn) begin
+       pixel_data_expand <= 1'b0;
+   end else begin
+       if ((layer_st) == 1'b1) begin
+           pixel_data_expand <= pixel_data_expand_nxt;
+       // VCS coverage off
+       end else if ((layer_st) == 1'b0) begin
+       end else begin
+           pixel_data_expand <= 'bx;
+       // VCS coverage on
+       end
+   end
+end
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+   if (!nvdla_core_rstn) begin
+       pixel_data_shrink <= 1'b0;
+   end else begin
+       if ((layer_st) == 1'b1) begin
+           pixel_data_shrink <= pixel_data_shrink_nxt;
+       // VCS coverage off
+       end else if ((layer_st) == 1'b0) begin
+       end else begin
+           pixel_data_shrink <= 'bx;
+       // VCS coverage on
+       end
+   end
+end
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+   if (!nvdla_core_rstn) begin
+       pixel_uint <= 1'b0;
+   end else begin
+       if ((layer_st) == 1'b1) begin
+           pixel_uint <= pixel_uint_nxt;
+       // VCS coverage off
+       end else if ((layer_st) == 1'b0) begin
+       end else begin
+           pixel_uint <= 'bx;
+       // VCS coverage on
+       end
+   end
+end
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+   if (!nvdla_core_rstn) begin
+       pixel_planar0_sft <= {3{1'b0}};
+   end else begin
+       if ((layer_st) == 1'b1) begin
+           pixel_planar0_sft <= pixel_planar0_sft_nxt;
+       // VCS coverage off
+       end else if ((layer_st) == 1'b0) begin
+       end else begin
+           pixel_planar0_sft <= 'bx;
+       // VCS coverage on
+       end
+   end
+end
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+   if (!nvdla_core_rstn) begin
+       pixel_planar1_sft <= {3{1'b0}};
+   end else begin
+       if ((layer_st & planar1_vld_w) == 1'b1) begin
+           pixel_planar1_sft <= pixel_planar1_sft_nxt;
+       // VCS coverage off
+       end else if ((layer_st & planar1_vld_w) == 1'b0) begin
+       end else begin
+           pixel_planar1_sft <= 'bx;
+       // VCS coverage on
+       end
+   end
+end
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+   if (!nvdla_core_rstn) begin
+       pixel_planar0_lp_burst <= {4{1'b0}};
+   end else begin
+       if ((layer_st) == 1'b1) begin
+           pixel_planar0_lp_burst <= pixel_planar0_lp_burst_w;
+       // VCS coverage off
+       end else if ((layer_st) == 1'b0) begin
+       end else begin
+           pixel_planar0_lp_burst <= 'bx;
+       // VCS coverage on
+       end
+   end
+end
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+   if (!nvdla_core_rstn) begin
+       pixel_planar1_lp_burst <= {3{1'b0}};
+   end else begin
+       if ((layer_st & planar1_vld_w) == 1'b1) begin
+           pixel_planar1_lp_burst <= pixel_planar1_lp_burst_w;
+       // VCS coverage off
+       end else if ((layer_st & planar1_vld_w) == 1'b0) begin
+       end else begin
+           pixel_planar1_lp_burst <= 'bx;
+       // VCS coverage on
+       end
+   end
+end
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+   if (!nvdla_core_rstn) begin
+       pixel_planar0_lp_vld <= 1'b0;
+   end else begin
+       if ((layer_st) == 1'b1) begin
+           pixel_planar0_lp_vld <= pixel_planar0_lp_vld_w;
+       // VCS coverage off
+       end else if ((layer_st) == 1'b0) begin
+       end else begin
+           pixel_planar0_lp_vld <= 'bx;
+       // VCS coverage on
+       end
+   end
+end
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+   if (!nvdla_core_rstn) begin
+       pixel_planar1_lp_vld <= 1'b0;
+   end else begin
+       if ((layer_st & planar1_vld_w) == 1'b1) begin
+           pixel_planar1_lp_vld <= pixel_planar1_lp_vld_w;
+       // VCS coverage off
+       end else if ((layer_st & planar1_vld_w) == 1'b0) begin
+       end else begin
+           pixel_planar1_lp_vld <= 'bx;
+       // VCS coverage on
+       end
+   end
+end
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+   if (!nvdla_core_rstn) begin
+       pixel_planar0_width_burst <= {14{1'b0}};
+   end else begin
+       if ((layer_st) == 1'b1) begin
+           pixel_planar0_width_burst <= pixel_planar0_width_burst_w;
+       // VCS coverage off
+       end else if ((layer_st) == 1'b0) begin
+       end else begin
+           pixel_planar0_width_burst <= 'bx;
+       // VCS coverage on
+       end
+   end
+end
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+   if (!nvdla_core_rstn) begin
+       pixel_planar1_width_burst <= {14{1'b0}};
+   end else begin
+       if ((layer_st & planar1_vld_w) == 1'b1) begin
+           pixel_planar1_width_burst <= pixel_planar1_width_burst_w;
+       // VCS coverage off
+       end else if ((layer_st & planar1_vld_w) == 1'b0) begin
+       end else begin
+           pixel_planar1_width_burst <= 'bx;
+       // VCS coverage on
+       end
+   end
+end
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+   if (!nvdla_core_rstn) begin
+       pixel_planar0_rp_burst <= {4{1'b0}};
+   end else begin
+       if ((layer_st) == 1'b1) begin
+           pixel_planar0_rp_burst <= pixel_planar0_rp_burst_w;
+       // VCS coverage off
+       end else if ((layer_st) == 1'b0) begin
+       end else begin
+           pixel_planar0_rp_burst <= 'bx;
+       // VCS coverage on
+       end
+   end
+end
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+   if (!nvdla_core_rstn) begin
+       pixel_planar1_rp_burst <= {3{1'b0}};
+   end else begin
+       if ((layer_st & planar1_vld_w) == 1'b1) begin
+           pixel_planar1_rp_burst <= pixel_planar1_rp_burst_w;
+       // VCS coverage off
+       end else if ((layer_st & planar1_vld_w) == 1'b0) begin
+       end else begin
+           pixel_planar1_rp_burst <= 'bx;
+       // VCS coverage on
+       end
+   end
+end
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+   if (!nvdla_core_rstn) begin
+       pixel_planar0_rp_vld <= 1'b0;
+   end else begin
+       if ((layer_st) == 1'b1) begin
+           pixel_planar0_rp_vld <= pixel_planar0_rp_vld_w;
+       // VCS coverage off
+       end else if ((layer_st) == 1'b0) begin
+       end else begin
+           pixel_planar0_rp_vld <= 'bx;
+       // VCS coverage on
+       end
+   end
+end
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+   if (!nvdla_core_rstn) begin
+       pixel_planar1_rp_vld <= 1'b0;
+   end else begin
+       if ((layer_st & planar1_vld_w) == 1'b1) begin
+           pixel_planar1_rp_vld <= pixel_planar1_rp_vld_w;
+       // VCS coverage off
+       end else if ((layer_st & planar1_vld_w) == 1'b0) begin
+       end else begin
+           pixel_planar1_rp_vld <= 'bx;
+       // VCS coverage on
+       end
+   end
+end
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+   if (!nvdla_core_rstn) begin
+       pixel_early_end <= 1'b0;
+   end else begin
+       if ((layer_st & planar1_vld_w) == 1'b1) begin
+           pixel_early_end <= pixel_early_end_w;
+       // VCS coverage off
+       end else if ((layer_st & planar1_vld_w) == 1'b0) begin
+       end else begin
+           pixel_early_end <= 'bx;
+       // VCS coverage on
+       end
+   end
+end
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+   if (!nvdla_core_rstn) begin
+       pixel_planar0_byte_sft <= {3{1'b0}};
+   end else begin
+       if ((layer_st) == 1'b1) begin
+           pixel_planar0_byte_sft <= pixel_planar0_byte_sft_w;
+       // VCS coverage off
+       end else if ((layer_st) == 1'b0) begin
+       end else begin
+           pixel_planar0_byte_sft <= 'bx;
+       // VCS coverage on
+       end
+   end
+end
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+   if (!nvdla_core_rstn) begin
+       pixel_planar1_byte_sft <= {3{1'b0}};
+   end else begin
+       if ((layer_st & planar1_vld_w) == 1'b1) begin
+           pixel_planar1_byte_sft <= pixel_planar1_byte_sft_w;
+       // VCS coverage off
+       end else if ((layer_st & planar1_vld_w) == 1'b0) begin
+       end else begin
+           pixel_planar1_byte_sft <= 'bx;
+       // VCS coverage on
+       end
+   end
+end
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+   if (!nvdla_core_rstn) begin
+       pixel_bank <= {6{1'b0}};
+   end else begin
+       if ((layer_st) == 1'b1) begin
+           pixel_bank <= reg2dp_data_bank + 1'b1;
+       // VCS coverage off
+       end else if ((layer_st) == 1'b0) begin
+       end else begin
+           pixel_bank <= 'bx;
+       // VCS coverage on
+       end
+   end
+end
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+   if (!nvdla_core_rstn) begin
+       pixel_planar0_bundle_limit <= {4{1'b0}};
+   end else begin
+       if ((layer_st) == 1'b1) begin
+           pixel_planar0_bundle_limit <= pixel_planar0_bundle_limit_w;
+       // VCS coverage off
+       end else if ((layer_st) == 1'b0) begin
+       end else begin
+           pixel_planar0_bundle_limit <= 'bx;
+       // VCS coverage on
+       end
+   end
+end
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+   if (!nvdla_core_rstn) begin
+       pixel_planar1_bundle_limit <= {5{1'b0}};
+   end else begin
+       if ((layer_st & planar1_vld_w) == 1'b1) begin
+           pixel_planar1_bundle_limit <= pixel_planar1_bundle_limit_w;
+       // VCS coverage off
+       end else if ((layer_st & planar1_vld_w) == 1'b0) begin
+       end else begin
+           pixel_planar1_bundle_limit <= 'bx;
+       // VCS coverage on
+       end
+   end
+end
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+   if (!nvdla_core_rstn) begin
+       pixel_planar0_bundle_limit_1st <= {4{1'b0}};
+   end else begin
+       if ((layer_st) == 1'b1) begin
+           pixel_planar0_bundle_limit_1st <= pixel_planar0_bundle_limit_1st_w;
+       // VCS coverage off
+       end else if ((layer_st) == 1'b0) begin
+       end else begin
+           pixel_planar0_bundle_limit_1st <= 'bx;
+       // VCS coverage on
+       end
+   end
+end
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+   if (!nvdla_core_rstn) begin
+       pixel_planar1_bundle_limit_1st <= {5{1'b0}};
+   end else begin
+       if ((layer_st & planar1_vld_w) == 1'b1) begin
+           pixel_planar1_bundle_limit_1st <= pixel_planar1_bundle_limit_1st_w;
+       // VCS coverage off
+       end else if ((layer_st & planar1_vld_w) == 1'b0) begin
+       end else begin
+           pixel_planar1_bundle_limit_1st <= 'bx;
+       // VCS coverage on
+       end
+   end
+end
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 //////////////////////////////////////////////////////////////
 ///// functional point                                   /////
 //////////////////////////////////////////////////////////////

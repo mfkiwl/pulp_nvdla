@@ -75,6 +75,10 @@ input nvdla_core_rstn;
 //: );
 //: );
 //: }
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 assign cvt_in_prdy = cvt_in_prdy_0;
 assign cvt_out_pvld = cvt_out_pvld_0;
 endmodule // NV_NVDLA_SDP_HLS_Y_cvt_top

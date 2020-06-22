@@ -76,6 +76,13 @@ module NV_NVDLA_CDMA_IMG_sg (
 //: ,img2sbuf_p${i}_wr_en
 //: );
 //: }
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+
+,img2sbuf_p0_wr_addr
+,img2sbuf_p0_wr_data
+,img2sbuf_p0_wr_en
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
   ,img_dat2mcif_rd_req_pd
   ,img_dat2mcif_rd_req_valid
   ,mcif2img_dat_rd_rsp_ready
@@ -114,6 +121,12 @@ input [3:0] pixel_planar0_bundle_limit_1st;
 //: input [${atmmbw}-1:0] pixel_planar0_byte_sft;
 //: input [${atmmbw}-1:0] pixel_planar1_byte_sft;
 //: );
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+
+input [3-1:0] pixel_planar0_byte_sft;
+input [3-1:0] pixel_planar1_byte_sft;
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 input [3:0] pixel_planar0_lp_burst;
 input pixel_planar0_lp_vld;
 input [3:0] pixel_planar0_rp_burst;
@@ -141,6 +154,13 @@ input status2dma_fsm_switch;
 //: output img2sbuf_p${i}_wr_en;
 //: );
 //: }
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+
+output [7:0] img2sbuf_p0_wr_addr;
+output [64-1:0] img2sbuf_p0_wr_data;
+output img2sbuf_p0_wr_en;
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 output [14:0] sg2pack_data_entries;
 output [14:0] sg2pack_entry_end;
 output [14:0] sg2pack_entry_mid;
@@ -469,6 +489,11 @@ wire [10:0] rsp_img_sel;
 //: print qq(
 //: wire [${atmmbw}-1:0] rsp_img_sft;
 //: );
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+
+wire [3-1:0] rsp_img_sft;
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 wire rsp_img_vld_w;
 wire sg2pack_img_layer_end;
 wire sg2pack_img_line_end;
@@ -502,6 +527,72 @@ assign is_first_running = is_running & ~is_running_d1;
 //: &eperl::flop("-nodeclare   -rval \"{14{1'b0}}\"  -en \"layer_st\" -d \"data_height_w\" -q data_height");
 //: &eperl::flop("-nodeclare   -rval \"{13{1'b0}}\"  -en \"layer_st\" -d \"reg2dp_datain_height\" -q height_cnt_total");
 //: &eperl::flop("-nodeclare   -rval \"{15{1'b0}}\"  -en \"layer_st\" -d \"data_entries_w\" -q data_entries");
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+   if (!nvdla_core_rstn) begin
+       is_running_d1 <= 1'b0;
+   end else begin
+       is_running_d1 <= is_running;
+   end
+end
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+   if (!nvdla_core_rstn) begin
+       mn_enable_d1 <= 1'b0;
+   end else begin
+       if ((layer_st) == 1'b1) begin
+           mn_enable_d1 <= mn_enable;
+       // VCS coverage off
+       end else if ((layer_st) == 1'b0) begin
+       end else begin
+           mn_enable_d1 <= 'bx;
+       // VCS coverage on
+       end
+   end
+end
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+   if (!nvdla_core_rstn) begin
+       data_height <= {14{1'b0}};
+   end else begin
+       if ((layer_st) == 1'b1) begin
+           data_height <= data_height_w;
+       // VCS coverage off
+       end else if ((layer_st) == 1'b0) begin
+       end else begin
+           data_height <= 'bx;
+       // VCS coverage on
+       end
+   end
+end
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+   if (!nvdla_core_rstn) begin
+       height_cnt_total <= {13{1'b0}};
+   end else begin
+       if ((layer_st) == 1'b1) begin
+           height_cnt_total <= reg2dp_datain_height;
+       // VCS coverage off
+       end else if ((layer_st) == 1'b0) begin
+       end else begin
+           height_cnt_total <= 'bx;
+       // VCS coverage on
+       end
+   end
+end
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+   if (!nvdla_core_rstn) begin
+       data_entries <= {15{1'b0}};
+   end else begin
+       if ((layer_st) == 1'b1) begin
+           data_entries <= data_entries_w;
+       // VCS coverage off
+       end else if ((layer_st) == 1'b0) begin
+       end else begin
+           data_entries <= 'bx;
+       // VCS coverage on
+       end
+   end
+end
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 ////////////////////////////////////////////////////////////////////////
 // generator preparing parameters //
 ////////////////////////////////////////////////////////////////////////
@@ -521,6 +612,93 @@ assign {mon_pre_entry_end_w, pre_entry_end_w} = sub_h_end_w * data_entries;
 //: &eperl::flop("-nodeclare   -rval \"{15{1'b0}}\"  -en \"is_first_running\" -d \"pre_entry_st_w\"  -q pre_entry_st_d1");
 //: &eperl::flop("-nodeclare   -rval \"{15{1'b0}}\"  -en \"is_first_running\" -d \"data_entries\"    -q pre_entry_mid_d1");
 //: &eperl::flop("-nodeclare   -rval \"{15{1'b0}}\"  -en \"is_first_running\" -d \"pre_entry_end_w\" -q pre_entry_end_d1");
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+   if (!nvdla_core_rstn) begin
+       pre_sub_h_st_d1 <= {4{1'b0}};
+   end else begin
+       if ((is_first_running) == 1'b1) begin
+           pre_sub_h_st_d1 <= sub_h_st_w;
+       // VCS coverage off
+       end else if ((is_first_running) == 1'b0) begin
+       end else begin
+           pre_sub_h_st_d1 <= 'bx;
+       // VCS coverage on
+       end
+   end
+end
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+   if (!nvdla_core_rstn) begin
+       pre_sub_h_mid_d1 <= {4{1'b0}};
+   end else begin
+       if ((is_first_running) == 1'b1) begin
+           pre_sub_h_mid_d1 <= sub_h_mid_w;
+       // VCS coverage off
+       end else if ((is_first_running) == 1'b0) begin
+       end else begin
+           pre_sub_h_mid_d1 <= 'bx;
+       // VCS coverage on
+       end
+   end
+end
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+   if (!nvdla_core_rstn) begin
+       pre_sub_h_end_d1 <= {4{1'b0}};
+   end else begin
+       if ((is_first_running) == 1'b1) begin
+           pre_sub_h_end_d1 <= sub_h_end_w;
+       // VCS coverage off
+       end else if ((is_first_running) == 1'b0) begin
+       end else begin
+           pre_sub_h_end_d1 <= 'bx;
+       // VCS coverage on
+       end
+   end
+end
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+   if (!nvdla_core_rstn) begin
+       pre_entry_st_d1 <= {15{1'b0}};
+   end else begin
+       if ((is_first_running) == 1'b1) begin
+           pre_entry_st_d1 <= pre_entry_st_w;
+       // VCS coverage off
+       end else if ((is_first_running) == 1'b0) begin
+       end else begin
+           pre_entry_st_d1 <= 'bx;
+       // VCS coverage on
+       end
+   end
+end
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+   if (!nvdla_core_rstn) begin
+       pre_entry_mid_d1 <= {15{1'b0}};
+   end else begin
+       if ((is_first_running) == 1'b1) begin
+           pre_entry_mid_d1 <= data_entries;
+       // VCS coverage off
+       end else if ((is_first_running) == 1'b0) begin
+       end else begin
+           pre_entry_mid_d1 <= 'bx;
+       // VCS coverage on
+       end
+   end
+end
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+   if (!nvdla_core_rstn) begin
+       pre_entry_end_d1 <= {15{1'b0}};
+   end else begin
+       if ((is_first_running) == 1'b1) begin
+           pre_entry_end_d1 <= pre_entry_end_w;
+       // VCS coverage off
+       end else if ((is_first_running) == 1'b0) begin
+       end else begin
+           pre_entry_end_d1 <= 'bx;
+       // VCS coverage on
+       end
+   end
+end
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 ////////////////////////////////////////////////////////////////////////
 // request generator for input image //
 ////////////////////////////////////////////////////////////////////////
@@ -533,16 +711,67 @@ assign is_last_height = (req_height_cnt == height_cnt_total);
 assign {mon_req_height_cnt_inc, req_height_cnt_inc} = req_height_cnt + 1'b1;
 assign req_height_cnt_w = is_first_running ? 13'b0 : req_height_cnt_inc;
 //: &eperl::flop("-nodeclare   -rval \"{13{1'b0}}\"  -en \"req_height_en\" -d \"req_height_cnt_w\" -q req_height_cnt");
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+   if (!nvdla_core_rstn) begin
+       req_height_cnt <= {13{1'b0}};
+   end else begin
+       if ((req_height_en) == 1'b1) begin
+           req_height_cnt <= req_height_cnt_w;
+       // VCS coverage off
+       end else if ((req_height_en) == 1'b0) begin
+       end else begin
+           req_height_cnt <= 'bx;
+       // VCS coverage on
+       end
+   end
+end
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 ///////////// image planar count /////////////
 assign is_img_last_planar = (req_img_planar_cnt == pixel_planar);
 assign req_img_planar_cnt_w = (is_first_running | is_img_last_planar) ? 1'b0 : ~req_img_planar_cnt;
 //: &eperl::flop("-nodeclare   -rval \"1'b0\"  -en \"req_img_planar_en\" -d \"req_img_planar_cnt_w\" -q req_img_planar_cnt");
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+   if (!nvdla_core_rstn) begin
+       req_img_planar_cnt <= 1'b0;
+   end else begin
+       if ((req_img_planar_en) == 1'b1) begin
+           req_img_planar_cnt <= req_img_planar_cnt_w;
+       // VCS coverage off
+       end else if ((req_img_planar_en) == 1'b0) begin
+       end else begin
+           req_img_planar_cnt <= 'bx;
+       // VCS coverage on
+       end
+   end
+end
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 ///////////// image planar 0 bundle and burst count /////////////
 assign {mon_req_img_p0_bundle_cnt_w,
         req_img_p0_bundle_cnt_w} = (is_first_running | is_p0_last_burst) ? {1'b0, pixel_planar0_bundle_limit_1st} :
                                   is_p0_bundle_end ? {1'b0, pixel_planar0_bundle_limit} :
                                   req_img_p0_bundle_cnt - req_img_p0_cur_burst;
 //: &eperl::flop("-nodeclare   -rval \"{4{1'b0}}\"  -en \"req_img_p0_burst_en\" -d \"req_img_p0_bundle_cnt_w\" -q req_img_p0_bundle_cnt");
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+   if (!nvdla_core_rstn) begin
+       req_img_p0_bundle_cnt <= {4{1'b0}};
+   end else begin
+       if ((req_img_p0_burst_en) == 1'b1) begin
+           req_img_p0_bundle_cnt <= req_img_p0_bundle_cnt_w;
+       // VCS coverage off
+       end else if ((req_img_p0_burst_en) == 1'b0) begin
+       end else begin
+           req_img_p0_bundle_cnt <= 'bx;
+       // VCS coverage on
+       end
+   end
+end
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 assign req_img_p0_burst_cnt_dec = req_img_p0_burst_cnt - req_img_p0_bundle_cnt;
 assign req_img_p0_cur_burst = req_img_p0_burst_cnt_dec[14] ? req_img_p0_burst_cnt[3:0] : req_img_p0_bundle_cnt;
 assign req_img_p0_burst_cnt_w = ((is_first_running | is_p0_last_burst) & pixel_planar0_lp_vld) ? {{10{1'b0}}, pixel_planar0_lp_burst} :
@@ -563,6 +792,37 @@ assign req_img_p0_burst_size = req_img_p0_cur_burst;
 assign is_p0_req_real = (req_img_p0_sec_cnt == 2'b1);
 //: &eperl::flop("-nodeclare   -rval \"{14{1'b0}}\"  -en \"req_img_p0_burst_en\" -d \"req_img_p0_burst_cnt_w\" -q req_img_p0_burst_cnt");
 //: &eperl::flop("-nodeclare   -rval \"{2{1'b0}}\"  -en \"req_img_p0_sec_en\" -d \"req_img_p0_sec_cnt_w\" -q req_img_p0_sec_cnt");
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+   if (!nvdla_core_rstn) begin
+       req_img_p0_burst_cnt <= {14{1'b0}};
+   end else begin
+       if ((req_img_p0_burst_en) == 1'b1) begin
+           req_img_p0_burst_cnt <= req_img_p0_burst_cnt_w;
+       // VCS coverage off
+       end else if ((req_img_p0_burst_en) == 1'b0) begin
+       end else begin
+           req_img_p0_burst_cnt <= 'bx;
+       // VCS coverage on
+       end
+   end
+end
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+   if (!nvdla_core_rstn) begin
+       req_img_p0_sec_cnt <= {2{1'b0}};
+   end else begin
+       if ((req_img_p0_sec_en) == 1'b1) begin
+           req_img_p0_sec_cnt <= req_img_p0_sec_cnt_w;
+       // VCS coverage off
+       end else if ((req_img_p0_sec_en) == 1'b0) begin
+       end else begin
+           req_img_p0_sec_cnt <= 'bx;
+       // VCS coverage on
+       end
+   end
+end
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 ///////////// image planar 1 bundle and burst count /////////////
 assign {mon_req_img_p1_bundle_cnt_w,
         req_img_p1_bundle_cnt_w} = (is_first_running | is_p1_last_burst) ? {1'b0, pixel_planar1_bundle_limit_1st} :
@@ -590,6 +850,51 @@ assign is_p1_req_real = (req_img_p1_sec_cnt == 2'b1);
 //: &eperl::flop("-nodeclare   -rval \"{5{1'b0}}\"  -en \"req_img_p1_burst_en\" -d \"req_img_p1_bundle_cnt_w\" -q req_img_p1_bundle_cnt");
 //: &eperl::flop("-nodeclare   -rval \"{14{1'b0}}\"  -en \"req_img_p1_burst_en\" -d \"req_img_p1_burst_cnt_w\" -q req_img_p1_burst_cnt");
 //: &eperl::flop("-nodeclare   -rval \"{2{1'b0}}\"  -en \"req_img_p1_sec_en\" -d \"req_img_p1_sec_cnt_w\" -q req_img_p1_sec_cnt");
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+   if (!nvdla_core_rstn) begin
+       req_img_p1_bundle_cnt <= {5{1'b0}};
+   end else begin
+       if ((req_img_p1_burst_en) == 1'b1) begin
+           req_img_p1_bundle_cnt <= req_img_p1_bundle_cnt_w;
+       // VCS coverage off
+       end else if ((req_img_p1_burst_en) == 1'b0) begin
+       end else begin
+           req_img_p1_bundle_cnt <= 'bx;
+       // VCS coverage on
+       end
+   end
+end
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+   if (!nvdla_core_rstn) begin
+       req_img_p1_burst_cnt <= {14{1'b0}};
+   end else begin
+       if ((req_img_p1_burst_en) == 1'b1) begin
+           req_img_p1_burst_cnt <= req_img_p1_burst_cnt_w;
+       // VCS coverage off
+       end else if ((req_img_p1_burst_en) == 1'b0) begin
+       end else begin
+           req_img_p1_burst_cnt <= 'bx;
+       // VCS coverage on
+       end
+   end
+end
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+   if (!nvdla_core_rstn) begin
+       req_img_p1_sec_cnt <= {2{1'b0}};
+   end else begin
+       if ((req_img_p1_sec_en) == 1'b1) begin
+           req_img_p1_sec_cnt <= req_img_p1_sec_cnt_w;
+       // VCS coverage off
+       end else if ((req_img_p1_sec_en) == 1'b0) begin
+       end else begin
+           req_img_p1_sec_cnt <= 'bx;
+       // VCS coverage on
+       end
+   end
+end
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 ///////////// image burst signal /////////////
 assign is_img_1st_burst = ~req_img_planar_cnt ? is_p0_1st_burst : is_p1_1st_burst;
 assign is_img_last_burst = ~req_img_planar_cnt ? is_p0_last_burst : is_p1_last_burst;
@@ -601,6 +906,16 @@ assign req_valid_w = (~is_running) ? 1'b0 :
                      is_first_running ? 1'b1 :
                      (req_reg_en & is_last_req) ? 1'b0 : req_valid;
 //: &eperl::flop("-nodeclare   -rval \"1'b0\"   -d \"req_valid_w\" -q req_valid");
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+   if (!nvdla_core_rstn) begin
+       req_valid <= 1'b0;
+   end else begin
+       req_valid <= req_valid_w;
+   end
+end
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 assign req_adv = req_valid & (~req_valid_d1 | req_ready_d1);
 assign is_last_req = (is_img_last_burst & is_img_last_planar & is_last_height);
 assign req_img_reg_en = req_adv;
@@ -620,6 +935,37 @@ assign {mon_req_img_p1_line_offset_w,
         req_img_p1_line_offset_w} = (is_first_running) ? 33'b0 : (req_img_p1_line_offset + reg2dp_uv_line_stride);
 //: &eperl::flop("-nodeclare   -rval \"{32{1'b0}}\"  -en \"req_height_en\" -d \"req_img_p0_line_offset_w\" -q req_img_p0_line_offset");
 //: &eperl::flop("-nodeclare   -rval \"{32{1'b0}}\"  -en \"req_height_en & planar1_enable\" -d \"req_img_p1_line_offset_w\" -q req_img_p1_line_offset");
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+   if (!nvdla_core_rstn) begin
+       req_img_p0_line_offset <= {32{1'b0}};
+   end else begin
+       if ((req_height_en) == 1'b1) begin
+           req_img_p0_line_offset <= req_img_p0_line_offset_w;
+       // VCS coverage off
+       end else if ((req_height_en) == 1'b0) begin
+       end else begin
+           req_img_p0_line_offset <= 'bx;
+       // VCS coverage on
+       end
+   end
+end
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+   if (!nvdla_core_rstn) begin
+       req_img_p1_line_offset <= {32{1'b0}};
+   end else begin
+       if ((req_height_en & planar1_enable) == 1'b1) begin
+           req_img_p1_line_offset <= req_img_p1_line_offset_w;
+       // VCS coverage off
+       end else if ((req_height_en & planar1_enable) == 1'b0) begin
+       end else begin
+           req_img_p1_line_offset <= 'bx;
+       // VCS coverage on
+       end
+   end
+end
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 ///////////// address burst offset for image /////////////
 //: my $atmm = 8;
 //: my $k = 33 - int(log($atmm)/log(2));
@@ -631,6 +977,42 @@ assign {mon_req_img_p1_line_offset_w,
 //: );
 //: &eperl::flop("-nodeclare   -rval \"{(${k}-1){1'b0}}\"  -en \"req_img_p0_burst_offset_en\" -d \"req_img_p0_burst_offset_w\" -q req_img_p0_burst_offset");
 //: &eperl::flop("-nodeclare   -rval \"{(${k}-1){1'b0}}\"  -en \"req_img_p1_burst_offset_en\" -d \"req_img_p1_burst_offset_w\" -q req_img_p1_burst_offset");
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+
+assign {mon_req_img_p0_burst_offset_w,
+req_img_p0_burst_offset_w} = (is_first_running | is_p0_last_burst) ? 30'b0 : (req_img_p0_burst_offset + req_img_p0_cur_burst);
+assign {mon_req_img_p1_burst_offset_w,
+req_img_p1_burst_offset_w} = (is_first_running | is_p1_last_burst) ? 30'b0 : (req_img_p1_burst_offset + req_img_p1_cur_burst);
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+   if (!nvdla_core_rstn) begin
+       req_img_p0_burst_offset <= {(30-1){1'b0}};
+   end else begin
+       if ((req_img_p0_burst_offset_en) == 1'b1) begin
+           req_img_p0_burst_offset <= req_img_p0_burst_offset_w;
+       // VCS coverage off
+       end else if ((req_img_p0_burst_offset_en) == 1'b0) begin
+       end else begin
+           req_img_p0_burst_offset <= 'bx;
+       // VCS coverage on
+       end
+   end
+end
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+   if (!nvdla_core_rstn) begin
+       req_img_p1_burst_offset <= {(30-1){1'b0}};
+   end else begin
+       if ((req_img_p1_burst_offset_en) == 1'b1) begin
+           req_img_p1_burst_offset <= req_img_p1_burst_offset_w;
+       // VCS coverage off
+       end else if ((req_img_p1_burst_offset_en) == 1'b0) begin
+       end else begin
+           req_img_p1_burst_offset <= 'bx;
+       // VCS coverage on
+       end
+   end
+end
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 ///////////// address base for image /////////////
 assign req_img_p0_addr_base_w = {reg2dp_datain_addr_high_0, reg2dp_datain_addr_low_0};
 assign req_img_p1_addr_base_w = {reg2dp_datain_addr_high_1, reg2dp_datain_addr_low_1};
@@ -644,6 +1026,34 @@ assign req_img_p1_addr_base_w = {reg2dp_datain_addr_high_1, reg2dp_datain_addr_l
 //: );
 //: &eperl::flop("-nodeclare  -norst -en \"layer_st\" -d \"req_img_p0_addr_base_w\" -q req_img_p0_addr_base");
 //: &eperl::flop("-nodeclare  -norst -en \"layer_st\" -d \"req_img_p1_addr_base_w\" -q req_img_p1_addr_base");
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+
+assign {mon_req_img_p0_addr,
+req_img_p0_addr} = req_img_p0_addr_base + req_img_p0_line_offset + {req_img_p0_burst_offset,3'd0};
+assign {mon_req_img_p1_addr,
+req_img_p1_addr} = req_img_p1_addr_base + req_img_p1_line_offset + {req_img_p1_burst_offset,3'd0};
+always @(posedge nvdla_core_clk) begin
+       if ((layer_st) == 1'b1) begin
+           req_img_p0_addr_base <= req_img_p0_addr_base_w;
+       // VCS coverage off
+       end else if ((layer_st) == 1'b0) begin
+       end else begin
+           req_img_p0_addr_base <= 'bx;
+       // VCS coverage on
+       end
+end
+always @(posedge nvdla_core_clk) begin
+       if ((layer_st) == 1'b1) begin
+           req_img_p1_addr_base <= req_img_p1_addr_base_w;
+       // VCS coverage off
+       end else if ((layer_st) == 1'b0) begin
+       end else begin
+           req_img_p1_addr_base <= 'bx;
+       // VCS coverage on
+       end
+end
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 ///////////// request package /////////////
 assign req_valid_d1_w = ~is_running ? 1'b0 :
                         req_valid ? 1'b1 :
@@ -668,6 +1078,156 @@ assign req_is_dummy = is_img_dummy;
 //: &eperl::flop("-nodeclare   -rval \"1'b0\"  -en \"req_reg_en\" -d \"is_last_req\" -q req_end_d1");
 //: &eperl::flop("-nodeclare   -rval \"1'b0\"  -en \"req_reg_en\" -d \"req_img_planar_cnt\" -q req_planar_d1");
 //: &eperl::flop("-nodeclare   -rval \"1'b0\"  -en \"req_reg_en\" -d \"req_is_dummy\" -q req_is_dummy_d1");
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+   if (!nvdla_core_rstn) begin
+       req_valid_d1 <= 1'b0;
+   end else begin
+       req_valid_d1 <= req_valid_d1_w;
+   end
+end
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+   if (!nvdla_core_rstn) begin
+       req_addr_d1 <= {64{1'b0}};
+   end else begin
+       if ((req_reg_en) == 1'b1) begin
+           req_addr_d1 <= req_addr;
+       // VCS coverage off
+       end else if ((req_reg_en) == 1'b0) begin
+       end else begin
+           req_addr_d1 <= 'bx;
+       // VCS coverage on
+       end
+   end
+end
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+   if (!nvdla_core_rstn) begin
+       req_size_d1 <= {5{1'b0}};
+   end else begin
+       if ((req_reg_en) == 1'b1) begin
+           req_size_d1 <= req_size;
+       // VCS coverage off
+       end else if ((req_reg_en) == 1'b0) begin
+       end else begin
+           req_size_d1 <= 'bx;
+       // VCS coverage on
+       end
+   end
+end
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+   if (!nvdla_core_rstn) begin
+       req_size_out_d1 <= {5{1'b0}};
+   end else begin
+       if ((req_reg_en) == 1'b1) begin
+           req_size_out_d1 <= req_size_out;
+       // VCS coverage off
+       end else if ((req_reg_en) == 1'b0) begin
+       end else begin
+           req_size_out_d1 <= 'bx;
+       // VCS coverage on
+       end
+   end
+end
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+   if (!nvdla_core_rstn) begin
+       req_line_st_d1 <= 1'b0;
+   end else begin
+       if ((req_reg_en) == 1'b1) begin
+           req_line_st_d1 <= req_line_st;
+       // VCS coverage off
+       end else if ((req_reg_en) == 1'b0) begin
+       end else begin
+           req_line_st_d1 <= 'bx;
+       // VCS coverage on
+       end
+   end
+end
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+   if (!nvdla_core_rstn) begin
+       req_bundle_end_d1 <= 1'b0;
+   end else begin
+       if ((req_reg_en) == 1'b1) begin
+           req_bundle_end_d1 <= req_bundle_end;
+       // VCS coverage off
+       end else if ((req_reg_en) == 1'b0) begin
+       end else begin
+           req_bundle_end_d1 <= 'bx;
+       // VCS coverage on
+       end
+   end
+end
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+   if (!nvdla_core_rstn) begin
+       req_line_end_d1 <= 1'b0;
+   end else begin
+       if ((req_reg_en) == 1'b1) begin
+           req_line_end_d1 <= req_line_end;
+       // VCS coverage off
+       end else if ((req_reg_en) == 1'b0) begin
+       end else begin
+           req_line_end_d1 <= 'bx;
+       // VCS coverage on
+       end
+   end
+end
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+   if (!nvdla_core_rstn) begin
+       req_grant_end_d1 <= 1'b0;
+   end else begin
+       if ((req_reg_en) == 1'b1) begin
+           req_grant_end_d1 <= req_grant_end;
+       // VCS coverage off
+       end else if ((req_reg_en) == 1'b0) begin
+       end else begin
+           req_grant_end_d1 <= 'bx;
+       // VCS coverage on
+       end
+   end
+end
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+   if (!nvdla_core_rstn) begin
+       req_end_d1 <= 1'b0;
+   end else begin
+       if ((req_reg_en) == 1'b1) begin
+           req_end_d1 <= is_last_req;
+       // VCS coverage off
+       end else if ((req_reg_en) == 1'b0) begin
+       end else begin
+           req_end_d1 <= 'bx;
+       // VCS coverage on
+       end
+   end
+end
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+   if (!nvdla_core_rstn) begin
+       req_planar_d1 <= 1'b0;
+   end else begin
+       if ((req_reg_en) == 1'b1) begin
+           req_planar_d1 <= req_img_planar_cnt;
+       // VCS coverage off
+       end else if ((req_reg_en) == 1'b0) begin
+       end else begin
+           req_planar_d1 <= 'bx;
+       // VCS coverage on
+       end
+   end
+end
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+   if (!nvdla_core_rstn) begin
+       req_is_dummy_d1 <= 1'b0;
+   end else begin
+       if ((req_reg_en) == 1'b1) begin
+           req_is_dummy_d1 <= req_is_dummy;
+       // VCS coverage off
+       end else if ((req_reg_en) == 1'b0) begin
+       end else begin
+           req_is_dummy_d1 <= 'bx;
+       // VCS coverage on
+       end
+   end
+end
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 `ifdef NVDLA_PRINT_CDMA
 always @ (posedge nvdla_core_clk)
 begin
@@ -684,6 +1244,16 @@ assign req_ready_d1 = ((dma_rd_req_rdy | req_is_dummy_d1) & dma_req_fifo_ready &
 assign req_is_done_w = is_first_running ? 1'b0 :
                        (req_valid_d1 & req_ready_d1 & req_end_d1) ? 1'b1 : req_is_done;
 //: &eperl::flop("-nodeclare   -rval \"1'b1\"   -d \"req_is_done_w\" -q req_is_done");
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+   if (!nvdla_core_rstn) begin
+       req_is_done <= 1'b1;
+   end else begin
+       req_is_done <= req_is_done_w;
+   end
+end
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 ///////////// cbuf monitor /////////////
 assign cur_required_entry = (is_cbuf_ready | req_is_done) ? 15'b0 :
                             is_last_height ? pre_entry_end_d1 :
@@ -701,6 +1271,30 @@ assign {mon_img_entry_onfly_w,
 assign img_entry_onfly_en = (~req_is_done & is_cbuf_enough & ~is_cbuf_ready) | img2status_dat_updt;
 //: &eperl::flop("-nodeclare   -rval \"1'b0\"   -d \"is_cbuf_ready_w\" -q is_cbuf_ready");
 //: &eperl::flop("-nodeclare   -rval \"{15{1'b0}}\"  -en \"img_entry_onfly_en\" -d \"img_entry_onfly_w\" -q img_entry_onfly");
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+   if (!nvdla_core_rstn) begin
+       is_cbuf_ready <= 1'b0;
+   end else begin
+       is_cbuf_ready <= is_cbuf_ready_w;
+   end
+end
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+   if (!nvdla_core_rstn) begin
+       img_entry_onfly <= {15{1'b0}};
+   end else begin
+       if ((img_entry_onfly_en) == 1'b1) begin
+           img_entry_onfly <= img_entry_onfly_w;
+       // VCS coverage off
+       end else if ((img_entry_onfly_en) == 1'b0) begin
+       end else begin
+           img_entry_onfly <= 'bx;
+       // VCS coverage on
+       end
+   end
+end
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 ////////////////////////////////////////////////////////////////////////
 // CDMA IMG read request interface //
 ////////////////////////////////////////////////////////////////////////
@@ -791,6 +1385,9 @@ assign dma_rsp_mask[0] = (~dma_rsp_fifo_req) ? 1'b0 :
 //: (dma_rsp_size[4:2] == dma_rsp_size_cnt[4:2]) ? 1'b0 : 1'b1;
 //: );
 //: }
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 assign {mon_dma_rsp_size_cnt_inc,
         dma_rsp_size_cnt_inc} = dma_rsp_size_cnt
 //: my $msk = (64/8/8);
@@ -800,8 +1397,30 @@ assign {mon_dma_rsp_size_cnt_inc,
 //: );
 //: }
 //: print qq( ; );
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+
++ dma_rsp_mask[0]
+ ; 
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 assign dma_rsp_size_cnt_w = (dma_rsp_size_cnt_inc == dma_rsp_size) ? 5'b0 : dma_rsp_size_cnt_inc;
 //: &eperl::flop("-nodeclare   -rval \"{5{1'b0}}\"  -en \"dma_rsp_vld\" -d \"dma_rsp_size_cnt_w\" -q dma_rsp_size_cnt");
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+   if (!nvdla_core_rstn) begin
+       dma_rsp_size_cnt <= {5{1'b0}};
+   end else begin
+       if ((dma_rsp_vld) == 1'b1) begin
+           dma_rsp_size_cnt <= dma_rsp_size_cnt_w;
+       // VCS coverage off
+       end else if ((dma_rsp_vld) == 1'b0) begin
+       end else begin
+           dma_rsp_size_cnt <= 'bx;
+       // VCS coverage on
+       end
+   end
+end
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 assign dma_rsp_vld = dma_rsp_fifo_req & (dma_rsp_dummy | dma_rd_rsp_vld);
 assign dma_rsp_fifo_ready = (dma_rsp_vld & (dma_rsp_size_cnt_inc == dma_rsp_size));
 ////////////////////////////////////////////////////////////////////////
@@ -829,6 +1448,30 @@ assign rsp_img_vld_w = dma_rsp_vld;
 //: end
 //: );
 //: }
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+   if (!nvdla_core_rstn) begin
+       rsp_img_vld <= 1'b0;
+   end else begin
+       rsp_img_vld <= rsp_img_vld_w;
+   end
+end
+
+assign rsp_img_p0_vld_w = dma_rsp_mask[0];
+
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn)
+if (!nvdla_core_rstn) begin
+rsp_img_p0_vld <= 1'b0;
+end else begin
+rsp_img_p0_vld <= rsp_img_p0_vld_w;
+end
+
+always @(posedge nvdla_core_clk)
+if (rsp_img_p0_vld_w) begin
+rsp_img_p0_data <= rsp_img_p0_data_w;
+end
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 assign rsp_dat = dma_rd_rsp_data;
 //10'h1 ABGR, VU, single, unchange
 //10'h2 ARGB, AYUV, 8bpp
@@ -910,6 +1553,29 @@ assign rsp_img_data_sw_o1 = {
 //: print " rsp_img_p${k}_data_w,  ";
 //: }
 //: }
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+
+rsp_dat[1*32+31:1*32+24], rsp_dat[1*32+7:1*32], rsp_dat[1*32+15:1*32+8], rsp_dat[1*32+23:1*32+16],
+ rsp_dat[0*32+31:0*32+24], rsp_dat[0*32+7:0*32], rsp_dat[0*32+15:0*32+8], rsp_dat[0*32+23:0*32+16]};  
+ assign rsp_img_data_sw_o3 = {  
+
+rsp_dat[1*32+7:1*32], rsp_dat[1*32+31:1*32+24], rsp_dat[1*32+23:1*32+16], rsp_dat[1*32+15:1*32+8],
+ rsp_dat[0*32+7:0*32], rsp_dat[0*32+31:0*32+24], rsp_dat[0*32+23:0*32+16], rsp_dat[0*32+15:0*32+8]};  
+ assign rsp_img_data_sw_o5 = {  
+
+rsp_dat[1*32+7:1*32], rsp_dat[1*32+15:1*32+8], rsp_dat[1*32+23:1*32+16], rsp_dat[1*32+31:1*32+24],
+ rsp_dat[0*32+7:0*32], rsp_dat[0*32+15:0*32+8], rsp_dat[0*32+23:0*32+16], rsp_dat[0*32+31:0*32+24]};  
+ assign rsp_img_data_sw_o9 = {  
+
+rsp_dat[3*16+7:3*16], rsp_dat[3*16+15:3*16+8],
+
+rsp_dat[2*16+7:2*16], rsp_dat[2*16+15:2*16+8],
+
+rsp_dat[1*16+7:1*16], rsp_dat[1*16+15:1*16+8],
+ rsp_dat[0*16+7:0*16], rsp_dat[0*16+15:0*16+8]};  
+ assign {  
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
         rsp_img_p0_data_w} = ({64{rsp_img_sel[0]}} & rsp_img_data_sw_o0) |
                              ({64{rsp_img_sel[1]}} & rsp_img_data_sw_o1) |
                              ({64{rsp_img_sel[3]}} & rsp_img_data_sw_o3) |
@@ -925,6 +1591,121 @@ assign rsp_img_1st_burst_w = dma_rsp_line_st & (dma_rsp_size_cnt == 5'h0);
 //: &eperl::flop("-nodeclare   -rval \"1'b0\"  -en \"rsp_img_vld_w\" -d \"dma_rsp_line_end & dma_rsp_fifo_ready\" -q rsp_img_line_end");
 //: &eperl::flop("-nodeclare   -rval \"1'b0\"  -en \"rsp_img_vld_w\" -d \"dma_rsp_bundle_end & dma_rsp_fifo_ready\" -q rsp_img_bundle_end");
 //: &eperl::flop("-nodeclare   -rval \"1'b0\"  -en \"rsp_img_vld_w\" -d \"dma_rsp_end & dma_rsp_fifo_ready\" -q rsp_img_end");
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+   if (!nvdla_core_rstn) begin
+       rsp_img_planar <= 1'b0;
+   end else begin
+       if ((rsp_img_vld_w) == 1'b1) begin
+           rsp_img_planar <= dma_rsp_planar;
+       // VCS coverage off
+       end else if ((rsp_img_vld_w) == 1'b0) begin
+       end else begin
+           rsp_img_planar <= 'bx;
+       // VCS coverage on
+       end
+   end
+end
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+   if (!nvdla_core_rstn) begin
+       rsp_img_1st_burst <= 1'b0;
+   end else begin
+       if ((rsp_img_vld_w) == 1'b1) begin
+           rsp_img_1st_burst <= rsp_img_1st_burst_w;
+       // VCS coverage off
+       end else if ((rsp_img_vld_w) == 1'b0) begin
+       end else begin
+           rsp_img_1st_burst <= 'bx;
+       // VCS coverage on
+       end
+   end
+end
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+   if (!nvdla_core_rstn) begin
+       rsp_img_line_st <= 1'b0;
+   end else begin
+       if ((rsp_img_vld_w) == 1'b1) begin
+           rsp_img_line_st <= dma_rsp_line_st;
+       // VCS coverage off
+       end else if ((rsp_img_vld_w) == 1'b0) begin
+       end else begin
+           rsp_img_line_st <= 'bx;
+       // VCS coverage on
+       end
+   end
+end
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+   if (!nvdla_core_rstn) begin
+       rsp_img_req_end <= 1'b0;
+   end else begin
+       if ((rsp_img_vld_w) == 1'b1) begin
+           rsp_img_req_end <= dma_rsp_fifo_ready;
+       // VCS coverage off
+       end else if ((rsp_img_vld_w) == 1'b0) begin
+       end else begin
+           rsp_img_req_end <= 'bx;
+       // VCS coverage on
+       end
+   end
+end
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+   if (!nvdla_core_rstn) begin
+       rsp_img_w_burst_size <= {5{1'b0}};
+   end else begin
+       if ((rsp_img_vld_w & dma_rsp_fifo_ready) == 1'b1) begin
+           rsp_img_w_burst_size <= dma_rsp_w_burst_size;
+       // VCS coverage off
+       end else if ((rsp_img_vld_w & dma_rsp_fifo_ready) == 1'b0) begin
+       end else begin
+           rsp_img_w_burst_size <= 'bx;
+       // VCS coverage on
+       end
+   end
+end
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+   if (!nvdla_core_rstn) begin
+       rsp_img_line_end <= 1'b0;
+   end else begin
+       if ((rsp_img_vld_w) == 1'b1) begin
+           rsp_img_line_end <= dma_rsp_line_end & dma_rsp_fifo_ready;
+       // VCS coverage off
+       end else if ((rsp_img_vld_w) == 1'b0) begin
+       end else begin
+           rsp_img_line_end <= 'bx;
+       // VCS coverage on
+       end
+   end
+end
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+   if (!nvdla_core_rstn) begin
+       rsp_img_bundle_end <= 1'b0;
+   end else begin
+       if ((rsp_img_vld_w) == 1'b1) begin
+           rsp_img_bundle_end <= dma_rsp_bundle_end & dma_rsp_fifo_ready;
+       // VCS coverage off
+       end else if ((rsp_img_vld_w) == 1'b0) begin
+       end else begin
+           rsp_img_bundle_end <= 'bx;
+       // VCS coverage on
+       end
+   end
+end
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+   if (!nvdla_core_rstn) begin
+       rsp_img_end <= 1'b0;
+   end else begin
+       if ((rsp_img_vld_w) == 1'b1) begin
+           rsp_img_end <= dma_rsp_end & dma_rsp_fifo_ready;
+       // VCS coverage off
+       end else if ((rsp_img_vld_w) == 1'b0) begin
+       end else begin
+           rsp_img_end <= 'bx;
+       // VCS coverage on
+       end
+   end
+end
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 ////////////////////////////////////////////////////////////////////////
 // CDMA pixel data response logic stage 2: cache and sbuf write //
 ////////////////////////////////////////////////////////////////////////
@@ -962,6 +1743,39 @@ assign rsp_img_c1l0_wr_en = (rsp_img_p0_vld & rsp_img_planar);
 //: print " assign rsp_img_p${i}_cache_data = ({${atmm} {~rsp_img_planar}} & rsp_img_c0l${i}) | ({${atmm} { rsp_img_planar}} & rsp_img_c1l${i});    \n";
 //: }
 //: }
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+
+/////rsp_img_p0_cache_data  p0 means planar 0
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+   if (!nvdla_core_rstn) begin
+       rsp_img_p0_cache_data <= {64{1'b0}};
+   end else begin
+       if ((rsp_img_c0l0_wr_en ) == 1'b1) begin
+           rsp_img_p0_cache_data <= rsp_img_p0_data;
+       // VCS coverage off
+       end else if ((rsp_img_c0l0_wr_en ) == 1'b0) begin
+       end else begin
+           rsp_img_p0_cache_data <= 'bx;
+       // VCS coverage on
+       end
+   end
+end
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+   if (!nvdla_core_rstn) begin
+       rsp_img_p1_cache_data <= {64{1'b0}};
+   end else begin
+       if ((rsp_img_c1l0_wr_en ) == 1'b1) begin
+           rsp_img_p1_cache_data <= rsp_img_p0_data;
+       // VCS coverage off
+       end else if ((rsp_img_c1l0_wr_en ) == 1'b0) begin
+       end else begin
+           rsp_img_p1_cache_data <= 'bx;
+       // VCS coverage on
+       end
+   end
+end
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 //per atmm
 //: my $dmaif = 64;
 //: my $atmm = (8*8);
@@ -1010,6 +1824,33 @@ assign rsp_img_c1l0_wr_en = (rsp_img_p0_vld & rsp_img_planar);
 //: &eperl::flop("-nodeclare   -rval \"1'b0\"   -d \"rsp_img_p${i}_vld_d1_w\" -q rsp_img_p${i}_vld_d1");
 //: &eperl::flop("-nodeclare  -norst -en \"rsp_img_p${i}_vld_d1_w\" -d \"rsp_img_p${i}_data_d1_w\" -q rsp_img_p${i}_data_d1");
 //: }
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+
+assign rsp_img_p0_vld_d1_w = rsp_img_p0_vld & (~rsp_img_1st_burst);
+
+assign rsp_img_p0_data_atmm0 = rsp_img_p0_data;
+assign {mon_rsp_img_p0_data_d1_w, rsp_img_p0_data_d1_w} = ({rsp_img_p0_data_atmm0,(rsp_img_c0l0_wr_en ? rsp_img_p0_cache_data : rsp_img_p1_cache_data)} >> {rsp_img_sft, 3'b0});
+
+assign rsp_img_planar_idx_add = 3'h1;
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+   if (!nvdla_core_rstn) begin
+       rsp_img_p0_vld_d1 <= 1'b0;
+   end else begin
+       rsp_img_p0_vld_d1 <= rsp_img_p0_vld_d1_w;
+   end
+end
+always @(posedge nvdla_core_clk) begin
+       if ((rsp_img_p0_vld_d1_w) == 1'b1) begin
+           rsp_img_p0_data_d1 <= rsp_img_p0_data_d1_w;
+       // VCS coverage off
+       end else if ((rsp_img_p0_vld_d1_w) == 1'b0) begin
+       end else begin
+           rsp_img_p0_data_d1 <= 'bx;
+       // VCS coverage on
+       end
+end
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 //assign rsp_img_p0_data_atmm0 = rsp_img_1st_burst ? rsp_img_p0_data : rsp_img_p0_cache_data;
 //assign rsp_img_p0_data_atmm1 = rsp_img_1st_burst ? rsp_img_p1_data : rsp_img_p0_data;
 //assign {mon_rsp_img_p0_data_d1_w, rsp_img_p0_data_d1_w} = ({rsp_img_p0_data_atmm1, rsp_img_p0_data_atmm0} >> {rsp_img_sft, 3'b0});
@@ -1035,6 +1876,60 @@ assign rsp_img_sft = rsp_img_planar ? pixel_planar1_byte_sft : pixel_planar0_byt
 //: &eperl::flop("-nodeclare   -rval \"{7{1'b0}}\"  -en \"rsp_img_p${i}_planar1_en\" -d \"rsp_img_p${i}_planar1_idx_w\" -q rsp_img_p${i}_planar1_idx");
 //: &eperl::flop("-nodeclare   -rval \"{8{1'b0}}\"  -en \"rsp_img_p${i}_vld_d1_w\" -d \"rsp_img_p${i}_addr\" -q rsp_img_p${i}_addr_d1");
 //: }
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+
+assign rsp_img_p0_planar0_idx_inc = rsp_img_p0_planar0_idx + rsp_img_planar_idx_add;
+assign rsp_img_p0_planar1_idx_inc = rsp_img_p0_planar1_idx + rsp_img_planar_idx_add;
+assign rsp_img_p0_planar0_idx_w = is_first_running ? 7'b0 : rsp_img_p0_planar0_idx_inc[8 -2:0];
+assign rsp_img_p0_planar1_idx_w = is_first_running ? 7'b0 : rsp_img_p0_planar1_idx_inc[8 -2:0];
+assign rsp_img_p0_planar0_en = is_first_running | (rsp_img_p0_vld_d1_w & ~rsp_img_planar);
+assign rsp_img_p0_planar1_en = is_first_running | (rsp_img_p0_vld_d1_w & rsp_img_planar);
+assign rsp_img_p0_addr = (~rsp_img_planar) ? {1'b0, rsp_img_p0_planar0_idx[0], rsp_img_p0_planar0_idx[8 -2:1]} :
+{1'b1, rsp_img_p0_planar1_idx[0], rsp_img_p0_planar1_idx[8 -2:1]};
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+   if (!nvdla_core_rstn) begin
+       rsp_img_p0_planar0_idx <= {7{1'b0}};
+   end else begin
+       if ((rsp_img_p0_planar0_en) == 1'b1) begin
+           rsp_img_p0_planar0_idx <= rsp_img_p0_planar0_idx_w;
+       // VCS coverage off
+       end else if ((rsp_img_p0_planar0_en) == 1'b0) begin
+       end else begin
+           rsp_img_p0_planar0_idx <= 'bx;
+       // VCS coverage on
+       end
+   end
+end
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+   if (!nvdla_core_rstn) begin
+       rsp_img_p0_planar1_idx <= {7{1'b0}};
+   end else begin
+       if ((rsp_img_p0_planar1_en) == 1'b1) begin
+           rsp_img_p0_planar1_idx <= rsp_img_p0_planar1_idx_w;
+       // VCS coverage off
+       end else if ((rsp_img_p0_planar1_en) == 1'b0) begin
+       end else begin
+           rsp_img_p0_planar1_idx <= 'bx;
+       // VCS coverage on
+       end
+   end
+end
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+   if (!nvdla_core_rstn) begin
+       rsp_img_p0_addr_d1 <= {8{1'b0}};
+   end else begin
+       if ((rsp_img_p0_vld_d1_w) == 1'b1) begin
+           rsp_img_p0_addr_d1 <= rsp_img_p0_addr;
+       // VCS coverage off
+       end else if ((rsp_img_p0_vld_d1_w) == 1'b0) begin
+       end else begin
+           rsp_img_p0_addr_d1 <= 'bx;
+       // VCS coverage on
+       end
+   end
+end
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 //////// data write control logic: MISC output ////////
 assign {mon_rsp_img_p0_burst_cnt_inc,
         rsp_img_p0_burst_cnt_inc} = rsp_img_p0_burst_cnt + rsp_img_w_burst_size[3:0] - rsp_img_line_st;
@@ -1060,10 +1955,121 @@ assign rsp_img_p1_burst_size_en = is_first_running | (rsp_img_vld & rsp_img_bund
 //: &eperl::flop("-nodeclare   -rval \"1'b0\"   -d \"rsp_img_bundle_done\" -q rsp_img_bundle_done_d1");
 //: &eperl::flop("-nodeclare   -rval \"1'b0\"  -en \"rsp_img_bundle_done\" -d \"rsp_img_line_end\" -q rsp_img_line_end_d1");
 //: &eperl::flop("-nodeclare   -rval \"1'b0\"  -en \"rsp_img_bundle_done\" -d \"rsp_img_end\" -q rsp_img_layer_end_d1");
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+   if (!nvdla_core_rstn) begin
+       rsp_img_p0_burst_cnt <= {4{1'b0}};
+   end else begin
+       if ((rsp_img_p0_burst_cnt_en) == 1'b1) begin
+           rsp_img_p0_burst_cnt <= rsp_img_p0_burst_cnt_w;
+       // VCS coverage off
+       end else if ((rsp_img_p0_burst_cnt_en) == 1'b0) begin
+       end else begin
+           rsp_img_p0_burst_cnt <= 'bx;
+       // VCS coverage on
+       end
+   end
+end
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+   if (!nvdla_core_rstn) begin
+       rsp_img_p1_burst_cnt <= {5{1'b0}};
+   end else begin
+       if ((rsp_img_p1_burst_cnt_en) == 1'b1) begin
+           rsp_img_p1_burst_cnt <= rsp_img_p1_burst_cnt_w;
+       // VCS coverage off
+       end else if ((rsp_img_p1_burst_cnt_en) == 1'b0) begin
+       end else begin
+           rsp_img_p1_burst_cnt <= 'bx;
+       // VCS coverage on
+       end
+   end
+end
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+   if (!nvdla_core_rstn) begin
+       rsp_img_p0_burst_size_d1 <= {4{1'b0}};
+   end else begin
+       if ((rsp_img_p0_burst_size_en) == 1'b1) begin
+           rsp_img_p0_burst_size_d1 <= rsp_img_p0_burst_size_w;
+       // VCS coverage off
+       end else if ((rsp_img_p0_burst_size_en) == 1'b0) begin
+       end else begin
+           rsp_img_p0_burst_size_d1 <= 'bx;
+       // VCS coverage on
+       end
+   end
+end
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+   if (!nvdla_core_rstn) begin
+       rsp_img_p1_burst_size_d1 <= {5{1'b0}};
+   end else begin
+       if ((rsp_img_p1_burst_size_en) == 1'b1) begin
+           rsp_img_p1_burst_size_d1 <= rsp_img_p1_burst_size_w;
+       // VCS coverage off
+       end else if ((rsp_img_p1_burst_size_en) == 1'b0) begin
+       end else begin
+           rsp_img_p1_burst_size_d1 <= 'bx;
+       // VCS coverage on
+       end
+   end
+end
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+   if (!nvdla_core_rstn) begin
+       rsp_img_bundle_done_d1 <= 1'b0;
+   end else begin
+       rsp_img_bundle_done_d1 <= rsp_img_bundle_done;
+   end
+end
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+   if (!nvdla_core_rstn) begin
+       rsp_img_line_end_d1 <= 1'b0;
+   end else begin
+       if ((rsp_img_bundle_done) == 1'b1) begin
+           rsp_img_line_end_d1 <= rsp_img_line_end;
+       // VCS coverage off
+       end else if ((rsp_img_bundle_done) == 1'b0) begin
+       end else begin
+           rsp_img_line_end_d1 <= 'bx;
+       // VCS coverage on
+       end
+   end
+end
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+   if (!nvdla_core_rstn) begin
+       rsp_img_layer_end_d1 <= 1'b0;
+   end else begin
+       if ((rsp_img_bundle_done) == 1'b1) begin
+           rsp_img_layer_end_d1 <= rsp_img_end;
+       // VCS coverage off
+       end else if ((rsp_img_bundle_done) == 1'b0) begin
+       end else begin
+           rsp_img_layer_end_d1 <= 'bx;
+       // VCS coverage on
+       end
+   end
+end
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 //////// data write control logic: status ////////
 assign rsp_img_is_done_w = is_first_running ? 1'b0 :
                            (rsp_img_end & rsp_img_line_end) ? 1'b1 : rsp_img_is_done;
 //: &eperl::flop("-nodeclare   -rval \"1'b1\"  -en \"is_running\" -d \"rsp_img_is_done_w\" -q rsp_img_is_done");
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+   if (!nvdla_core_rstn) begin
+       rsp_img_is_done <= 1'b1;
+   end else begin
+       if ((is_running) == 1'b1) begin
+           rsp_img_is_done <= rsp_img_is_done_w;
+       // VCS coverage off
+       end else if ((is_running) == 1'b0) begin
+       end else begin
+           rsp_img_is_done <= 'bx;
+       // VCS coverage on
+       end
+   end
+end
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 ////////////////////////////////////////////////////////////////////////
 // Shared buffer write signals //
 ////////////////////////////////////////////////////////////////////////
@@ -1077,6 +2083,13 @@ assign rsp_img_is_done_w = is_first_running ? 1'b0 :
 //: assign img2sbuf_p${i}_wr_en = rsp_img_p${i}_vld_d1;
 //: );
 //: }
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+
+assign img2sbuf_p0_wr_addr = rsp_img_p0_addr_d1;
+assign img2sbuf_p0_wr_data = rsp_img_p0_data_d1;
+assign img2sbuf_p0_wr_en = rsp_img_p0_vld_d1;
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 //assign img2sbuf_p0_wr_en = rsp_img_p0_vld_d1;
 //assign img2sbuf_p1_wr_en = rsp_img_p1_vld_d1;
 //assign img2sbuf_p0_wr_addr = rsp_img_p0_addr_d1;
@@ -1124,6 +2137,23 @@ assign sg2pack_sub_h_end = pre_sub_h_end_d1;
 ////////////////////////////////////////////////////////////////////////
 assign sg_is_done_w = ~is_first_running & req_is_done & rsp_img_is_done;
 //: &eperl::flop("-nodeclare   -rval \"1'b1\"  -en \"is_running\" -d \"sg_is_done_w\" -q sg_is_done");
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+   if (!nvdla_core_rstn) begin
+       sg_is_done <= 1'b1;
+   end else begin
+       if ((is_running) == 1'b1) begin
+           sg_is_done <= sg_is_done_w;
+       // VCS coverage off
+       end else if ((is_running) == 1'b0) begin
+       end else begin
+           sg_is_done <= 'bx;
+       // VCS coverage on
+       end
+   end
+end
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 ////////////////////////////////////////////////////////////////////////
 // performance counting register //
 ////////////////////////////////////////////////////////////////////////

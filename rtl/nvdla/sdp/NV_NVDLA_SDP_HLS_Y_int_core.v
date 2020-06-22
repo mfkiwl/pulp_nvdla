@@ -79,6 +79,9 @@ input nvdla_core_rstn;
 //:
 //: );
 //: }
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 assign chn_in_prdy = chn_in_prdy_0;
 assign chn_alu_op_prdy = chn_alu_op_prdy_0;
 assign chn_mul_op_prdy = chn_mul_op_prdy_0;
@@ -130,4 +133,7 @@ assign chn_out_pvld = chn_out_pvld_0;
 //:
 //: );
 //: }
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 endmodule // NV_NVDLA_SDP_HLS_Y_int_core

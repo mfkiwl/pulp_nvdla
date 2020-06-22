@@ -110,6 +110,10 @@ output pdp_op_start;
 output pdp_rdma2dp_ready;
 //: my $m = 1*(8 +6);
 //: print " output [$m-1:0] pooling1d_pd; \n";
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+ output [14-1:0] pooling1d_pd; 
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 output pooling1d_pvld;
 output sdp2pdp_ready;
 //////////////////////////////////////////////////////////////////////////
@@ -200,6 +204,10 @@ wire pdp_datin_pvld_mux0;
 //: foreach my $m (0..$k-1) {
 //: print "wire    [$b+2:0] pdp_din_$m; \n";
 //: }
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+wire    [8+2:0] pdp_din_0; 
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 wire pdp_din_lc;
 wire pdp_din_lc_sync;
 wire pdp_full_pvld;
@@ -247,6 +255,11 @@ wire [2:0] strip_xcnt_offset;
 //: my $k = int(log($m)/log(2));
 //: print "wire     [12-${k}:0] surface_num; \n";
 //: print "reg     [12-${k}:0] surface_cnt_rd; \n";
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+wire     [12-3:0] surface_num; 
+reg     [12-3:0] surface_cnt_rd; 
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 wire sync_switch_in_vld_d0;
 wire sync_switch_in_vld_d1;
 wire [11:0] sync_switch_out_pd;
@@ -268,6 +281,13 @@ wire sync_switch_out_vld;
 //: print "wire    [1:0]    mon_unit1d_actv_data_8bit_${m}; \n";
 //: print "wire    [1:0]    mon_unit1d_actv_data_8bit_${m}_ff; \n";
 //: }
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+wire    [8+2:0] unit1d_actv_data_8bit_0; 
+wire    [8+2:0] unit1d_actv_data_8bit_0_ff; 
+wire    [1:0]    mon_unit1d_actv_data_8bit_0; 
+wire    [1:0]    mon_unit1d_actv_data_8bit_0_ff; 
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 wire [1*(8 +3)+3:0] unit1d_actv_out;
 wire unit1d_actv_out_prdy;
 wire unit1d_actv_out_pvld;
@@ -385,6 +405,12 @@ assign pdp_datin_pvld_f = pdp_datin_pvld_mux0;
 //: assign pdp_din_$m = {{3{pdp_datin_pd_f_0[${b}*${m}+${b}-1]}},pdp_datin_pd_f_0[${b}*${m}+${b}-1:${b}*${m}]};
 //: );
 //: }
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+ assign posc_last = (pdp_datin_pd_f_0[8+6:8+4]==7); 
+
+assign pdp_din_0 = {{3{pdp_datin_pd_f_0[8*0+8-1]}},pdp_datin_pd_f_0[8*0+8-1:8*0]};
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 assign datain_ext = {
 //: my $k = 1;
 //: if($k>1) {
@@ -393,10 +419,89 @@ assign datain_ext = {
 //: print "pdp_din_${i}, ";
 //: }
 //: }
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 pdp_din_0};
 assign pdp_datin_pd_f0 = {posc_last,pdp_datin_pd_f_0[1*8 +11:1*8],datain_ext};
 //: my $k = 1*(8 +3) + 13;
 //: &eperl::pipe(" -wid $k -is -do pdp_datin_pd0 -vo pdp_datin_pvld0 -ri pdp_datin_prdy -di pdp_datin_pd_f0 -vi pdp_datin_pvld_f -ro pdp_datin_prdy_f0 ");
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+// Reg
+reg pdp_datin_prdy_f0;
+reg skid_flop_pdp_datin_prdy_f0;
+reg skid_flop_pdp_datin_pvld_f;
+reg [24-1:0] skid_flop_pdp_datin_pd_f0;
+reg pipe_skid_pdp_datin_pvld_f;
+reg [24-1:0] pipe_skid_pdp_datin_pd_f0;
+// Wire
+wire skid_pdp_datin_pvld_f;
+wire [24-1:0] skid_pdp_datin_pd_f0;
+wire skid_pdp_datin_prdy_f0;
+wire pipe_skid_pdp_datin_prdy_f0;
+wire pdp_datin_pvld0;
+wire [24-1:0] pdp_datin_pd0;
+// Code
+// SKID READY
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+   if (!nvdla_core_rstn) begin
+       pdp_datin_prdy_f0 <= 1'b1;
+       skid_flop_pdp_datin_prdy_f0 <= 1'b1;
+   end else begin
+       pdp_datin_prdy_f0 <= skid_pdp_datin_prdy_f0;
+       skid_flop_pdp_datin_prdy_f0 <= skid_pdp_datin_prdy_f0;
+   end
+end
+
+// SKID VALID
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+    if (!nvdla_core_rstn) begin
+        skid_flop_pdp_datin_pvld_f <= 1'b0;
+    end else begin
+        if (skid_flop_pdp_datin_prdy_f0) begin
+            skid_flop_pdp_datin_pvld_f <= pdp_datin_pvld_f;
+        end
+   end
+end
+assign skid_pdp_datin_pvld_f = (skid_flop_pdp_datin_prdy_f0) ? pdp_datin_pvld_f : skid_flop_pdp_datin_pvld_f;
+
+// SKID DATA
+always @(posedge nvdla_core_clk) begin
+    if (skid_flop_pdp_datin_prdy_f0 & pdp_datin_pvld_f) begin
+        skid_flop_pdp_datin_pd_f0[24-1:0] <= pdp_datin_pd_f0[24-1:0];
+    end
+end
+assign skid_pdp_datin_pd_f0[24-1:0] = (skid_flop_pdp_datin_prdy_f0) ? pdp_datin_pd_f0[24-1:0] : skid_flop_pdp_datin_pd_f0[24-1:0];
+
+
+// PIPE READY
+assign skid_pdp_datin_prdy_f0 = pipe_skid_pdp_datin_prdy_f0 || !pipe_skid_pdp_datin_pvld_f;
+
+// PIPE VALID
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+    if (!nvdla_core_rstn) begin
+        pipe_skid_pdp_datin_pvld_f <= 1'b0;
+    end else begin
+        if (skid_pdp_datin_prdy_f0) begin
+            pipe_skid_pdp_datin_pvld_f <= skid_pdp_datin_pvld_f;
+        end
+    end
+end
+
+// PIPE DATA
+always @(posedge nvdla_core_clk) begin
+    if (skid_pdp_datin_prdy_f0 && skid_pdp_datin_pvld_f) begin
+        pipe_skid_pdp_datin_pd_f0[24-1:0] <= skid_pdp_datin_pd_f0[24-1:0];
+    end
+end
+
+
+// PIPE OUTPUT
+assign pipe_skid_pdp_datin_prdy_f0 = pdp_datin_prdy;
+assign pdp_datin_pvld0 = pipe_skid_pdp_datin_pvld_f;
+assign pdp_datin_pd0 = pipe_skid_pdp_datin_pd_f0;
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 assign pdp_datin_prdy_f = pdp_datin_prdy_f0;
 assign pdp_datin_pvld = pdp_datin_pvld0;
 assign pdp_datin_pd = pdp_datin_pd0;
@@ -1007,6 +1112,10 @@ always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
 end
 //: my $Enum = 8/1 -1;
 //: print " assign last_c = (channel_cnt==5'd${Enum}) & pdp_datin_prdy_1;   \n";
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+ assign last_c = (channel_cnt==5'd7) & pdp_datin_prdy_1;   
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
   if (!nvdla_core_rstn) begin
     bubble_cnt <= {3{1'b0}};
@@ -1216,6 +1325,217 @@ assign line_ldata_valid = line_last_stripe_done;
 //: end
 //: );
 //: }
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+assign init_unit1d_set[0] = init_cnt & (padding_stride_num>=0) & (pout_width_cur >= 3'd0); 
+assign unit1d_set_trig[0] = stride_end & (unit1d_cnt_stride == regs_num) & (~last_pooling_flag);
+
+assign unit1d_set[0] = unit1d_set_trig[0] | init_unit1d_set[0];
+assign unit1d_clr[0] = (pooling_1d_rdy & (unit1d_cnt_pooling == 3'd0)) | line_ldata_valid;
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn)
+if (!nvdla_core_rstn) begin
+unit1d_en[0] <= 1'b0;
+end else begin
+if(pdp_cube_end)
+unit1d_en[0] <= 1'b0;
+else if(unit1d_set[0])
+unit1d_en[0] <= 1'b1;
+else if(unit1d_clr[0])
+unit1d_en[0] <= 1'b0;
+end
+assign init_unit1d_set[1] = init_cnt & (padding_stride_num>=1) & (pout_width_cur >= 3'd1); 
+assign unit1d_set_trig[1]=  stride_end & (unit1d_cnt_stride == 3'd0) & (unit1d_cnt_stride != regs_num) & (~last_pooling_flag);
+
+assign unit1d_set[1] = unit1d_set_trig[1] | init_unit1d_set[1];
+assign unit1d_clr[1] = (pooling_1d_rdy & (unit1d_cnt_pooling == 3'd1)) | line_ldata_valid;
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn)
+if (!nvdla_core_rstn) begin
+unit1d_en[1] <= 1'b0;
+end else begin
+if(pdp_cube_end)
+unit1d_en[1] <= 1'b0;
+else if(unit1d_set[1])
+unit1d_en[1] <= 1'b1;
+else if(unit1d_clr[1])
+unit1d_en[1] <= 1'b0;
+end
+assign init_unit1d_set[2] = init_cnt & (padding_stride_num>=2) & (pout_width_cur >= 3'd2); 
+assign unit1d_set_trig[2]=  stride_end & (unit1d_cnt_stride == 3'd1) & (unit1d_cnt_stride != regs_num) & (~last_pooling_flag);
+
+assign unit1d_set[2] = unit1d_set_trig[2] | init_unit1d_set[2];
+assign unit1d_clr[2] = (pooling_1d_rdy & (unit1d_cnt_pooling == 3'd2)) | line_ldata_valid;
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn)
+if (!nvdla_core_rstn) begin
+unit1d_en[2] <= 1'b0;
+end else begin
+if(pdp_cube_end)
+unit1d_en[2] <= 1'b0;
+else if(unit1d_set[2])
+unit1d_en[2] <= 1'b1;
+else if(unit1d_clr[2])
+unit1d_en[2] <= 1'b0;
+end
+assign init_unit1d_set[3] = init_cnt & (padding_stride_num>=3) & (pout_width_cur >= 3'd3); 
+assign unit1d_set_trig[3]=  stride_end & (unit1d_cnt_stride == 3'd2) & (unit1d_cnt_stride != regs_num) & (~last_pooling_flag);
+
+assign unit1d_set[3] = unit1d_set_trig[3] | init_unit1d_set[3];
+assign unit1d_clr[3] = (pooling_1d_rdy & (unit1d_cnt_pooling == 3'd3)) | line_ldata_valid;
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn)
+if (!nvdla_core_rstn) begin
+unit1d_en[3] <= 1'b0;
+end else begin
+if(pdp_cube_end)
+unit1d_en[3] <= 1'b0;
+else if(unit1d_set[3])
+unit1d_en[3] <= 1'b1;
+else if(unit1d_clr[3])
+unit1d_en[3] <= 1'b0;
+end
+assign init_unit1d_set[4] = init_cnt & (padding_stride_num>=4) & (pout_width_cur >= 3'd4); 
+assign unit1d_set_trig[4]=  stride_end & (unit1d_cnt_stride == 3'd3) & (unit1d_cnt_stride != regs_num) & (~last_pooling_flag);
+
+assign unit1d_set[4] = unit1d_set_trig[4] | init_unit1d_set[4];
+assign unit1d_clr[4] = (pooling_1d_rdy & (unit1d_cnt_pooling == 3'd4)) | line_ldata_valid;
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn)
+if (!nvdla_core_rstn) begin
+unit1d_en[4] <= 1'b0;
+end else begin
+if(pdp_cube_end)
+unit1d_en[4] <= 1'b0;
+else if(unit1d_set[4])
+unit1d_en[4] <= 1'b1;
+else if(unit1d_clr[4])
+unit1d_en[4] <= 1'b0;
+end
+assign init_unit1d_set[5] = init_cnt & (padding_stride_num>=5) & (pout_width_cur >= 3'd5); 
+assign unit1d_set_trig[5]=  stride_end & (unit1d_cnt_stride == 3'd4) & (unit1d_cnt_stride != regs_num) & (~last_pooling_flag);
+
+assign unit1d_set[5] = unit1d_set_trig[5] | init_unit1d_set[5];
+assign unit1d_clr[5] = (pooling_1d_rdy & (unit1d_cnt_pooling == 3'd5)) | line_ldata_valid;
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn)
+if (!nvdla_core_rstn) begin
+unit1d_en[5] <= 1'b0;
+end else begin
+if(pdp_cube_end)
+unit1d_en[5] <= 1'b0;
+else if(unit1d_set[5])
+unit1d_en[5] <= 1'b1;
+else if(unit1d_clr[5])
+unit1d_en[5] <= 1'b0;
+end
+assign init_unit1d_set[6] = init_cnt & (padding_stride_num>=6) & (pout_width_cur >= 3'd6); 
+assign unit1d_set_trig[6]=  stride_end & (unit1d_cnt_stride == 3'd5) & (unit1d_cnt_stride != regs_num) & (~last_pooling_flag);
+
+assign unit1d_set[6] = unit1d_set_trig[6] | init_unit1d_set[6];
+assign unit1d_clr[6] = (pooling_1d_rdy & (unit1d_cnt_pooling == 3'd6)) | line_ldata_valid;
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn)
+if (!nvdla_core_rstn) begin
+unit1d_en[6] <= 1'b0;
+end else begin
+if(pdp_cube_end)
+unit1d_en[6] <= 1'b0;
+else if(unit1d_set[6])
+unit1d_en[6] <= 1'b1;
+else if(unit1d_clr[6])
+unit1d_en[6] <= 1'b0;
+end
+assign init_unit1d_set[7] = init_cnt & (padding_stride_num>=7) & (pout_width_cur >= 3'd7); 
+assign unit1d_set_trig[7]=  stride_end & (unit1d_cnt_stride == 3'd6) & (unit1d_cnt_stride != regs_num) & (~last_pooling_flag);
+
+assign unit1d_set[7] = unit1d_set_trig[7] | init_unit1d_set[7];
+assign unit1d_clr[7] = (pooling_1d_rdy & (unit1d_cnt_pooling == 3'd7)) | line_ldata_valid;
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn)
+if (!nvdla_core_rstn) begin
+unit1d_en[7] <= 1'b0;
+end else begin
+if(pdp_cube_end)
+unit1d_en[7] <= 1'b0;
+else if(unit1d_set[7])
+unit1d_en[7] <= 1'b1;
+else if(unit1d_clr[7])
+unit1d_en[7] <= 1'b0;
+end
+
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn)
+if (!nvdla_core_rstn) begin
+pooling_din_1st_0 <= 1'b0;
+end else begin
+if(unit1d_set[0])
+pooling_din_1st_0 <= 1'b1;
+else if(strip_recieve_done)
+pooling_din_1st_0 <= 1'b0;
+end
+
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn)
+if (!nvdla_core_rstn) begin
+pooling_din_1st_1 <= 1'b0;
+end else begin
+if(unit1d_set[1])
+pooling_din_1st_1 <= 1'b1;
+else if(strip_recieve_done)
+pooling_din_1st_1 <= 1'b0;
+end
+
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn)
+if (!nvdla_core_rstn) begin
+pooling_din_1st_2 <= 1'b0;
+end else begin
+if(unit1d_set[2])
+pooling_din_1st_2 <= 1'b1;
+else if(strip_recieve_done)
+pooling_din_1st_2 <= 1'b0;
+end
+
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn)
+if (!nvdla_core_rstn) begin
+pooling_din_1st_3 <= 1'b0;
+end else begin
+if(unit1d_set[3])
+pooling_din_1st_3 <= 1'b1;
+else if(strip_recieve_done)
+pooling_din_1st_3 <= 1'b0;
+end
+
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn)
+if (!nvdla_core_rstn) begin
+pooling_din_1st_4 <= 1'b0;
+end else begin
+if(unit1d_set[4])
+pooling_din_1st_4 <= 1'b1;
+else if(strip_recieve_done)
+pooling_din_1st_4 <= 1'b0;
+end
+
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn)
+if (!nvdla_core_rstn) begin
+pooling_din_1st_5 <= 1'b0;
+end else begin
+if(unit1d_set[5])
+pooling_din_1st_5 <= 1'b1;
+else if(strip_recieve_done)
+pooling_din_1st_5 <= 1'b0;
+end
+
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn)
+if (!nvdla_core_rstn) begin
+pooling_din_1st_6 <= 1'b0;
+end else begin
+if(unit1d_set[6])
+pooling_din_1st_6 <= 1'b1;
+else if(strip_recieve_done)
+pooling_din_1st_6 <= 1'b0;
+end
+
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn)
+if (!nvdla_core_rstn) begin
+pooling_din_1st_7 <= 1'b0;
+end else begin
+if(unit1d_set[7])
+pooling_din_1st_7 <= 1'b1;
+else if(strip_recieve_done)
+pooling_din_1st_7 <= 1'b0;
+end
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 //////////////////////////////////////////////////////////////////////////////////////
 //assign datin_buf = pdp_datin_pd[96:0];
 //assign datin_buf_1 = {pdp_datin_pd[96:88],pdp_datin_pd0[87:0]};
@@ -1278,6 +1598,193 @@ assign {pdp_din_lc_sync,last_c_sync, last_out_en_sync,cur_datin_disable_sync,poo
 //: );
 //: );
 //: }
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+
+assign pooling_din_last[0] = unit1d_en[0] & (((strip_xcnt_psize== pooling_size_h_cfg[2:0]) & (unit1d_cnt_pooling==3'd0)) | strip_width_end) ;
+
+NV_NVDLA_PDP_CORE_unit1d unit1d_0 (
+.nvdla_core_clk (nvdla_core_clk) //|< i
+,.nvdla_core_rstn (nvdla_core_rstn) //|< i
+,.average_pooling_en (average_pooling_en) //|< w
+,.cur_datin_disable (cur_datin_disable) //|< r
+,.last_out_en ((last_out_en_sync | cur_datin_disable_sync)) //|< ?
+,.pdma2pdp_pd (datin_buf[1*(8 +3)+6:0]) //|< w
+,.pdma2pdp_pvld (unit1d_pvld[0]) //|< w
+,.pdp_din_lc_f (pdp_din_lc) //|< w
+,.pooling_din_1st ((pooling_din_1st_0 )) //|< r
+,.pooling_din_last (pooling_din_last[0]) //|< w
+,.pooling_out_prdy (unit1d_out_prdy[0]) //|< w
+,.pooling_type_cfg (pooling_type_cfg[1:0]) //|< i
+,.pooling_unit_en (unit1d_en[0]) //|< r
+//,.reg2dp_int16_en         (reg2dp_int16_en)                             //|< i
+//,.reg2dp_int8_en          (reg2dp_int8_en)                              //|< i
+,.pdma2pdp_prdy (unit1d_prdy[0]) //|> w
+,.pooling_out (unit1d_out_0) //|> w
+,.pooling_out_pvld (unit1d_out_pvld[0]) //|> w
+);
+
+assign pooling_din_last[1] = unit1d_en[1] & (((strip_xcnt_psize== pooling_size_h_cfg[2:0]) & (unit1d_cnt_pooling==3'd1)) | strip_width_end) ;
+
+NV_NVDLA_PDP_CORE_unit1d unit1d_1 (
+.nvdla_core_clk (nvdla_core_clk) //|< i
+,.nvdla_core_rstn (nvdla_core_rstn) //|< i
+,.average_pooling_en (average_pooling_en) //|< w
+,.cur_datin_disable (cur_datin_disable) //|< r
+,.last_out_en ((last_out_en_sync | cur_datin_disable_sync)) //|< ?
+,.pdma2pdp_pd (datin_buf[1*(8 +3)+6:0]) //|< w
+,.pdma2pdp_pvld (unit1d_pvld[1]) //|< w
+,.pdp_din_lc_f (pdp_din_lc) //|< w
+,.pooling_din_1st ((pooling_din_1st_1 )) //|< r
+,.pooling_din_last (pooling_din_last[1]) //|< w
+,.pooling_out_prdy (unit1d_out_prdy[1]) //|< w
+,.pooling_type_cfg (pooling_type_cfg[1:0]) //|< i
+,.pooling_unit_en (unit1d_en[1]) //|< r
+//,.reg2dp_int16_en         (reg2dp_int16_en)                             //|< i
+//,.reg2dp_int8_en          (reg2dp_int8_en)                              //|< i
+,.pdma2pdp_prdy (unit1d_prdy[1]) //|> w
+,.pooling_out (unit1d_out_1) //|> w
+,.pooling_out_pvld (unit1d_out_pvld[1]) //|> w
+);
+
+assign pooling_din_last[2] = unit1d_en[2] & (((strip_xcnt_psize== pooling_size_h_cfg[2:0]) & (unit1d_cnt_pooling==3'd2)) | strip_width_end) ;
+
+NV_NVDLA_PDP_CORE_unit1d unit1d_2 (
+.nvdla_core_clk (nvdla_core_clk) //|< i
+,.nvdla_core_rstn (nvdla_core_rstn) //|< i
+,.average_pooling_en (average_pooling_en) //|< w
+,.cur_datin_disable (cur_datin_disable) //|< r
+,.last_out_en ((last_out_en_sync | cur_datin_disable_sync)) //|< ?
+,.pdma2pdp_pd (datin_buf[1*(8 +3)+6:0]) //|< w
+,.pdma2pdp_pvld (unit1d_pvld[2]) //|< w
+,.pdp_din_lc_f (pdp_din_lc) //|< w
+,.pooling_din_1st ((pooling_din_1st_2 )) //|< r
+,.pooling_din_last (pooling_din_last[2]) //|< w
+,.pooling_out_prdy (unit1d_out_prdy[2]) //|< w
+,.pooling_type_cfg (pooling_type_cfg[1:0]) //|< i
+,.pooling_unit_en (unit1d_en[2]) //|< r
+//,.reg2dp_int16_en         (reg2dp_int16_en)                             //|< i
+//,.reg2dp_int8_en          (reg2dp_int8_en)                              //|< i
+,.pdma2pdp_prdy (unit1d_prdy[2]) //|> w
+,.pooling_out (unit1d_out_2) //|> w
+,.pooling_out_pvld (unit1d_out_pvld[2]) //|> w
+);
+
+assign pooling_din_last[3] = unit1d_en[3] & (((strip_xcnt_psize== pooling_size_h_cfg[2:0]) & (unit1d_cnt_pooling==3'd3)) | strip_width_end) ;
+
+NV_NVDLA_PDP_CORE_unit1d unit1d_3 (
+.nvdla_core_clk (nvdla_core_clk) //|< i
+,.nvdla_core_rstn (nvdla_core_rstn) //|< i
+,.average_pooling_en (average_pooling_en) //|< w
+,.cur_datin_disable (cur_datin_disable) //|< r
+,.last_out_en ((last_out_en_sync | cur_datin_disable_sync)) //|< ?
+,.pdma2pdp_pd (datin_buf[1*(8 +3)+6:0]) //|< w
+,.pdma2pdp_pvld (unit1d_pvld[3]) //|< w
+,.pdp_din_lc_f (pdp_din_lc) //|< w
+,.pooling_din_1st ((pooling_din_1st_3 )) //|< r
+,.pooling_din_last (pooling_din_last[3]) //|< w
+,.pooling_out_prdy (unit1d_out_prdy[3]) //|< w
+,.pooling_type_cfg (pooling_type_cfg[1:0]) //|< i
+,.pooling_unit_en (unit1d_en[3]) //|< r
+//,.reg2dp_int16_en         (reg2dp_int16_en)                             //|< i
+//,.reg2dp_int8_en          (reg2dp_int8_en)                              //|< i
+,.pdma2pdp_prdy (unit1d_prdy[3]) //|> w
+,.pooling_out (unit1d_out_3) //|> w
+,.pooling_out_pvld (unit1d_out_pvld[3]) //|> w
+);
+
+assign pooling_din_last[4] = unit1d_en[4] & (((strip_xcnt_psize== pooling_size_h_cfg[2:0]) & (unit1d_cnt_pooling==3'd4)) | strip_width_end) ;
+
+NV_NVDLA_PDP_CORE_unit1d unit1d_4 (
+.nvdla_core_clk (nvdla_core_clk) //|< i
+,.nvdla_core_rstn (nvdla_core_rstn) //|< i
+,.average_pooling_en (average_pooling_en) //|< w
+,.cur_datin_disable (cur_datin_disable) //|< r
+,.last_out_en ((last_out_en_sync | cur_datin_disable_sync)) //|< ?
+,.pdma2pdp_pd (datin_buf[1*(8 +3)+6:0]) //|< w
+,.pdma2pdp_pvld (unit1d_pvld[4]) //|< w
+,.pdp_din_lc_f (pdp_din_lc) //|< w
+,.pooling_din_1st ((pooling_din_1st_4 )) //|< r
+,.pooling_din_last (pooling_din_last[4]) //|< w
+,.pooling_out_prdy (unit1d_out_prdy[4]) //|< w
+,.pooling_type_cfg (pooling_type_cfg[1:0]) //|< i
+,.pooling_unit_en (unit1d_en[4]) //|< r
+//,.reg2dp_int16_en         (reg2dp_int16_en)                             //|< i
+//,.reg2dp_int8_en          (reg2dp_int8_en)                              //|< i
+,.pdma2pdp_prdy (unit1d_prdy[4]) //|> w
+,.pooling_out (unit1d_out_4) //|> w
+,.pooling_out_pvld (unit1d_out_pvld[4]) //|> w
+);
+
+assign pooling_din_last[5] = unit1d_en[5] & (((strip_xcnt_psize== pooling_size_h_cfg[2:0]) & (unit1d_cnt_pooling==3'd5)) | strip_width_end) ;
+
+NV_NVDLA_PDP_CORE_unit1d unit1d_5 (
+.nvdla_core_clk (nvdla_core_clk) //|< i
+,.nvdla_core_rstn (nvdla_core_rstn) //|< i
+,.average_pooling_en (average_pooling_en) //|< w
+,.cur_datin_disable (cur_datin_disable) //|< r
+,.last_out_en ((last_out_en_sync | cur_datin_disable_sync)) //|< ?
+,.pdma2pdp_pd (datin_buf[1*(8 +3)+6:0]) //|< w
+,.pdma2pdp_pvld (unit1d_pvld[5]) //|< w
+,.pdp_din_lc_f (pdp_din_lc) //|< w
+,.pooling_din_1st ((pooling_din_1st_5 )) //|< r
+,.pooling_din_last (pooling_din_last[5]) //|< w
+,.pooling_out_prdy (unit1d_out_prdy[5]) //|< w
+,.pooling_type_cfg (pooling_type_cfg[1:0]) //|< i
+,.pooling_unit_en (unit1d_en[5]) //|< r
+//,.reg2dp_int16_en         (reg2dp_int16_en)                             //|< i
+//,.reg2dp_int8_en          (reg2dp_int8_en)                              //|< i
+,.pdma2pdp_prdy (unit1d_prdy[5]) //|> w
+,.pooling_out (unit1d_out_5) //|> w
+,.pooling_out_pvld (unit1d_out_pvld[5]) //|> w
+);
+
+assign pooling_din_last[6] = unit1d_en[6] & (((strip_xcnt_psize== pooling_size_h_cfg[2:0]) & (unit1d_cnt_pooling==3'd6)) | strip_width_end) ;
+
+NV_NVDLA_PDP_CORE_unit1d unit1d_6 (
+.nvdla_core_clk (nvdla_core_clk) //|< i
+,.nvdla_core_rstn (nvdla_core_rstn) //|< i
+,.average_pooling_en (average_pooling_en) //|< w
+,.cur_datin_disable (cur_datin_disable) //|< r
+,.last_out_en ((last_out_en_sync | cur_datin_disable_sync)) //|< ?
+,.pdma2pdp_pd (datin_buf[1*(8 +3)+6:0]) //|< w
+,.pdma2pdp_pvld (unit1d_pvld[6]) //|< w
+,.pdp_din_lc_f (pdp_din_lc) //|< w
+,.pooling_din_1st ((pooling_din_1st_6 )) //|< r
+,.pooling_din_last (pooling_din_last[6]) //|< w
+,.pooling_out_prdy (unit1d_out_prdy[6]) //|< w
+,.pooling_type_cfg (pooling_type_cfg[1:0]) //|< i
+,.pooling_unit_en (unit1d_en[6]) //|< r
+//,.reg2dp_int16_en         (reg2dp_int16_en)                             //|< i
+//,.reg2dp_int8_en          (reg2dp_int8_en)                              //|< i
+,.pdma2pdp_prdy (unit1d_prdy[6]) //|> w
+,.pooling_out (unit1d_out_6) //|> w
+,.pooling_out_pvld (unit1d_out_pvld[6]) //|> w
+);
+
+assign pooling_din_last[7] = unit1d_en[7] & (((strip_xcnt_psize== pooling_size_h_cfg[2:0]) & (unit1d_cnt_pooling==3'd7)) | strip_width_end) ;
+
+NV_NVDLA_PDP_CORE_unit1d unit1d_7 (
+.nvdla_core_clk (nvdla_core_clk) //|< i
+,.nvdla_core_rstn (nvdla_core_rstn) //|< i
+,.average_pooling_en (average_pooling_en) //|< w
+,.cur_datin_disable (cur_datin_disable) //|< r
+,.last_out_en ((last_out_en_sync | cur_datin_disable_sync)) //|< ?
+,.pdma2pdp_pd (datin_buf[1*(8 +3)+6:0]) //|< w
+,.pdma2pdp_pvld (unit1d_pvld[7]) //|< w
+,.pdp_din_lc_f (pdp_din_lc) //|< w
+,.pooling_din_1st ((pooling_din_1st_7 )) //|< r
+,.pooling_din_last (pooling_din_last[7]) //|< w
+,.pooling_out_prdy (unit1d_out_prdy[7]) //|< w
+,.pooling_type_cfg (pooling_type_cfg[1:0]) //|< i
+,.pooling_unit_en (unit1d_en[7]) //|< r
+//,.reg2dp_int16_en         (reg2dp_int16_en)                             //|< i
+//,.reg2dp_int8_en          (reg2dp_int8_en)                              //|< i
+,.pdma2pdp_prdy (unit1d_prdy[7]) //|> w
+,.pooling_out (unit1d_out_7) //|> w
+,.pooling_out_pvld (unit1d_out_pvld[7]) //|> w
+);
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 //////////////////////////////////////////////////////////////////////////////////////
 assign unit1d_out_prdy[0] = unit1d_out_prdy_use & pdp_info_out_pvld & (&{unit1d_out_pvld[7:1]});
 assign unit1d_out_prdy[1] = unit1d_out_prdy_use & pdp_info_out_pvld & (&{unit1d_out_pvld[7:2],unit1d_out_pvld[0]});
@@ -1335,6 +1842,10 @@ assign cube_out_channel[12:0]= pooling_channel_cfg[12:0];
 //: my $m = 8;
 //: my $k = int(log($m)/log(2));
 //: print "assign surface_num = cube_out_channel[12:${k}]; \n";
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+assign surface_num = cube_out_channel[12:3]; 
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
   if (!nvdla_core_rstn) begin
     surface_cnt_rd <= 0;
@@ -1429,6 +1940,12 @@ assign loading_en = unit1d_actv_out_pvld & unit1d_actv_out_prdy;
 //: print "assign {mon_unit1d_actv_data_8bit_${m}[1:0],unit1d_actv_data_8bit_${m}} = padding_here_int8 ? {mon_unit1d_actv_data_8bit_${m}_ff[1:0],unit1d_actv_data_8bit_${m}_ff} : {2'd0,unit1d_actv_out[(${b}+3)*${m}+(${b}+3)-1:(${b}+3)*${m}] }; \n";
 //: }
 //: print "assign padding_here = (pooling_type_cfg== 2'h0 ) & (unit1d_actv_out[${k}*(${b}+3)+2:${k}*(${b}+3)] != pooling_size_h_cfg); \n";
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+assign {mon_unit1d_actv_data_8bit_0_ff[1:0],unit1d_actv_data_8bit_0_ff} = $signed({{1{unit1d_actv_out[(8+3)*0+(8+3)-1]}},unit1d_actv_out[(8+3)*0+(8+3)-1:(8+3)*0] }) + $signed({pad_table_out[10], pad_table_out[10:0]}); 
+assign {mon_unit1d_actv_data_8bit_0[1:0],unit1d_actv_data_8bit_0} = padding_here_int8 ? {mon_unit1d_actv_data_8bit_0_ff[1:0],unit1d_actv_data_8bit_0_ff} : {2'd0,unit1d_actv_out[(8+3)*0+(8+3)-1:(8+3)*0] }; 
+assign padding_here = (pooling_type_cfg== 2'h0 ) & (unit1d_actv_out[1*(8+3)+2:1*(8+3)] != pooling_size_h_cfg); 
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 assign padding_here_int8 = padding_here;
 assign {mon_pad_table_index[0],pad_table_index[2:0]} = pooling_size_h_cfg - unit1d_actv_out[1*(8 +3)+2:1*(8 +3)];
 `ifdef SPYGLASS_ASSERT_ON
@@ -1491,6 +2008,10 @@ always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
 //: }
 //: }
 //: print "{{3{unit1d_actv_data_8bit_0[${b}+2]}}, unit1d_actv_data_8bit_0[${b}+2:0]}}; \n";
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+{{3{unit1d_actv_data_8bit_0[8+2]}}, unit1d_actv_data_8bit_0[8+2:0]}}; 
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
    end
   end
 end

@@ -178,6 +178,10 @@ wire mon_overlap;
 //: elsif($k==8) {
 //: print " wire    [10:0] number_of_block_in_c; \n";
 //: }
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+ wire    [10:0] number_of_block_in_c; 
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 wire op_done;
 wire op_load;
 wire [3:0] overlap;
@@ -293,6 +297,10 @@ assign number_of_byte_in_c = {1'b0,cfg_channel};
 //: elsif($k == 8) {
 //: print " assign {mon_number_of_block_in_c[1:0],number_of_block_in_c[10:0]} = number_of_byte_in_c[14:3] + {11'd0,(|number_of_byte_in_c[2:0])};    \n";
 //: }
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+ assign {mon_number_of_block_in_c[1:0],number_of_block_in_c[10:0]} = number_of_byte_in_c[14:3] + {11'd0,(|number_of_byte_in_c[2:0])};    
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 //==============
 // WIDTH calculation
 // Always has FTRAN with size 0~7
@@ -407,19 +415,35 @@ always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
 //: my $k=8;
 //: my $m = int(log($k)/log(2));
 //: print " {mon_base_addr_width_c,base_addr_width} <= base_addr_split + {width_stride,${m}'d0} + {overlap[3:0],${m}'d0};     \n";
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+ {mon_base_addr_width_c,base_addr_width} <= base_addr_split + {width_stride,3'd0} + {overlap[3:0],3'd0};     
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
                 else
 //: my $k=8;
 //: my $m = int(log($k)/log(2));
 //: print " {mon_base_addr_width_c,base_addr_width} <= base_addr_split + {width_stride,${m}'d0} - {overlap[3:0],${m}'d0};     \n";
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+ {mon_base_addr_width_c,base_addr_width} <= base_addr_split + {width_stride,3'd0} - {overlap[3:0],3'd0};     
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
             end else begin
                 if({1'b0,reg2dp_kernel_width[2:0]} < reg2dp_kernel_stride_width)
 //: my $k=8;
 //: my $m = int(log($k)/log(2));
 //: print " {mon_base_addr_width_c,base_addr_width} <= base_addr_split + {width_stride,${m}'d0};     \n";
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+ {mon_base_addr_width_c,base_addr_width} <= base_addr_split + {width_stride,3'd0};     
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
                 else
 //: my $k=8;
 //: my $m = int(log($k)/log(2));
 //: print " {mon_base_addr_width_c,base_addr_width} <= base_addr_split + {width_stride,${m}'d0};     \n";
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+ {mon_base_addr_width_c,base_addr_width} <= base_addr_split + {width_stride,3'd0};     
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
             end
         end else if (is_surf_end) begin
             {mon_base_addr_width_c,base_addr_width} <= base_addr_esurf + reg2dp_esurf_stride;
@@ -489,19 +513,35 @@ always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
 //: my $k=8;
 //: my $m = int(log($k)/log(2));
 //: print " {mon_base_addr_line_c,base_addr_line} <= base_addr_split + {width_stride,${m}'d0} + {overlap[3:0],${m}'d0};  \n";
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+ {mon_base_addr_line_c,base_addr_line} <= base_addr_split + {width_stride,3'd0} + {overlap[3:0],3'd0};  
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
                 else
 //: my $k=8;
 //: my $m = int(log($k)/log(2));
 //: print " {mon_base_addr_line_c,base_addr_line} <= base_addr_split + {width_stride,${m}'d0} - {overlap[3:0],${m}'d0};   \n";
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+ {mon_base_addr_line_c,base_addr_line} <= base_addr_split + {width_stride,3'd0} - {overlap[3:0],3'd0};   
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
             end else begin
                 if({1'b0,reg2dp_kernel_width[2:0]} < reg2dp_kernel_stride_width)
 //: my $k=8;
 //: my $m = int(log($k)/log(2));
 //: print"  {mon_base_addr_line_c,base_addr_line} <= base_addr_split + {width_stride,${m}'d0};   \n";
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+  {mon_base_addr_line_c,base_addr_line} <= base_addr_split + {width_stride,3'd0};   
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
                 else
 //: my $k=8;
 //: my $m = int(log($k)/log(2));
 //: print " {mon_base_addr_line_c,base_addr_line} <= base_addr_split + {width_stride,${m}'d0};   \n";
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+ {mon_base_addr_line_c,base_addr_line} <= base_addr_split + {width_stride,3'd0};   
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
             end
         end else if(is_surf_end)
             {mon_base_addr_line_c,base_addr_line} <= base_addr_esurf + reg2dp_esurf_stride;
@@ -571,19 +611,35 @@ always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
 //: my $k=8;
 //: my $m = int(log($k)/log(2));
 //: print " {mon_base_addr_surf_c,base_addr_esurf} <= base_addr_split + {width_stride,${m}'d0} + {overlap[3:0],${m}'d0};   \n";
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+ {mon_base_addr_surf_c,base_addr_esurf} <= base_addr_split + {width_stride,3'd0} + {overlap[3:0],3'd0};   
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
                 else
 //: my $k=8;
 //: my $m = int(log($k)/log(2));
 //: print " {mon_base_addr_surf_c,base_addr_esurf} <= base_addr_split + {width_stride,${m}'d0} - {overlap[3:0],${m}'d0};  \n";
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+ {mon_base_addr_surf_c,base_addr_esurf} <= base_addr_split + {width_stride,3'd0} - {overlap[3:0],3'd0};  
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
             end else begin
                 if({1'b0,reg2dp_kernel_width[2:0]} < reg2dp_kernel_stride_width)
 //: my $k=8;
 //: my $m = int(log($k)/log(2));
 //: print " {mon_base_addr_surf_c,base_addr_esurf} <= base_addr_split + {width_stride,${m}'d0};    \n";
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+ {mon_base_addr_surf_c,base_addr_esurf} <= base_addr_split + {width_stride,3'd0};    
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
                 else
 //: my $k=8;
 //: my $m = int(log($k)/log(2));
 //: print " {mon_base_addr_surf_c,base_addr_esurf} <= base_addr_split + {width_stride,${m}'d0};    \n";
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+ {mon_base_addr_surf_c,base_addr_esurf} <= base_addr_split + {width_stride,3'd0};    
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
             end
         end else if (is_surf_end)
             {mon_base_addr_surf_c,base_addr_esurf} <= base_addr_esurf + reg2dp_esurf_stride;
@@ -650,19 +706,35 @@ always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
 //: my $k=8;
 //: my $m = int(log($k)/log(2));
 //: print " {mon_base_addr_split_c,base_addr_split} <= base_addr_split + {width_stride,${m}'d0} + {overlap[3:0],${m}'d0}; \n";
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+ {mon_base_addr_split_c,base_addr_split} <= base_addr_split + {width_stride,3'd0} + {overlap[3:0],3'd0}; 
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
             else
 //: my $k=8;
 //: my $m = int(log($k)/log(2));
 //: print "{mon_base_addr_split_c,base_addr_split} <= base_addr_split + {width_stride,${m}'d0} - {overlap[3:0],${m}'d0}; \n";
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+{mon_base_addr_split_c,base_addr_split} <= base_addr_split + {width_stride,3'd0} - {overlap[3:0],3'd0}; 
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
           end else begin
             if({1'b0,reg2dp_kernel_width[2:0]} < reg2dp_kernel_stride_width)
 //: my $k=8;
 //: my $m = int(log($k)/log(2));
 //: print " {mon_base_addr_split_c,base_addr_split} <= base_addr_split + {width_stride,${m}'d0}; \n";
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+ {mon_base_addr_split_c,base_addr_split} <= base_addr_split + {width_stride,3'd0}; 
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
             else
 //: my $k=8;
 //: my $m = int(log($k)/log(2));
 //: print " {mon_base_addr_split_c,base_addr_split} <= base_addr_split + {width_stride,${m}'d0}; \n";
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+ {mon_base_addr_split_c,base_addr_split} <= base_addr_split + {width_stride,3'd0}; 
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
           end
         end
     end

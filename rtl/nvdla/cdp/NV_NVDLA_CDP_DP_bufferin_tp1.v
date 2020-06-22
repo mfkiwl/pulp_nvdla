@@ -70,6 +70,233 @@ reg [3:0] cube_end_width_cnt;
 //: );
 //: }
 //: }
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+
+reg [1*9-1:0] data_shift_00;
+
+reg [1*9-1:0] data_shift_10;
+
+reg [1*9-1:0] data_shift_20;
+
+reg [1*9-1:0] data_shift_30;
+
+reg [1*9-1:0] data_shift_40;
+
+reg [1*9-1:0] data_shift_50;
+
+reg [1*9-1:0] data_shift_60;
+
+reg [1*9-1:0] data_shift_70;
+
+reg [1*9-1:0] data_shift_80;
+
+reg [1*9-1:0] data_shift_01;
+
+reg [1*9-1:0] data_shift_11;
+
+reg [1*9-1:0] data_shift_21;
+
+reg [1*9-1:0] data_shift_31;
+
+reg [1*9-1:0] data_shift_41;
+
+reg [1*9-1:0] data_shift_51;
+
+reg [1*9-1:0] data_shift_61;
+
+reg [1*9-1:0] data_shift_71;
+
+reg [1*9-1:0] data_shift_81;
+
+reg [1*9-1:0] data_shift_02;
+
+reg [1*9-1:0] data_shift_12;
+
+reg [1*9-1:0] data_shift_22;
+
+reg [1*9-1:0] data_shift_32;
+
+reg [1*9-1:0] data_shift_42;
+
+reg [1*9-1:0] data_shift_52;
+
+reg [1*9-1:0] data_shift_62;
+
+reg [1*9-1:0] data_shift_72;
+
+reg [1*9-1:0] data_shift_82;
+
+reg [1*9-1:0] data_shift_03;
+
+reg [1*9-1:0] data_shift_13;
+
+reg [1*9-1:0] data_shift_23;
+
+reg [1*9-1:0] data_shift_33;
+
+reg [1*9-1:0] data_shift_43;
+
+reg [1*9-1:0] data_shift_53;
+
+reg [1*9-1:0] data_shift_63;
+
+reg [1*9-1:0] data_shift_73;
+
+reg [1*9-1:0] data_shift_83;
+
+reg [1*9-1:0] data_shift_04;
+
+reg [1*9-1:0] data_shift_14;
+
+reg [1*9-1:0] data_shift_24;
+
+reg [1*9-1:0] data_shift_34;
+
+reg [1*9-1:0] data_shift_44;
+
+reg [1*9-1:0] data_shift_54;
+
+reg [1*9-1:0] data_shift_64;
+
+reg [1*9-1:0] data_shift_74;
+
+reg [1*9-1:0] data_shift_84;
+
+reg [1*9-1:0] data_shift_05;
+
+reg [1*9-1:0] data_shift_15;
+
+reg [1*9-1:0] data_shift_25;
+
+reg [1*9-1:0] data_shift_35;
+
+reg [1*9-1:0] data_shift_45;
+
+reg [1*9-1:0] data_shift_55;
+
+reg [1*9-1:0] data_shift_65;
+
+reg [1*9-1:0] data_shift_75;
+
+reg [1*9-1:0] data_shift_85;
+
+reg [1*9-1:0] data_shift_06;
+
+reg [1*9-1:0] data_shift_16;
+
+reg [1*9-1:0] data_shift_26;
+
+reg [1*9-1:0] data_shift_36;
+
+reg [1*9-1:0] data_shift_46;
+
+reg [1*9-1:0] data_shift_56;
+
+reg [1*9-1:0] data_shift_66;
+
+reg [1*9-1:0] data_shift_76;
+
+reg [1*9-1:0] data_shift_86;
+
+reg [1*9-1:0] data_shift_07;
+
+reg [1*9-1:0] data_shift_17;
+
+reg [1*9-1:0] data_shift_27;
+
+reg [1*9-1:0] data_shift_37;
+
+reg [1*9-1:0] data_shift_47;
+
+reg [1*9-1:0] data_shift_57;
+
+reg [1*9-1:0] data_shift_67;
+
+reg [1*9-1:0] data_shift_77;
+
+reg [1*9-1:0] data_shift_87;
+
+reg [1*9-1:0] data_1stC_00;
+
+reg [1*9-1:0] data_1stC_10;
+
+reg [1*9-1:0] data_1stC_20;
+
+reg [1*9-1:0] data_1stC_30;
+
+reg [1*9-1:0] data_1stC_40;
+
+reg [1*9-1:0] data_1stC_01;
+
+reg [1*9-1:0] data_1stC_11;
+
+reg [1*9-1:0] data_1stC_21;
+
+reg [1*9-1:0] data_1stC_31;
+
+reg [1*9-1:0] data_1stC_41;
+
+reg [1*9-1:0] data_1stC_02;
+
+reg [1*9-1:0] data_1stC_12;
+
+reg [1*9-1:0] data_1stC_22;
+
+reg [1*9-1:0] data_1stC_32;
+
+reg [1*9-1:0] data_1stC_42;
+
+reg [1*9-1:0] data_1stC_03;
+
+reg [1*9-1:0] data_1stC_13;
+
+reg [1*9-1:0] data_1stC_23;
+
+reg [1*9-1:0] data_1stC_33;
+
+reg [1*9-1:0] data_1stC_43;
+
+reg [1*9-1:0] data_1stC_04;
+
+reg [1*9-1:0] data_1stC_14;
+
+reg [1*9-1:0] data_1stC_24;
+
+reg [1*9-1:0] data_1stC_34;
+
+reg [1*9-1:0] data_1stC_44;
+
+reg [1*9-1:0] data_1stC_05;
+
+reg [1*9-1:0] data_1stC_15;
+
+reg [1*9-1:0] data_1stC_25;
+
+reg [1*9-1:0] data_1stC_35;
+
+reg [1*9-1:0] data_1stC_45;
+
+reg [1*9-1:0] data_1stC_06;
+
+reg [1*9-1:0] data_1stC_16;
+
+reg [1*9-1:0] data_1stC_26;
+
+reg [1*9-1:0] data_1stC_36;
+
+reg [1*9-1:0] data_1stC_46;
+
+reg [1*9-1:0] data_1stC_07;
+
+reg [1*9-1:0] data_1stC_17;
+
+reg [1*9-1:0] data_1stC_27;
+
+reg [1*9-1:0] data_1stC_37;
+
+reg [1*9-1:0] data_1stC_47;
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 reg data_shift_valid;
 reg hold_here;
 reg hold_here_dly;
@@ -199,6 +426,11 @@ wire is_posc_end;
 //: }
 //: my $k = int($atmm/$tp) -1;
 //: print "assign is_posc_end = (is_pos_c == ${k});  \n";
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+assign is_4ele_here = (is_pos_c == 3);  
+assign is_posc_end = (is_pos_c == 7);  
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 localparam WAIT = 3'b000;
 localparam NORMAL_C = 3'b001;
 localparam FIRST_C = 3'b010;
@@ -228,6 +460,11 @@ always @(*) begin
 //: stat_nex = NORMAL_C;
 //: );
 //: }
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+
+stat_nex = NORMAL_C;
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
         end
       end
       NORMAL_C: begin
@@ -256,6 +493,11 @@ always @(*) begin
 //: stat_nex = SECOND_C;
 //: );
 //: }
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+
+stat_nex = SECOND_C;
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
         end
       end
       SECOND_C: begin
@@ -313,6 +555,217 @@ always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
 //: );
 //: }
 //: }
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+
+data_shift_00 <= {1*9{1'd0}};
+
+data_shift_10 <= {1*9{1'd0}};
+
+data_shift_20 <= {1*9{1'd0}};
+
+data_shift_30 <= {1*9{1'd0}};
+
+data_shift_40 <= {1*9{1'd0}};
+
+data_shift_50 <= {1*9{1'd0}};
+
+data_shift_60 <= {1*9{1'd0}};
+
+data_shift_70 <= {1*9{1'd0}};
+
+data_shift_80 <= {1*9{1'd0}};
+
+data_shift_01 <= {1*9{1'd0}};
+
+data_shift_11 <= {1*9{1'd0}};
+
+data_shift_21 <= {1*9{1'd0}};
+
+data_shift_31 <= {1*9{1'd0}};
+
+data_shift_41 <= {1*9{1'd0}};
+
+data_shift_51 <= {1*9{1'd0}};
+
+data_shift_61 <= {1*9{1'd0}};
+
+data_shift_71 <= {1*9{1'd0}};
+
+data_shift_81 <= {1*9{1'd0}};
+
+data_shift_02 <= {1*9{1'd0}};
+
+data_shift_12 <= {1*9{1'd0}};
+
+data_shift_22 <= {1*9{1'd0}};
+
+data_shift_32 <= {1*9{1'd0}};
+
+data_shift_42 <= {1*9{1'd0}};
+
+data_shift_52 <= {1*9{1'd0}};
+
+data_shift_62 <= {1*9{1'd0}};
+
+data_shift_72 <= {1*9{1'd0}};
+
+data_shift_82 <= {1*9{1'd0}};
+
+data_shift_03 <= {1*9{1'd0}};
+
+data_shift_13 <= {1*9{1'd0}};
+
+data_shift_23 <= {1*9{1'd0}};
+
+data_shift_33 <= {1*9{1'd0}};
+
+data_shift_43 <= {1*9{1'd0}};
+
+data_shift_53 <= {1*9{1'd0}};
+
+data_shift_63 <= {1*9{1'd0}};
+
+data_shift_73 <= {1*9{1'd0}};
+
+data_shift_83 <= {1*9{1'd0}};
+
+data_shift_04 <= {1*9{1'd0}};
+
+data_shift_14 <= {1*9{1'd0}};
+
+data_shift_24 <= {1*9{1'd0}};
+
+data_shift_34 <= {1*9{1'd0}};
+
+data_shift_44 <= {1*9{1'd0}};
+
+data_shift_54 <= {1*9{1'd0}};
+
+data_shift_64 <= {1*9{1'd0}};
+
+data_shift_74 <= {1*9{1'd0}};
+
+data_shift_84 <= {1*9{1'd0}};
+
+data_shift_05 <= {1*9{1'd0}};
+
+data_shift_15 <= {1*9{1'd0}};
+
+data_shift_25 <= {1*9{1'd0}};
+
+data_shift_35 <= {1*9{1'd0}};
+
+data_shift_45 <= {1*9{1'd0}};
+
+data_shift_55 <= {1*9{1'd0}};
+
+data_shift_65 <= {1*9{1'd0}};
+
+data_shift_75 <= {1*9{1'd0}};
+
+data_shift_85 <= {1*9{1'd0}};
+
+data_shift_06 <= {1*9{1'd0}};
+
+data_shift_16 <= {1*9{1'd0}};
+
+data_shift_26 <= {1*9{1'd0}};
+
+data_shift_36 <= {1*9{1'd0}};
+
+data_shift_46 <= {1*9{1'd0}};
+
+data_shift_56 <= {1*9{1'd0}};
+
+data_shift_66 <= {1*9{1'd0}};
+
+data_shift_76 <= {1*9{1'd0}};
+
+data_shift_86 <= {1*9{1'd0}};
+
+data_shift_07 <= {1*9{1'd0}};
+
+data_shift_17 <= {1*9{1'd0}};
+
+data_shift_27 <= {1*9{1'd0}};
+
+data_shift_37 <= {1*9{1'd0}};
+
+data_shift_47 <= {1*9{1'd0}};
+
+data_shift_57 <= {1*9{1'd0}};
+
+data_shift_67 <= {1*9{1'd0}};
+
+data_shift_77 <= {1*9{1'd0}};
+
+data_shift_87 <= {1*9{1'd0}};
+
+data_1stC_00 <= {1*9{1'd0}};
+
+data_1stC_10 <= {1*9{1'd0}};
+
+data_1stC_20 <= {1*9{1'd0}};
+
+data_1stC_30 <= {1*9{1'd0}};
+
+data_1stC_01 <= {1*9{1'd0}};
+
+data_1stC_11 <= {1*9{1'd0}};
+
+data_1stC_21 <= {1*9{1'd0}};
+
+data_1stC_31 <= {1*9{1'd0}};
+
+data_1stC_02 <= {1*9{1'd0}};
+
+data_1stC_12 <= {1*9{1'd0}};
+
+data_1stC_22 <= {1*9{1'd0}};
+
+data_1stC_32 <= {1*9{1'd0}};
+
+data_1stC_03 <= {1*9{1'd0}};
+
+data_1stC_13 <= {1*9{1'd0}};
+
+data_1stC_23 <= {1*9{1'd0}};
+
+data_1stC_33 <= {1*9{1'd0}};
+
+data_1stC_04 <= {1*9{1'd0}};
+
+data_1stC_14 <= {1*9{1'd0}};
+
+data_1stC_24 <= {1*9{1'd0}};
+
+data_1stC_34 <= {1*9{1'd0}};
+
+data_1stC_05 <= {1*9{1'd0}};
+
+data_1stC_15 <= {1*9{1'd0}};
+
+data_1stC_25 <= {1*9{1'd0}};
+
+data_1stC_35 <= {1*9{1'd0}};
+
+data_1stC_06 <= {1*9{1'd0}};
+
+data_1stC_16 <= {1*9{1'd0}};
+
+data_1stC_26 <= {1*9{1'd0}};
+
+data_1stC_36 <= {1*9{1'd0}};
+
+data_1stC_07 <= {1*9{1'd0}};
+
+data_1stC_17 <= {1*9{1'd0}};
+
+data_1stC_27 <= {1*9{1'd0}};
+
+data_1stC_37 <= {1*9{1'd0}};
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
   end else begin
   case(stat_cur)
       WAIT: begin
@@ -337,6 +790,145 @@ always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
 //: );
 //: }
 //: }
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+
+if(is_pos_w==4'd0) begin
+data_shift_00 <= dp_data[1*9-1:0];
+data_shift_10 <= data_shift_00;
+data_shift_20 <= data_shift_10;
+data_shift_30 <= data_shift_20;
+end
+
+if(is_pos_w==4'd1) begin
+data_shift_01 <= dp_data[1*9-1:0];
+data_shift_11 <= data_shift_01;
+data_shift_21 <= data_shift_11;
+data_shift_31 <= data_shift_21;
+end
+
+if(is_pos_w==4'd2) begin
+data_shift_02 <= dp_data[1*9-1:0];
+data_shift_12 <= data_shift_02;
+data_shift_22 <= data_shift_12;
+data_shift_32 <= data_shift_22;
+end
+
+if(is_pos_w==4'd3) begin
+data_shift_03 <= dp_data[1*9-1:0];
+data_shift_13 <= data_shift_03;
+data_shift_23 <= data_shift_13;
+data_shift_33 <= data_shift_23;
+end
+
+if(is_pos_w==4'd4) begin
+data_shift_04 <= dp_data[1*9-1:0];
+data_shift_14 <= data_shift_04;
+data_shift_24 <= data_shift_14;
+data_shift_34 <= data_shift_24;
+end
+
+if(is_pos_w==4'd5) begin
+data_shift_05 <= dp_data[1*9-1:0];
+data_shift_15 <= data_shift_05;
+data_shift_25 <= data_shift_15;
+data_shift_35 <= data_shift_25;
+end
+
+if(is_pos_w==4'd6) begin
+data_shift_06 <= dp_data[1*9-1:0];
+data_shift_16 <= data_shift_06;
+data_shift_26 <= data_shift_16;
+data_shift_36 <= data_shift_26;
+end
+
+if(is_pos_w==4'd7) begin
+data_shift_07 <= dp_data[1*9-1:0];
+data_shift_17 <= data_shift_07;
+data_shift_27 <= data_shift_17;
+data_shift_37 <= data_shift_27;
+end
+
+data_shift_40 <= {1*9{1'd0}};
+
+data_shift_41 <= {1*9{1'd0}};
+
+data_shift_42 <= {1*9{1'd0}};
+
+data_shift_43 <= {1*9{1'd0}};
+
+data_shift_44 <= {1*9{1'd0}};
+
+data_shift_45 <= {1*9{1'd0}};
+
+data_shift_46 <= {1*9{1'd0}};
+
+data_shift_47 <= {1*9{1'd0}};
+
+data_shift_50 <= {1*9{1'd0}};
+
+data_shift_51 <= {1*9{1'd0}};
+
+data_shift_52 <= {1*9{1'd0}};
+
+data_shift_53 <= {1*9{1'd0}};
+
+data_shift_54 <= {1*9{1'd0}};
+
+data_shift_55 <= {1*9{1'd0}};
+
+data_shift_56 <= {1*9{1'd0}};
+
+data_shift_57 <= {1*9{1'd0}};
+
+data_shift_60 <= {1*9{1'd0}};
+
+data_shift_61 <= {1*9{1'd0}};
+
+data_shift_62 <= {1*9{1'd0}};
+
+data_shift_63 <= {1*9{1'd0}};
+
+data_shift_64 <= {1*9{1'd0}};
+
+data_shift_65 <= {1*9{1'd0}};
+
+data_shift_66 <= {1*9{1'd0}};
+
+data_shift_67 <= {1*9{1'd0}};
+
+data_shift_70 <= {1*9{1'd0}};
+
+data_shift_71 <= {1*9{1'd0}};
+
+data_shift_72 <= {1*9{1'd0}};
+
+data_shift_73 <= {1*9{1'd0}};
+
+data_shift_74 <= {1*9{1'd0}};
+
+data_shift_75 <= {1*9{1'd0}};
+
+data_shift_76 <= {1*9{1'd0}};
+
+data_shift_77 <= {1*9{1'd0}};
+
+data_shift_80 <= {1*9{1'd0}};
+
+data_shift_81 <= {1*9{1'd0}};
+
+data_shift_82 <= {1*9{1'd0}};
+
+data_shift_83 <= {1*9{1'd0}};
+
+data_shift_84 <= {1*9{1'd0}};
+
+data_shift_85 <= {1*9{1'd0}};
+
+data_shift_86 <= {1*9{1'd0}};
+
+data_shift_87 <= {1*9{1'd0}};
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
       end end
       NORMAL_C: begin
           if(load_din) begin
@@ -357,6 +949,105 @@ always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
 //: end
 //: );
 //: }
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+
+if(is_pos_w==4'd0) begin
+data_shift_00 <= dp_data[1*9-1:0];
+data_shift_10 <= data_shift_00;
+data_shift_20 <= data_shift_10;
+data_shift_30 <= data_shift_20;
+data_shift_40 <= data_shift_30;
+data_shift_50 <= data_shift_40;
+data_shift_60 <= data_shift_50;
+data_shift_70 <= data_shift_60;
+data_shift_80 <= data_shift_70;
+end
+
+if(is_pos_w==4'd1) begin
+data_shift_01 <= dp_data[1*9-1:0];
+data_shift_11 <= data_shift_01;
+data_shift_21 <= data_shift_11;
+data_shift_31 <= data_shift_21;
+data_shift_41 <= data_shift_31;
+data_shift_51 <= data_shift_41;
+data_shift_61 <= data_shift_51;
+data_shift_71 <= data_shift_61;
+data_shift_81 <= data_shift_71;
+end
+
+if(is_pos_w==4'd2) begin
+data_shift_02 <= dp_data[1*9-1:0];
+data_shift_12 <= data_shift_02;
+data_shift_22 <= data_shift_12;
+data_shift_32 <= data_shift_22;
+data_shift_42 <= data_shift_32;
+data_shift_52 <= data_shift_42;
+data_shift_62 <= data_shift_52;
+data_shift_72 <= data_shift_62;
+data_shift_82 <= data_shift_72;
+end
+
+if(is_pos_w==4'd3) begin
+data_shift_03 <= dp_data[1*9-1:0];
+data_shift_13 <= data_shift_03;
+data_shift_23 <= data_shift_13;
+data_shift_33 <= data_shift_23;
+data_shift_43 <= data_shift_33;
+data_shift_53 <= data_shift_43;
+data_shift_63 <= data_shift_53;
+data_shift_73 <= data_shift_63;
+data_shift_83 <= data_shift_73;
+end
+
+if(is_pos_w==4'd4) begin
+data_shift_04 <= dp_data[1*9-1:0];
+data_shift_14 <= data_shift_04;
+data_shift_24 <= data_shift_14;
+data_shift_34 <= data_shift_24;
+data_shift_44 <= data_shift_34;
+data_shift_54 <= data_shift_44;
+data_shift_64 <= data_shift_54;
+data_shift_74 <= data_shift_64;
+data_shift_84 <= data_shift_74;
+end
+
+if(is_pos_w==4'd5) begin
+data_shift_05 <= dp_data[1*9-1:0];
+data_shift_15 <= data_shift_05;
+data_shift_25 <= data_shift_15;
+data_shift_35 <= data_shift_25;
+data_shift_45 <= data_shift_35;
+data_shift_55 <= data_shift_45;
+data_shift_65 <= data_shift_55;
+data_shift_75 <= data_shift_65;
+data_shift_85 <= data_shift_75;
+end
+
+if(is_pos_w==4'd6) begin
+data_shift_06 <= dp_data[1*9-1:0];
+data_shift_16 <= data_shift_06;
+data_shift_26 <= data_shift_16;
+data_shift_36 <= data_shift_26;
+data_shift_46 <= data_shift_36;
+data_shift_56 <= data_shift_46;
+data_shift_66 <= data_shift_56;
+data_shift_76 <= data_shift_66;
+data_shift_86 <= data_shift_76;
+end
+
+if(is_pos_w==4'd7) begin
+data_shift_07 <= dp_data[1*9-1:0];
+data_shift_17 <= data_shift_07;
+data_shift_27 <= data_shift_17;
+data_shift_37 <= data_shift_27;
+data_shift_47 <= data_shift_37;
+data_shift_57 <= data_shift_47;
+data_shift_67 <= data_shift_57;
+data_shift_77 <= data_shift_67;
+data_shift_87 <= data_shift_77;
+end
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
       end end
       FIRST_C: begin
 //: my $tp = 1;
@@ -394,6 +1085,249 @@ always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
 //: end
 //: );
 //: }
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+
+if(hold_here & rdma2dp_ready_normal) begin
+if(width_pre_cnt==4'd0) begin
+data_shift_00 <= {1*9{1'd0}};
+data_shift_10 <= data_shift_00;
+data_shift_20 <= data_shift_10;
+data_shift_30 <= data_shift_20;
+data_shift_40 <= data_shift_30;
+data_shift_50 <= data_shift_40;
+data_shift_60 <= data_shift_50;
+data_shift_70 <= data_shift_60;
+data_shift_80 <= data_shift_70;
+end
+end else begin
+if((is_pos_w==4'd0) & load_din) begin
+data_1stC_00 <= dp_data[1*9-1:0];
+data_1stC_10 <= data_1stC_00;
+data_1stC_20 <= data_1stC_10;
+data_1stC_30 <= data_1stC_20;
+data_shift_00 <= {1*9{1'd0}};
+data_shift_10 <= data_shift_00;
+data_shift_20 <= data_shift_10;
+data_shift_30 <= data_shift_20;
+data_shift_40 <= data_shift_30;
+data_shift_50 <= data_shift_40;
+data_shift_60 <= data_shift_50;
+data_shift_70 <= data_shift_60;
+data_shift_80 <= data_shift_70;
+end
+end
+
+if(hold_here & rdma2dp_ready_normal) begin
+if(width_pre_cnt==4'd1) begin
+data_shift_01 <= {1*9{1'd0}};
+data_shift_11 <= data_shift_01;
+data_shift_21 <= data_shift_11;
+data_shift_31 <= data_shift_21;
+data_shift_41 <= data_shift_31;
+data_shift_51 <= data_shift_41;
+data_shift_61 <= data_shift_51;
+data_shift_71 <= data_shift_61;
+data_shift_81 <= data_shift_71;
+end
+end else begin
+if((is_pos_w==4'd1) & load_din) begin
+data_1stC_01 <= dp_data[1*9-1:0];
+data_1stC_11 <= data_1stC_01;
+data_1stC_21 <= data_1stC_11;
+data_1stC_31 <= data_1stC_21;
+data_shift_01 <= {1*9{1'd0}};
+data_shift_11 <= data_shift_01;
+data_shift_21 <= data_shift_11;
+data_shift_31 <= data_shift_21;
+data_shift_41 <= data_shift_31;
+data_shift_51 <= data_shift_41;
+data_shift_61 <= data_shift_51;
+data_shift_71 <= data_shift_61;
+data_shift_81 <= data_shift_71;
+end
+end
+
+if(hold_here & rdma2dp_ready_normal) begin
+if(width_pre_cnt==4'd2) begin
+data_shift_02 <= {1*9{1'd0}};
+data_shift_12 <= data_shift_02;
+data_shift_22 <= data_shift_12;
+data_shift_32 <= data_shift_22;
+data_shift_42 <= data_shift_32;
+data_shift_52 <= data_shift_42;
+data_shift_62 <= data_shift_52;
+data_shift_72 <= data_shift_62;
+data_shift_82 <= data_shift_72;
+end
+end else begin
+if((is_pos_w==4'd2) & load_din) begin
+data_1stC_02 <= dp_data[1*9-1:0];
+data_1stC_12 <= data_1stC_02;
+data_1stC_22 <= data_1stC_12;
+data_1stC_32 <= data_1stC_22;
+data_shift_02 <= {1*9{1'd0}};
+data_shift_12 <= data_shift_02;
+data_shift_22 <= data_shift_12;
+data_shift_32 <= data_shift_22;
+data_shift_42 <= data_shift_32;
+data_shift_52 <= data_shift_42;
+data_shift_62 <= data_shift_52;
+data_shift_72 <= data_shift_62;
+data_shift_82 <= data_shift_72;
+end
+end
+
+if(hold_here & rdma2dp_ready_normal) begin
+if(width_pre_cnt==4'd3) begin
+data_shift_03 <= {1*9{1'd0}};
+data_shift_13 <= data_shift_03;
+data_shift_23 <= data_shift_13;
+data_shift_33 <= data_shift_23;
+data_shift_43 <= data_shift_33;
+data_shift_53 <= data_shift_43;
+data_shift_63 <= data_shift_53;
+data_shift_73 <= data_shift_63;
+data_shift_83 <= data_shift_73;
+end
+end else begin
+if((is_pos_w==4'd3) & load_din) begin
+data_1stC_03 <= dp_data[1*9-1:0];
+data_1stC_13 <= data_1stC_03;
+data_1stC_23 <= data_1stC_13;
+data_1stC_33 <= data_1stC_23;
+data_shift_03 <= {1*9{1'd0}};
+data_shift_13 <= data_shift_03;
+data_shift_23 <= data_shift_13;
+data_shift_33 <= data_shift_23;
+data_shift_43 <= data_shift_33;
+data_shift_53 <= data_shift_43;
+data_shift_63 <= data_shift_53;
+data_shift_73 <= data_shift_63;
+data_shift_83 <= data_shift_73;
+end
+end
+
+if(hold_here & rdma2dp_ready_normal) begin
+if(width_pre_cnt==4'd4) begin
+data_shift_04 <= {1*9{1'd0}};
+data_shift_14 <= data_shift_04;
+data_shift_24 <= data_shift_14;
+data_shift_34 <= data_shift_24;
+data_shift_44 <= data_shift_34;
+data_shift_54 <= data_shift_44;
+data_shift_64 <= data_shift_54;
+data_shift_74 <= data_shift_64;
+data_shift_84 <= data_shift_74;
+end
+end else begin
+if((is_pos_w==4'd4) & load_din) begin
+data_1stC_04 <= dp_data[1*9-1:0];
+data_1stC_14 <= data_1stC_04;
+data_1stC_24 <= data_1stC_14;
+data_1stC_34 <= data_1stC_24;
+data_shift_04 <= {1*9{1'd0}};
+data_shift_14 <= data_shift_04;
+data_shift_24 <= data_shift_14;
+data_shift_34 <= data_shift_24;
+data_shift_44 <= data_shift_34;
+data_shift_54 <= data_shift_44;
+data_shift_64 <= data_shift_54;
+data_shift_74 <= data_shift_64;
+data_shift_84 <= data_shift_74;
+end
+end
+
+if(hold_here & rdma2dp_ready_normal) begin
+if(width_pre_cnt==4'd5) begin
+data_shift_05 <= {1*9{1'd0}};
+data_shift_15 <= data_shift_05;
+data_shift_25 <= data_shift_15;
+data_shift_35 <= data_shift_25;
+data_shift_45 <= data_shift_35;
+data_shift_55 <= data_shift_45;
+data_shift_65 <= data_shift_55;
+data_shift_75 <= data_shift_65;
+data_shift_85 <= data_shift_75;
+end
+end else begin
+if((is_pos_w==4'd5) & load_din) begin
+data_1stC_05 <= dp_data[1*9-1:0];
+data_1stC_15 <= data_1stC_05;
+data_1stC_25 <= data_1stC_15;
+data_1stC_35 <= data_1stC_25;
+data_shift_05 <= {1*9{1'd0}};
+data_shift_15 <= data_shift_05;
+data_shift_25 <= data_shift_15;
+data_shift_35 <= data_shift_25;
+data_shift_45 <= data_shift_35;
+data_shift_55 <= data_shift_45;
+data_shift_65 <= data_shift_55;
+data_shift_75 <= data_shift_65;
+data_shift_85 <= data_shift_75;
+end
+end
+
+if(hold_here & rdma2dp_ready_normal) begin
+if(width_pre_cnt==4'd6) begin
+data_shift_06 <= {1*9{1'd0}};
+data_shift_16 <= data_shift_06;
+data_shift_26 <= data_shift_16;
+data_shift_36 <= data_shift_26;
+data_shift_46 <= data_shift_36;
+data_shift_56 <= data_shift_46;
+data_shift_66 <= data_shift_56;
+data_shift_76 <= data_shift_66;
+data_shift_86 <= data_shift_76;
+end
+end else begin
+if((is_pos_w==4'd6) & load_din) begin
+data_1stC_06 <= dp_data[1*9-1:0];
+data_1stC_16 <= data_1stC_06;
+data_1stC_26 <= data_1stC_16;
+data_1stC_36 <= data_1stC_26;
+data_shift_06 <= {1*9{1'd0}};
+data_shift_16 <= data_shift_06;
+data_shift_26 <= data_shift_16;
+data_shift_36 <= data_shift_26;
+data_shift_46 <= data_shift_36;
+data_shift_56 <= data_shift_46;
+data_shift_66 <= data_shift_56;
+data_shift_76 <= data_shift_66;
+data_shift_86 <= data_shift_76;
+end
+end
+
+if(hold_here & rdma2dp_ready_normal) begin
+if(width_pre_cnt==4'd7) begin
+data_shift_07 <= {1*9{1'd0}};
+data_shift_17 <= data_shift_07;
+data_shift_27 <= data_shift_17;
+data_shift_37 <= data_shift_27;
+data_shift_47 <= data_shift_37;
+data_shift_57 <= data_shift_47;
+data_shift_67 <= data_shift_57;
+data_shift_77 <= data_shift_67;
+data_shift_87 <= data_shift_77;
+end
+end else begin
+if((is_pos_w==4'd7) & load_din) begin
+data_1stC_07 <= dp_data[1*9-1:0];
+data_1stC_17 <= data_1stC_07;
+data_1stC_27 <= data_1stC_17;
+data_1stC_37 <= data_1stC_27;
+data_shift_07 <= {1*9{1'd0}};
+data_shift_17 <= data_shift_07;
+data_shift_27 <= data_shift_17;
+data_shift_37 <= data_shift_27;
+data_shift_47 <= data_shift_37;
+data_shift_57 <= data_shift_47;
+data_shift_67 <= data_shift_57;
+data_shift_77 <= data_shift_67;
+data_shift_87 <= data_shift_77;
+end
+end
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
       end
       SECOND_C: begin
           if(load_din) begin
@@ -414,6 +1348,105 @@ always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
 //: end
 //: );
 //: }
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+
+if(is_pos_w==4'd0) begin
+data_shift_00 <= dp_data[1*9-1:0];
+data_shift_10 <= data_1stC_00;
+data_shift_20 <= data_1stC_10;
+data_shift_30 <= data_1stC_20;
+data_shift_40 <= data_1stC_30;
+data_shift_50 <= {1*9{1'd0}};
+data_shift_60 <= {1*9{1'd0}};
+data_shift_70 <= {1*9{1'd0}};
+data_shift_80 <= {1*9{1'd0}};
+end
+
+if(is_pos_w==4'd1) begin
+data_shift_01 <= dp_data[1*9-1:0];
+data_shift_11 <= data_1stC_01;
+data_shift_21 <= data_1stC_11;
+data_shift_31 <= data_1stC_21;
+data_shift_41 <= data_1stC_31;
+data_shift_51 <= {1*9{1'd0}};
+data_shift_61 <= {1*9{1'd0}};
+data_shift_71 <= {1*9{1'd0}};
+data_shift_81 <= {1*9{1'd0}};
+end
+
+if(is_pos_w==4'd2) begin
+data_shift_02 <= dp_data[1*9-1:0];
+data_shift_12 <= data_1stC_02;
+data_shift_22 <= data_1stC_12;
+data_shift_32 <= data_1stC_22;
+data_shift_42 <= data_1stC_32;
+data_shift_52 <= {1*9{1'd0}};
+data_shift_62 <= {1*9{1'd0}};
+data_shift_72 <= {1*9{1'd0}};
+data_shift_82 <= {1*9{1'd0}};
+end
+
+if(is_pos_w==4'd3) begin
+data_shift_03 <= dp_data[1*9-1:0];
+data_shift_13 <= data_1stC_03;
+data_shift_23 <= data_1stC_13;
+data_shift_33 <= data_1stC_23;
+data_shift_43 <= data_1stC_33;
+data_shift_53 <= {1*9{1'd0}};
+data_shift_63 <= {1*9{1'd0}};
+data_shift_73 <= {1*9{1'd0}};
+data_shift_83 <= {1*9{1'd0}};
+end
+
+if(is_pos_w==4'd4) begin
+data_shift_04 <= dp_data[1*9-1:0];
+data_shift_14 <= data_1stC_04;
+data_shift_24 <= data_1stC_14;
+data_shift_34 <= data_1stC_24;
+data_shift_44 <= data_1stC_34;
+data_shift_54 <= {1*9{1'd0}};
+data_shift_64 <= {1*9{1'd0}};
+data_shift_74 <= {1*9{1'd0}};
+data_shift_84 <= {1*9{1'd0}};
+end
+
+if(is_pos_w==4'd5) begin
+data_shift_05 <= dp_data[1*9-1:0];
+data_shift_15 <= data_1stC_05;
+data_shift_25 <= data_1stC_15;
+data_shift_35 <= data_1stC_25;
+data_shift_45 <= data_1stC_35;
+data_shift_55 <= {1*9{1'd0}};
+data_shift_65 <= {1*9{1'd0}};
+data_shift_75 <= {1*9{1'd0}};
+data_shift_85 <= {1*9{1'd0}};
+end
+
+if(is_pos_w==4'd6) begin
+data_shift_06 <= dp_data[1*9-1:0];
+data_shift_16 <= data_1stC_06;
+data_shift_26 <= data_1stC_16;
+data_shift_36 <= data_1stC_26;
+data_shift_46 <= data_1stC_36;
+data_shift_56 <= {1*9{1'd0}};
+data_shift_66 <= {1*9{1'd0}};
+data_shift_76 <= {1*9{1'd0}};
+data_shift_86 <= {1*9{1'd0}};
+end
+
+if(is_pos_w==4'd7) begin
+data_shift_07 <= dp_data[1*9-1:0];
+data_shift_17 <= data_1stC_07;
+data_shift_27 <= data_1stC_17;
+data_shift_37 <= data_1stC_27;
+data_shift_47 <= data_1stC_37;
+data_shift_57 <= {1*9{1'd0}};
+data_shift_67 <= {1*9{1'd0}};
+data_shift_77 <= {1*9{1'd0}};
+data_shift_87 <= {1*9{1'd0}};
+end
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
       end end
       CUBE_END: begin
           if(rdma2dp_ready_normal) begin
@@ -434,6 +1467,105 @@ always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
 //: end
 //: );
 //: }
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+
+if(cube_end_width_cnt==4'd0) begin
+data_shift_00 <= {1*9{1'd0}};
+data_shift_10 <= data_shift_00;
+data_shift_20 <= data_shift_10;
+data_shift_30 <= data_shift_20;
+data_shift_40 <= data_shift_30;
+data_shift_50 <= data_shift_40;
+data_shift_60 <= data_shift_50;
+data_shift_70 <= data_shift_60;
+data_shift_80 <= data_shift_70;
+end
+
+if(cube_end_width_cnt==4'd1) begin
+data_shift_01 <= {1*9{1'd0}};
+data_shift_11 <= data_shift_01;
+data_shift_21 <= data_shift_11;
+data_shift_31 <= data_shift_21;
+data_shift_41 <= data_shift_31;
+data_shift_51 <= data_shift_41;
+data_shift_61 <= data_shift_51;
+data_shift_71 <= data_shift_61;
+data_shift_81 <= data_shift_71;
+end
+
+if(cube_end_width_cnt==4'd2) begin
+data_shift_02 <= {1*9{1'd0}};
+data_shift_12 <= data_shift_02;
+data_shift_22 <= data_shift_12;
+data_shift_32 <= data_shift_22;
+data_shift_42 <= data_shift_32;
+data_shift_52 <= data_shift_42;
+data_shift_62 <= data_shift_52;
+data_shift_72 <= data_shift_62;
+data_shift_82 <= data_shift_72;
+end
+
+if(cube_end_width_cnt==4'd3) begin
+data_shift_03 <= {1*9{1'd0}};
+data_shift_13 <= data_shift_03;
+data_shift_23 <= data_shift_13;
+data_shift_33 <= data_shift_23;
+data_shift_43 <= data_shift_33;
+data_shift_53 <= data_shift_43;
+data_shift_63 <= data_shift_53;
+data_shift_73 <= data_shift_63;
+data_shift_83 <= data_shift_73;
+end
+
+if(cube_end_width_cnt==4'd4) begin
+data_shift_04 <= {1*9{1'd0}};
+data_shift_14 <= data_shift_04;
+data_shift_24 <= data_shift_14;
+data_shift_34 <= data_shift_24;
+data_shift_44 <= data_shift_34;
+data_shift_54 <= data_shift_44;
+data_shift_64 <= data_shift_54;
+data_shift_74 <= data_shift_64;
+data_shift_84 <= data_shift_74;
+end
+
+if(cube_end_width_cnt==4'd5) begin
+data_shift_05 <= {1*9{1'd0}};
+data_shift_15 <= data_shift_05;
+data_shift_25 <= data_shift_15;
+data_shift_35 <= data_shift_25;
+data_shift_45 <= data_shift_35;
+data_shift_55 <= data_shift_45;
+data_shift_65 <= data_shift_55;
+data_shift_75 <= data_shift_65;
+data_shift_85 <= data_shift_75;
+end
+
+if(cube_end_width_cnt==4'd6) begin
+data_shift_06 <= {1*9{1'd0}};
+data_shift_16 <= data_shift_06;
+data_shift_26 <= data_shift_16;
+data_shift_36 <= data_shift_26;
+data_shift_46 <= data_shift_36;
+data_shift_56 <= data_shift_46;
+data_shift_66 <= data_shift_56;
+data_shift_76 <= data_shift_66;
+data_shift_86 <= data_shift_76;
+end
+
+if(cube_end_width_cnt==4'd7) begin
+data_shift_07 <= {1*9{1'd0}};
+data_shift_17 <= data_shift_07;
+data_shift_27 <= data_shift_17;
+data_shift_37 <= data_shift_27;
+data_shift_47 <= data_shift_37;
+data_shift_57 <= data_shift_47;
+data_shift_67 <= data_shift_57;
+data_shift_77 <= data_shift_67;
+data_shift_87 <= data_shift_77;
+end
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
       end end
       default: begin
 //: my $tp = 1;
@@ -452,6 +1584,217 @@ always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
 //: );
 //: }
 //: }
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+
+data_shift_00 <= {1*9{1'd0}};
+
+data_shift_10 <= {1*9{1'd0}};
+
+data_shift_20 <= {1*9{1'd0}};
+
+data_shift_30 <= {1*9{1'd0}};
+
+data_shift_40 <= {1*9{1'd0}};
+
+data_shift_50 <= {1*9{1'd0}};
+
+data_shift_60 <= {1*9{1'd0}};
+
+data_shift_70 <= {1*9{1'd0}};
+
+data_shift_80 <= {1*9{1'd0}};
+
+data_shift_01 <= {1*9{1'd0}};
+
+data_shift_11 <= {1*9{1'd0}};
+
+data_shift_21 <= {1*9{1'd0}};
+
+data_shift_31 <= {1*9{1'd0}};
+
+data_shift_41 <= {1*9{1'd0}};
+
+data_shift_51 <= {1*9{1'd0}};
+
+data_shift_61 <= {1*9{1'd0}};
+
+data_shift_71 <= {1*9{1'd0}};
+
+data_shift_81 <= {1*9{1'd0}};
+
+data_shift_02 <= {1*9{1'd0}};
+
+data_shift_12 <= {1*9{1'd0}};
+
+data_shift_22 <= {1*9{1'd0}};
+
+data_shift_32 <= {1*9{1'd0}};
+
+data_shift_42 <= {1*9{1'd0}};
+
+data_shift_52 <= {1*9{1'd0}};
+
+data_shift_62 <= {1*9{1'd0}};
+
+data_shift_72 <= {1*9{1'd0}};
+
+data_shift_82 <= {1*9{1'd0}};
+
+data_shift_03 <= {1*9{1'd0}};
+
+data_shift_13 <= {1*9{1'd0}};
+
+data_shift_23 <= {1*9{1'd0}};
+
+data_shift_33 <= {1*9{1'd0}};
+
+data_shift_43 <= {1*9{1'd0}};
+
+data_shift_53 <= {1*9{1'd0}};
+
+data_shift_63 <= {1*9{1'd0}};
+
+data_shift_73 <= {1*9{1'd0}};
+
+data_shift_83 <= {1*9{1'd0}};
+
+data_shift_04 <= {1*9{1'd0}};
+
+data_shift_14 <= {1*9{1'd0}};
+
+data_shift_24 <= {1*9{1'd0}};
+
+data_shift_34 <= {1*9{1'd0}};
+
+data_shift_44 <= {1*9{1'd0}};
+
+data_shift_54 <= {1*9{1'd0}};
+
+data_shift_64 <= {1*9{1'd0}};
+
+data_shift_74 <= {1*9{1'd0}};
+
+data_shift_84 <= {1*9{1'd0}};
+
+data_shift_05 <= {1*9{1'd0}};
+
+data_shift_15 <= {1*9{1'd0}};
+
+data_shift_25 <= {1*9{1'd0}};
+
+data_shift_35 <= {1*9{1'd0}};
+
+data_shift_45 <= {1*9{1'd0}};
+
+data_shift_55 <= {1*9{1'd0}};
+
+data_shift_65 <= {1*9{1'd0}};
+
+data_shift_75 <= {1*9{1'd0}};
+
+data_shift_85 <= {1*9{1'd0}};
+
+data_shift_06 <= {1*9{1'd0}};
+
+data_shift_16 <= {1*9{1'd0}};
+
+data_shift_26 <= {1*9{1'd0}};
+
+data_shift_36 <= {1*9{1'd0}};
+
+data_shift_46 <= {1*9{1'd0}};
+
+data_shift_56 <= {1*9{1'd0}};
+
+data_shift_66 <= {1*9{1'd0}};
+
+data_shift_76 <= {1*9{1'd0}};
+
+data_shift_86 <= {1*9{1'd0}};
+
+data_shift_07 <= {1*9{1'd0}};
+
+data_shift_17 <= {1*9{1'd0}};
+
+data_shift_27 <= {1*9{1'd0}};
+
+data_shift_37 <= {1*9{1'd0}};
+
+data_shift_47 <= {1*9{1'd0}};
+
+data_shift_57 <= {1*9{1'd0}};
+
+data_shift_67 <= {1*9{1'd0}};
+
+data_shift_77 <= {1*9{1'd0}};
+
+data_shift_87 <= {1*9{1'd0}};
+
+data_1stC_00 <= {1*9{1'd0}};
+
+data_1stC_10 <= {1*9{1'd0}};
+
+data_1stC_20 <= {1*9{1'd0}};
+
+data_1stC_30 <= {1*9{1'd0}};
+
+data_1stC_01 <= {1*9{1'd0}};
+
+data_1stC_11 <= {1*9{1'd0}};
+
+data_1stC_21 <= {1*9{1'd0}};
+
+data_1stC_31 <= {1*9{1'd0}};
+
+data_1stC_02 <= {1*9{1'd0}};
+
+data_1stC_12 <= {1*9{1'd0}};
+
+data_1stC_22 <= {1*9{1'd0}};
+
+data_1stC_32 <= {1*9{1'd0}};
+
+data_1stC_03 <= {1*9{1'd0}};
+
+data_1stC_13 <= {1*9{1'd0}};
+
+data_1stC_23 <= {1*9{1'd0}};
+
+data_1stC_33 <= {1*9{1'd0}};
+
+data_1stC_04 <= {1*9{1'd0}};
+
+data_1stC_14 <= {1*9{1'd0}};
+
+data_1stC_24 <= {1*9{1'd0}};
+
+data_1stC_34 <= {1*9{1'd0}};
+
+data_1stC_05 <= {1*9{1'd0}};
+
+data_1stC_15 <= {1*9{1'd0}};
+
+data_1stC_25 <= {1*9{1'd0}};
+
+data_1stC_35 <= {1*9{1'd0}};
+
+data_1stC_06 <= {1*9{1'd0}};
+
+data_1stC_16 <= {1*9{1'd0}};
+
+data_1stC_26 <= {1*9{1'd0}};
+
+data_1stC_36 <= {1*9{1'd0}};
+
+data_1stC_07 <= {1*9{1'd0}};
+
+data_1stC_17 <= {1*9{1'd0}};
+
+data_1stC_27 <= {1*9{1'd0}};
+
+data_1stC_37 <= {1*9{1'd0}};
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
       end
  endcase
    end
@@ -527,6 +1870,9 @@ end
 //: my $tp = 1;
 //: my $m = int(4/$tp+0.99) -1;
 //: print "assign is_hold_4ele_done = (hold_4ele_cnt == ${m});  ";
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+assign is_hold_4ele_done = (hold_4ele_cnt == 3);  
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 //the last block data need to be output in cube end
 always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
   if (!nvdla_core_rstn) begin
@@ -573,6 +1919,10 @@ end
 //: } elsif( $tp == 1 ) {
 //: print " assign cube_done = (stat_cur==CUBE_END) & (cube_end_width_cnt == last_width) & (cube_end_c_cnt == 3'd3) & rdma2dp_ready_normal; \n";
 //: }
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+ assign cube_done = (stat_cur==CUBE_END) & (cube_end_width_cnt == last_width) & (cube_end_c_cnt == 3'd3) & rdma2dp_ready_normal; 
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 //assign cube_done = (stat_cur==CUBE_END) & (cube_end_width_cnt == last_width) & rdma2dp_ready_normal;
 //1pipe delay for buffer data generation
 always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
@@ -653,6 +2003,41 @@ always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
 //: data_shift_4${m},data_shift_5${m},data_shift_6${m},data_shift_7${m},data_shift_8${m}};
 //: );
 //: }
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+
+if(is_pos_w_dly == 4'd0)
+buffer_data <= {data_shift_00,data_shift_10,data_shift_20,data_shift_30,
+data_shift_40,data_shift_50,data_shift_60,data_shift_70,data_shift_80};
+
+if(is_pos_w_dly == 4'd1)
+buffer_data <= {data_shift_01,data_shift_11,data_shift_21,data_shift_31,
+data_shift_41,data_shift_51,data_shift_61,data_shift_71,data_shift_81};
+
+if(is_pos_w_dly == 4'd2)
+buffer_data <= {data_shift_02,data_shift_12,data_shift_22,data_shift_32,
+data_shift_42,data_shift_52,data_shift_62,data_shift_72,data_shift_82};
+
+if(is_pos_w_dly == 4'd3)
+buffer_data <= {data_shift_03,data_shift_13,data_shift_23,data_shift_33,
+data_shift_43,data_shift_53,data_shift_63,data_shift_73,data_shift_83};
+
+if(is_pos_w_dly == 4'd4)
+buffer_data <= {data_shift_04,data_shift_14,data_shift_24,data_shift_34,
+data_shift_44,data_shift_54,data_shift_64,data_shift_74,data_shift_84};
+
+if(is_pos_w_dly == 4'd5)
+buffer_data <= {data_shift_05,data_shift_15,data_shift_25,data_shift_35,
+data_shift_45,data_shift_55,data_shift_65,data_shift_75,data_shift_85};
+
+if(is_pos_w_dly == 4'd6)
+buffer_data <= {data_shift_06,data_shift_16,data_shift_26,data_shift_36,
+data_shift_46,data_shift_56,data_shift_66,data_shift_76,data_shift_86};
+
+if(is_pos_w_dly == 4'd7)
+buffer_data <= {data_shift_07,data_shift_17,data_shift_27,data_shift_37,
+data_shift_47,data_shift_57,data_shift_67,data_shift_77,data_shift_87};
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
   end else if(stat_cur_dly==FIRST_C) begin
       if(more2less_dly) begin
           if(data_shift_load) begin
@@ -663,6 +2048,41 @@ always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
 //: data_shift_4${m},data_shift_5${m},data_shift_6${m},data_shift_7${m},data_shift_8${m}};
 //: );
 //: }
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+
+if(is_pos_w_dly == 4'd0)
+buffer_data <= {data_shift_00,data_shift_10,data_shift_20,data_shift_30,
+data_shift_40,data_shift_50,data_shift_60,data_shift_70,data_shift_80};
+
+if(is_pos_w_dly == 4'd1)
+buffer_data <= {data_shift_01,data_shift_11,data_shift_21,data_shift_31,
+data_shift_41,data_shift_51,data_shift_61,data_shift_71,data_shift_81};
+
+if(is_pos_w_dly == 4'd2)
+buffer_data <= {data_shift_02,data_shift_12,data_shift_22,data_shift_32,
+data_shift_42,data_shift_52,data_shift_62,data_shift_72,data_shift_82};
+
+if(is_pos_w_dly == 4'd3)
+buffer_data <= {data_shift_03,data_shift_13,data_shift_23,data_shift_33,
+data_shift_43,data_shift_53,data_shift_63,data_shift_73,data_shift_83};
+
+if(is_pos_w_dly == 4'd4)
+buffer_data <= {data_shift_04,data_shift_14,data_shift_24,data_shift_34,
+data_shift_44,data_shift_54,data_shift_64,data_shift_74,data_shift_84};
+
+if(is_pos_w_dly == 4'd5)
+buffer_data <= {data_shift_05,data_shift_15,data_shift_25,data_shift_35,
+data_shift_45,data_shift_55,data_shift_65,data_shift_75,data_shift_85};
+
+if(is_pos_w_dly == 4'd6)
+buffer_data <= {data_shift_06,data_shift_16,data_shift_26,data_shift_36,
+data_shift_46,data_shift_56,data_shift_66,data_shift_76,data_shift_86};
+
+if(is_pos_w_dly == 4'd7)
+buffer_data <= {data_shift_07,data_shift_17,data_shift_27,data_shift_37,
+data_shift_47,data_shift_57,data_shift_67,data_shift_77,data_shift_87};
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
           end else if(hold_here_dly & data_shift_ready) begin
 //: foreach my $m (0..7) {
 //: print qq(
@@ -671,6 +2091,41 @@ always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
 //: data_shift_4${m},data_shift_5${m},data_shift_6${m},data_shift_7${m},data_shift_8${m}};
 //: );
 //: }
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+
+if(width_pre_cnt_dly == 4'd0)
+buffer_data <= {data_shift_00,data_shift_10,data_shift_20,data_shift_30,
+data_shift_40,data_shift_50,data_shift_60,data_shift_70,data_shift_80};
+
+if(width_pre_cnt_dly == 4'd1)
+buffer_data <= {data_shift_01,data_shift_11,data_shift_21,data_shift_31,
+data_shift_41,data_shift_51,data_shift_61,data_shift_71,data_shift_81};
+
+if(width_pre_cnt_dly == 4'd2)
+buffer_data <= {data_shift_02,data_shift_12,data_shift_22,data_shift_32,
+data_shift_42,data_shift_52,data_shift_62,data_shift_72,data_shift_82};
+
+if(width_pre_cnt_dly == 4'd3)
+buffer_data <= {data_shift_03,data_shift_13,data_shift_23,data_shift_33,
+data_shift_43,data_shift_53,data_shift_63,data_shift_73,data_shift_83};
+
+if(width_pre_cnt_dly == 4'd4)
+buffer_data <= {data_shift_04,data_shift_14,data_shift_24,data_shift_34,
+data_shift_44,data_shift_54,data_shift_64,data_shift_74,data_shift_84};
+
+if(width_pre_cnt_dly == 4'd5)
+buffer_data <= {data_shift_05,data_shift_15,data_shift_25,data_shift_35,
+data_shift_45,data_shift_55,data_shift_65,data_shift_75,data_shift_85};
+
+if(width_pre_cnt_dly == 4'd6)
+buffer_data <= {data_shift_06,data_shift_16,data_shift_26,data_shift_36,
+data_shift_46,data_shift_56,data_shift_66,data_shift_76,data_shift_86};
+
+if(width_pre_cnt_dly == 4'd7)
+buffer_data <= {data_shift_07,data_shift_17,data_shift_27,data_shift_37,
+data_shift_47,data_shift_57,data_shift_67,data_shift_77,data_shift_87};
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
           end
       end else begin
           if((is_pos_w_dly<=width_pre_dly) & data_shift_load) begin
@@ -681,6 +2136,41 @@ always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
 //: data_shift_4${m},data_shift_5${m},data_shift_6${m},data_shift_7${m},data_shift_8${m}};
 //: );
 //: }
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+
+if(is_pos_w_dly == 4'd0)
+buffer_data <= {data_shift_00,data_shift_10,data_shift_20,data_shift_30,
+data_shift_40,data_shift_50,data_shift_60,data_shift_70,data_shift_80};
+
+if(is_pos_w_dly == 4'd1)
+buffer_data <= {data_shift_01,data_shift_11,data_shift_21,data_shift_31,
+data_shift_41,data_shift_51,data_shift_61,data_shift_71,data_shift_81};
+
+if(is_pos_w_dly == 4'd2)
+buffer_data <= {data_shift_02,data_shift_12,data_shift_22,data_shift_32,
+data_shift_42,data_shift_52,data_shift_62,data_shift_72,data_shift_82};
+
+if(is_pos_w_dly == 4'd3)
+buffer_data <= {data_shift_03,data_shift_13,data_shift_23,data_shift_33,
+data_shift_43,data_shift_53,data_shift_63,data_shift_73,data_shift_83};
+
+if(is_pos_w_dly == 4'd4)
+buffer_data <= {data_shift_04,data_shift_14,data_shift_24,data_shift_34,
+data_shift_44,data_shift_54,data_shift_64,data_shift_74,data_shift_84};
+
+if(is_pos_w_dly == 4'd5)
+buffer_data <= {data_shift_05,data_shift_15,data_shift_25,data_shift_35,
+data_shift_45,data_shift_55,data_shift_65,data_shift_75,data_shift_85};
+
+if(is_pos_w_dly == 4'd6)
+buffer_data <= {data_shift_06,data_shift_16,data_shift_26,data_shift_36,
+data_shift_46,data_shift_56,data_shift_66,data_shift_76,data_shift_86};
+
+if(is_pos_w_dly == 4'd7)
+buffer_data <= {data_shift_07,data_shift_17,data_shift_27,data_shift_37,
+data_shift_47,data_shift_57,data_shift_67,data_shift_77,data_shift_87};
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
           end else if(data_shift_load) begin
               buffer_data <= {buf2sq_data_bw{1'b0}};
           end
@@ -971,6 +2461,18 @@ end
 //: assign buffer_pd[${k}+13] = buffer_last_h ;
 //: assign buffer_pd[${k}+14] = buffer_last_c ;
 //: );
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+
+assign buffer_pd[81-1:0] = buffer_data;
+assign buffer_pd[81+3:81] = buffer_pos_w[3:0];
+assign buffer_pd[81+7:81+4] = buffer_width[3:0];
+assign buffer_pd[81+10:81+8] = buffer_pos_c[2:0];
+assign buffer_pd[81+11] = buffer_b_sync ;
+assign buffer_pd[81+12] = buffer_last_w ;
+assign buffer_pd[81+13] = buffer_last_h ;
+assign buffer_pd[81+14] = buffer_last_c ;
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 /////////////////////////////////////////
 assign buffer_valid = buffer_data_vld;
 /////////////////////////////////////////
@@ -978,6 +2480,82 @@ assign buffer_valid = buffer_data_vld;
 //: my $tp = 1;
 //: my $k = (${tp}+8)*${icvto}+15;
 //: &eperl::pipe(" -is -wid $k -do normalz_buf_data -vo normalz_buf_data_pvld -ri normalz_buf_data_prdy -di buffer_pd -vi buffer_valid -ro buffer_ready ");
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+// Reg
+reg buffer_ready;
+reg skid_flop_buffer_ready;
+reg skid_flop_buffer_valid;
+reg [96-1:0] skid_flop_buffer_pd;
+reg pipe_skid_buffer_valid;
+reg [96-1:0] pipe_skid_buffer_pd;
+// Wire
+wire skid_buffer_valid;
+wire [96-1:0] skid_buffer_pd;
+wire skid_buffer_ready;
+wire pipe_skid_buffer_ready;
+wire normalz_buf_data_pvld;
+wire [96-1:0] normalz_buf_data;
+// Code
+// SKID READY
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+   if (!nvdla_core_rstn) begin
+       buffer_ready <= 1'b1;
+       skid_flop_buffer_ready <= 1'b1;
+   end else begin
+       buffer_ready <= skid_buffer_ready;
+       skid_flop_buffer_ready <= skid_buffer_ready;
+   end
+end
+
+// SKID VALID
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+    if (!nvdla_core_rstn) begin
+        skid_flop_buffer_valid <= 1'b0;
+    end else begin
+        if (skid_flop_buffer_ready) begin
+            skid_flop_buffer_valid <= buffer_valid;
+        end
+   end
+end
+assign skid_buffer_valid = (skid_flop_buffer_ready) ? buffer_valid : skid_flop_buffer_valid;
+
+// SKID DATA
+always @(posedge nvdla_core_clk) begin
+    if (skid_flop_buffer_ready & buffer_valid) begin
+        skid_flop_buffer_pd[96-1:0] <= buffer_pd[96-1:0];
+    end
+end
+assign skid_buffer_pd[96-1:0] = (skid_flop_buffer_ready) ? buffer_pd[96-1:0] : skid_flop_buffer_pd[96-1:0];
+
+
+// PIPE READY
+assign skid_buffer_ready = pipe_skid_buffer_ready || !pipe_skid_buffer_valid;
+
+// PIPE VALID
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+    if (!nvdla_core_rstn) begin
+        pipe_skid_buffer_valid <= 1'b0;
+    end else begin
+        if (skid_buffer_ready) begin
+            pipe_skid_buffer_valid <= skid_buffer_valid;
+        end
+    end
+end
+
+// PIPE DATA
+always @(posedge nvdla_core_clk) begin
+    if (skid_buffer_ready && skid_buffer_valid) begin
+        pipe_skid_buffer_pd[96-1:0] <= skid_buffer_pd[96-1:0];
+    end
+end
+
+
+// PIPE OUTPUT
+assign pipe_skid_buffer_ready = normalz_buf_data_prdy;
+assign normalz_buf_data_pvld = pipe_skid_buffer_valid;
+assign normalz_buf_data = pipe_skid_buffer_pd;
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 assign buf_dat_rdy = buffer_ready;
 /////////////////////////////////////////
 //==============

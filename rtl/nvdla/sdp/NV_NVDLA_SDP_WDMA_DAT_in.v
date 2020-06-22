@@ -438,4 +438,80 @@ output dfifo_rd_pvld;
 output [8*8 -1:0] dfifo_rd_pd;
 //: my $dw = 8*8;
 //: &eperl::pipe("-is -wid $dw -do dfifo_rd_pd -vo dfifo_rd_pvld -ri dfifo_rd_prdy -di dfifo_wr_pd -vi dfifo_wr_pvld -ro dfifo_wr_prdy");
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+// Reg
+reg dfifo_wr_prdy;
+reg skid_flop_dfifo_wr_prdy;
+reg skid_flop_dfifo_wr_pvld;
+reg [64-1:0] skid_flop_dfifo_wr_pd;
+reg pipe_skid_dfifo_wr_pvld;
+reg [64-1:0] pipe_skid_dfifo_wr_pd;
+// Wire
+wire skid_dfifo_wr_pvld;
+wire [64-1:0] skid_dfifo_wr_pd;
+wire skid_dfifo_wr_prdy;
+wire pipe_skid_dfifo_wr_prdy;
+wire dfifo_rd_pvld;
+wire [64-1:0] dfifo_rd_pd;
+// Code
+// SKID READY
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+   if (!nvdla_core_rstn) begin
+       dfifo_wr_prdy <= 1'b1;
+       skid_flop_dfifo_wr_prdy <= 1'b1;
+   end else begin
+       dfifo_wr_prdy <= skid_dfifo_wr_prdy;
+       skid_flop_dfifo_wr_prdy <= skid_dfifo_wr_prdy;
+   end
+end
+
+// SKID VALID
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+    if (!nvdla_core_rstn) begin
+        skid_flop_dfifo_wr_pvld <= 1'b0;
+    end else begin
+        if (skid_flop_dfifo_wr_prdy) begin
+            skid_flop_dfifo_wr_pvld <= dfifo_wr_pvld;
+        end
+   end
+end
+assign skid_dfifo_wr_pvld = (skid_flop_dfifo_wr_prdy) ? dfifo_wr_pvld : skid_flop_dfifo_wr_pvld;
+
+// SKID DATA
+always @(posedge nvdla_core_clk) begin
+    if (skid_flop_dfifo_wr_prdy & dfifo_wr_pvld) begin
+        skid_flop_dfifo_wr_pd[64-1:0] <= dfifo_wr_pd[64-1:0];
+    end
+end
+assign skid_dfifo_wr_pd[64-1:0] = (skid_flop_dfifo_wr_prdy) ? dfifo_wr_pd[64-1:0] : skid_flop_dfifo_wr_pd[64-1:0];
+
+
+// PIPE READY
+assign skid_dfifo_wr_prdy = pipe_skid_dfifo_wr_prdy || !pipe_skid_dfifo_wr_pvld;
+
+// PIPE VALID
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+    if (!nvdla_core_rstn) begin
+        pipe_skid_dfifo_wr_pvld <= 1'b0;
+    end else begin
+        if (skid_dfifo_wr_prdy) begin
+            pipe_skid_dfifo_wr_pvld <= skid_dfifo_wr_pvld;
+        end
+    end
+end
+
+// PIPE DATA
+always @(posedge nvdla_core_clk) begin
+    if (skid_dfifo_wr_prdy && skid_dfifo_wr_pvld) begin
+        pipe_skid_dfifo_wr_pd[64-1:0] <= skid_dfifo_wr_pd[64-1:0];
+    end
+end
+
+
+// PIPE OUTPUT
+assign pipe_skid_dfifo_wr_prdy = dfifo_rd_prdy;
+assign dfifo_rd_pvld = pipe_skid_dfifo_wr_pvld;
+assign dfifo_rd_pd = pipe_skid_dfifo_wr_pd;
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 endmodule

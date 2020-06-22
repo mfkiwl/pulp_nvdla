@@ -130,6 +130,49 @@ reg [1*(8 +3)-1:0] cur_pooling_dat;
 //: print "wire    [${bw}-1:0] latch_result${m}; \n";
 //: print "wire    [${bw}-1:0] latch_result${m}_d4; \n";
 //: }
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+reg     [11-1:0] latch_result0_d3; 
+reg     [11+3:0] flush_out0; 
+wire    [11-1:0] data_buf0; 
+wire    [11-1:0] latch_result0; 
+wire    [11-1:0] latch_result0_d4; 
+reg     [11-1:0] latch_result1_d3; 
+reg     [11+3:0] flush_out1; 
+wire    [11-1:0] data_buf1; 
+wire    [11-1:0] latch_result1; 
+wire    [11-1:0] latch_result1_d4; 
+reg     [11-1:0] latch_result2_d3; 
+reg     [11+3:0] flush_out2; 
+wire    [11-1:0] data_buf2; 
+wire    [11-1:0] latch_result2; 
+wire    [11-1:0] latch_result2_d4; 
+reg     [11-1:0] latch_result3_d3; 
+reg     [11+3:0] flush_out3; 
+wire    [11-1:0] data_buf3; 
+wire    [11-1:0] latch_result3; 
+wire    [11-1:0] latch_result3_d4; 
+reg     [11-1:0] latch_result4_d3; 
+reg     [11+3:0] flush_out4; 
+wire    [11-1:0] data_buf4; 
+wire    [11-1:0] latch_result4; 
+wire    [11-1:0] latch_result4_d4; 
+reg     [11-1:0] latch_result5_d3; 
+reg     [11+3:0] flush_out5; 
+wire    [11-1:0] data_buf5; 
+wire    [11-1:0] latch_result5; 
+wire    [11-1:0] latch_result5_d4; 
+reg     [11-1:0] latch_result6_d3; 
+reg     [11+3:0] flush_out6; 
+wire    [11-1:0] data_buf6; 
+wire    [11-1:0] latch_result6; 
+wire    [11-1:0] latch_result6_d4; 
+reg     [11-1:0] latch_result7_d3; 
+reg     [11+3:0] flush_out7; 
+wire    [11-1:0] data_buf7; 
+wire    [11-1:0] latch_result7; 
+wire    [11-1:0] latch_result7_d4; 
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 reg [4:0] pooling_cnt;
 reg [1*(8 +3)+3:0] pooling_out;
 reg [2:0] pooling_size;
@@ -155,6 +198,13 @@ assign pdma2pdp_prdy = pdma2pdp_prdy_f;
 //: input[${k}-1:0] data0;
 //: input[${k}-1:0] data1;
 //: );
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+
+function [11-1:0] pooling_MIN;
+input[11-1:0] data0;
+input[11-1:0] data1;
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
    reg min_int_ff;
   begin
       min_int_ff = ($signed(data1)> $signed(data0)) ;
@@ -167,6 +217,13 @@ assign pdma2pdp_prdy = pdma2pdp_prdy_f;
 //: input[${k}-1:0] data0;
 //: input[${k}-1:0] data1;
 //: );
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+
+function [11-1:0] pooling_MAX;
+input[11-1:0] data0;
+input[11-1:0] data1;
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
       reg max_int_ff;
       begin
       max_int_ff = ($signed(data0)> $signed(data1)) ;
@@ -179,6 +236,13 @@ assign pdma2pdp_prdy = pdma2pdp_prdy_f;
 //: input[${k}-1:0] data0;
 //: input[${k}-1:0] data1;
 //: );
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+
+function [11-1:0] pooling_SUM;
+input[11-1:0] data0;
+input[11-1:0] data1;
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
    begin
 //spyglass disable_block W484
       pooling_SUM = $signed(data1) + $signed(data0);
@@ -192,6 +256,13 @@ assign pdma2pdp_prdy = pdma2pdp_prdy_f;
 //: input[${k}-1:0] data0;
 //: input[${k}-1:0] data1;
 //: );
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+
+function [11-1:0] pooling_fun;
+input[11-1:0] data0;
+input[11-1:0] data1;
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
   input[1:0] pooling_type;
   reg min_pooling;
   reg max_pooling;
@@ -209,6 +280,13 @@ assign pdma2pdp_prdy = pdma2pdp_prdy_f;
 //: max_pooling ? (pooling_MAX(data0[${P}*${m}+${P}-1:${P}*${m}],data1[${P}*${m}+${P}-1:${P}*${m}])) : 0;
 //: );
 //: }
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+
+pooling_fun[11*0+11-1:11*0] = mean_pooling? pooling_SUM(data0[11*0+11-1:11*0],data1[11*0+11-1:11*0]) :
+min_pooling ? (pooling_MIN(data0[11*0+11-1:11*0],data1[11*0+11-1:11*0])) :
+max_pooling ? (pooling_MAX(data0[11*0+11-1:11*0],data1[11*0+11-1:11*0])) : 0;
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
   end
 endfunction
 //=========================================================
@@ -239,6 +317,17 @@ always @(*) begin
 //: foreach my $m (0..$k-1) {
 //: print "5'd${m}:   cur_pooling_dat = data_buf${m}; \n";
 //: }
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+5'd0:   cur_pooling_dat = data_buf0; 
+5'd1:   cur_pooling_dat = data_buf1; 
+5'd2:   cur_pooling_dat = data_buf2; 
+5'd3:   cur_pooling_dat = data_buf3; 
+5'd4:   cur_pooling_dat = data_buf4; 
+5'd5:   cur_pooling_dat = data_buf5; 
+5'd6:   cur_pooling_dat = data_buf6; 
+5'd7:   cur_pooling_dat = data_buf7; 
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 //VCS coverage off
        default: cur_pooling_dat = 0;
 //VCS coverage on
@@ -318,6 +407,108 @@ end
 //: assign pipe_out_vld = pipe_vld_$STAGE;
 //: assign pipe_out_pd = pipe_dp_$STAGE;
 //: );
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+
+wire [34-1:0] pipe_out_pd;
+wire [34-1:0] pipe_dp_0;
+wire pipe_vld_0;
+wire pipe_rdy_4;
+assign pipe_vld_0 = pdma2pdp_pvld;
+assign pipe_dp_0 = {pooling_din_last,pooling_out_size[2:0],cur_datin_disable,buf_sel[4:0],pdp_din_lc_f,pooling_din_1st,datain_ext,int_pooling};
+
+wire pipe_rdy_0;
+reg pipe_vld_1;
+reg [34-1:0] pipe_dp_1;
+
+wire pipe_rdy_1;
+reg pipe_vld_2;
+reg [34-1:0] pipe_dp_2;
+
+wire pipe_rdy_2;
+reg pipe_vld_3;
+reg [34-1:0] pipe_dp_3;
+
+wire pipe_rdy_3;
+reg pipe_vld_4;
+reg [34-1:0] pipe_dp_4;
+
+assign pipe_rdy_0 = ~pipe_vld_1 || pipe_rdy_1;
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn)
+begin
+if (!nvdla_core_rstn)
+pipe_vld_1 <= 1'b0;
+else if(pipe_vld_0)
+pipe_vld_1 <= 1'b1;
+else if(pipe_rdy_1)
+pipe_vld_1 <= 1'b0;
+end
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn)
+begin
+if (!nvdla_core_rstn)
+pipe_dp_1 <= 34'd0;
+else if(pipe_vld_0 & pipe_rdy_0)
+pipe_dp_1 <= pipe_dp_0;
+end
+
+assign pipe_rdy_1 = ~pipe_vld_2 || pipe_rdy_2;
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn)
+begin
+if (!nvdla_core_rstn)
+pipe_vld_2 <= 1'b0;
+else if(pipe_vld_1)
+pipe_vld_2 <= 1'b1;
+else if(pipe_rdy_2)
+pipe_vld_2 <= 1'b0;
+end
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn)
+begin
+if (!nvdla_core_rstn)
+pipe_dp_2 <= 34'd0;
+else if(pipe_vld_1 & pipe_rdy_1)
+pipe_dp_2 <= pipe_dp_1;
+end
+
+assign pipe_rdy_2 = ~pipe_vld_3 || pipe_rdy_3;
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn)
+begin
+if (!nvdla_core_rstn)
+pipe_vld_3 <= 1'b0;
+else if(pipe_vld_2)
+pipe_vld_3 <= 1'b1;
+else if(pipe_rdy_3)
+pipe_vld_3 <= 1'b0;
+end
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn)
+begin
+if (!nvdla_core_rstn)
+pipe_dp_3 <= 34'd0;
+else if(pipe_vld_2 & pipe_rdy_2)
+pipe_dp_3 <= pipe_dp_2;
+end
+
+assign pipe_rdy_3 = ~pipe_vld_4 || pipe_rdy_4;
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn)
+begin
+if (!nvdla_core_rstn)
+pipe_vld_4 <= 1'b0;
+else if(pipe_vld_3)
+pipe_vld_4 <= 1'b1;
+else if(pipe_rdy_4)
+pipe_vld_4 <= 1'b0;
+end
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn)
+begin
+if (!nvdla_core_rstn)
+pipe_dp_4 <= 34'd0;
+else if(pipe_vld_3 & pipe_rdy_3)
+pipe_dp_4 <= pipe_dp_3;
+end
+
+assign pipe_rdy_4 = pipe_out_rdy;
+assign pipe_out_vld = pipe_vld_4;
+assign pipe_out_pd = pipe_dp_4;
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 assign pipe_in_rdy = pipe_rdy_0;
 //////::dla_pipe -stages NVDLA_HLS_ADD17_LATENCY -i pipe_in -o pipe_out -width 185;
 assign pipe_out_rdy = add_out_rdy;
@@ -425,6 +616,17 @@ always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
 //: foreach my $m (0..$k-1) {
 //: print "latch_result${m}_d3 <= 0; \n";
 //: }
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+latch_result0_d3 <= 0; 
+latch_result1_d3 <= 0; 
+latch_result2_d3 <= 0; 
+latch_result3_d3 <= 0; 
+latch_result4_d3 <= 0; 
+latch_result5_d3 <= 0; 
+latch_result6_d3 <= 0; 
+latch_result7_d3 <= 0; 
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
   end else begin
     if(add_out_vld & add_out_rdy) begin
         case(buf_sel_sync)
@@ -432,12 +634,34 @@ always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
 //: foreach my $m (0..$k-1) {
 //: print "5'd${m}: latch_result${m}_d3 <= pooling_result; \n";
 //: }
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+5'd0: latch_result0_d3 <= pooling_result; 
+5'd1: latch_result1_d3 <= pooling_result; 
+5'd2: latch_result2_d3 <= pooling_result; 
+5'd3: latch_result3_d3 <= pooling_result; 
+5'd4: latch_result4_d3 <= pooling_result; 
+5'd5: latch_result5_d3 <= pooling_result; 
+5'd6: latch_result6_d3 <= pooling_result; 
+5'd7: latch_result7_d3 <= pooling_result; 
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 //VCS coverage off
             default: begin
 //: my $k = int(8 / 1);
 //: foreach my $m (0..$k-1) {
 //: print "latch_result${m}_d3 <= latch_result${m}_d3; \n";
 //: }
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+latch_result0_d3 <= latch_result0_d3; 
+latch_result1_d3 <= latch_result1_d3; 
+latch_result2_d3 <= latch_result2_d3; 
+latch_result3_d3 <= latch_result3_d3; 
+latch_result4_d3 <= latch_result4_d3; 
+latch_result5_d3 <= latch_result5_d3; 
+latch_result6_d3 <= latch_result6_d3; 
+latch_result7_d3 <= latch_result7_d3; 
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
             end
 //VCS coverage on
         endcase
@@ -456,6 +680,33 @@ assign data_buf_lc_d4 = pdp_din_lc_f_sync;
 //: print "assign latch_result$m = latch_result${m}_d4; \n";
 //: print "assign data_buf$m = latch_result$m ; \n";
 //: }
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+assign latch_result0_d4 = (buf_sel_sync==5'd0)? pooling_result : latch_result0_d3; 
+assign latch_result0 = latch_result0_d4; 
+assign data_buf0 = latch_result0 ; 
+assign latch_result1_d4 = (buf_sel_sync==5'd1)? pooling_result : latch_result1_d3; 
+assign latch_result1 = latch_result1_d4; 
+assign data_buf1 = latch_result1 ; 
+assign latch_result2_d4 = (buf_sel_sync==5'd2)? pooling_result : latch_result2_d3; 
+assign latch_result2 = latch_result2_d4; 
+assign data_buf2 = latch_result2 ; 
+assign latch_result3_d4 = (buf_sel_sync==5'd3)? pooling_result : latch_result3_d3; 
+assign latch_result3 = latch_result3_d4; 
+assign data_buf3 = latch_result3 ; 
+assign latch_result4_d4 = (buf_sel_sync==5'd4)? pooling_result : latch_result4_d3; 
+assign latch_result4 = latch_result4_d4; 
+assign data_buf4 = latch_result4 ; 
+assign latch_result5_d4 = (buf_sel_sync==5'd5)? pooling_result : latch_result5_d3; 
+assign latch_result5 = latch_result5_d4; 
+assign data_buf5 = latch_result5 ; 
+assign latch_result6_d4 = (buf_sel_sync==5'd6)? pooling_result : latch_result6_d3; 
+assign latch_result6 = latch_result6_d4; 
+assign data_buf6 = latch_result6 ; 
+assign latch_result7_d4 = (buf_sel_sync==5'd7)? pooling_result : latch_result7_d3; 
+assign latch_result7 = latch_result7_d4; 
+assign data_buf7 = latch_result7 ; 
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 //==========
 //info select
 assign pooling_out_size_sync_use = /*(NVDLA_HLS_ADD17_LATENCY == 4) ?*/ pooling_out_size_sync_use_d4 /* : pooling_out_size_sync_use_d3 */;
@@ -485,6 +736,11 @@ always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
 //: print qq(
 //: if(pooling_cnt==(5'd${k} -1))
 //: );
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+
+if(pooling_cnt==(5'd8 -1))
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
              pooling_cnt <= 0;
          else
              pooling_cnt <= pooling_cnt +1'd1;
@@ -498,6 +754,17 @@ always @(*) begin
 //: foreach my $m (0..$k-1) {
 //: print "5'd${m}:    pooling_out = flush_out$m; \n";
 //: }
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+5'd0:    pooling_out = flush_out0; 
+5'd1:    pooling_out = flush_out1; 
+5'd2:    pooling_out = flush_out2; 
+5'd3:    pooling_out = flush_out3; 
+5'd4:    pooling_out = flush_out4; 
+5'd5:    pooling_out = flush_out5; 
+5'd6:    pooling_out = flush_out6; 
+5'd7:    pooling_out = flush_out7; 
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
          default: pooling_out = 0;
         endcase
     end else begin
@@ -506,6 +773,17 @@ always @(*) begin
 //: foreach my $m (0..$k-1) {
 //: print "5'd${m}:    pooling_out = {data_buf_lc,pooling_out_size_sync_use,data_buf${m}}; \n";
 //: }
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+5'd0:    pooling_out = {data_buf_lc,pooling_out_size_sync_use,data_buf0}; 
+5'd1:    pooling_out = {data_buf_lc,pooling_out_size_sync_use,data_buf1}; 
+5'd2:    pooling_out = {data_buf_lc,pooling_out_size_sync_use,data_buf2}; 
+5'd3:    pooling_out = {data_buf_lc,pooling_out_size_sync_use,data_buf3}; 
+5'd4:    pooling_out = {data_buf_lc,pooling_out_size_sync_use,data_buf4}; 
+5'd5:    pooling_out = {data_buf_lc,pooling_out_size_sync_use,data_buf5}; 
+5'd6:    pooling_out = {data_buf_lc,pooling_out_size_sync_use,data_buf6}; 
+5'd7:    pooling_out = {data_buf_lc,pooling_out_size_sync_use,data_buf7}; 
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
          default: pooling_out = 0;
         endcase
     end
@@ -518,6 +796,17 @@ always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
 //: foreach my $m (0..$k-1) {
 //: print "flush_out$m <= 0; \n";
 //: }
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+flush_out0 <= 0; 
+flush_out1 <= 0; 
+flush_out2 <= 0; 
+flush_out3 <= 0; 
+flush_out4 <= 0; 
+flush_out5 <= 0; 
+flush_out6 <= 0; 
+flush_out7 <= 0; 
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
   end else begin
     if(pooling_din_last_sync_use & (~cur_datin_disable_sync_use)) begin
         case(buf_sel_sync_use)
@@ -525,12 +814,34 @@ always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
 //: foreach my $m (0..$k-1) {
 //: print "5'd${m}: flush_out$m <= {data_buf_lc,pooling_out_size_sync_use,data_buf${m}}; \n";
 //: }
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+5'd0: flush_out0 <= {data_buf_lc,pooling_out_size_sync_use,data_buf0}; 
+5'd1: flush_out1 <= {data_buf_lc,pooling_out_size_sync_use,data_buf1}; 
+5'd2: flush_out2 <= {data_buf_lc,pooling_out_size_sync_use,data_buf2}; 
+5'd3: flush_out3 <= {data_buf_lc,pooling_out_size_sync_use,data_buf3}; 
+5'd4: flush_out4 <= {data_buf_lc,pooling_out_size_sync_use,data_buf4}; 
+5'd5: flush_out5 <= {data_buf_lc,pooling_out_size_sync_use,data_buf5}; 
+5'd6: flush_out6 <= {data_buf_lc,pooling_out_size_sync_use,data_buf6}; 
+5'd7: flush_out7 <= {data_buf_lc,pooling_out_size_sync_use,data_buf7}; 
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 //VCS coverage off
         default: begin
 //: my $k = int(8 / 1);
 //: foreach my $m (0..$k-1) {
 //: print "flush_out$m <= flush_out${m}; \n";
 //: }
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+flush_out0 <= flush_out0; 
+flush_out1 <= flush_out1; 
+flush_out2 <= flush_out2; 
+flush_out3 <= flush_out3; 
+flush_out4 <= flush_out4; 
+flush_out5 <= flush_out5; 
+flush_out6 <= flush_out6; 
+flush_out7 <= flush_out7; 
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
         end
 //VCS coverage on
         endcase

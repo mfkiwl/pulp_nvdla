@@ -624,6 +624,9 @@ assign cq_wr_pd[2:1] = cq_wr_len[1:0];
 //: print qq((cmd_axid == $remap_clientid[$i]) ? $i :);
 //:}
 //: print qq(0;);
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+assign cq_wr_thread_id = (cmd_axid == 1) ? 0 :(cmd_axid == 2) ? 1 :(cmd_axid == 3) ? 2 :0;
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 //assign cq_wr_thread_id = cmd_axid;
 //====================================
 // OBS

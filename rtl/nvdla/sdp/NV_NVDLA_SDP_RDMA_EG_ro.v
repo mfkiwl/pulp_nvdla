@@ -340,6 +340,17 @@ end
 //: foreach my $i (0..${m}-1) {
 //: print "assign out_data_1bpe_ext[16*${i}+15:16*${i}] = {{8{out_data_1bpe[8*${i}+7]}}, out_data_1bpe[8*${i}+7:8*${i}]}; \n";
 //: }
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+assign out_data_1bpe_ext[16*0+15:16*0] = {{8{out_data_1bpe[8*0+7]}}, out_data_1bpe[8*0+7:8*0]}; 
+assign out_data_1bpe_ext[16*1+15:16*1] = {{8{out_data_1bpe[8*1+7]}}, out_data_1bpe[8*1+7:8*1]}; 
+assign out_data_1bpe_ext[16*2+15:16*2] = {{8{out_data_1bpe[8*2+7]}}, out_data_1bpe[8*2+7:8*2]}; 
+assign out_data_1bpe_ext[16*3+15:16*3] = {{8{out_data_1bpe[8*3+7]}}, out_data_1bpe[8*3+7:8*3]}; 
+assign out_data_1bpe_ext[16*4+15:16*4] = {{8{out_data_1bpe[8*4+7]}}, out_data_1bpe[8*4+7:8*4]}; 
+assign out_data_1bpe_ext[16*5+15:16*5] = {{8{out_data_1bpe[8*5+7]}}, out_data_1bpe[8*5+7:8*5]}; 
+assign out_data_1bpe_ext[16*6+15:16*6] = {{8{out_data_1bpe[8*6+7]}}, out_data_1bpe[8*6+7:8*6]}; 
+assign out_data_1bpe_ext[16*7+15:16*7] = {{8{out_data_1bpe[8*7+7]}}, out_data_1bpe[8*7+7:8*7]}; 
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 ////dp int8 two byte per element/////////// 
 always @(
   rod_sel
@@ -407,6 +418,82 @@ output sdp_rdma2dp_valid;
 input sdp_rdma2dp_ready;
 //: my $dw = 1 + 8*16;
 //: &eperl::pipe("-is -wid $dw -do sdp_rdma2dp_pd -vo sdp_rdma2dp_valid -ri sdp_rdma2dp_ready -di out_pd -vi out_vld -ro out_rdy");
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+// Reg
+reg out_rdy;
+reg skid_flop_out_rdy;
+reg skid_flop_out_vld;
+reg [129-1:0] skid_flop_out_pd;
+reg pipe_skid_out_vld;
+reg [129-1:0] pipe_skid_out_pd;
+// Wire
+wire skid_out_vld;
+wire [129-1:0] skid_out_pd;
+wire skid_out_rdy;
+wire pipe_skid_out_rdy;
+wire sdp_rdma2dp_valid;
+wire [129-1:0] sdp_rdma2dp_pd;
+// Code
+// SKID READY
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+   if (!nvdla_core_rstn) begin
+       out_rdy <= 1'b1;
+       skid_flop_out_rdy <= 1'b1;
+   end else begin
+       out_rdy <= skid_out_rdy;
+       skid_flop_out_rdy <= skid_out_rdy;
+   end
+end
+
+// SKID VALID
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+    if (!nvdla_core_rstn) begin
+        skid_flop_out_vld <= 1'b0;
+    end else begin
+        if (skid_flop_out_rdy) begin
+            skid_flop_out_vld <= out_vld;
+        end
+   end
+end
+assign skid_out_vld = (skid_flop_out_rdy) ? out_vld : skid_flop_out_vld;
+
+// SKID DATA
+always @(posedge nvdla_core_clk) begin
+    if (skid_flop_out_rdy & out_vld) begin
+        skid_flop_out_pd[129-1:0] <= out_pd[129-1:0];
+    end
+end
+assign skid_out_pd[129-1:0] = (skid_flop_out_rdy) ? out_pd[129-1:0] : skid_flop_out_pd[129-1:0];
+
+
+// PIPE READY
+assign skid_out_rdy = pipe_skid_out_rdy || !pipe_skid_out_vld;
+
+// PIPE VALID
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+    if (!nvdla_core_rstn) begin
+        pipe_skid_out_vld <= 1'b0;
+    end else begin
+        if (skid_out_rdy) begin
+            pipe_skid_out_vld <= skid_out_vld;
+        end
+    end
+end
+
+// PIPE DATA
+always @(posedge nvdla_core_clk) begin
+    if (skid_out_rdy && skid_out_vld) begin
+        pipe_skid_out_pd[129-1:0] <= skid_out_pd[129-1:0];
+    end
+end
+
+
+// PIPE OUTPUT
+assign pipe_skid_out_rdy = sdp_rdma2dp_ready;
+assign sdp_rdma2dp_valid = pipe_skid_out_vld;
+assign sdp_rdma2dp_pd = pipe_skid_out_pd;
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 endmodule // NV_NVDLA_SDP_RDMA_EG_RO_pipe_p1
 module NV_NVDLA_SDP_RDMA_EG_RO_dfifo (
       nvdla_core_clk
@@ -428,6 +515,82 @@ output rod_rd_pvld;
 output [8*8 -1:0] rod_rd_pd;
 //: my $dw = 8*8;
 //: &eperl::pipe("-is -wid $dw -do rod_rd_pd -vo rod_rd_pvld -ri rod_rd_prdy -di rod_wr_pd -vi rod_wr_pvld -ro rod_wr_prdy");
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+// Reg
+reg rod_wr_prdy;
+reg skid_flop_rod_wr_prdy;
+reg skid_flop_rod_wr_pvld;
+reg [64-1:0] skid_flop_rod_wr_pd;
+reg pipe_skid_rod_wr_pvld;
+reg [64-1:0] pipe_skid_rod_wr_pd;
+// Wire
+wire skid_rod_wr_pvld;
+wire [64-1:0] skid_rod_wr_pd;
+wire skid_rod_wr_prdy;
+wire pipe_skid_rod_wr_prdy;
+wire rod_rd_pvld;
+wire [64-1:0] rod_rd_pd;
+// Code
+// SKID READY
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+   if (!nvdla_core_rstn) begin
+       rod_wr_prdy <= 1'b1;
+       skid_flop_rod_wr_prdy <= 1'b1;
+   end else begin
+       rod_wr_prdy <= skid_rod_wr_prdy;
+       skid_flop_rod_wr_prdy <= skid_rod_wr_prdy;
+   end
+end
+
+// SKID VALID
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+    if (!nvdla_core_rstn) begin
+        skid_flop_rod_wr_pvld <= 1'b0;
+    end else begin
+        if (skid_flop_rod_wr_prdy) begin
+            skid_flop_rod_wr_pvld <= rod_wr_pvld;
+        end
+   end
+end
+assign skid_rod_wr_pvld = (skid_flop_rod_wr_prdy) ? rod_wr_pvld : skid_flop_rod_wr_pvld;
+
+// SKID DATA
+always @(posedge nvdla_core_clk) begin
+    if (skid_flop_rod_wr_prdy & rod_wr_pvld) begin
+        skid_flop_rod_wr_pd[64-1:0] <= rod_wr_pd[64-1:0];
+    end
+end
+assign skid_rod_wr_pd[64-1:0] = (skid_flop_rod_wr_prdy) ? rod_wr_pd[64-1:0] : skid_flop_rod_wr_pd[64-1:0];
+
+
+// PIPE READY
+assign skid_rod_wr_prdy = pipe_skid_rod_wr_prdy || !pipe_skid_rod_wr_pvld;
+
+// PIPE VALID
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+    if (!nvdla_core_rstn) begin
+        pipe_skid_rod_wr_pvld <= 1'b0;
+    end else begin
+        if (skid_rod_wr_prdy) begin
+            pipe_skid_rod_wr_pvld <= skid_rod_wr_pvld;
+        end
+    end
+end
+
+// PIPE DATA
+always @(posedge nvdla_core_clk) begin
+    if (skid_rod_wr_prdy && skid_rod_wr_pvld) begin
+        pipe_skid_rod_wr_pd[64-1:0] <= skid_rod_wr_pd[64-1:0];
+    end
+end
+
+
+// PIPE OUTPUT
+assign pipe_skid_rod_wr_prdy = rod_rd_prdy;
+assign rod_rd_pvld = pipe_skid_rod_wr_pvld;
+assign rod_rd_pd = pipe_skid_rod_wr_pd;
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 endmodule
 `define FORCE_CONTENTION_ASSERTION_RESET_ACTIVE 1'b1
 `include "simulate_x_tick.vh"

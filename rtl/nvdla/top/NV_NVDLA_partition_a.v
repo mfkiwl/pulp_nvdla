@@ -49,6 +49,13 @@ module NV_NVDLA_partition_a (
 //: print qq(
 //: ,mac_a2accu_data${i} )
 //: }
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+
+,mac_a2accu_data0 
+,mac_a2accu_data1 
+,mac_a2accu_data2 
+,mac_a2accu_data3 
+//| eperl: generated_end (DO NOT EDIT ABOVE)
   ,mac_a2accu_mask
   ,mac_a2accu_mode
   ,mac_a2accu_pd
@@ -57,6 +64,13 @@ module NV_NVDLA_partition_a (
 //: print qq(
 //: ,mac_b2accu_data${i} )
 //: }
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+
+,mac_b2accu_data0 
+,mac_b2accu_data1 
+,mac_b2accu_data2 
+,mac_b2accu_data3 
+//| eperl: generated_end (DO NOT EDIT ABOVE)
   ,mac_b2accu_mask
   ,mac_b2accu_mode
   ,mac_b2accu_pd
@@ -96,6 +110,13 @@ input mac_a2accu_mode;
 //: print qq(
 //: input [19 -1:0] mac_a2accu_data${i}; )
 //: }
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+
+input [19 -1:0] mac_a2accu_data0; 
+input [19 -1:0] mac_a2accu_data1; 
+input [19 -1:0] mac_a2accu_data2; 
+input [19 -1:0] mac_a2accu_data3; 
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 input [8:0] mac_a2accu_pd;
 input mac_b2accu_pvld; /* data valid */
 input [8/2 -1:0] mac_b2accu_mask;
@@ -104,6 +125,13 @@ input mac_b2accu_mode;
 //: print qq(
 //: input [19 -1:0] mac_b2accu_data${i}; )
 //: }
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+
+input [19 -1:0] mac_b2accu_data0; 
+input [19 -1:0] mac_b2accu_data1; 
+input [19 -1:0] mac_b2accu_data2; 
+input [19 -1:0] mac_b2accu_data3; 
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 input [8:0] mac_b2accu_pd;
 input [31:0] pwrbus_ram_pd;
 //input la_r_clk;
@@ -117,6 +145,13 @@ wire global_clk_ovr_on_sync;
 //: print qq(
 //: wire [19 -1:0] mac_b2accu_data${i}; )
 //: }
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+
+wire [19 -1:0] mac_b2accu_data0; 
+wire [19 -1:0] mac_b2accu_data1; 
+wire [19 -1:0] mac_b2accu_data2; 
+wire [19 -1:0] mac_b2accu_data3; 
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 wire [8/2 -1:0] mac_b2accu_mask;
 wire mac_b2accu_mode;
 wire [8:0] mac_b2accu_pd;
@@ -166,6 +201,13 @@ NV_NVDLA_cacc u_NV_NVDLA_cacc (
 //:for(my $i=0; $i<8/2; $i++){
 //: print ",.mac_a2accu_data${i}              (mac_a2accu_data${i}) \n"; #//|< i
 //: }
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+,.mac_a2accu_data0              (mac_a2accu_data0) 
+,.mac_a2accu_data1              (mac_a2accu_data1) 
+,.mac_a2accu_data2              (mac_a2accu_data2) 
+,.mac_a2accu_data3              (mac_a2accu_data3) 
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
   ,.mac_a2accu_pd (mac_a2accu_pd[8:0]) //|< i
   ,.mac_b2accu_pvld (mac_b2accu_pvld) //|< w
   ,.mac_b2accu_mask (mac_b2accu_mask[8/2 -1:0]) //|< w
@@ -173,6 +215,13 @@ NV_NVDLA_cacc u_NV_NVDLA_cacc (
 //:for(my $i=0; $i<8/2; $i++){
 //: print ",.mac_b2accu_data${i}              (mac_b2accu_data${i}) \n"; #//|< i
 //: }
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+,.mac_b2accu_data0              (mac_b2accu_data0) 
+,.mac_b2accu_data1              (mac_b2accu_data1) 
+,.mac_b2accu_data2              (mac_b2accu_data2) 
+,.mac_b2accu_data3              (mac_b2accu_data3) 
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
   ,.mac_b2accu_pd (mac_b2accu_pd[8:0]) //|< w
   ,.cacc2sdp_valid (cacc2sdp_valid)
   ,.cacc2sdp_ready (cacc2sdp_ready)

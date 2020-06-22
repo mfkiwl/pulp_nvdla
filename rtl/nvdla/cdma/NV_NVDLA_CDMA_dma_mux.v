@@ -94,6 +94,82 @@ assign req_mc_in_pd = ({( 32 + 15 ) {mc_sel_dc_w}} & dc_dat2mcif_rd_req_pd) |
                       ({( 32 + 15 ) {mc_sel_img_w}} & img_dat2mcif_rd_req_pd);
 //: my $k = ( 32 + 15 );
 //: &eperl::pipe("-is -wid ${k} -do req_mc_out_pd -vo req_mc_out_pvld -ri req_mc_out_prdy -di req_mc_in_pd -vi req_mc_in_pvld -ro req_mc_in_prdy");
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+// Reg
+reg req_mc_in_prdy;
+reg skid_flop_req_mc_in_prdy;
+reg skid_flop_req_mc_in_pvld;
+reg [47-1:0] skid_flop_req_mc_in_pd;
+reg pipe_skid_req_mc_in_pvld;
+reg [47-1:0] pipe_skid_req_mc_in_pd;
+// Wire
+wire skid_req_mc_in_pvld;
+wire [47-1:0] skid_req_mc_in_pd;
+wire skid_req_mc_in_prdy;
+wire pipe_skid_req_mc_in_prdy;
+wire req_mc_out_pvld;
+wire [47-1:0] req_mc_out_pd;
+// Code
+// SKID READY
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+   if (!nvdla_core_rstn) begin
+       req_mc_in_prdy <= 1'b1;
+       skid_flop_req_mc_in_prdy <= 1'b1;
+   end else begin
+       req_mc_in_prdy <= skid_req_mc_in_prdy;
+       skid_flop_req_mc_in_prdy <= skid_req_mc_in_prdy;
+   end
+end
+
+// SKID VALID
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+    if (!nvdla_core_rstn) begin
+        skid_flop_req_mc_in_pvld <= 1'b0;
+    end else begin
+        if (skid_flop_req_mc_in_prdy) begin
+            skid_flop_req_mc_in_pvld <= req_mc_in_pvld;
+        end
+   end
+end
+assign skid_req_mc_in_pvld = (skid_flop_req_mc_in_prdy) ? req_mc_in_pvld : skid_flop_req_mc_in_pvld;
+
+// SKID DATA
+always @(posedge nvdla_core_clk) begin
+    if (skid_flop_req_mc_in_prdy & req_mc_in_pvld) begin
+        skid_flop_req_mc_in_pd[47-1:0] <= req_mc_in_pd[47-1:0];
+    end
+end
+assign skid_req_mc_in_pd[47-1:0] = (skid_flop_req_mc_in_prdy) ? req_mc_in_pd[47-1:0] : skid_flop_req_mc_in_pd[47-1:0];
+
+
+// PIPE READY
+assign skid_req_mc_in_prdy = pipe_skid_req_mc_in_prdy || !pipe_skid_req_mc_in_pvld;
+
+// PIPE VALID
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+    if (!nvdla_core_rstn) begin
+        pipe_skid_req_mc_in_pvld <= 1'b0;
+    end else begin
+        if (skid_req_mc_in_prdy) begin
+            pipe_skid_req_mc_in_pvld <= skid_req_mc_in_pvld;
+        end
+    end
+end
+
+// PIPE DATA
+always @(posedge nvdla_core_clk) begin
+    if (skid_req_mc_in_prdy && skid_req_mc_in_pvld) begin
+        pipe_skid_req_mc_in_pd[47-1:0] <= skid_req_mc_in_pd[47-1:0];
+    end
+end
+
+
+// PIPE OUTPUT
+assign pipe_skid_req_mc_in_prdy = req_mc_out_prdy;
+assign req_mc_out_pvld = pipe_skid_req_mc_in_pvld;
+assign req_mc_out_pd = pipe_skid_req_mc_in_pd;
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 assign dc_dat2mcif_rd_req_ready = req_mc_in_prdy & dc_dat2mcif_rd_req_valid;
 assign img_dat2mcif_rd_req_ready = req_mc_in_prdy & img_dat2mcif_rd_req_valid;
 assign cdma_dat2mcif_rd_req_valid = req_mc_out_pvld;
@@ -101,6 +177,37 @@ assign cdma_dat2mcif_rd_req_pd = req_mc_out_pd;
 assign req_mc_out_prdy = cdma_dat2mcif_rd_req_ready;
 //: &eperl::flop("-nodeclare   -rval \"1'b0\"  -en \"req_mc_in_pvld & req_mc_in_prdy\" -d \"mc_sel_dc_w\" -q mc_sel_dc");
 //: &eperl::flop("-nodeclare   -rval \"1'b0\"  -en \"req_mc_in_pvld & req_mc_in_prdy\" -d \"mc_sel_img_w\" -q mc_sel_img");
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+   if (!nvdla_core_rstn) begin
+       mc_sel_dc <= 1'b0;
+   end else begin
+       if ((req_mc_in_pvld & req_mc_in_prdy) == 1'b1) begin
+           mc_sel_dc <= mc_sel_dc_w;
+       // VCS coverage off
+       end else if ((req_mc_in_pvld & req_mc_in_prdy) == 1'b0) begin
+       end else begin
+           mc_sel_dc <= 'bx;
+       // VCS coverage on
+       end
+   end
+end
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+   if (!nvdla_core_rstn) begin
+       mc_sel_img <= 1'b0;
+   end else begin
+       if ((req_mc_in_pvld & req_mc_in_prdy) == 1'b1) begin
+           mc_sel_img <= mc_sel_img_w;
+       // VCS coverage off
+       end else if ((req_mc_in_pvld & req_mc_in_prdy) == 1'b0) begin
+       end else begin
+           mc_sel_img <= 'bx;
+       // VCS coverage on
+       end
+   end
+end
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 //////////////// CVIF interface ////////////////
 ////////////////////////////////////////////////////////////////////////
 // Data response channel //
@@ -110,6 +217,82 @@ assign rsp_mc_in_pvld = mcif2cdma_dat_rd_rsp_valid;
 assign rsp_mc_in_pd = mcif2cdma_dat_rd_rsp_pd;
 //: my $k = ( 64 + (64/8/8) );
 //: &eperl::pipe("-is -wid $k -do rsp_mc_out_pd -vo rsp_mc_out_pvld -ri rsp_mc_out_prdy -di rsp_mc_in_pd -vi rsp_mc_in_pvld -ro rsp_mc_in_prdy");
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+// Reg
+reg rsp_mc_in_prdy;
+reg skid_flop_rsp_mc_in_prdy;
+reg skid_flop_rsp_mc_in_pvld;
+reg [65-1:0] skid_flop_rsp_mc_in_pd;
+reg pipe_skid_rsp_mc_in_pvld;
+reg [65-1:0] pipe_skid_rsp_mc_in_pd;
+// Wire
+wire skid_rsp_mc_in_pvld;
+wire [65-1:0] skid_rsp_mc_in_pd;
+wire skid_rsp_mc_in_prdy;
+wire pipe_skid_rsp_mc_in_prdy;
+wire rsp_mc_out_pvld;
+wire [65-1:0] rsp_mc_out_pd;
+// Code
+// SKID READY
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+   if (!nvdla_core_rstn) begin
+       rsp_mc_in_prdy <= 1'b1;
+       skid_flop_rsp_mc_in_prdy <= 1'b1;
+   end else begin
+       rsp_mc_in_prdy <= skid_rsp_mc_in_prdy;
+       skid_flop_rsp_mc_in_prdy <= skid_rsp_mc_in_prdy;
+   end
+end
+
+// SKID VALID
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+    if (!nvdla_core_rstn) begin
+        skid_flop_rsp_mc_in_pvld <= 1'b0;
+    end else begin
+        if (skid_flop_rsp_mc_in_prdy) begin
+            skid_flop_rsp_mc_in_pvld <= rsp_mc_in_pvld;
+        end
+   end
+end
+assign skid_rsp_mc_in_pvld = (skid_flop_rsp_mc_in_prdy) ? rsp_mc_in_pvld : skid_flop_rsp_mc_in_pvld;
+
+// SKID DATA
+always @(posedge nvdla_core_clk) begin
+    if (skid_flop_rsp_mc_in_prdy & rsp_mc_in_pvld) begin
+        skid_flop_rsp_mc_in_pd[65-1:0] <= rsp_mc_in_pd[65-1:0];
+    end
+end
+assign skid_rsp_mc_in_pd[65-1:0] = (skid_flop_rsp_mc_in_prdy) ? rsp_mc_in_pd[65-1:0] : skid_flop_rsp_mc_in_pd[65-1:0];
+
+
+// PIPE READY
+assign skid_rsp_mc_in_prdy = pipe_skid_rsp_mc_in_prdy || !pipe_skid_rsp_mc_in_pvld;
+
+// PIPE VALID
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+    if (!nvdla_core_rstn) begin
+        pipe_skid_rsp_mc_in_pvld <= 1'b0;
+    end else begin
+        if (skid_rsp_mc_in_prdy) begin
+            pipe_skid_rsp_mc_in_pvld <= skid_rsp_mc_in_pvld;
+        end
+    end
+end
+
+// PIPE DATA
+always @(posedge nvdla_core_clk) begin
+    if (skid_rsp_mc_in_prdy && skid_rsp_mc_in_pvld) begin
+        pipe_skid_rsp_mc_in_pd[65-1:0] <= skid_rsp_mc_in_pd[65-1:0];
+    end
+end
+
+
+// PIPE OUTPUT
+assign pipe_skid_rsp_mc_in_prdy = rsp_mc_out_prdy;
+assign rsp_mc_out_pvld = pipe_skid_rsp_mc_in_pvld;
+assign rsp_mc_out_pd = pipe_skid_rsp_mc_in_pd;
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 assign mcif2cdma_dat_rd_rsp_ready = rsp_mc_in_prdy;
 assign mcif2dc_dat_rd_rsp_valid = rsp_mc_out_pvld & mc_sel_dc;
 assign mcif2img_dat_rd_rsp_valid = rsp_mc_out_pvld & mc_sel_img;

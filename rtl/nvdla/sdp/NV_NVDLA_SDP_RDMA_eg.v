@@ -292,6 +292,65 @@ assign unpack_out_prdy = cfg_mode_both ? alu_rod_rdy & mul_rod_rdy : cfg_mode_al
 //: print "assign  mode_2bytex2_mul_rod1_pd[16*${i}+15:16*${i}] = unpack_out_pd[16*${jj}+15: 16*${jj}]; \n";
 //: }
 //: print "\n";
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+assign  mode_1bytex2_alu_rod0_pd[8*0+7:8*0] = unpack_out_pd[8*0+7: 8*0]; 
+assign  mode_1bytex2_alu_rod0_pd[8*1+7:8*1] = unpack_out_pd[8*2+7: 8*2]; 
+assign  mode_1bytex2_alu_rod0_pd[8*2+7:8*2] = unpack_out_pd[8*4+7: 8*4]; 
+assign  mode_1bytex2_alu_rod0_pd[8*3+7:8*3] = unpack_out_pd[8*6+7: 8*6]; 
+assign  mode_1bytex2_alu_rod0_pd[8*4+7:8*4] = unpack_out_pd[8*8+7: 8*8]; 
+assign  mode_1bytex2_alu_rod0_pd[8*5+7:8*5] = unpack_out_pd[8*10+7: 8*10]; 
+assign  mode_1bytex2_alu_rod0_pd[8*6+7:8*6] = unpack_out_pd[8*12+7: 8*12]; 
+assign  mode_1bytex2_alu_rod0_pd[8*7+7:8*7] = unpack_out_pd[8*14+7: 8*14]; 
+
+assign  mode_1bytex2_alu_rod1_pd[8*0+7:8*0] = unpack_out_pd[8*16+7: 8*16]; 
+assign  mode_1bytex2_alu_rod1_pd[8*1+7:8*1] = unpack_out_pd[8*18+7: 8*18]; 
+assign  mode_1bytex2_alu_rod1_pd[8*2+7:8*2] = unpack_out_pd[8*20+7: 8*20]; 
+assign  mode_1bytex2_alu_rod1_pd[8*3+7:8*3] = unpack_out_pd[8*22+7: 8*22]; 
+assign  mode_1bytex2_alu_rod1_pd[8*4+7:8*4] = unpack_out_pd[8*24+7: 8*24]; 
+assign  mode_1bytex2_alu_rod1_pd[8*5+7:8*5] = unpack_out_pd[8*26+7: 8*26]; 
+assign  mode_1bytex2_alu_rod1_pd[8*6+7:8*6] = unpack_out_pd[8*28+7: 8*28]; 
+assign  mode_1bytex2_alu_rod1_pd[8*7+7:8*7] = unpack_out_pd[8*30+7: 8*30]; 
+
+assign  mode_2bytex2_alu_rod0_pd[16*0+15:16*0] = unpack_out_pd[16*0+15: 16*0]; 
+assign  mode_2bytex2_alu_rod0_pd[16*1+15:16*1] = unpack_out_pd[16*2+15: 16*2]; 
+assign  mode_2bytex2_alu_rod0_pd[16*2+15:16*2] = unpack_out_pd[16*4+15: 16*4]; 
+assign  mode_2bytex2_alu_rod0_pd[16*3+15:16*3] = unpack_out_pd[16*6+15: 16*6]; 
+
+assign  mode_2bytex2_alu_rod1_pd[16*0+15:16*0] = unpack_out_pd[16*8+15: 16*8]; 
+assign  mode_2bytex2_alu_rod1_pd[16*1+15:16*1] = unpack_out_pd[16*10+15: 16*10]; 
+assign  mode_2bytex2_alu_rod1_pd[16*2+15:16*2] = unpack_out_pd[16*12+15: 16*12]; 
+assign  mode_2bytex2_alu_rod1_pd[16*3+15:16*3] = unpack_out_pd[16*14+15: 16*14]; 
+
+assign  mode_1bytex2_mul_rod0_pd[8*0+7:8*0] = unpack_out_pd[8*1+7: 8*1]; 
+assign  mode_1bytex2_mul_rod0_pd[8*1+7:8*1] = unpack_out_pd[8*3+7: 8*3]; 
+assign  mode_1bytex2_mul_rod0_pd[8*2+7:8*2] = unpack_out_pd[8*5+7: 8*5]; 
+assign  mode_1bytex2_mul_rod0_pd[8*3+7:8*3] = unpack_out_pd[8*7+7: 8*7]; 
+assign  mode_1bytex2_mul_rod0_pd[8*4+7:8*4] = unpack_out_pd[8*9+7: 8*9]; 
+assign  mode_1bytex2_mul_rod0_pd[8*5+7:8*5] = unpack_out_pd[8*11+7: 8*11]; 
+assign  mode_1bytex2_mul_rod0_pd[8*6+7:8*6] = unpack_out_pd[8*13+7: 8*13]; 
+assign  mode_1bytex2_mul_rod0_pd[8*7+7:8*7] = unpack_out_pd[8*15+7: 8*15]; 
+
+assign  mode_1bytex2_mul_rod1_pd[8*0+7:8*0] = unpack_out_pd[8*17+7: 8*17]; 
+assign  mode_1bytex2_mul_rod1_pd[8*1+7:8*1] = unpack_out_pd[8*19+7: 8*19]; 
+assign  mode_1bytex2_mul_rod1_pd[8*2+7:8*2] = unpack_out_pd[8*21+7: 8*21]; 
+assign  mode_1bytex2_mul_rod1_pd[8*3+7:8*3] = unpack_out_pd[8*23+7: 8*23]; 
+assign  mode_1bytex2_mul_rod1_pd[8*4+7:8*4] = unpack_out_pd[8*25+7: 8*25]; 
+assign  mode_1bytex2_mul_rod1_pd[8*5+7:8*5] = unpack_out_pd[8*27+7: 8*27]; 
+assign  mode_1bytex2_mul_rod1_pd[8*6+7:8*6] = unpack_out_pd[8*29+7: 8*29]; 
+assign  mode_1bytex2_mul_rod1_pd[8*7+7:8*7] = unpack_out_pd[8*31+7: 8*31]; 
+
+assign  mode_2bytex2_mul_rod0_pd[16*0+15:16*0] = unpack_out_pd[16*1+15: 16*1]; 
+assign  mode_2bytex2_mul_rod0_pd[16*1+15:16*1] = unpack_out_pd[16*3+15: 16*3]; 
+assign  mode_2bytex2_mul_rod0_pd[16*2+15:16*2] = unpack_out_pd[16*5+15: 16*5]; 
+assign  mode_2bytex2_mul_rod0_pd[16*3+15:16*3] = unpack_out_pd[16*7+15: 16*7]; 
+
+assign  mode_2bytex2_mul_rod1_pd[16*0+15:16*0] = unpack_out_pd[16*9+15: 16*9]; 
+assign  mode_2bytex2_mul_rod1_pd[16*1+15:16*1] = unpack_out_pd[16*11+15: 16*11]; 
+assign  mode_2bytex2_mul_rod1_pd[16*2+15:16*2] = unpack_out_pd[16*13+15: 16*13]; 
+assign  mode_2bytex2_mul_rod1_pd[16*3+15:16*3] = unpack_out_pd[16*15+15: 16*15]; 
+
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 wire [8*8 -1:0] alu_rod0_pd = cfg_mode_2bytex2 ? mode_2bytex2_alu_rod0_pd : cfg_mode_1bytex2 ? mode_1bytex2_alu_rod0_pd : unpack_out_pd[(8*8*0+8*8 -1):8*8*0];
 wire [8*8 -1:0] alu_rod1_pd = cfg_mode_2bytex2 ? mode_2bytex2_alu_rod1_pd : cfg_mode_1bytex2 ? mode_1bytex2_alu_rod1_pd : unpack_out_pd[(8*8*1+8*8 -1):8*8*1];
 wire [8*8 -1:0] alu_rod2_pd = unpack_out_pd[(8*8*2+8*8 -1):8*8*2];

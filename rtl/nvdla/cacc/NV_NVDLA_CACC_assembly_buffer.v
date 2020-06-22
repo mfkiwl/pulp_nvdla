@@ -52,12 +52,51 @@ wire [3 +1 -1:0] abuf_rd_addr;
 //: ,.pwrbus_ram_pd (pwrbus_ram_pd[31:0]) //|< i
 //: );
 //: );
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+
+nv_ram_rws_16x272 u_accu_abuf_0 (
+.clk (nvdla_core_clk) //|< i
+,.ra (abuf_rd_addr) //|< i
+,.re (abuf_rd_en) //|< i
+,.dout (abuf_rd_data_ecc) //|> w
+,.wa (abuf_wr_addr) //|< r
+,.we (abuf_wr_en) //|< r
+,.di (abuf_wr_data) //|< r
+,.pwrbus_ram_pd (pwrbus_ram_pd[31:0]) //|< i
+);
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 // 1 pipe for sram read data.
 //: &eperl::flop("-q abuf_rd_en_d1 -d \"abuf_rd_en\" -clk nvdla_core_clk -rst nvdla_core_rstn");
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+reg  abuf_rd_en_d1;
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+   if (!nvdla_core_rstn) begin
+       abuf_rd_en_d1 <= 'b0;
+   end else begin
+       abuf_rd_en_d1 <= abuf_rd_en;
+   end
+end
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 wire [34*8 -1:0] abuf_rd_raw_data = abuf_rd_data_ecc;
 // spyglass disable_block STARC05-3.3.1.4b
 //: my $kk=34*8;
 //: &eperl::flop("-wid ${kk} -norst -q abuf_rd_raw_data_d1 -en \"abuf_rd_en_d1\" -d \"abuf_rd_raw_data\" -clk nvdla_core_clk");
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+reg [271:0] abuf_rd_raw_data_d1;
+always @(posedge nvdla_core_clk) begin
+       if ((abuf_rd_en_d1) == 1'b1) begin
+           abuf_rd_raw_data_d1 <= abuf_rd_raw_data;
+       // VCS coverage off
+       end else if ((abuf_rd_en_d1) == 1'b0) begin
+       end else begin
+           abuf_rd_raw_data_d1 <= 'bx;
+       // VCS coverage on
+       end
+end
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 // spyglass enable_block NoWidthInBasedNum-ML
 // spyglass enable_block STARC05-3.3.1.4b
 assign abuf_rd_data = abuf_rd_raw_data_d1;

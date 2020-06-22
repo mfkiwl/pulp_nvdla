@@ -31,6 +31,30 @@ module NV_NVDLA_NOCIF_DRAM_write (
 //:,mcif2client${i}_wr_rsp_complete
 //:);
 //:}
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+
+,client02mcif_wr_req_pd
+,client02mcif_wr_req_valid
+,client02mcif_wr_wt
+,client02mcif_wr_axid
+,client02mcif_wr_req_ready
+,mcif2client0_wr_rsp_complete
+
+,client12mcif_wr_req_pd
+,client12mcif_wr_req_valid
+,client12mcif_wr_wt
+,client12mcif_wr_axid
+,client12mcif_wr_req_ready
+,mcif2client1_wr_rsp_complete
+
+,client22mcif_wr_req_pd
+,client22mcif_wr_req_valid
+,client22mcif_wr_wt
+,client22mcif_wr_axid
+,client22mcif_wr_req_ready
+,mcif2client2_wr_rsp_complete
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
     ,reg2dp_wr_os_cnt
     ,noc2mcif_axi_b_bid //|< i
     ,noc2mcif_axi_b_bvalid //|< i
@@ -57,6 +81,30 @@ module NV_NVDLA_NOCIF_DRAM_write (
 //:output mcif2client${i}_wr_rsp_complete;
 //:);
 //:}
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+
+input [64 +1:0] client02mcif_wr_req_pd;
+input client02mcif_wr_req_valid;
+output client02mcif_wr_req_ready;
+input [7:0] client02mcif_wr_wt;
+input [3:0] client02mcif_wr_axid;
+output mcif2client0_wr_rsp_complete;
+
+input [64 +1:0] client12mcif_wr_req_pd;
+input client12mcif_wr_req_valid;
+output client12mcif_wr_req_ready;
+input [7:0] client12mcif_wr_wt;
+input [3:0] client12mcif_wr_axid;
+output mcif2client1_wr_rsp_complete;
+
+input [64 +1:0] client22mcif_wr_req_pd;
+input client22mcif_wr_req_valid;
+output client22mcif_wr_req_ready;
+input [7:0] client22mcif_wr_wt;
+input [3:0] client22mcif_wr_axid;
+output mcif2client2_wr_rsp_complete;
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 input nvdla_core_clk;
 input nvdla_core_rstn;
   output mcif2noc_axi_aw_awvalid; /* data valid */
@@ -95,6 +143,27 @@ NV_NVDLA_NOCIF_DRAM_WRITE_ig u_ig (
 //:,.client${i}2mcif_wr_axid(client${i}2mcif_wr_axid)
 //:);
 //:}
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+
+,.client02mcif_wr_req_valid(client02mcif_wr_req_valid)
+,.client02mcif_wr_req_ready(client02mcif_wr_req_ready)
+,.client02mcif_wr_req_pd(client02mcif_wr_req_pd)
+,.client02mcif_wr_wt(client02mcif_wr_wt)
+,.client02mcif_wr_axid(client02mcif_wr_axid)
+
+,.client12mcif_wr_req_valid(client12mcif_wr_req_valid)
+,.client12mcif_wr_req_ready(client12mcif_wr_req_ready)
+,.client12mcif_wr_req_pd(client12mcif_wr_req_pd)
+,.client12mcif_wr_wt(client12mcif_wr_wt)
+,.client12mcif_wr_axid(client12mcif_wr_axid)
+
+,.client22mcif_wr_req_valid(client22mcif_wr_req_valid)
+,.client22mcif_wr_req_ready(client22mcif_wr_req_ready)
+,.client22mcif_wr_req_pd(client22mcif_wr_req_pd)
+,.client22mcif_wr_wt(client22mcif_wr_wt)
+,.client22mcif_wr_axid(client22mcif_wr_axid)
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
   ,.cq_wr_pvld (cq_wr_pvld) //|> w
   ,.cq_wr_prdy (cq_wr_prdy) //|< w
   ,.cq_wr_thread_id (cq_wr_thread_id[3:0]) //|> w
@@ -120,6 +189,21 @@ NV_NVDLA_NOCIF_DRAM_WRITE_ig u_ig (
 //:wire cq_rd${i}_prdy;
 //:);
 //:}
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+
+wire [2:0] cq_rd0_pd;
+wire cq_rd0_pvld;
+wire cq_rd0_prdy;
+
+wire [2:0] cq_rd1_pd;
+wire cq_rd1_pvld;
+wire cq_rd1_prdy;
+
+wire [2:0] cq_rd2_pd;
+wire cq_rd2_pvld;
+wire cq_rd2_prdy;
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 NV_NVDLA_NOCIF_DRAM_WRITE_eg u_eg (
    .nvdla_core_clk (nvdla_core_clk) //|< i
   ,.nvdla_core_rstn (nvdla_core_rstn) //|< i
@@ -136,6 +220,27 @@ NV_NVDLA_NOCIF_DRAM_WRITE_eg u_eg (
 //:,.cq_rd${i}_prdy (cq_rd${i}_prdy) //|> w
 //:);
 //:}
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+
+,.mcif2client0_wr_rsp_complete(mcif2client0_wr_rsp_complete)
+
+,.mcif2client1_wr_rsp_complete(mcif2client1_wr_rsp_complete)
+
+,.mcif2client2_wr_rsp_complete(mcif2client2_wr_rsp_complete)
+
+,.cq_rd0_pd (cq_rd0_pd) //|< w
+,.cq_rd0_pvld (cq_rd0_pvld) //|< w
+,.cq_rd0_prdy (cq_rd0_prdy) //|> w
+
+,.cq_rd1_pd (cq_rd1_pd) //|< w
+,.cq_rd1_pvld (cq_rd1_pvld) //|< w
+,.cq_rd1_prdy (cq_rd1_prdy) //|> w
+
+,.cq_rd2_pd (cq_rd2_pd) //|< w
+,.cq_rd2_pvld (cq_rd2_pvld) //|< w
+,.cq_rd2_prdy (cq_rd2_prdy) //|> w
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
   ,.noc2mcif_axi_b_bvalid (noc2mcif_axi_b_bvalid) //|< i
   ,.noc2mcif_axi_b_bready (noc2mcif_axi_b_bready) //|> o
   ,.noc2mcif_axi_b_bid (noc2mcif_axi_b_bid[7:0]) //|< i
@@ -164,5 +269,24 @@ NV_NVDLA_NOCIF_DRAM_WRITE_cq u_cq (
 //:,.cq_rd${i}_prdy (1'b1) //|< w
 //:);
 //:}
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+
+,.cq_rd0_pd (cq_rd0_pd) //|< w
+,.cq_rd0_pvld (cq_rd0_pvld) //|< w
+,.cq_rd0_prdy (cq_rd0_prdy) //|> w
+
+,.cq_rd1_pd (cq_rd1_pd) //|< w
+,.cq_rd1_pvld (cq_rd1_pvld) //|< w
+,.cq_rd1_prdy (cq_rd1_prdy) //|> w
+
+,.cq_rd2_pd (cq_rd2_pd) //|< w
+,.cq_rd2_pvld (cq_rd2_pvld) //|< w
+,.cq_rd2_prdy (cq_rd2_prdy) //|> w
+
+,.cq_rd3_prdy (1'b1) //|< w
+
+,.cq_rd4_prdy (1'b1) //|< w
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 );
 endmodule

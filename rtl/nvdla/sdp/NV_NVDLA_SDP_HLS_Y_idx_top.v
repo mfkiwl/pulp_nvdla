@@ -136,6 +136,9 @@ input nvdla_core_rstn;
 //: print "assign   chn_lut_out_pd[${i}+${boh}] = lut_out_lo_hit${i} ; \n";
 //: }
 //:
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 assign chn_lut_in_prdy = chn_lut_in_prdy0;
 assign chn_lut_out_pvld = chn_lut_out_pvld0;
 endmodule // NV_NVDLA_SDP_HLS_Y_idx_top

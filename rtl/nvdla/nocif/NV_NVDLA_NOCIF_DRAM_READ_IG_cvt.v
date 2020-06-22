@@ -236,6 +236,15 @@ reg [32 -1:0] axi_addr_i;
 //:end
 //: assign axi_addr = axi_addr_i;
 //:);
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+
+always @(cmd_addr) begin
+axi_addr_i = cmd_addr;
+axi_addr_i[3 -1:0] = 0;
+end
+assign axi_addr = axi_addr_i;
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 //assign axi_size = AXSIZE_64; //stepheng. remove
 assign inc = cmd_ftran & cmd_ltran & (cmd_size[0]==1) & cmd_swizzle;
 //assign {mon_axi_len_c, axi_len[1:0]} = cmd_size[2:1] + inc;
@@ -326,6 +335,9 @@ assign cq_wr_pd[6] = ig2cq_ldrop ;
 //: print qq((cmd_axid == $remap_clientid[$i]) ? $i :);
 //:}
 //: print qq(0;);
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+assign cq_wr_thread_id = (cmd_axid == 8) ? 0 :(cmd_axid == 9) ? 1 :(cmd_axid == 3) ? 2 :(cmd_axid == 2) ? 3 :(cmd_axid == 1) ? 4 :(cmd_axid == 5) ? 5 :(cmd_axid == 6) ? 6 :0;
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 //assign cq_wr_thread_id = cmd_axid;
 // IG===AXI OUT PIPE
 assign axi_cmd_vld = cmd_vld & cq_wr_prdy & !os_cnt_full; // inter-lock with context-queue

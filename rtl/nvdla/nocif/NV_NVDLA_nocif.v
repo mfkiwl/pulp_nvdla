@@ -32,6 +32,87 @@ module NV_NVDLA_nocif (
 //: print("  ,mcif2client${i}_wr_rsp_complete\n");
 //: print("  ,client${i}2mcif_wr_axid\n");
 //: }
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+  ,client02mcif_rd_cdt_lat_fifo_pop
+  ,client02mcif_rd_req_valid
+  ,client02mcif_rd_req_pd
+  ,client02mcif_rd_req_ready
+  ,mcif2client0_rd_rsp_valid
+  ,mcif2client0_rd_rsp_pd
+  ,mcif2client0_rd_rsp_ready
+  ,client02mcif_lat_fifo_depth
+  ,client02mcif_rd_axid
+  ,client12mcif_rd_cdt_lat_fifo_pop
+  ,client12mcif_rd_req_valid
+  ,client12mcif_rd_req_pd
+  ,client12mcif_rd_req_ready
+  ,mcif2client1_rd_rsp_valid
+  ,mcif2client1_rd_rsp_pd
+  ,mcif2client1_rd_rsp_ready
+  ,client12mcif_lat_fifo_depth
+  ,client12mcif_rd_axid
+  ,client22mcif_rd_cdt_lat_fifo_pop
+  ,client22mcif_rd_req_valid
+  ,client22mcif_rd_req_pd
+  ,client22mcif_rd_req_ready
+  ,mcif2client2_rd_rsp_valid
+  ,mcif2client2_rd_rsp_pd
+  ,mcif2client2_rd_rsp_ready
+  ,client22mcif_lat_fifo_depth
+  ,client22mcif_rd_axid
+  ,client32mcif_rd_cdt_lat_fifo_pop
+  ,client32mcif_rd_req_valid
+  ,client32mcif_rd_req_pd
+  ,client32mcif_rd_req_ready
+  ,mcif2client3_rd_rsp_valid
+  ,mcif2client3_rd_rsp_pd
+  ,mcif2client3_rd_rsp_ready
+  ,client32mcif_lat_fifo_depth
+  ,client32mcif_rd_axid
+  ,client42mcif_rd_cdt_lat_fifo_pop
+  ,client42mcif_rd_req_valid
+  ,client42mcif_rd_req_pd
+  ,client42mcif_rd_req_ready
+  ,mcif2client4_rd_rsp_valid
+  ,mcif2client4_rd_rsp_pd
+  ,mcif2client4_rd_rsp_ready
+  ,client42mcif_lat_fifo_depth
+  ,client42mcif_rd_axid
+  ,client52mcif_rd_cdt_lat_fifo_pop
+  ,client52mcif_rd_req_valid
+  ,client52mcif_rd_req_pd
+  ,client52mcif_rd_req_ready
+  ,mcif2client5_rd_rsp_valid
+  ,mcif2client5_rd_rsp_pd
+  ,mcif2client5_rd_rsp_ready
+  ,client52mcif_lat_fifo_depth
+  ,client52mcif_rd_axid
+  ,client62mcif_rd_cdt_lat_fifo_pop
+  ,client62mcif_rd_req_valid
+  ,client62mcif_rd_req_pd
+  ,client62mcif_rd_req_ready
+  ,mcif2client6_rd_rsp_valid
+  ,mcif2client6_rd_rsp_pd
+  ,mcif2client6_rd_rsp_ready
+  ,client62mcif_lat_fifo_depth
+  ,client62mcif_rd_axid
+  ,client02mcif_wr_req_pd
+  ,client02mcif_wr_req_valid
+  ,client02mcif_wr_req_ready
+  ,mcif2client0_wr_rsp_complete
+  ,client02mcif_wr_axid
+  ,client12mcif_wr_req_pd
+  ,client12mcif_wr_req_valid
+  ,client12mcif_wr_req_ready
+  ,mcif2client1_wr_rsp_complete
+  ,client12mcif_wr_axid
+  ,client22mcif_wr_req_pd
+  ,client22mcif_wr_req_valid
+  ,client22mcif_wr_req_ready
+  ,mcif2client2_wr_rsp_complete
+  ,client22mcif_wr_axid
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
   ,csb2mcif_req_pd //|< i
   ,csb2mcif_req_pvld //|< i
   ,csb2mcif_req_prdy //|> o
@@ -83,6 +164,87 @@ module NV_NVDLA_nocif (
 //: print("output mcif2client${i}_wr_rsp_complete;\n");
 //: print("input [3:0] client${i}2mcif_wr_axid;\n");
 //: }
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+input client02mcif_rd_cdt_lat_fifo_pop;
+input client02mcif_rd_req_valid;
+input [47 -1:0] client02mcif_rd_req_pd;
+output client02mcif_rd_req_ready;
+output mcif2client0_rd_rsp_valid;
+input mcif2client0_rd_rsp_ready;
+output [65 -1:0] mcif2client0_rd_rsp_pd;
+input [7:0] client02mcif_lat_fifo_depth;
+input [3:0] client02mcif_rd_axid;
+input client12mcif_rd_cdt_lat_fifo_pop;
+input client12mcif_rd_req_valid;
+input [47 -1:0] client12mcif_rd_req_pd;
+output client12mcif_rd_req_ready;
+output mcif2client1_rd_rsp_valid;
+input mcif2client1_rd_rsp_ready;
+output [65 -1:0] mcif2client1_rd_rsp_pd;
+input [7:0] client12mcif_lat_fifo_depth;
+input [3:0] client12mcif_rd_axid;
+input client22mcif_rd_cdt_lat_fifo_pop;
+input client22mcif_rd_req_valid;
+input [47 -1:0] client22mcif_rd_req_pd;
+output client22mcif_rd_req_ready;
+output mcif2client2_rd_rsp_valid;
+input mcif2client2_rd_rsp_ready;
+output [65 -1:0] mcif2client2_rd_rsp_pd;
+input [7:0] client22mcif_lat_fifo_depth;
+input [3:0] client22mcif_rd_axid;
+input client32mcif_rd_cdt_lat_fifo_pop;
+input client32mcif_rd_req_valid;
+input [47 -1:0] client32mcif_rd_req_pd;
+output client32mcif_rd_req_ready;
+output mcif2client3_rd_rsp_valid;
+input mcif2client3_rd_rsp_ready;
+output [65 -1:0] mcif2client3_rd_rsp_pd;
+input [7:0] client32mcif_lat_fifo_depth;
+input [3:0] client32mcif_rd_axid;
+input client42mcif_rd_cdt_lat_fifo_pop;
+input client42mcif_rd_req_valid;
+input [47 -1:0] client42mcif_rd_req_pd;
+output client42mcif_rd_req_ready;
+output mcif2client4_rd_rsp_valid;
+input mcif2client4_rd_rsp_ready;
+output [65 -1:0] mcif2client4_rd_rsp_pd;
+input [7:0] client42mcif_lat_fifo_depth;
+input [3:0] client42mcif_rd_axid;
+input client52mcif_rd_cdt_lat_fifo_pop;
+input client52mcif_rd_req_valid;
+input [47 -1:0] client52mcif_rd_req_pd;
+output client52mcif_rd_req_ready;
+output mcif2client5_rd_rsp_valid;
+input mcif2client5_rd_rsp_ready;
+output [65 -1:0] mcif2client5_rd_rsp_pd;
+input [7:0] client52mcif_lat_fifo_depth;
+input [3:0] client52mcif_rd_axid;
+input client62mcif_rd_cdt_lat_fifo_pop;
+input client62mcif_rd_req_valid;
+input [47 -1:0] client62mcif_rd_req_pd;
+output client62mcif_rd_req_ready;
+output mcif2client6_rd_rsp_valid;
+input mcif2client6_rd_rsp_ready;
+output [65 -1:0] mcif2client6_rd_rsp_pd;
+input [7:0] client62mcif_lat_fifo_depth;
+input [3:0] client62mcif_rd_axid;
+input [66 -1:0] client02mcif_wr_req_pd;
+input client02mcif_wr_req_valid;
+output client02mcif_wr_req_ready;
+output mcif2client0_wr_rsp_complete;
+input [3:0] client02mcif_wr_axid;
+input [66 -1:0] client12mcif_wr_req_pd;
+input client12mcif_wr_req_valid;
+output client12mcif_wr_req_ready;
+output mcif2client1_wr_rsp_complete;
+input [3:0] client12mcif_wr_axid;
+input [66 -1:0] client22mcif_wr_req_pd;
+input client22mcif_wr_req_valid;
+output client22mcif_wr_req_ready;
+output mcif2client2_wr_rsp_complete;
+input [3:0] client22mcif_wr_axid;
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 input nvdla_core_clk;
 input nvdla_core_rstn;
 input [31:0] pwrbus_ram_pd;
@@ -145,6 +307,87 @@ NV_NVDLA_NOCIF_dram u_dram (
 //: print("  ,.mcif2client${i}_wr_rsp_complete(mcif2client${i}_wr_rsp_complete)\n");
 //: print("  ,.client${i}2mcif_wr_axid(client${i}2mcif_wr_axid)\n");
 //: }
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+  ,.client02mcif_rd_cdt_lat_fifo_pop(client02mcif_rd_cdt_lat_fifo_pop)
+  ,.client02mcif_rd_req_valid(client02mcif_rd_req_valid)
+  ,.client02mcif_rd_req_pd(client02mcif_rd_req_pd)
+  ,.client02mcif_rd_req_ready(client02mcif_rd_req_ready)
+  ,.mcif2client0_rd_rsp_valid(mcif2client0_rd_rsp_valid)
+  ,.mcif2client0_rd_rsp_ready(mcif2client0_rd_rsp_ready)
+  ,.mcif2client0_rd_rsp_pd(mcif2client0_rd_rsp_pd)
+  ,.client02mcif_rd_axid(client02mcif_rd_axid)
+  ,.client02mcif_lat_fifo_depth(client02mcif_lat_fifo_depth)
+  ,.client12mcif_rd_cdt_lat_fifo_pop(client12mcif_rd_cdt_lat_fifo_pop)
+  ,.client12mcif_rd_req_valid(client12mcif_rd_req_valid)
+  ,.client12mcif_rd_req_pd(client12mcif_rd_req_pd)
+  ,.client12mcif_rd_req_ready(client12mcif_rd_req_ready)
+  ,.mcif2client1_rd_rsp_valid(mcif2client1_rd_rsp_valid)
+  ,.mcif2client1_rd_rsp_ready(mcif2client1_rd_rsp_ready)
+  ,.mcif2client1_rd_rsp_pd(mcif2client1_rd_rsp_pd)
+  ,.client12mcif_rd_axid(client12mcif_rd_axid)
+  ,.client12mcif_lat_fifo_depth(client12mcif_lat_fifo_depth)
+  ,.client22mcif_rd_cdt_lat_fifo_pop(client22mcif_rd_cdt_lat_fifo_pop)
+  ,.client22mcif_rd_req_valid(client22mcif_rd_req_valid)
+  ,.client22mcif_rd_req_pd(client22mcif_rd_req_pd)
+  ,.client22mcif_rd_req_ready(client22mcif_rd_req_ready)
+  ,.mcif2client2_rd_rsp_valid(mcif2client2_rd_rsp_valid)
+  ,.mcif2client2_rd_rsp_ready(mcif2client2_rd_rsp_ready)
+  ,.mcif2client2_rd_rsp_pd(mcif2client2_rd_rsp_pd)
+  ,.client22mcif_rd_axid(client22mcif_rd_axid)
+  ,.client22mcif_lat_fifo_depth(client22mcif_lat_fifo_depth)
+  ,.client32mcif_rd_cdt_lat_fifo_pop(client32mcif_rd_cdt_lat_fifo_pop)
+  ,.client32mcif_rd_req_valid(client32mcif_rd_req_valid)
+  ,.client32mcif_rd_req_pd(client32mcif_rd_req_pd)
+  ,.client32mcif_rd_req_ready(client32mcif_rd_req_ready)
+  ,.mcif2client3_rd_rsp_valid(mcif2client3_rd_rsp_valid)
+  ,.mcif2client3_rd_rsp_ready(mcif2client3_rd_rsp_ready)
+  ,.mcif2client3_rd_rsp_pd(mcif2client3_rd_rsp_pd)
+  ,.client32mcif_rd_axid(client32mcif_rd_axid)
+  ,.client32mcif_lat_fifo_depth(client32mcif_lat_fifo_depth)
+  ,.client42mcif_rd_cdt_lat_fifo_pop(client42mcif_rd_cdt_lat_fifo_pop)
+  ,.client42mcif_rd_req_valid(client42mcif_rd_req_valid)
+  ,.client42mcif_rd_req_pd(client42mcif_rd_req_pd)
+  ,.client42mcif_rd_req_ready(client42mcif_rd_req_ready)
+  ,.mcif2client4_rd_rsp_valid(mcif2client4_rd_rsp_valid)
+  ,.mcif2client4_rd_rsp_ready(mcif2client4_rd_rsp_ready)
+  ,.mcif2client4_rd_rsp_pd(mcif2client4_rd_rsp_pd)
+  ,.client42mcif_rd_axid(client42mcif_rd_axid)
+  ,.client42mcif_lat_fifo_depth(client42mcif_lat_fifo_depth)
+  ,.client52mcif_rd_cdt_lat_fifo_pop(client52mcif_rd_cdt_lat_fifo_pop)
+  ,.client52mcif_rd_req_valid(client52mcif_rd_req_valid)
+  ,.client52mcif_rd_req_pd(client52mcif_rd_req_pd)
+  ,.client52mcif_rd_req_ready(client52mcif_rd_req_ready)
+  ,.mcif2client5_rd_rsp_valid(mcif2client5_rd_rsp_valid)
+  ,.mcif2client5_rd_rsp_ready(mcif2client5_rd_rsp_ready)
+  ,.mcif2client5_rd_rsp_pd(mcif2client5_rd_rsp_pd)
+  ,.client52mcif_rd_axid(client52mcif_rd_axid)
+  ,.client52mcif_lat_fifo_depth(client52mcif_lat_fifo_depth)
+  ,.client62mcif_rd_cdt_lat_fifo_pop(client62mcif_rd_cdt_lat_fifo_pop)
+  ,.client62mcif_rd_req_valid(client62mcif_rd_req_valid)
+  ,.client62mcif_rd_req_pd(client62mcif_rd_req_pd)
+  ,.client62mcif_rd_req_ready(client62mcif_rd_req_ready)
+  ,.mcif2client6_rd_rsp_valid(mcif2client6_rd_rsp_valid)
+  ,.mcif2client6_rd_rsp_ready(mcif2client6_rd_rsp_ready)
+  ,.mcif2client6_rd_rsp_pd(mcif2client6_rd_rsp_pd)
+  ,.client62mcif_rd_axid(client62mcif_rd_axid)
+  ,.client62mcif_lat_fifo_depth(client62mcif_lat_fifo_depth)
+  ,.client02mcif_wr_req_pd(client02mcif_wr_req_pd)
+  ,.client02mcif_wr_req_valid(client02mcif_wr_req_valid)
+  ,.client02mcif_wr_req_ready(client02mcif_wr_req_ready)
+  ,.mcif2client0_wr_rsp_complete(mcif2client0_wr_rsp_complete)
+  ,.client02mcif_wr_axid(client02mcif_wr_axid)
+  ,.client12mcif_wr_req_pd(client12mcif_wr_req_pd)
+  ,.client12mcif_wr_req_valid(client12mcif_wr_req_valid)
+  ,.client12mcif_wr_req_ready(client12mcif_wr_req_ready)
+  ,.mcif2client1_wr_rsp_complete(mcif2client1_wr_rsp_complete)
+  ,.client12mcif_wr_axid(client12mcif_wr_axid)
+  ,.client22mcif_wr_req_pd(client22mcif_wr_req_pd)
+  ,.client22mcif_wr_req_valid(client22mcif_wr_req_valid)
+  ,.client22mcif_wr_req_ready(client22mcif_wr_req_ready)
+  ,.mcif2client2_wr_rsp_complete(mcif2client2_wr_rsp_complete)
+  ,.client22mcif_wr_axid(client22mcif_wr_axid)
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
   ,.noc2mcif_axi_b_bid(noc2mcif_axi_b_bid ) //|< i
   ,.noc2mcif_axi_b_bvalid(noc2mcif_axi_b_bvalid ) //|< i
   ,.noc2mcif_axi_r_rdata(noc2mcif_axi_r_rdata ) //|< i

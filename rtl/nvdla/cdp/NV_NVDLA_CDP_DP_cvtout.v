@@ -41,6 +41,11 @@ input cvtout_prdy;
 //: my $ocvto = 8;
 //: print "input  [${k}*${ocvti}-1:0] mul2ocvt_pd;  \n";
 //: print "output  [${k}*${ocvto}+14:0] cvtout_pd;  \n";
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+input  [1*25-1:0] mul2ocvt_pd;  
+output  [1*8+14:0] cvtout_pd;  
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 input mul2ocvt_pvld;
 input [31:0] reg2dp_datout_offset;
 input [15:0] reg2dp_datout_scale;
@@ -67,6 +72,12 @@ wire cdp_cvtout_in_valid;
 //: wire [${ocvto}-1:0] cdp_cvtout_output_pd_$m;
 //: );
 //: }
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+
+wire [25-1:0] cdp_cvtout_input_pd_0;
+wire [8-1:0] cdp_cvtout_output_pd_0;
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 wire cdp_cvtout_input_rdy;
 wire cdp_cvtout_input_vld;
 wire [1 -1:0] cdp_cvtout_input_rdys;
@@ -186,6 +197,16 @@ assign cdp_cvtout_input_rdy = &cdp_cvtout_input_rdys;
 //: ;
 //: );
 //: }
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+
+assign cdp_cvtout_input_pd_0 = mul2ocvt_pd[0*25+25-1:0*25];
+assign cdp_cvtout_input_vlds[0] = cdp_cvtout_input_vld
+
+& cdp_cvtout_input_rdys[0]
+
+;
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 //cvt sub-unit data in
 always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
   if (!nvdla_core_rstn) begin
@@ -229,6 +250,23 @@ end
 //: );
 //: );
 //: }
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+
+HLS_cdp_ocvt u_HLS_cdp_ocvt_0 (
+.nvdla_core_clk (nvdla_core_clk) //|< i
+,.nvdla_core_rstn (nvdla_core_rstn) //|< i
+,.chn_data_in_rsc_z (cdp_cvtout_input_pd_0) //|< w
+,.chn_data_in_rsc_vz (cdp_cvtout_input_vlds[0]) //|< w
+,.chn_data_in_rsc_lz (cdp_cvtout_input_rdys[0]) //|> w
+,.cfg_alu_in_rsc_z (reg2dp_datout_offset_use[25-1:0]) //|< r
+,.cfg_mul_in_rsc_z (reg2dp_datout_scale_use[15:0]) //|< r
+,.cfg_truncate_rsc_z (reg2dp_datout_shifter_use[5:0]) //|< r
+,.chn_data_out_rsc_z (cdp_cvtout_output_pd_0) //|> ?
+,.chn_data_out_rsc_vz (cdp_cvtout_output_rdys[0]) //|< w
+,.chn_data_out_rsc_lz (cdp_cvtout_output_vlds[0]) //|> w
+);
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 //sub-unit output ready
 //: my $k = 1;
 //: foreach my $m (0..$k-1) {
@@ -244,6 +282,15 @@ end
 //: ;
 //: );
 //: }
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+
+assign cdp_cvtout_output_rdys[0] = cdp_cvtout_output_rdy
+
+& cdp_cvtout_output_vlds[0]
+
+;
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 //output valid
 assign cdp_cvtout_output_vld = &cdp_cvtout_output_vlds;
 //output ready
@@ -259,6 +306,9 @@ assign cdp_cvtout_output_pd = {
 //: );
 //: }
 //: }
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 cdp_cvtout_output_pd_0};
 //===============================================
 //data info output

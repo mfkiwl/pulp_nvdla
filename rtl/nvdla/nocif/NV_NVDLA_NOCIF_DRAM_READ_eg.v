@@ -30,6 +30,51 @@ module NV_NVDLA_NOCIF_DRAM_READ_eg (
 //:print(",mcif2client${i}_rd_rsp_pd\n");
 //:print(",mcif2client${i}_rd_rsp_valid\n");
 //:}
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+,cq_rd0_pd
+,cq_rd0_pvld
+,cq_rd0_prdy
+,mcif2client0_rd_rsp_ready
+,mcif2client0_rd_rsp_pd
+,mcif2client0_rd_rsp_valid
+,cq_rd1_pd
+,cq_rd1_pvld
+,cq_rd1_prdy
+,mcif2client1_rd_rsp_ready
+,mcif2client1_rd_rsp_pd
+,mcif2client1_rd_rsp_valid
+,cq_rd2_pd
+,cq_rd2_pvld
+,cq_rd2_prdy
+,mcif2client2_rd_rsp_ready
+,mcif2client2_rd_rsp_pd
+,mcif2client2_rd_rsp_valid
+,cq_rd3_pd
+,cq_rd3_pvld
+,cq_rd3_prdy
+,mcif2client3_rd_rsp_ready
+,mcif2client3_rd_rsp_pd
+,mcif2client3_rd_rsp_valid
+,cq_rd4_pd
+,cq_rd4_pvld
+,cq_rd4_prdy
+,mcif2client4_rd_rsp_ready
+,mcif2client4_rd_rsp_pd
+,mcif2client4_rd_rsp_valid
+,cq_rd5_pd
+,cq_rd5_pvld
+,cq_rd5_prdy
+,mcif2client5_rd_rsp_ready
+,mcif2client5_rd_rsp_pd
+,mcif2client5_rd_rsp_valid
+,cq_rd6_pd
+,cq_rd6_pvld
+,cq_rd6_prdy
+,mcif2client6_rd_rsp_ready
+,mcif2client6_rd_rsp_pd
+,mcif2client6_rd_rsp_valid
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
    ,noc2mcif_axi_r_rdata //|< i
   ,noc2mcif_axi_r_rid //|< i
   ,noc2mcif_axi_r_rlast //|< i
@@ -50,6 +95,58 @@ module NV_NVDLA_NOCIF_DRAM_READ_eg (
 //:print("output  cq_rd${i}_prdy;\n");
 //:print("input [6:0] cq_rd${i}_pd;\n");
 //:}
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+output mcif2client0_rd_rsp_valid;
+input mcif2client0_rd_rsp_ready;
+
+output [64 +1 -1:0] mcif2client0_rd_rsp_pd;
+input  cq_rd0_pvld;
+output  cq_rd0_prdy;
+input [6:0] cq_rd0_pd;
+output mcif2client1_rd_rsp_valid;
+input mcif2client1_rd_rsp_ready;
+
+output [64 +1 -1:0] mcif2client1_rd_rsp_pd;
+input  cq_rd1_pvld;
+output  cq_rd1_prdy;
+input [6:0] cq_rd1_pd;
+output mcif2client2_rd_rsp_valid;
+input mcif2client2_rd_rsp_ready;
+
+output [64 +1 -1:0] mcif2client2_rd_rsp_pd;
+input  cq_rd2_pvld;
+output  cq_rd2_prdy;
+input [6:0] cq_rd2_pd;
+output mcif2client3_rd_rsp_valid;
+input mcif2client3_rd_rsp_ready;
+
+output [64 +1 -1:0] mcif2client3_rd_rsp_pd;
+input  cq_rd3_pvld;
+output  cq_rd3_prdy;
+input [6:0] cq_rd3_pd;
+output mcif2client4_rd_rsp_valid;
+input mcif2client4_rd_rsp_ready;
+
+output [64 +1 -1:0] mcif2client4_rd_rsp_pd;
+input  cq_rd4_pvld;
+output  cq_rd4_prdy;
+input [6:0] cq_rd4_pd;
+output mcif2client5_rd_rsp_valid;
+input mcif2client5_rd_rsp_ready;
+
+output [64 +1 -1:0] mcif2client5_rd_rsp_pd;
+input  cq_rd5_pvld;
+output  cq_rd5_prdy;
+input [6:0] cq_rd5_pd;
+output mcif2client6_rd_rsp_valid;
+input mcif2client6_rd_rsp_ready;
+
+output [64 +1 -1:0] mcif2client6_rd_rsp_pd;
+input  cq_rd6_pvld;
+output  cq_rd6_prdy;
+input [6:0] cq_rd6_pd;
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 input nvdla_core_clk;
 input nvdla_core_rstn;
 input noc2mcif_axi_r_rvalid; /* data valid */
@@ -110,6 +207,268 @@ reg [1:0] arb_wen;
 //:print("wire  rq${i}_rd_pvld;\n");
 //:print("wire src${i}_gnt;\n");
 //:}
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+reg [1:0] ctt0_cnt;
+reg [6:0] ctt0_cq_pd;
+reg  ctt0_vld;
+wire ctt0_accept;
+wire ctt0_last_beat;
+wire ctt0_rdy;
+
+wire [64 -1:0] dma0_data;
+
+wire [64/2-1:0] dma0_data0;
+
+wire [64/2-1:0] dma0_data1;
+wire dma0_is_last_odd;
+wire dma0_last_odd;
+wire [1:0] dma0_mask;
+
+wire [64/2-1:0] dma0_mdata0;
+
+wire [64/2-1:0] dma0_mdata1;
+
+wire [64 +1 -1:0] dma0_pd;
+wire dma0_rdy;
+wire dma0_vld;
+wire mon_dma0_lodd;
+wire [64/2:0] ro0_rd0_pd;
+wire [64/2:0] ro0_rd1_pd;
+wire ro0_rd0_prdy;
+wire ro0_rd0_pvld;
+wire ro0_rd1_prdy;
+wire ro0_rd1_pvld;
+wire ro0_wr_rdy;
+wire ro0_wr0_prdy;
+wire ro0_wr1_prdy;
+wire [64 -1:0] rq0_rd_pd;
+wire  rq0_rd_prdy;
+wire  rq0_rd_pvld;
+wire src0_gnt;
+reg [1:0] ctt1_cnt;
+reg [6:0] ctt1_cq_pd;
+reg  ctt1_vld;
+wire ctt1_accept;
+wire ctt1_last_beat;
+wire ctt1_rdy;
+
+wire [64 -1:0] dma1_data;
+
+wire [64/2-1:0] dma1_data0;
+
+wire [64/2-1:0] dma1_data1;
+wire dma1_is_last_odd;
+wire dma1_last_odd;
+wire [1:0] dma1_mask;
+
+wire [64/2-1:0] dma1_mdata0;
+
+wire [64/2-1:0] dma1_mdata1;
+
+wire [64 +1 -1:0] dma1_pd;
+wire dma1_rdy;
+wire dma1_vld;
+wire mon_dma1_lodd;
+wire [64/2:0] ro1_rd0_pd;
+wire [64/2:0] ro1_rd1_pd;
+wire ro1_rd0_prdy;
+wire ro1_rd0_pvld;
+wire ro1_rd1_prdy;
+wire ro1_rd1_pvld;
+wire ro1_wr_rdy;
+wire ro1_wr0_prdy;
+wire ro1_wr1_prdy;
+wire [64 -1:0] rq1_rd_pd;
+wire  rq1_rd_prdy;
+wire  rq1_rd_pvld;
+wire src1_gnt;
+reg [1:0] ctt2_cnt;
+reg [6:0] ctt2_cq_pd;
+reg  ctt2_vld;
+wire ctt2_accept;
+wire ctt2_last_beat;
+wire ctt2_rdy;
+
+wire [64 -1:0] dma2_data;
+
+wire [64/2-1:0] dma2_data0;
+
+wire [64/2-1:0] dma2_data1;
+wire dma2_is_last_odd;
+wire dma2_last_odd;
+wire [1:0] dma2_mask;
+
+wire [64/2-1:0] dma2_mdata0;
+
+wire [64/2-1:0] dma2_mdata1;
+
+wire [64 +1 -1:0] dma2_pd;
+wire dma2_rdy;
+wire dma2_vld;
+wire mon_dma2_lodd;
+wire [64/2:0] ro2_rd0_pd;
+wire [64/2:0] ro2_rd1_pd;
+wire ro2_rd0_prdy;
+wire ro2_rd0_pvld;
+wire ro2_rd1_prdy;
+wire ro2_rd1_pvld;
+wire ro2_wr_rdy;
+wire ro2_wr0_prdy;
+wire ro2_wr1_prdy;
+wire [64 -1:0] rq2_rd_pd;
+wire  rq2_rd_prdy;
+wire  rq2_rd_pvld;
+wire src2_gnt;
+reg [1:0] ctt3_cnt;
+reg [6:0] ctt3_cq_pd;
+reg  ctt3_vld;
+wire ctt3_accept;
+wire ctt3_last_beat;
+wire ctt3_rdy;
+
+wire [64 -1:0] dma3_data;
+
+wire [64/2-1:0] dma3_data0;
+
+wire [64/2-1:0] dma3_data1;
+wire dma3_is_last_odd;
+wire dma3_last_odd;
+wire [1:0] dma3_mask;
+
+wire [64/2-1:0] dma3_mdata0;
+
+wire [64/2-1:0] dma3_mdata1;
+
+wire [64 +1 -1:0] dma3_pd;
+wire dma3_rdy;
+wire dma3_vld;
+wire mon_dma3_lodd;
+wire [64/2:0] ro3_rd0_pd;
+wire [64/2:0] ro3_rd1_pd;
+wire ro3_rd0_prdy;
+wire ro3_rd0_pvld;
+wire ro3_rd1_prdy;
+wire ro3_rd1_pvld;
+wire ro3_wr_rdy;
+wire ro3_wr0_prdy;
+wire ro3_wr1_prdy;
+wire [64 -1:0] rq3_rd_pd;
+wire  rq3_rd_prdy;
+wire  rq3_rd_pvld;
+wire src3_gnt;
+reg [1:0] ctt4_cnt;
+reg [6:0] ctt4_cq_pd;
+reg  ctt4_vld;
+wire ctt4_accept;
+wire ctt4_last_beat;
+wire ctt4_rdy;
+
+wire [64 -1:0] dma4_data;
+
+wire [64/2-1:0] dma4_data0;
+
+wire [64/2-1:0] dma4_data1;
+wire dma4_is_last_odd;
+wire dma4_last_odd;
+wire [1:0] dma4_mask;
+
+wire [64/2-1:0] dma4_mdata0;
+
+wire [64/2-1:0] dma4_mdata1;
+
+wire [64 +1 -1:0] dma4_pd;
+wire dma4_rdy;
+wire dma4_vld;
+wire mon_dma4_lodd;
+wire [64/2:0] ro4_rd0_pd;
+wire [64/2:0] ro4_rd1_pd;
+wire ro4_rd0_prdy;
+wire ro4_rd0_pvld;
+wire ro4_rd1_prdy;
+wire ro4_rd1_pvld;
+wire ro4_wr_rdy;
+wire ro4_wr0_prdy;
+wire ro4_wr1_prdy;
+wire [64 -1:0] rq4_rd_pd;
+wire  rq4_rd_prdy;
+wire  rq4_rd_pvld;
+wire src4_gnt;
+reg [1:0] ctt5_cnt;
+reg [6:0] ctt5_cq_pd;
+reg  ctt5_vld;
+wire ctt5_accept;
+wire ctt5_last_beat;
+wire ctt5_rdy;
+
+wire [64 -1:0] dma5_data;
+
+wire [64/2-1:0] dma5_data0;
+
+wire [64/2-1:0] dma5_data1;
+wire dma5_is_last_odd;
+wire dma5_last_odd;
+wire [1:0] dma5_mask;
+
+wire [64/2-1:0] dma5_mdata0;
+
+wire [64/2-1:0] dma5_mdata1;
+
+wire [64 +1 -1:0] dma5_pd;
+wire dma5_rdy;
+wire dma5_vld;
+wire mon_dma5_lodd;
+wire [64/2:0] ro5_rd0_pd;
+wire [64/2:0] ro5_rd1_pd;
+wire ro5_rd0_prdy;
+wire ro5_rd0_pvld;
+wire ro5_rd1_prdy;
+wire ro5_rd1_pvld;
+wire ro5_wr_rdy;
+wire ro5_wr0_prdy;
+wire ro5_wr1_prdy;
+wire [64 -1:0] rq5_rd_pd;
+wire  rq5_rd_prdy;
+wire  rq5_rd_pvld;
+wire src5_gnt;
+reg [1:0] ctt6_cnt;
+reg [6:0] ctt6_cq_pd;
+reg  ctt6_vld;
+wire ctt6_accept;
+wire ctt6_last_beat;
+wire ctt6_rdy;
+
+wire [64 -1:0] dma6_data;
+
+wire [64/2-1:0] dma6_data0;
+
+wire [64/2-1:0] dma6_data1;
+wire dma6_is_last_odd;
+wire dma6_last_odd;
+wire [1:0] dma6_mask;
+
+wire [64/2-1:0] dma6_mdata0;
+
+wire [64/2-1:0] dma6_mdata1;
+
+wire [64 +1 -1:0] dma6_pd;
+wire dma6_rdy;
+wire dma6_vld;
+wire mon_dma6_lodd;
+wire [64/2:0] ro6_rd0_pd;
+wire [64/2:0] ro6_rd1_pd;
+wire ro6_rd0_prdy;
+wire ro6_rd0_pvld;
+wire ro6_rd1_prdy;
+wire ro6_rd1_pvld;
+wire ro6_wr_rdy;
+wire ro6_wr0_prdy;
+wire ro6_wr1_prdy;
+wire [64 -1:0] rq6_rd_pd;
+wire  rq6_rd_prdy;
+wire  rq6_rd_pvld;
+wire src6_gnt;
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 wire [3:0] ipipe_axi_axid;
 wire [64 -1:0] ipipe_axi_data;
 wire [64 +3:0] ipipe_axi_pd;
@@ -163,12 +522,32 @@ assign rq_wr_pd = ipipe_axi_data;
 //:for($i=0;$i<$k;$i++) {
 //:print qq(wire rq${i}_wr_pvld, rq${i}_wr_prdy;\n);
 //:}
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+wire rq0_wr_pvld, rq0_wr_prdy;
+wire rq1_wr_pvld, rq1_wr_prdy;
+wire rq2_wr_pvld, rq2_wr_prdy;
+wire rq3_wr_pvld, rq3_wr_prdy;
+wire rq4_wr_pvld, rq4_wr_prdy;
+wire rq5_wr_pvld, rq5_wr_prdy;
+wire rq6_wr_pvld, rq6_wr_prdy;
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 assign ipipe_axi_rdy = 0
 //:my $k = 7;
 //:my $i;
 //:for($i=0;$i<$k;$i++) {
 //: print ("| (rq${i}_wr_pvld & rq${i}_wr_prdy)\n");
 //:}
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+| (rq0_wr_pvld & rq0_wr_prdy)
+| (rq1_wr_pvld & rq1_wr_prdy)
+| (rq2_wr_pvld & rq2_wr_prdy)
+| (rq3_wr_pvld & rq3_wr_prdy)
+| (rq4_wr_pvld & rq4_wr_prdy)
+| (rq5_wr_pvld & rq5_wr_prdy)
+| (rq6_wr_pvld & rq6_wr_prdy)
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 ;
 //:my $k = 7;
 //:my $i;
@@ -211,6 +590,127 @@ assign ipipe_axi_rdy = 0
 //: wire src${i}_req = 1'b0;
 //:);
 //:}
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+assign rq0_wr_pvld = ipipe_axi_vld & (ipipe_axi_axid == 8);
+wire [64 -1:0] rq0_wr_pd = rq_wr_pd;
+NV_NVDLA_NOCIF_DRAM_READ_EG_lat_fifo lat_fifo0 (
+.nvdla_core_clk(nvdla_core_clk)
+,.nvdla_core_rstn(nvdla_core_rstn)
+,.rq_wr_prdy(rq0_wr_prdy)
+,.rq_wr_pvld(rq0_wr_pvld)
+,.rq_wr_pd(rq0_wr_pd)
+,.rq_rd_prdy(rq0_rd_prdy)
+,.rq_rd_pvld(rq0_rd_pvld)
+,.rq_rd_pd(rq0_rd_pd)
+,.pwrbus_ram_pd(pwrbus_ram_pd)
+);
+assign rq1_wr_pvld = ipipe_axi_vld & (ipipe_axi_axid == 9);
+wire [64 -1:0] rq1_wr_pd = rq_wr_pd;
+NV_NVDLA_NOCIF_DRAM_READ_EG_lat_fifo lat_fifo1 (
+.nvdla_core_clk(nvdla_core_clk)
+,.nvdla_core_rstn(nvdla_core_rstn)
+,.rq_wr_prdy(rq1_wr_prdy)
+,.rq_wr_pvld(rq1_wr_pvld)
+,.rq_wr_pd(rq1_wr_pd)
+,.rq_rd_prdy(rq1_rd_prdy)
+,.rq_rd_pvld(rq1_rd_pvld)
+,.rq_rd_pd(rq1_rd_pd)
+,.pwrbus_ram_pd(pwrbus_ram_pd)
+);
+assign rq2_wr_pvld = ipipe_axi_vld & (ipipe_axi_axid == 3);
+wire [64 -1:0] rq2_wr_pd = rq_wr_pd;
+NV_NVDLA_NOCIF_DRAM_READ_EG_lat_fifo lat_fifo2 (
+.nvdla_core_clk(nvdla_core_clk)
+,.nvdla_core_rstn(nvdla_core_rstn)
+,.rq_wr_prdy(rq2_wr_prdy)
+,.rq_wr_pvld(rq2_wr_pvld)
+,.rq_wr_pd(rq2_wr_pd)
+,.rq_rd_prdy(rq2_rd_prdy)
+,.rq_rd_pvld(rq2_rd_pvld)
+,.rq_rd_pd(rq2_rd_pd)
+,.pwrbus_ram_pd(pwrbus_ram_pd)
+);
+assign rq3_wr_pvld = ipipe_axi_vld & (ipipe_axi_axid == 2);
+wire [64 -1:0] rq3_wr_pd = rq_wr_pd;
+NV_NVDLA_NOCIF_DRAM_READ_EG_lat_fifo lat_fifo3 (
+.nvdla_core_clk(nvdla_core_clk)
+,.nvdla_core_rstn(nvdla_core_rstn)
+,.rq_wr_prdy(rq3_wr_prdy)
+,.rq_wr_pvld(rq3_wr_pvld)
+,.rq_wr_pd(rq3_wr_pd)
+,.rq_rd_prdy(rq3_rd_prdy)
+,.rq_rd_pvld(rq3_rd_pvld)
+,.rq_rd_pd(rq3_rd_pd)
+,.pwrbus_ram_pd(pwrbus_ram_pd)
+);
+assign rq4_wr_pvld = ipipe_axi_vld & (ipipe_axi_axid == 1);
+wire [64 -1:0] rq4_wr_pd = rq_wr_pd;
+NV_NVDLA_NOCIF_DRAM_READ_EG_lat_fifo lat_fifo4 (
+.nvdla_core_clk(nvdla_core_clk)
+,.nvdla_core_rstn(nvdla_core_rstn)
+,.rq_wr_prdy(rq4_wr_prdy)
+,.rq_wr_pvld(rq4_wr_pvld)
+,.rq_wr_pd(rq4_wr_pd)
+,.rq_rd_prdy(rq4_rd_prdy)
+,.rq_rd_pvld(rq4_rd_pvld)
+,.rq_rd_pd(rq4_rd_pd)
+,.pwrbus_ram_pd(pwrbus_ram_pd)
+);
+assign rq5_wr_pvld = ipipe_axi_vld & (ipipe_axi_axid == 5);
+wire [64 -1:0] rq5_wr_pd = rq_wr_pd;
+NV_NVDLA_NOCIF_DRAM_READ_EG_lat_fifo lat_fifo5 (
+.nvdla_core_clk(nvdla_core_clk)
+,.nvdla_core_rstn(nvdla_core_rstn)
+,.rq_wr_prdy(rq5_wr_prdy)
+,.rq_wr_pvld(rq5_wr_pvld)
+,.rq_wr_pd(rq5_wr_pd)
+,.rq_rd_prdy(rq5_rd_prdy)
+,.rq_rd_pvld(rq5_rd_pvld)
+,.rq_rd_pd(rq5_rd_pd)
+,.pwrbus_ram_pd(pwrbus_ram_pd)
+);
+assign rq6_wr_pvld = ipipe_axi_vld & (ipipe_axi_axid == 6);
+wire [64 -1:0] rq6_wr_pd = rq_wr_pd;
+NV_NVDLA_NOCIF_DRAM_READ_EG_lat_fifo lat_fifo6 (
+.nvdla_core_clk(nvdla_core_clk)
+,.nvdla_core_rstn(nvdla_core_rstn)
+,.rq_wr_prdy(rq6_wr_prdy)
+,.rq_wr_pvld(rq6_wr_pvld)
+,.rq_wr_pd(rq6_wr_pd)
+,.rq_rd_prdy(rq6_rd_prdy)
+,.rq_rd_pvld(rq6_rd_pvld)
+,.rq_rd_pd(rq6_rd_pd)
+,.pwrbus_ram_pd(pwrbus_ram_pd)
+);
+wire src0_req = rq0_rd_pvld && ctt0_vld && ro0_wr_rdy;
+assign ctt0_rdy = src0_gnt;
+assign rq0_rd_prdy = src0_gnt;
+wire src1_req = rq1_rd_pvld && ctt1_vld && ro1_wr_rdy;
+assign ctt1_rdy = src1_gnt;
+assign rq1_rd_prdy = src1_gnt;
+wire src2_req = rq2_rd_pvld && ctt2_vld && ro2_wr_rdy;
+assign ctt2_rdy = src2_gnt;
+assign rq2_rd_prdy = src2_gnt;
+wire src3_req = rq3_rd_pvld && ctt3_vld && ro3_wr_rdy;
+assign ctt3_rdy = src3_gnt;
+assign rq3_rd_prdy = src3_gnt;
+wire src4_req = rq4_rd_pvld && ctt4_vld && ro4_wr_rdy;
+assign ctt4_rdy = src4_gnt;
+assign rq4_rd_prdy = src4_gnt;
+wire src5_req = rq5_rd_pvld && ctt5_vld && ro5_wr_rdy;
+assign ctt5_rdy = src5_gnt;
+assign rq5_rd_prdy = src5_gnt;
+wire src6_req = rq6_rd_pvld && ctt6_vld && ro6_wr_rdy;
+assign ctt6_rdy = src6_gnt;
+assign rq6_rd_prdy = src6_gnt;
+
+wire src7_req = 1'b0;
+
+wire src8_req = 1'b0;
+
+wire src9_req = 1'b0;
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 read_eg_arb u_read_eg_arb (
    .req0 (src0_req) //|< w
   ,.req1 (src1_req) //|< w
@@ -248,6 +748,15 @@ always @(src0_gnt or rq0_rd_pd
 //:for($i=1;$i<$k;$i++) {
 //:print("or src${i}_gnt or rq${i}_rd_pd\n");
 //:}
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+or src1_gnt or rq1_rd_pd
+or src2_gnt or rq2_rd_pd
+or src3_gnt or rq3_rd_pd
+or src4_gnt or rq4_rd_pd
+or src5_gnt or rq5_rd_pd
+or src6_gnt or rq6_rd_pd
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 ) begin
 //spyglass disable_block W171 W226
  case (1'b1)
@@ -256,6 +765,16 @@ always @(src0_gnt or rq0_rd_pd
 //:for($i=0;$i<$k;$i++) {
 //: print("src${i}_gnt: arb_data = rq${i}_rd_pd;\n");
 //:}
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+src0_gnt: arb_data = rq0_rd_pd;
+src1_gnt: arb_data = rq1_rd_pd;
+src2_gnt: arb_data = rq2_rd_pd;
+src3_gnt: arb_data = rq3_rd_pd;
+src4_gnt: arb_data = rq4_rd_pd;
+src5_gnt: arb_data = rq5_rd_pd;
+src6_gnt: arb_data = rq6_rd_pd;
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
   default : begin
                 arb_data[64 -1:0] = {64{`x_or_0}};
               end
@@ -269,6 +788,15 @@ always @(src0_gnt or ctt0_cq_pd
 //:for($i=1;$i<$k;$i++) {
 //:print("or src${i}_gnt or ctt${i}_cq_pd\n");
 //:}
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+or src1_gnt or ctt1_cq_pd
+or src2_gnt or ctt2_cq_pd
+or src3_gnt or ctt3_cq_pd
+or src4_gnt or ctt4_cq_pd
+or src5_gnt or ctt5_cq_pd
+or src6_gnt or ctt6_cq_pd
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 ) begin
 //spyglass disable_block W171 W226
  case (1'b1)
@@ -277,6 +805,16 @@ always @(src0_gnt or ctt0_cq_pd
 //:for($i=0;$i<$k;$i++) {
 //: print("src${i}_gnt: arb_cq_pd = ctt${i}_cq_pd;\n");
 //:}
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+src0_gnt: arb_cq_pd = ctt0_cq_pd;
+src1_gnt: arb_cq_pd = ctt1_cq_pd;
+src2_gnt: arb_cq_pd = ctt2_cq_pd;
+src3_gnt: arb_cq_pd = ctt3_cq_pd;
+src4_gnt: arb_cq_pd = ctt4_cq_pd;
+src5_gnt: arb_cq_pd = ctt5_cq_pd;
+src6_gnt: arb_cq_pd = ctt6_cq_pd;
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
   default : begin
                 arb_cq_pd = {7{`x_or_0}};
               end
@@ -290,6 +828,15 @@ always @(src0_gnt or ctt0_cnt
 //:for($i=1;$i<$k;$i++) {
 //:print("or src${i}_gnt or ctt${i}_cnt\n");
 //:}
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+or src1_gnt or ctt1_cnt
+or src2_gnt or ctt2_cnt
+or src3_gnt or ctt3_cnt
+or src4_gnt or ctt4_cnt
+or src5_gnt or ctt5_cnt
+or src6_gnt or ctt6_cnt
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 ) begin
 //spyglass disable_block W171 W226
  case (1'b1)
@@ -298,6 +845,16 @@ always @(src0_gnt or ctt0_cnt
 //:for($i=0;$i<$k;$i++) {
 //: print("src${i}_gnt: arb_cnt = ctt${i}_cnt;\n");
 //:}
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+src0_gnt: arb_cnt = ctt0_cnt;
+src1_gnt: arb_cnt = ctt1_cnt;
+src2_gnt: arb_cnt = ctt2_cnt;
+src3_gnt: arb_cnt = ctt3_cnt;
+src4_gnt: arb_cnt = ctt4_cnt;
+src5_gnt: arb_cnt = ctt5_cnt;
+src6_gnt: arb_cnt = ctt6_cnt;
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
   default : begin
                 arb_cnt = {2{`x_or_0}};
               end
@@ -400,6 +957,366 @@ assign arb_first_beat = (arb_cnt==0);
 //:);
 //:);
 //:}
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+
+assign ro0_wr_rdy = ro0_wr0_prdy & ro0_wr1_prdy;
+wire ro0_wr0_pvld = src0_gnt & arb_wen0_swizzled & ro0_wr1_prdy;
+wire [64/2:0] ro0_wr0_pd = arb_pd0;
+NV_NVDLA_NOCIF_DRAM_READ_EG_ro_fifo ro0_fifo0 (
+.nvdla_core_clk(nvdla_core_clk)
+,.nvdla_core_rstn(nvdla_core_rstn)
+,.ro_wr_prdy(ro0_wr0_prdy)
+,.ro_wr_pvld(ro0_wr0_pvld)
+,.ro_wr_pd(ro0_wr0_pd)
+,.ro_rd_prdy(ro0_rd0_prdy)
+,.ro_rd_pvld(ro0_rd0_pvld)
+,.ro_rd_pd(ro0_rd0_pd)
+,.pwrbus_ram_pd(pwrbus_ram_pd)
+);
+wire ro0_wr1_pvld = src0_gnt & arb_wen1_swizzled & ro0_wr0_prdy;
+wire [64/2:0] ro0_wr1_pd = arb_pd1;
+
+NV_NVDLA_NOCIF_DRAM_READ_EG_ro_fifo ro0_fifo1 (
+.nvdla_core_clk(nvdla_core_clk)
+,.nvdla_core_rstn(nvdla_core_rstn)
+,.ro_wr_prdy(ro0_wr1_prdy)
+,.ro_wr_pvld(ro0_wr1_pvld)
+,.ro_wr_pd(ro0_wr1_pd)
+,.ro_rd_prdy(ro0_rd1_prdy)
+,.ro_rd_pvld(ro0_rd1_pvld)
+,.ro_rd_pd(ro0_rd1_pd)
+,.pwrbus_ram_pd(pwrbus_ram_pd)
+);
+assign dma0_vld = ro0_rd0_pvld & (dma0_last_odd ? 1'b1 : ro0_rd1_pvld);
+assign {dma0_last_odd,dma0_data0} = ro0_rd0_pd;
+assign {mon_dma0_lodd,dma0_data1} = ro0_rd1_pd;
+assign dma0_is_last_odd = ro0_rd0_pvld & dma0_last_odd;
+assign dma0_mask = dma0_is_last_odd ? 2'b01: 2'b11;
+assign dma0_mdata0 = {64/2{dma0_mask[0]}} & dma0_data0;
+assign dma0_mdata1 = {64/2{dma0_mask[1]}} & dma0_data1;
+assign dma0_pd = {1'b1,dma0_data};
+assign dma0_data = {dma0_mdata1,dma0_mdata0};
+assign ro0_rd0_prdy = dma0_rdy & (dma0_is_last_odd ? 1'b1: ro0_rd1_pvld);
+assign ro0_rd1_prdy = dma0_rdy & (dma0_is_last_odd ? 1'b1: ro0_rd0_pvld);
+
+NV_NVDLA_NOCIF_DRAM_READ_EG_pipe_p2 pipe_pp0 (
+.nvdla_core_clk(nvdla_core_clk)
+,.nvdla_core_rstn(nvdla_core_rstn)
+,.rd_rsp_rdy(mcif2client0_rd_rsp_ready)
+,.dma_pd(dma0_pd)
+,.dma_vld(dma0_vld)
+,.rd_rsp_pd(mcif2client0_rd_rsp_pd)
+,.rd_rsp_valid(mcif2client0_rd_rsp_valid)
+,.dma_rdy(dma0_rdy)
+);
+
+assign ro1_wr_rdy = ro1_wr0_prdy & ro1_wr1_prdy;
+wire ro1_wr0_pvld = src1_gnt & arb_wen0_swizzled & ro1_wr1_prdy;
+wire [64/2:0] ro1_wr0_pd = arb_pd0;
+NV_NVDLA_NOCIF_DRAM_READ_EG_ro_fifo ro1_fifo0 (
+.nvdla_core_clk(nvdla_core_clk)
+,.nvdla_core_rstn(nvdla_core_rstn)
+,.ro_wr_prdy(ro1_wr0_prdy)
+,.ro_wr_pvld(ro1_wr0_pvld)
+,.ro_wr_pd(ro1_wr0_pd)
+,.ro_rd_prdy(ro1_rd0_prdy)
+,.ro_rd_pvld(ro1_rd0_pvld)
+,.ro_rd_pd(ro1_rd0_pd)
+,.pwrbus_ram_pd(pwrbus_ram_pd)
+);
+wire ro1_wr1_pvld = src1_gnt & arb_wen1_swizzled & ro1_wr0_prdy;
+wire [64/2:0] ro1_wr1_pd = arb_pd1;
+
+NV_NVDLA_NOCIF_DRAM_READ_EG_ro_fifo ro1_fifo1 (
+.nvdla_core_clk(nvdla_core_clk)
+,.nvdla_core_rstn(nvdla_core_rstn)
+,.ro_wr_prdy(ro1_wr1_prdy)
+,.ro_wr_pvld(ro1_wr1_pvld)
+,.ro_wr_pd(ro1_wr1_pd)
+,.ro_rd_prdy(ro1_rd1_prdy)
+,.ro_rd_pvld(ro1_rd1_pvld)
+,.ro_rd_pd(ro1_rd1_pd)
+,.pwrbus_ram_pd(pwrbus_ram_pd)
+);
+assign dma1_vld = ro1_rd0_pvld & (dma1_last_odd ? 1'b1 : ro1_rd1_pvld);
+assign {dma1_last_odd,dma1_data0} = ro1_rd0_pd;
+assign {mon_dma1_lodd,dma1_data1} = ro1_rd1_pd;
+assign dma1_is_last_odd = ro1_rd0_pvld & dma1_last_odd;
+assign dma1_mask = dma1_is_last_odd ? 2'b01: 2'b11;
+assign dma1_mdata0 = {64/2{dma1_mask[0]}} & dma1_data0;
+assign dma1_mdata1 = {64/2{dma1_mask[1]}} & dma1_data1;
+assign dma1_pd = {1'b1,dma1_data};
+assign dma1_data = {dma1_mdata1,dma1_mdata0};
+assign ro1_rd0_prdy = dma1_rdy & (dma1_is_last_odd ? 1'b1: ro1_rd1_pvld);
+assign ro1_rd1_prdy = dma1_rdy & (dma1_is_last_odd ? 1'b1: ro1_rd0_pvld);
+
+NV_NVDLA_NOCIF_DRAM_READ_EG_pipe_p2 pipe_pp1 (
+.nvdla_core_clk(nvdla_core_clk)
+,.nvdla_core_rstn(nvdla_core_rstn)
+,.rd_rsp_rdy(mcif2client1_rd_rsp_ready)
+,.dma_pd(dma1_pd)
+,.dma_vld(dma1_vld)
+,.rd_rsp_pd(mcif2client1_rd_rsp_pd)
+,.rd_rsp_valid(mcif2client1_rd_rsp_valid)
+,.dma_rdy(dma1_rdy)
+);
+
+assign ro2_wr_rdy = ro2_wr0_prdy & ro2_wr1_prdy;
+wire ro2_wr0_pvld = src2_gnt & arb_wen0_swizzled & ro2_wr1_prdy;
+wire [64/2:0] ro2_wr0_pd = arb_pd0;
+NV_NVDLA_NOCIF_DRAM_READ_EG_ro_fifo ro2_fifo0 (
+.nvdla_core_clk(nvdla_core_clk)
+,.nvdla_core_rstn(nvdla_core_rstn)
+,.ro_wr_prdy(ro2_wr0_prdy)
+,.ro_wr_pvld(ro2_wr0_pvld)
+,.ro_wr_pd(ro2_wr0_pd)
+,.ro_rd_prdy(ro2_rd0_prdy)
+,.ro_rd_pvld(ro2_rd0_pvld)
+,.ro_rd_pd(ro2_rd0_pd)
+,.pwrbus_ram_pd(pwrbus_ram_pd)
+);
+wire ro2_wr1_pvld = src2_gnt & arb_wen1_swizzled & ro2_wr0_prdy;
+wire [64/2:0] ro2_wr1_pd = arb_pd1;
+
+NV_NVDLA_NOCIF_DRAM_READ_EG_ro_fifo ro2_fifo1 (
+.nvdla_core_clk(nvdla_core_clk)
+,.nvdla_core_rstn(nvdla_core_rstn)
+,.ro_wr_prdy(ro2_wr1_prdy)
+,.ro_wr_pvld(ro2_wr1_pvld)
+,.ro_wr_pd(ro2_wr1_pd)
+,.ro_rd_prdy(ro2_rd1_prdy)
+,.ro_rd_pvld(ro2_rd1_pvld)
+,.ro_rd_pd(ro2_rd1_pd)
+,.pwrbus_ram_pd(pwrbus_ram_pd)
+);
+assign dma2_vld = ro2_rd0_pvld & (dma2_last_odd ? 1'b1 : ro2_rd1_pvld);
+assign {dma2_last_odd,dma2_data0} = ro2_rd0_pd;
+assign {mon_dma2_lodd,dma2_data1} = ro2_rd1_pd;
+assign dma2_is_last_odd = ro2_rd0_pvld & dma2_last_odd;
+assign dma2_mask = dma2_is_last_odd ? 2'b01: 2'b11;
+assign dma2_mdata0 = {64/2{dma2_mask[0]}} & dma2_data0;
+assign dma2_mdata1 = {64/2{dma2_mask[1]}} & dma2_data1;
+assign dma2_pd = {1'b1,dma2_data};
+assign dma2_data = {dma2_mdata1,dma2_mdata0};
+assign ro2_rd0_prdy = dma2_rdy & (dma2_is_last_odd ? 1'b1: ro2_rd1_pvld);
+assign ro2_rd1_prdy = dma2_rdy & (dma2_is_last_odd ? 1'b1: ro2_rd0_pvld);
+
+NV_NVDLA_NOCIF_DRAM_READ_EG_pipe_p2 pipe_pp2 (
+.nvdla_core_clk(nvdla_core_clk)
+,.nvdla_core_rstn(nvdla_core_rstn)
+,.rd_rsp_rdy(mcif2client2_rd_rsp_ready)
+,.dma_pd(dma2_pd)
+,.dma_vld(dma2_vld)
+,.rd_rsp_pd(mcif2client2_rd_rsp_pd)
+,.rd_rsp_valid(mcif2client2_rd_rsp_valid)
+,.dma_rdy(dma2_rdy)
+);
+
+assign ro3_wr_rdy = ro3_wr0_prdy & ro3_wr1_prdy;
+wire ro3_wr0_pvld = src3_gnt & arb_wen0_swizzled & ro3_wr1_prdy;
+wire [64/2:0] ro3_wr0_pd = arb_pd0;
+NV_NVDLA_NOCIF_DRAM_READ_EG_ro_fifo ro3_fifo0 (
+.nvdla_core_clk(nvdla_core_clk)
+,.nvdla_core_rstn(nvdla_core_rstn)
+,.ro_wr_prdy(ro3_wr0_prdy)
+,.ro_wr_pvld(ro3_wr0_pvld)
+,.ro_wr_pd(ro3_wr0_pd)
+,.ro_rd_prdy(ro3_rd0_prdy)
+,.ro_rd_pvld(ro3_rd0_pvld)
+,.ro_rd_pd(ro3_rd0_pd)
+,.pwrbus_ram_pd(pwrbus_ram_pd)
+);
+wire ro3_wr1_pvld = src3_gnt & arb_wen1_swizzled & ro3_wr0_prdy;
+wire [64/2:0] ro3_wr1_pd = arb_pd1;
+
+NV_NVDLA_NOCIF_DRAM_READ_EG_ro_fifo ro3_fifo1 (
+.nvdla_core_clk(nvdla_core_clk)
+,.nvdla_core_rstn(nvdla_core_rstn)
+,.ro_wr_prdy(ro3_wr1_prdy)
+,.ro_wr_pvld(ro3_wr1_pvld)
+,.ro_wr_pd(ro3_wr1_pd)
+,.ro_rd_prdy(ro3_rd1_prdy)
+,.ro_rd_pvld(ro3_rd1_pvld)
+,.ro_rd_pd(ro3_rd1_pd)
+,.pwrbus_ram_pd(pwrbus_ram_pd)
+);
+assign dma3_vld = ro3_rd0_pvld & (dma3_last_odd ? 1'b1 : ro3_rd1_pvld);
+assign {dma3_last_odd,dma3_data0} = ro3_rd0_pd;
+assign {mon_dma3_lodd,dma3_data1} = ro3_rd1_pd;
+assign dma3_is_last_odd = ro3_rd0_pvld & dma3_last_odd;
+assign dma3_mask = dma3_is_last_odd ? 2'b01: 2'b11;
+assign dma3_mdata0 = {64/2{dma3_mask[0]}} & dma3_data0;
+assign dma3_mdata1 = {64/2{dma3_mask[1]}} & dma3_data1;
+assign dma3_pd = {1'b1,dma3_data};
+assign dma3_data = {dma3_mdata1,dma3_mdata0};
+assign ro3_rd0_prdy = dma3_rdy & (dma3_is_last_odd ? 1'b1: ro3_rd1_pvld);
+assign ro3_rd1_prdy = dma3_rdy & (dma3_is_last_odd ? 1'b1: ro3_rd0_pvld);
+
+NV_NVDLA_NOCIF_DRAM_READ_EG_pipe_p2 pipe_pp3 (
+.nvdla_core_clk(nvdla_core_clk)
+,.nvdla_core_rstn(nvdla_core_rstn)
+,.rd_rsp_rdy(mcif2client3_rd_rsp_ready)
+,.dma_pd(dma3_pd)
+,.dma_vld(dma3_vld)
+,.rd_rsp_pd(mcif2client3_rd_rsp_pd)
+,.rd_rsp_valid(mcif2client3_rd_rsp_valid)
+,.dma_rdy(dma3_rdy)
+);
+
+assign ro4_wr_rdy = ro4_wr0_prdy & ro4_wr1_prdy;
+wire ro4_wr0_pvld = src4_gnt & arb_wen0_swizzled & ro4_wr1_prdy;
+wire [64/2:0] ro4_wr0_pd = arb_pd0;
+NV_NVDLA_NOCIF_DRAM_READ_EG_ro_fifo ro4_fifo0 (
+.nvdla_core_clk(nvdla_core_clk)
+,.nvdla_core_rstn(nvdla_core_rstn)
+,.ro_wr_prdy(ro4_wr0_prdy)
+,.ro_wr_pvld(ro4_wr0_pvld)
+,.ro_wr_pd(ro4_wr0_pd)
+,.ro_rd_prdy(ro4_rd0_prdy)
+,.ro_rd_pvld(ro4_rd0_pvld)
+,.ro_rd_pd(ro4_rd0_pd)
+,.pwrbus_ram_pd(pwrbus_ram_pd)
+);
+wire ro4_wr1_pvld = src4_gnt & arb_wen1_swizzled & ro4_wr0_prdy;
+wire [64/2:0] ro4_wr1_pd = arb_pd1;
+
+NV_NVDLA_NOCIF_DRAM_READ_EG_ro_fifo ro4_fifo1 (
+.nvdla_core_clk(nvdla_core_clk)
+,.nvdla_core_rstn(nvdla_core_rstn)
+,.ro_wr_prdy(ro4_wr1_prdy)
+,.ro_wr_pvld(ro4_wr1_pvld)
+,.ro_wr_pd(ro4_wr1_pd)
+,.ro_rd_prdy(ro4_rd1_prdy)
+,.ro_rd_pvld(ro4_rd1_pvld)
+,.ro_rd_pd(ro4_rd1_pd)
+,.pwrbus_ram_pd(pwrbus_ram_pd)
+);
+assign dma4_vld = ro4_rd0_pvld & (dma4_last_odd ? 1'b1 : ro4_rd1_pvld);
+assign {dma4_last_odd,dma4_data0} = ro4_rd0_pd;
+assign {mon_dma4_lodd,dma4_data1} = ro4_rd1_pd;
+assign dma4_is_last_odd = ro4_rd0_pvld & dma4_last_odd;
+assign dma4_mask = dma4_is_last_odd ? 2'b01: 2'b11;
+assign dma4_mdata0 = {64/2{dma4_mask[0]}} & dma4_data0;
+assign dma4_mdata1 = {64/2{dma4_mask[1]}} & dma4_data1;
+assign dma4_pd = {1'b1,dma4_data};
+assign dma4_data = {dma4_mdata1,dma4_mdata0};
+assign ro4_rd0_prdy = dma4_rdy & (dma4_is_last_odd ? 1'b1: ro4_rd1_pvld);
+assign ro4_rd1_prdy = dma4_rdy & (dma4_is_last_odd ? 1'b1: ro4_rd0_pvld);
+
+NV_NVDLA_NOCIF_DRAM_READ_EG_pipe_p2 pipe_pp4 (
+.nvdla_core_clk(nvdla_core_clk)
+,.nvdla_core_rstn(nvdla_core_rstn)
+,.rd_rsp_rdy(mcif2client4_rd_rsp_ready)
+,.dma_pd(dma4_pd)
+,.dma_vld(dma4_vld)
+,.rd_rsp_pd(mcif2client4_rd_rsp_pd)
+,.rd_rsp_valid(mcif2client4_rd_rsp_valid)
+,.dma_rdy(dma4_rdy)
+);
+
+assign ro5_wr_rdy = ro5_wr0_prdy & ro5_wr1_prdy;
+wire ro5_wr0_pvld = src5_gnt & arb_wen0_swizzled & ro5_wr1_prdy;
+wire [64/2:0] ro5_wr0_pd = arb_pd0;
+NV_NVDLA_NOCIF_DRAM_READ_EG_ro_fifo ro5_fifo0 (
+.nvdla_core_clk(nvdla_core_clk)
+,.nvdla_core_rstn(nvdla_core_rstn)
+,.ro_wr_prdy(ro5_wr0_prdy)
+,.ro_wr_pvld(ro5_wr0_pvld)
+,.ro_wr_pd(ro5_wr0_pd)
+,.ro_rd_prdy(ro5_rd0_prdy)
+,.ro_rd_pvld(ro5_rd0_pvld)
+,.ro_rd_pd(ro5_rd0_pd)
+,.pwrbus_ram_pd(pwrbus_ram_pd)
+);
+wire ro5_wr1_pvld = src5_gnt & arb_wen1_swizzled & ro5_wr0_prdy;
+wire [64/2:0] ro5_wr1_pd = arb_pd1;
+
+NV_NVDLA_NOCIF_DRAM_READ_EG_ro_fifo ro5_fifo1 (
+.nvdla_core_clk(nvdla_core_clk)
+,.nvdla_core_rstn(nvdla_core_rstn)
+,.ro_wr_prdy(ro5_wr1_prdy)
+,.ro_wr_pvld(ro5_wr1_pvld)
+,.ro_wr_pd(ro5_wr1_pd)
+,.ro_rd_prdy(ro5_rd1_prdy)
+,.ro_rd_pvld(ro5_rd1_pvld)
+,.ro_rd_pd(ro5_rd1_pd)
+,.pwrbus_ram_pd(pwrbus_ram_pd)
+);
+assign dma5_vld = ro5_rd0_pvld & (dma5_last_odd ? 1'b1 : ro5_rd1_pvld);
+assign {dma5_last_odd,dma5_data0} = ro5_rd0_pd;
+assign {mon_dma5_lodd,dma5_data1} = ro5_rd1_pd;
+assign dma5_is_last_odd = ro5_rd0_pvld & dma5_last_odd;
+assign dma5_mask = dma5_is_last_odd ? 2'b01: 2'b11;
+assign dma5_mdata0 = {64/2{dma5_mask[0]}} & dma5_data0;
+assign dma5_mdata1 = {64/2{dma5_mask[1]}} & dma5_data1;
+assign dma5_pd = {1'b1,dma5_data};
+assign dma5_data = {dma5_mdata1,dma5_mdata0};
+assign ro5_rd0_prdy = dma5_rdy & (dma5_is_last_odd ? 1'b1: ro5_rd1_pvld);
+assign ro5_rd1_prdy = dma5_rdy & (dma5_is_last_odd ? 1'b1: ro5_rd0_pvld);
+
+NV_NVDLA_NOCIF_DRAM_READ_EG_pipe_p2 pipe_pp5 (
+.nvdla_core_clk(nvdla_core_clk)
+,.nvdla_core_rstn(nvdla_core_rstn)
+,.rd_rsp_rdy(mcif2client5_rd_rsp_ready)
+,.dma_pd(dma5_pd)
+,.dma_vld(dma5_vld)
+,.rd_rsp_pd(mcif2client5_rd_rsp_pd)
+,.rd_rsp_valid(mcif2client5_rd_rsp_valid)
+,.dma_rdy(dma5_rdy)
+);
+
+assign ro6_wr_rdy = ro6_wr0_prdy & ro6_wr1_prdy;
+wire ro6_wr0_pvld = src6_gnt & arb_wen0_swizzled & ro6_wr1_prdy;
+wire [64/2:0] ro6_wr0_pd = arb_pd0;
+NV_NVDLA_NOCIF_DRAM_READ_EG_ro_fifo ro6_fifo0 (
+.nvdla_core_clk(nvdla_core_clk)
+,.nvdla_core_rstn(nvdla_core_rstn)
+,.ro_wr_prdy(ro6_wr0_prdy)
+,.ro_wr_pvld(ro6_wr0_pvld)
+,.ro_wr_pd(ro6_wr0_pd)
+,.ro_rd_prdy(ro6_rd0_prdy)
+,.ro_rd_pvld(ro6_rd0_pvld)
+,.ro_rd_pd(ro6_rd0_pd)
+,.pwrbus_ram_pd(pwrbus_ram_pd)
+);
+wire ro6_wr1_pvld = src6_gnt & arb_wen1_swizzled & ro6_wr0_prdy;
+wire [64/2:0] ro6_wr1_pd = arb_pd1;
+
+NV_NVDLA_NOCIF_DRAM_READ_EG_ro_fifo ro6_fifo1 (
+.nvdla_core_clk(nvdla_core_clk)
+,.nvdla_core_rstn(nvdla_core_rstn)
+,.ro_wr_prdy(ro6_wr1_prdy)
+,.ro_wr_pvld(ro6_wr1_pvld)
+,.ro_wr_pd(ro6_wr1_pd)
+,.ro_rd_prdy(ro6_rd1_prdy)
+,.ro_rd_pvld(ro6_rd1_pvld)
+,.ro_rd_pd(ro6_rd1_pd)
+,.pwrbus_ram_pd(pwrbus_ram_pd)
+);
+assign dma6_vld = ro6_rd0_pvld & (dma6_last_odd ? 1'b1 : ro6_rd1_pvld);
+assign {dma6_last_odd,dma6_data0} = ro6_rd0_pd;
+assign {mon_dma6_lodd,dma6_data1} = ro6_rd1_pd;
+assign dma6_is_last_odd = ro6_rd0_pvld & dma6_last_odd;
+assign dma6_mask = dma6_is_last_odd ? 2'b01: 2'b11;
+assign dma6_mdata0 = {64/2{dma6_mask[0]}} & dma6_data0;
+assign dma6_mdata1 = {64/2{dma6_mask[1]}} & dma6_data1;
+assign dma6_pd = {1'b1,dma6_data};
+assign dma6_data = {dma6_mdata1,dma6_mdata0};
+assign ro6_rd0_prdy = dma6_rdy & (dma6_is_last_odd ? 1'b1: ro6_rd1_pvld);
+assign ro6_rd1_prdy = dma6_rdy & (dma6_is_last_odd ? 1'b1: ro6_rd0_pvld);
+
+NV_NVDLA_NOCIF_DRAM_READ_EG_pipe_p2 pipe_pp6 (
+.nvdla_core_clk(nvdla_core_clk)
+,.nvdla_core_rstn(nvdla_core_rstn)
+,.rd_rsp_rdy(mcif2client6_rd_rsp_ready)
+,.dma_pd(dma6_pd)
+,.dma_vld(dma6_vld)
+,.rd_rsp_pd(mcif2client6_rd_rsp_pd)
+,.rd_rsp_valid(mcif2client6_rd_rsp_valid)
+,.dma_rdy(dma6_rdy)
+);
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 //my $dw = eval(64 +2);
 //&eperl::pipe("-is -wid $dw -vo mcif2client${i}_rd_rsp_valid -do mcif2client${i}_rd_rsp_pd -ro dma${i}_rdy -vi dma${i}_vld -di dma${i}_pd -ri mcif2client${i}_rd_rsp_ready");
 //:my $k = 7;
@@ -434,6 +1351,205 @@ assign arb_first_beat = (arb_cnt==0);
 //:print("   end\n");
 //:print("end\n");
 //:}
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+assign ctt0_last_beat = src0_gnt & arb_last_beat;
+assign cq_rd0_prdy = (ctt0_rdy & ctt0_last_beat) || !ctt0_vld;
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+   if (!nvdla_core_rstn) begin
+      ctt0_vld <= 1'b0;
+   end else begin
+       if ((cq_rd0_prdy) == 1'b1) begin
+          ctt0_vld <= cq_rd0_pvld;
+       end
+   end
+end
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+   if (!nvdla_core_rstn) begin
+      ctt0_cnt <= {2{1'b0}};
+   end else begin
+    if (cq_rd0_pvld && cq_rd0_prdy) begin 
+       ctt0_cnt <= 0;
+    end else if (ctt0_accept) begin
+       ctt0_cnt <= ctt0_cnt + 1;
+    end
+   end
+end
+assign ctt0_accept = ctt0_vld & ctt0_rdy;
+always @(posedge nvdla_core_clk) begin
+   if (cq_rd0_pvld && cq_rd0_prdy) begin
+      ctt0_cq_pd <= cq_rd0_pd;
+   end
+end
+assign ctt1_last_beat = src1_gnt & arb_last_beat;
+assign cq_rd1_prdy = (ctt1_rdy & ctt1_last_beat) || !ctt1_vld;
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+   if (!nvdla_core_rstn) begin
+      ctt1_vld <= 1'b0;
+   end else begin
+       if ((cq_rd1_prdy) == 1'b1) begin
+          ctt1_vld <= cq_rd1_pvld;
+       end
+   end
+end
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+   if (!nvdla_core_rstn) begin
+      ctt1_cnt <= {2{1'b0}};
+   end else begin
+    if (cq_rd1_pvld && cq_rd1_prdy) begin 
+       ctt1_cnt <= 0;
+    end else if (ctt1_accept) begin
+       ctt1_cnt <= ctt1_cnt + 1;
+    end
+   end
+end
+assign ctt1_accept = ctt1_vld & ctt1_rdy;
+always @(posedge nvdla_core_clk) begin
+   if (cq_rd1_pvld && cq_rd1_prdy) begin
+      ctt1_cq_pd <= cq_rd1_pd;
+   end
+end
+assign ctt2_last_beat = src2_gnt & arb_last_beat;
+assign cq_rd2_prdy = (ctt2_rdy & ctt2_last_beat) || !ctt2_vld;
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+   if (!nvdla_core_rstn) begin
+      ctt2_vld <= 1'b0;
+   end else begin
+       if ((cq_rd2_prdy) == 1'b1) begin
+          ctt2_vld <= cq_rd2_pvld;
+       end
+   end
+end
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+   if (!nvdla_core_rstn) begin
+      ctt2_cnt <= {2{1'b0}};
+   end else begin
+    if (cq_rd2_pvld && cq_rd2_prdy) begin 
+       ctt2_cnt <= 0;
+    end else if (ctt2_accept) begin
+       ctt2_cnt <= ctt2_cnt + 1;
+    end
+   end
+end
+assign ctt2_accept = ctt2_vld & ctt2_rdy;
+always @(posedge nvdla_core_clk) begin
+   if (cq_rd2_pvld && cq_rd2_prdy) begin
+      ctt2_cq_pd <= cq_rd2_pd;
+   end
+end
+assign ctt3_last_beat = src3_gnt & arb_last_beat;
+assign cq_rd3_prdy = (ctt3_rdy & ctt3_last_beat) || !ctt3_vld;
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+   if (!nvdla_core_rstn) begin
+      ctt3_vld <= 1'b0;
+   end else begin
+       if ((cq_rd3_prdy) == 1'b1) begin
+          ctt3_vld <= cq_rd3_pvld;
+       end
+   end
+end
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+   if (!nvdla_core_rstn) begin
+      ctt3_cnt <= {2{1'b0}};
+   end else begin
+    if (cq_rd3_pvld && cq_rd3_prdy) begin 
+       ctt3_cnt <= 0;
+    end else if (ctt3_accept) begin
+       ctt3_cnt <= ctt3_cnt + 1;
+    end
+   end
+end
+assign ctt3_accept = ctt3_vld & ctt3_rdy;
+always @(posedge nvdla_core_clk) begin
+   if (cq_rd3_pvld && cq_rd3_prdy) begin
+      ctt3_cq_pd <= cq_rd3_pd;
+   end
+end
+assign ctt4_last_beat = src4_gnt & arb_last_beat;
+assign cq_rd4_prdy = (ctt4_rdy & ctt4_last_beat) || !ctt4_vld;
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+   if (!nvdla_core_rstn) begin
+      ctt4_vld <= 1'b0;
+   end else begin
+       if ((cq_rd4_prdy) == 1'b1) begin
+          ctt4_vld <= cq_rd4_pvld;
+       end
+   end
+end
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+   if (!nvdla_core_rstn) begin
+      ctt4_cnt <= {2{1'b0}};
+   end else begin
+    if (cq_rd4_pvld && cq_rd4_prdy) begin 
+       ctt4_cnt <= 0;
+    end else if (ctt4_accept) begin
+       ctt4_cnt <= ctt4_cnt + 1;
+    end
+   end
+end
+assign ctt4_accept = ctt4_vld & ctt4_rdy;
+always @(posedge nvdla_core_clk) begin
+   if (cq_rd4_pvld && cq_rd4_prdy) begin
+      ctt4_cq_pd <= cq_rd4_pd;
+   end
+end
+assign ctt5_last_beat = src5_gnt & arb_last_beat;
+assign cq_rd5_prdy = (ctt5_rdy & ctt5_last_beat) || !ctt5_vld;
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+   if (!nvdla_core_rstn) begin
+      ctt5_vld <= 1'b0;
+   end else begin
+       if ((cq_rd5_prdy) == 1'b1) begin
+          ctt5_vld <= cq_rd5_pvld;
+       end
+   end
+end
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+   if (!nvdla_core_rstn) begin
+      ctt5_cnt <= {2{1'b0}};
+   end else begin
+    if (cq_rd5_pvld && cq_rd5_prdy) begin 
+       ctt5_cnt <= 0;
+    end else if (ctt5_accept) begin
+       ctt5_cnt <= ctt5_cnt + 1;
+    end
+   end
+end
+assign ctt5_accept = ctt5_vld & ctt5_rdy;
+always @(posedge nvdla_core_clk) begin
+   if (cq_rd5_pvld && cq_rd5_prdy) begin
+      ctt5_cq_pd <= cq_rd5_pd;
+   end
+end
+assign ctt6_last_beat = src6_gnt & arb_last_beat;
+assign cq_rd6_prdy = (ctt6_rdy & ctt6_last_beat) || !ctt6_vld;
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+   if (!nvdla_core_rstn) begin
+      ctt6_vld <= 1'b0;
+   end else begin
+       if ((cq_rd6_prdy) == 1'b1) begin
+          ctt6_vld <= cq_rd6_pvld;
+       end
+   end
+end
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+   if (!nvdla_core_rstn) begin
+      ctt6_cnt <= {2{1'b0}};
+   end else begin
+    if (cq_rd6_pvld && cq_rd6_prdy) begin 
+       ctt6_cnt <= 0;
+    end else if (ctt6_accept) begin
+       ctt6_cnt <= ctt6_cnt + 1;
+    end
+   end
+end
+assign ctt6_accept = ctt6_vld & ctt6_rdy;
+always @(posedge nvdla_core_clk) begin
+   if (cq_rd6_pvld && cq_rd6_prdy) begin
+      ctt6_cq_pd <= cq_rd6_pd;
+   end
+end
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 endmodule
 module NV_NVDLA_NOCIF_DRAM_READ_EG_pipe_p1 (
    nvdla_core_clk

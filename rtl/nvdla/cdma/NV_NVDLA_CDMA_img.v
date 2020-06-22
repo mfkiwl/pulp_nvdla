@@ -105,6 +105,14 @@ module NV_NVDLA_CDMA_img (
 //: ,img2cvt_dat_wr_pad_mask
 //: );
 //: }
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+
+,img2cvt_dat_wr_addr
+,img2cvt_dat_wr_data
+,img2cvt_mn_wr_data
+,img2cvt_dat_wr_pad_mask
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
   ,img2cvt_dat_wr_en //|> o
   ,img2cvt_dat_wr_info_pd //|> o
 //,img2cvt_dat_wr_pad_mask //|> o
@@ -121,6 +129,16 @@ module NV_NVDLA_CDMA_img (
 //: ,img2sbuf_p${i}_rd_data
 //: );
 //: }
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+
+,img2sbuf_p0_wr_en
+,img2sbuf_p0_wr_addr
+,img2sbuf_p0_wr_data
+,img2sbuf_p0_rd_en
+,img2sbuf_p0_rd_addr
+,img2sbuf_p0_rd_data
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
   ,img2status_dat_entries //|> o
   ,img2status_dat_slices //|> o
   ,img2status_dat_updt //|> o
@@ -172,6 +190,14 @@ output img2cvt_dat_wr_en;
 //: output [$Bnum-1:0] img2cvt_dat_wr_pad_mask;
 //: );
 //: }
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+
+output [16:0] img2cvt_dat_wr_addr;
+output [64-1:0] img2cvt_dat_wr_data;
+output [8*16-1:0] img2cvt_mn_wr_data;
+output [8-1:0] img2cvt_dat_wr_pad_mask;
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 output [11:0] img2cvt_dat_wr_info_pd;
 ////: my $ele_num=NVDLA_CDMA_DMAIF_BW/NVDLA_CDMA_BPE;
 ////: print qq( output [${ele_num}-1:0] img2cvt_dat_wr_pad_mask;  );
@@ -196,6 +222,16 @@ input status2dma_fsm_switch;
 //: input [${atmm}-1:0] img2sbuf_p${i}_rd_data;
 //: );
 //: }
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+
+output img2sbuf_p0_wr_en ;
+output [7:0] img2sbuf_p0_wr_addr;
+output [64-1:0] img2sbuf_p0_wr_data;
+output img2sbuf_p0_rd_en;
+output [7:0] img2sbuf_p0_rd_addr;
+input [64-1:0] img2sbuf_p0_rd_data;
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 input sc2cdma_dat_pending_req;
 input nvdla_core_ng_clk;
 input [0:0] reg2dp_op_en;
@@ -257,6 +293,12 @@ wire [3:0] pixel_planar0_bundle_limit_1st;
 //: wire [${atmmbw}-1:0] pixel_planar0_byte_sft;
 //: wire [${atmmbw}-1:0] pixel_planar1_byte_sft;
 //: );
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+
+wire [3-1:0] pixel_planar0_byte_sft;
+wire [3-1:0] pixel_planar1_byte_sft;
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 wire [3:0] pixel_planar0_lp_burst;
 wire pixel_planar0_lp_vld;
 wire [3:0] pixel_planar0_rp_burst;
@@ -389,6 +431,13 @@ NV_NVDLA_CDMA_IMG_sg u_sg (
 //: ,.img2sbuf_p${i}_wr_en (img2sbuf_p${i}_wr_en)
 //: );
 //: }
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+
+,.img2sbuf_p0_wr_addr (img2sbuf_p0_wr_addr)
+,.img2sbuf_p0_wr_data (img2sbuf_p0_wr_data)
+,.img2sbuf_p0_wr_en (img2sbuf_p0_wr_en)
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
   ,.sg2pack_data_entries (sg2pack_data_entries)
   ,.sg2pack_entry_end (sg2pack_entry_end)
   ,.sg2pack_entry_mid (sg2pack_entry_mid)
@@ -429,6 +478,13 @@ NV_NVDLA_CDMA_IMG_pack u_pack (
 //: ,.img2sbuf_p${i}_rd_en (img2sbuf_p${i}_rd_en)
 //: );
 //: }
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+
+,.img2sbuf_p0_rd_data (img2sbuf_p0_rd_data)
+,.img2sbuf_p0_rd_addr (img2sbuf_p0_rd_addr)
+,.img2sbuf_p0_rd_en (img2sbuf_p0_rd_en)
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
   ,.is_running (is_running)
   ,.layer_st (layer_st)
   ,.pixel_bank (pixel_bank)
@@ -486,6 +542,14 @@ NV_NVDLA_CDMA_IMG_pack u_pack (
 //: ,.img2cvt_dat_wr_pad_mask (img2cvt_dat_wr_pad_mask )
 //: );
 //: }
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+
+,.img2cvt_dat_wr_addr (img2cvt_dat_wr_addr )
+,.img2cvt_dat_wr_data (img2cvt_dat_wr_data )
+,.img2cvt_mn_wr_data (img2cvt_mn_wr_data )
+,.img2cvt_dat_wr_pad_mask (img2cvt_dat_wr_pad_mask )
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 //,.img2cvt_dat_wr_addr (img2cvt_dat_wr_addr[11:0])
 //,.img2cvt_dat_wr_data (img2cvt_dat_wr_data)
   ,.img2cvt_dat_wr_en (img2cvt_dat_wr_en)

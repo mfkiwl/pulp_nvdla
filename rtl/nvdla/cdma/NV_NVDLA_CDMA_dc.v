@@ -56,6 +56,12 @@ module NV_NVDLA_CDMA_dc (
 //: ,output [${dmaif}-1:0] dc2cvt_dat_wr_data
 //: );
 //: }
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+
+,output [16:0] dc2cvt_dat_wr_addr
+,output [64-1:0] dc2cvt_dat_wr_data
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 ,output [11:0] dc2cvt_dat_wr_info_pd
 ,output reg [1:0] dc2status_state
 ,output dc2status_dat_updt
@@ -78,6 +84,16 @@ module NV_NVDLA_CDMA_dc (
 //: ,input [${atmm}-1:0] dc2sbuf_p${i}_rd_data
 //: );
 //: }
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+
+,output dc2sbuf_p0_wr_en
+,output [7:0] dc2sbuf_p0_wr_addr
+,output [64-1:0] dc2sbuf_p0_wr_data
+,output reg dc2sbuf_p0_rd_en
+,output reg [7:0] dc2sbuf_p0_rd_addr
+,input [64-1:0] dc2sbuf_p0_rd_data
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 ,input sc2cdma_dat_pending_req
 ,input nvdla_core_ng_clk
 ,input reg2dp_op_en
@@ -98,6 +114,14 @@ module NV_NVDLA_CDMA_dc (
 //: ,input [31-${atmbw}:0] reg2dp_surf_stride
 //: ,input [31-${atmbw}:0] reg2dp_batch_stride
 //: );
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+
+,input [31-3:0] reg2dp_datain_addr_low_0
+,input [31-3:0] reg2dp_line_stride
+,input [31-3:0] reg2dp_surf_stride
+,input [31-3:0] reg2dp_batch_stride
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 ,input reg2dp_line_packed
 ,input reg2dp_surf_packed
 ,input [4:0] reg2dp_batches
@@ -127,6 +151,16 @@ reg cbuf_is_ready;
 //: reg [$dmabw-1:0] cbuf_wr_data_d3_$i;
 //: );
 //: }
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+
+reg [16:0] cbuf_wr_addr_0;
+wire [16:0] cbuf_wr_addr_d0_0;
+reg [16:0] cbuf_wr_addr_d1_0;
+reg [16:0] cbuf_wr_addr_d2_0;
+reg [16:0] cbuf_wr_addr_d3_0;
+reg [64-1:0] cbuf_wr_data_d3_0;
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 reg cbuf_wr_en;
 reg cbuf_wr_en_d1;
 reg cbuf_wr_en_d2;
@@ -261,6 +295,19 @@ reg [0:0] req_csm_sel;
 //: reg req_pre_valid_${i}_d3;
 //: );
 //: }
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+
+wire pre_reg_en_d2_g0;
+reg [13:0] req_atomic_0_d3;
+reg [17:0] req_entry_0_d3;
+reg req_pre_valid_0_d3;
+
+wire pre_reg_en_d2_g1;
+reg [13:0] req_atomic_1_d3;
+reg [17:0] req_entry_1_d3;
+reg req_pre_valid_1_d3;
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 reg pre_valid_d1;
 reg pre_valid_d2;
 reg [13:0] req_atm_cnt_0;
@@ -326,6 +373,9 @@ wire cbuf_wr_en_d0;
 //: reg [${k}-1:0] cbuf_wr_hsel_d3;
 //: );
 //: }
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 wire [11:0] cbuf_wr_info_pd;
 wire [11:0] cbuf_wr_info_pd_d0;
 wire ch0_aval;
@@ -399,6 +449,15 @@ wire dma_rd_req_vld;
 //: foreach my $k (0..$M-1) {
 //: print qq( wire [${atmm}-1:0] dma_rsp_data_p${k}; \n);
 //: }
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+
+wire [64+1-1:0] dma_rd_rsp_pd;
+wire [64-1:0] dma_rd_rsp_data;
+
+wire [1-1:0] dma_rd_rsp_mask;
+ wire [64-1:0] dma_rsp_data_p0; 
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 wire dma_rd_rsp_rdy;
 wire dma_rd_rsp_vld;
 wire [5:0] dma_req_fifo_data;
@@ -499,6 +558,14 @@ reg [2:0] rsp_rd_more_atmm;
 //: reg [7:0] p${k}_rd_addr_w;
 //: );
 //: }
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+
+wire p0_wr_en;
+wire [7:0] p0_wr_addr;
+wire p0_rd_en_w;
+reg [7:0] p0_rd_addr_w;
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 wire pending_req_end;
 wire pre_ready;
 wire pre_ready_d1;
@@ -531,6 +598,28 @@ wire rd_req_rdyi;
 //: reg [12+31-${atmbw}:0] grain_addr;
 //: wire [2+31-${atmbw}:0] req_addr_ch_base_add;
 //: );
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+
+wire [63-3:0] req_addr;
+reg [63-3:0] req_addr_d1;
+wire [63-3:0] req_addr_base_inc;
+wire [63-3:0] req_addr_base_w;
+reg [63-3:0] req_addr_base;
+wire [63-3:0] req_addr_batch_base_inc;
+wire [63-3:0] req_addr_batch_base_w;
+wire [63-3:0] req_addr_ori;
+wire [63-3:0] req_addr_ch_base_inc;
+wire [63-3:0] req_addr_ch_base_w;
+wire [63-3:0] req_addr_grain_base_inc;
+wire [63-3:0] req_addr_grain_base_w;
+reg [63-3:0] req_addr_batch_base;
+reg [63-3:0] req_addr_ch_base;
+reg [63-3:0] req_addr_grain_base;
+wire [12+31-3:0] grain_addr_w;
+reg [12+31-3:0] grain_addr;
+wire [2+31-3:0] req_addr_ch_base_add;
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 wire [13:0] req_atm;
 wire [13:0] req_atm_cnt;
 wire [13:0] req_atm_cnt_0_w;
@@ -784,6 +873,12 @@ assign slcg_dc_gate_img = slcg_dc_gate_d3[1];
 //: assign data_surface_inc = {reg2dp_datain_channel[12:${atmbw}]} + 1'b1;
 //: );
 //:}
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+
+assign data_width_sub_one_w = (is_packed_1x1) ? {{(2+3){1'b0}}, reg2dp_datain_channel[12:3]} : {2'b0, reg2dp_datain_width};
+assign data_surface_inc = {reg2dp_datain_channel[12:3]} + 1'b1;
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 // assign is_data_expand = 1'b0;
 //assign is_data_shrink = 1'b0;
 assign is_data_normal = 1'b1;
@@ -1156,6 +1251,11 @@ assign req_ch_mode = is_packed_1x1 ? 3'h1 :
 //: print qq(
 //: 3'h${k};
 //: );
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+
+3'h1;
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 assign {mon_req_ch_left_w,req_ch_left_w} = (layer_st | is_req_ch_end) ? {1'b0,data_surface_w} : (data_surface - req_ch_cnt) - {8'd0,req_cur_ch};
 // assign req_cur_ch_w = (req_ch_left_w > {{8{1'b0}}, req_ch_mode}) ? req_ch_mode : req_ch_left_w[2:0];
 // assign {mon_req_ch_cnt_inc,
@@ -1298,6 +1398,10 @@ assign req_addr_ch_base_add = /*(is_data_shrink) ? {reg2dp_surf_stride, 2'b0} : 
 //: } elsif($k == 4) {
 //: print "{reg2dp_surf_stride, 2'b0};          \n";
 //: }
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+{2'b0, reg2dp_surf_stride};          
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 assign {mon_req_addr_ch_base_inc, req_addr_ch_base_inc} = req_addr_ch_base + req_addr_ch_base_add;
 assign {mon_req_addr_base_inc, req_addr_base_inc} = req_addr_base + reg2dp_surf_stride;
 assign req_addr_grain_base_w = is_first_running ? req_addr_ori : req_addr_grain_base_inc;
@@ -1450,6 +1554,11 @@ assign dma_rd_req_vld = dma_req_fifo_ready & req_valid_d1;
 //: my $k = 32;
 //: print "assign dma_rd_req_addr_f = {req_addr_d1, ${atmbw}'d0};  \n";
 //: print "assign dma_rd_req_addr = dma_rd_req_addr_f[${k}-1:0];  \n";
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+assign dma_rd_req_addr_f = {req_addr_d1, 3'd0};  
+assign dma_rd_req_addr = dma_rd_req_addr_f[32-1:0];  
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 assign dma_rd_req_size = {{13{1'b0}}, req_size_out_d1};
 assign dma_rd_req_type = reg2dp_datain_ram_type;
 assign dma_rd_rsp_rdy = ~is_blocking;
@@ -1494,6 +1603,11 @@ assign active_atom_num = 2'd0
 //: );
 //: }
 //: print "; ";
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+
++ dma_rd_rsp_mask[0]
+; 
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 assign {mon_dma_rsp_size_cnt_inc,dma_rsp_size_cnt_inc} = dma_rsp_size_cnt + active_atom_num;
 assign {
 //: my $dmaif=64;
@@ -1506,6 +1620,9 @@ assign {
 //: }
 //: }
 //: print qq( dma_rsp_data_p0} = dma_rd_rsp_data; );
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+ dma_rsp_data_p0} = dma_rd_rsp_data; 
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 assign dma_rsp_size_cnt_w = (dma_rsp_size_cnt_inc == dma_rsp_size) ? 4'b0 : dma_rsp_size_cnt_inc;
 assign dma_rsp_fifo_ready = (dma_rd_rsp_vld & ~is_blocking & (dma_rsp_size_cnt_inc == dma_rsp_size));
 always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
@@ -1610,6 +1727,19 @@ assign ch3_p1_wr_addr = {2'h3, ch3_p1_wr_addr_cnt[0], ch3_p1_wr_addr_cnt[8 -3:1]
 //: assign dc2sbuf_p${k}_wr_data = dma_rsp_data_p${k};
 //: );
 //: }
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+
+assign p0_wr_en = is_running & dma_rd_rsp_vld & ~is_blocking;
+
+assign p0_wr_addr = ({8 {p0_wr_en & is_rsp_ch0}} & ch0_p0_wr_addr)
+| ({8 {p0_wr_en & is_rsp_ch1}} & ch1_p0_wr_addr)
+| ({8 {p0_wr_en & is_rsp_ch2}} & ch2_p0_wr_addr)
+| ({8 {p0_wr_en & is_rsp_ch3}} & ch3_p0_wr_addr);
+assign dc2sbuf_p0_wr_en = p0_wr_en;
+assign dc2sbuf_p0_wr_addr = p0_wr_addr;
+assign dc2sbuf_p0_wr_data = dma_rsp_data_p0;
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 ////////////////////////////////////////////////////////////////////////
 // DC local buffer count //
 ////////////////////////////////////////////////////////////////////////
@@ -1889,6 +2019,11 @@ begin
 //: end
 //: );
 //: }
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+
+rsp_rd_more_atmm[2:0] = 3'd0;
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 end
 // assign rsp_w_cnt_add = (rsp_ch0_rd_one) ? 2'h1 : 2'h2;
 assign rsp_ch0_rd_size = rsp_w_cnt_add;
@@ -2020,6 +2155,12 @@ begin
 //: end
 //: );
 //: }
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+
+rsp_rd_en = ch0_aval;
+rsp_w_cnt_add = 3'd1;
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
     end else begin
         rsp_rd_en = 1'b0;
         rsp_w_cnt_add = 3'd0;
@@ -2038,6 +2179,9 @@ assign p0_rd_en_w = rsp_rd_en;
 //: );
 //: }
 //: }
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 ///////////// channel address counter /////////////
 assign ch0_rd_addr_cnt_reg_en = rsp_rd_en & ~rsp_rd_ch2ch3;
 assign ch1_rd_addr_cnt_reg_en = rsp_rd_en & (rsp_cur_ch >= 3'h2) & ~rsp_rd_ch2ch3;
@@ -2241,6 +2385,11 @@ always @(*) begin
 //: end
 //: );
 //: }
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+
+p0_rd_addr_w = ch0_p0_rd_addr;
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 end
 // assign p0_rd_addr_w = rsp_rd_ch2ch3 ? ch2_p0_rd_addr : ch0_p0_rd_addr;
 // assign p1_rd_addr_w = (rsp_cur_ch == 3'h1) ? ch0_p1_rd_addr : ( rsp_rd_ch2ch3 ? ch3_p0_rd_addr : ch1_p0_rd_addr);
@@ -2274,6 +2423,15 @@ always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
 //: dc2sbuf_p${k}_rd_en <= p${k}_rd_en_w;
 //: );
 //: }
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+
+dc2sbuf_p0_rd_en <= 1'b0;
+
+end else begin
+
+dc2sbuf_p0_rd_en <= p0_rd_en_w;
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
     end
 end
 //: my $dmaif=64;
@@ -2290,6 +2448,17 @@ end
 //: end
 //: );
 //: }
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+if (!nvdla_core_rstn) begin
+dc2sbuf_p0_rd_addr <= {8{1'b0}};
+end else if (p0_rd_en_w) begin
+dc2sbuf_p0_rd_addr <= p0_rd_addr_w;
+end
+end
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 ////////////////////////////////////////////////////////////////////////
 // generate write signal to convertor //
 ////////////////////////////////////////////////////////////////////////
@@ -2365,6 +2534,16 @@ end
 //: assign is_w_cnt_div2 = (is_data_normal & is_rsp_ch_end & ~rsp_ch_cnt[1] & (rsp_cur_ch == 3'h2));
 //: );
 //: }
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+
+assign {mon_idx_ch_offset_w,
+idx_ch_offset_w} = (layer_st) ? 18'b0 :
+(is_rsp_ch_end) ? {1'b0, idx_batch_offset_w} :
+idx_ch_offset + data_width;
+assign is_w_cnt_div4 = 1'b0;
+assign is_w_cnt_div2 = 1'b0;
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 assign {mon_idx_batch_offset_w, idx_batch_offset_w} = (layer_st | is_rsp_batch_end) ? 19'b0 : (idx_batch_offset + data_entries);
 assign {mon_idx_h_offset_w,
         idx_h_offset_w} = (layer_st) ? 18'b0 :
@@ -2490,6 +2669,17 @@ end
 //: end
 //: );
 //: }
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+if (!nvdla_core_rstn) begin
+cbuf_wr_addr_0 <= 0;
+end else if(rsp_w_reg_en) begin
+cbuf_wr_addr_0 <= cbuf_idx_w + 0;
+end
+end
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
     if (!nvdla_core_rstn) begin
         cbuf_wr_info_mask <= 0;
@@ -2502,6 +2692,9 @@ always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
 //: my $i = $M - $k -1;
 //: print " ,p${i}_rd_en_w  ";
 //: }
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+ cbuf_wr_info_mask <= {{(4-1){1'b0}}    ,p0_rd_en_w  
+//| eperl: generated_end (DO NOT EDIT ABOVE)
        };
     end
 end
@@ -2570,6 +2763,35 @@ assign cbuf_wr_info_pd_d0 = cbuf_wr_info_pd;
 //: );
 //: }
 //: }
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+
+assign cbuf_wr_addr_d0_0 = cbuf_wr_addr_0;
+
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+if (!nvdla_core_rstn) begin
+cbuf_wr_addr_d1_0 <= 0;
+end else if ((cbuf_wr_en_d0) == 1'b1) begin
+cbuf_wr_addr_d1_0 <= cbuf_wr_addr_d0_0;
+end
+end
+
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+if (!nvdla_core_rstn) begin
+cbuf_wr_addr_d2_0 <= 0;
+end else if ((cbuf_wr_en_d1) == 1'b1) begin
+cbuf_wr_addr_d2_0 <= cbuf_wr_addr_d1_0;
+end
+end
+
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+if (!nvdla_core_rstn) begin
+cbuf_wr_addr_d3_0 <= 0;
+end else if ((cbuf_wr_en_d2) == 1'b1) begin
+cbuf_wr_addr_d3_0 <= cbuf_wr_addr_d2_0;
+end
+end
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 ////////////////////////////////////
 //: my $latency = (2 +1);
 //: foreach my $i (0..$latency-1) {
@@ -2592,6 +2814,57 @@ assign cbuf_wr_info_pd_d0 = cbuf_wr_info_pd;
 //: end
 //: );
 //: }
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+if (!nvdla_core_rstn) begin
+cbuf_wr_en_d1 <= 1'b0;
+end else begin
+cbuf_wr_en_d1 <= cbuf_wr_en_d0;
+end
+end
+
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+if (!nvdla_core_rstn) begin
+cbuf_wr_info_pd_d1 <= {12{1'b0}};
+end else if(cbuf_wr_en_d0) begin
+cbuf_wr_info_pd_d1 <= cbuf_wr_info_pd_d0;
+end
+end
+
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+if (!nvdla_core_rstn) begin
+cbuf_wr_en_d2 <= 1'b0;
+end else begin
+cbuf_wr_en_d2 <= cbuf_wr_en_d1;
+end
+end
+
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+if (!nvdla_core_rstn) begin
+cbuf_wr_info_pd_d2 <= {12{1'b0}};
+end else if(cbuf_wr_en_d1) begin
+cbuf_wr_info_pd_d2 <= cbuf_wr_info_pd_d1;
+end
+end
+
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+if (!nvdla_core_rstn) begin
+cbuf_wr_en_d3 <= 1'b0;
+end else begin
+cbuf_wr_en_d3 <= cbuf_wr_en_d2;
+end
+end
+
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+if (!nvdla_core_rstn) begin
+cbuf_wr_info_pd_d3 <= {12{1'b0}};
+end else if(cbuf_wr_en_d2) begin
+cbuf_wr_info_pd_d3 <= cbuf_wr_info_pd_d2;
+end
+end
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 // ###################################################################
 //: my $latency = (2 +1);
 //: my $lb = $latency - 1;
@@ -2668,6 +2941,23 @@ assign cbuf_wr_info_pd_d0 = cbuf_wr_info_pd;
 //: assign dc2cvt_dat_wr_mask = cbuf_wr_mask_d${latency};
 //: );
 //: }
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+
+always @(posedge nvdla_core_clk) begin
+if (cbuf_wr_en_d2) begin
+cbuf_wr_data_d3_0 <= {
+
+dc2sbuf_p0_rd_data};
+end
+end
+
+assign dc2cvt_dat_wr_addr = cbuf_wr_addr_d3_0;
+assign dc2cvt_dat_wr_data = cbuf_wr_data_d3_0;
+
+assign dc2cvt_dat_wr_en = cbuf_wr_en_d3;
+assign dc2cvt_dat_wr_info_pd = cbuf_wr_info_pd_d3;
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 //////////////////////////////////////////////////////
 //////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////
@@ -2760,6 +3050,99 @@ end
 //: assign dc2status_dat_${name} = dat_${name}_d${latency};
 //: );
 //: }
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+if (!nvdla_core_rstn) begin
+dat_updt_d1 <= 1'b0;
+end else begin
+dat_updt_d1 <= dat_updt_d0;
+end
+end
+
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+if (!nvdla_core_rstn) begin
+dat_entries_d1 <= 0;
+end else begin
+if ((dat_updt_d0) == 1'b1) begin
+dat_entries_d1 <= dat_entries_d0;
+end
+end
+end
+
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+if (!nvdla_core_rstn) begin
+dat_slices_d1 <= 0;
+end else begin
+if ((dat_updt_d0) == 1'b1) begin
+dat_slices_d1 <= dat_slices_d0;
+end
+end
+end
+
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+if (!nvdla_core_rstn) begin
+dat_updt_d2 <= 1'b0;
+end else begin
+dat_updt_d2 <= dat_updt_d1;
+end
+end
+
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+if (!nvdla_core_rstn) begin
+dat_entries_d2 <= 0;
+end else begin
+if ((dat_updt_d1) == 1'b1) begin
+dat_entries_d2 <= dat_entries_d1;
+end
+end
+end
+
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+if (!nvdla_core_rstn) begin
+dat_slices_d2 <= 0;
+end else begin
+if ((dat_updt_d1) == 1'b1) begin
+dat_slices_d2 <= dat_slices_d1;
+end
+end
+end
+
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+if (!nvdla_core_rstn) begin
+dat_updt_d3 <= 1'b0;
+end else begin
+dat_updt_d3 <= dat_updt_d2;
+end
+end
+
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+if (!nvdla_core_rstn) begin
+dat_entries_d3 <= 0;
+end else begin
+if ((dat_updt_d2) == 1'b1) begin
+dat_entries_d3 <= dat_entries_d2;
+end
+end
+end
+
+always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
+if (!nvdla_core_rstn) begin
+dat_slices_d3 <= 0;
+end else begin
+if ((dat_updt_d2) == 1'b1) begin
+dat_slices_d3 <= dat_slices_d2;
+end
+end
+end
+
+assign dc2status_dat_updt = dat_updt_d3;
+
+assign dc2status_dat_entries = dat_entries_d3;
+
+assign dc2status_dat_slices = dat_slices_d3;
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 ////////////////////////////////////////////////////////////////////////
 // performance counting register //
 ////////////////////////////////////////////////////////////////////////

@@ -260,6 +260,93 @@ always @(posedge nvdla_core_clk or negedge nvdla_core_rstn) begin
 //: log2_frac_msb <= {log2_datin_msb[${i}-1:0],{(${k}-${i}){1'b0}}};
 //: );
 //: }
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+
+if(log2_datin_msb[21]) begin
+log2_datout_msb <= 22'd21;
+log2_frac_msb <= log2_datin_msb[21-1:0];
+
+end else if(log2_datin_msb[20]) begin
+log2_datout_msb <= 22'd20;
+log2_frac_msb <= {log2_datin_msb[20-1:0],{(21-20){1'b0}}};
+
+end else if(log2_datin_msb[19]) begin
+log2_datout_msb <= 22'd19;
+log2_frac_msb <= {log2_datin_msb[19-1:0],{(21-19){1'b0}}};
+
+end else if(log2_datin_msb[18]) begin
+log2_datout_msb <= 22'd18;
+log2_frac_msb <= {log2_datin_msb[18-1:0],{(21-18){1'b0}}};
+
+end else if(log2_datin_msb[17]) begin
+log2_datout_msb <= 22'd17;
+log2_frac_msb <= {log2_datin_msb[17-1:0],{(21-17){1'b0}}};
+
+end else if(log2_datin_msb[16]) begin
+log2_datout_msb <= 22'd16;
+log2_frac_msb <= {log2_datin_msb[16-1:0],{(21-16){1'b0}}};
+
+end else if(log2_datin_msb[15]) begin
+log2_datout_msb <= 22'd15;
+log2_frac_msb <= {log2_datin_msb[15-1:0],{(21-15){1'b0}}};
+
+end else if(log2_datin_msb[14]) begin
+log2_datout_msb <= 22'd14;
+log2_frac_msb <= {log2_datin_msb[14-1:0],{(21-14){1'b0}}};
+
+end else if(log2_datin_msb[13]) begin
+log2_datout_msb <= 22'd13;
+log2_frac_msb <= {log2_datin_msb[13-1:0],{(21-13){1'b0}}};
+
+end else if(log2_datin_msb[12]) begin
+log2_datout_msb <= 22'd12;
+log2_frac_msb <= {log2_datin_msb[12-1:0],{(21-12){1'b0}}};
+
+end else if(log2_datin_msb[11]) begin
+log2_datout_msb <= 22'd11;
+log2_frac_msb <= {log2_datin_msb[11-1:0],{(21-11){1'b0}}};
+
+end else if(log2_datin_msb[10]) begin
+log2_datout_msb <= 22'd10;
+log2_frac_msb <= {log2_datin_msb[10-1:0],{(21-10){1'b0}}};
+
+end else if(log2_datin_msb[9]) begin
+log2_datout_msb <= 22'd9;
+log2_frac_msb <= {log2_datin_msb[9-1:0],{(21-9){1'b0}}};
+
+end else if(log2_datin_msb[8]) begin
+log2_datout_msb <= 22'd8;
+log2_frac_msb <= {log2_datin_msb[8-1:0],{(21-8){1'b0}}};
+
+end else if(log2_datin_msb[7]) begin
+log2_datout_msb <= 22'd7;
+log2_frac_msb <= {log2_datin_msb[7-1:0],{(21-7){1'b0}}};
+
+end else if(log2_datin_msb[6]) begin
+log2_datout_msb <= 22'd6;
+log2_frac_msb <= {log2_datin_msb[6-1:0],{(21-6){1'b0}}};
+
+end else if(log2_datin_msb[5]) begin
+log2_datout_msb <= 22'd5;
+log2_frac_msb <= {log2_datin_msb[5-1:0],{(21-5){1'b0}}};
+
+end else if(log2_datin_msb[4]) begin
+log2_datout_msb <= 22'd4;
+log2_frac_msb <= {log2_datin_msb[4-1:0],{(21-4){1'b0}}};
+
+end else if(log2_datin_msb[3]) begin
+log2_datout_msb <= 22'd3;
+log2_frac_msb <= {log2_datin_msb[3-1:0],{(21-3){1'b0}}};
+
+end else if(log2_datin_msb[2]) begin
+log2_datout_msb <= 22'd2;
+log2_frac_msb <= {log2_datin_msb[2-1:0],{(21-2){1'b0}}};
+
+end else if(log2_datin_msb[1]) begin
+log2_datout_msb <= 22'd1;
+log2_frac_msb <= {log2_datin_msb[1-1:0],{(21-1){1'b0}}};
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
                     end else if(log2_datin_msb[0]) begin
                         log2_datout_msb <= {(pPP_BW+1){1'b0}};
                         log2_frac_msb <= {pPP_BW{1'b0}};

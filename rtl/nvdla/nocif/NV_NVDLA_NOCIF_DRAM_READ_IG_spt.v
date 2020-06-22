@@ -172,6 +172,11 @@ assign {end_offset_c,end_offset[2:0]} = spt_req_offset + spt_req_size;
 //: assign is_cross_256byte_boundary = spt_req_vld & end_offset_c;
 //: );
 //:}
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+
+assign is_cross_256byte_boundary = 1'b0;
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 //assign is_cross_256byte_boundary = spt_req_vld & end_offset_c;
 assign first_req_size = (is_cross_256byte_boundary) ? (7 - spt_req_offset) : spt_req_size;
 assign first_req_addr = spt_req_addr;
@@ -186,6 +191,14 @@ reg [32 -1:0] second_req_addr_i;
 //: second_req_addr_i[$i:0] = 0;
 //: end
 //:);
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+
+always @(spt_req_addr) begin
+second_req_addr_i = spt_req_addr;
+second_req_addr_i[4:0] = 0;
+end
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 //assign second_req_addr = {spt_req_addr[32 -1:8],{8{1'b0}}};
 assign second_req_addr = second_req_addr_i;
 assign second_req_size = end_offset; // only usefull when 2nd req is needed

@@ -47,6 +47,41 @@ module NV_NVDLA_PDP_WDMA_dat (
 //: );
 //: }
 //: }
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+
+,dat0_fifo0_rd_pd
+,dat0_fifo0_rd_prdy
+,dat0_fifo0_rd_pvld
+
+,dat0_fifo1_rd_pd
+,dat0_fifo1_rd_prdy
+,dat0_fifo1_rd_pvld
+
+,dat0_fifo2_rd_pd
+,dat0_fifo2_rd_prdy
+,dat0_fifo2_rd_pvld
+
+,dat0_fifo3_rd_pd
+,dat0_fifo3_rd_prdy
+,dat0_fifo3_rd_pvld
+
+,dat0_fifo4_rd_pd
+,dat0_fifo4_rd_prdy
+,dat0_fifo4_rd_pvld
+
+,dat0_fifo5_rd_pd
+,dat0_fifo5_rd_prdy
+,dat0_fifo5_rd_pvld
+
+,dat0_fifo6_rd_pd
+,dat0_fifo6_rd_prdy
+,dat0_fifo6_rd_pvld
+
+,dat0_fifo7_rd_pd
+,dat0_fifo7_rd_prdy
+,dat0_fifo7_rd_pvld
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
   ,dp2wdma_rdy //|> o
   );
 /////////////////////////////////////////////////////////////////////
@@ -80,6 +115,41 @@ input [31:0] pwrbus_ram_pd;
 //: );
 //: }
 //: }
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+
+output [8-1:0] dat0_fifo0_rd_pd;
+input dat0_fifo0_rd_prdy;
+output dat0_fifo0_rd_pvld;
+
+output [8-1:0] dat0_fifo1_rd_pd;
+input dat0_fifo1_rd_prdy;
+output dat0_fifo1_rd_pvld;
+
+output [8-1:0] dat0_fifo2_rd_pd;
+input dat0_fifo2_rd_prdy;
+output dat0_fifo2_rd_pvld;
+
+output [8-1:0] dat0_fifo3_rd_pd;
+input dat0_fifo3_rd_prdy;
+output dat0_fifo3_rd_pvld;
+
+output [8-1:0] dat0_fifo4_rd_pd;
+input dat0_fifo4_rd_prdy;
+output dat0_fifo4_rd_pvld;
+
+output [8-1:0] dat0_fifo5_rd_pd;
+input dat0_fifo5_rd_prdy;
+output dat0_fifo5_rd_pvld;
+
+output [8-1:0] dat0_fifo6_rd_pd;
+input dat0_fifo6_rd_prdy;
+output dat0_fifo6_rd_pvld;
+
+output [8-1:0] dat0_fifo7_rd_pd;
+input dat0_fifo7_rd_prdy;
+output dat0_fifo7_rd_pvld;
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 input wdma_done;
 input op_load;
 //////////////////////////////////////////////////////////////////
@@ -91,6 +161,10 @@ reg [12:0] count_h;
 //: my $atomicm = 8;
 //: my $k = int( log($atomicm)/log(2) );
 //: print "reg     [12-${k}:0] count_surf;  \n";
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+reg     [12-3:0] count_surf;  
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 reg [12:0] count_w;
 reg [7:0] count_wg;
 //reg mon_nan_in_count;
@@ -307,6 +381,10 @@ end
 //: my $pdpth = 1;
 //: my $k = int( $atomicm/$pdpth );
 //: print "assign is_last_b = (count_b==5'd${k} -1 ); \n";
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+assign is_last_b = (count_b==5'd8 -1 ); 
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 //==============
 // COUNT W
 //==============
@@ -345,6 +423,11 @@ end
 //: print qq(
 //: assign is_last_surf = (count_surf== reg2dp_cube_out_channel[12:${k}]);
 //: );
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+
+assign is_last_surf = (count_surf== reg2dp_cube_out_channel[12:3]);
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 //==============
 // COUNT HEIGHT
 //==============
@@ -377,6 +460,11 @@ assign spt_posb = count_b;
 //: assign spt_posw = {{(2-$k){1'b0}},count_w[$k-1:0]};
 //: );
 //: }
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+
+assign spt_posw = 2'b0;
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 //==============
 // Data FIFO WRITE contrl
 //==============
@@ -430,6 +518,208 @@ assign dp2wdma_rdy = dat_fifo_wr_prdy;
 //:
 //: my $dat_wr_accepts_str = join(" \n| ",@dat_wr_accepts);
 //: print "assign spt_dat_accept = dat_fifo_wr_pvld & dat_fifo_wr_prdy;";
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+
+wire [8-1:0] dat0_fifo0_wr_pd;
+wire dat0_fifo0_wr_prdy;
+wire dat0_fifo0_wr_pvld;
+// DATA FIFO WRITE SIDE
+// is last_b, then fifo idx large than count_b will need a push to fill in fake data to make up a full atomic_m
+assign dat0_fifo0_wr_pvld = dat_fifo_wr_pvld & (spt_posw==0) & (spt_posb == 0);
+assign dat0_fifo0_wr_pd = dp2wdma_dat_pd;
+
+// DATA FIFO INSTANCE
+NV_NVDLA_PDP_WDMA_DAT_fifo u_dat0_fifo0 (
+.nvdla_core_clk (nvdla_core_clk)
+,.nvdla_core_rstn (nvdla_core_rstn)
+,.dat_fifo_wr_prdy (dat0_fifo0_wr_prdy)
+,.dat_fifo_wr_pvld (dat0_fifo0_wr_pvld)
+,.dat_fifo_wr_pd (dat0_fifo0_wr_pd)
+,.dat_fifo_rd_prdy (dat0_fifo0_rd_prdy)
+,.dat_fifo_rd_pvld (dat0_fifo0_rd_pvld)
+,.dat_fifo_rd_pd (dat0_fifo0_rd_pd)
+,.pwrbus_ram_pd (pwrbus_ram_pd[31:0])
+);
+
+// ::assert never "when the first fifo is ready, all the left fifo should be ready" dat0_fifo0_wr_prdy & !dat0_fifo0_wr_prdy;
+// ::assert never "when the last fifo is not ready, all the previous fifo should not be ready" dat0_fifo0_wr_prdy & !dat0_fifo3_wr_prdy;
+
+wire [8-1:0] dat0_fifo1_wr_pd;
+wire dat0_fifo1_wr_prdy;
+wire dat0_fifo1_wr_pvld;
+// DATA FIFO WRITE SIDE
+// is last_b, then fifo idx large than count_b will need a push to fill in fake data to make up a full atomic_m
+assign dat0_fifo1_wr_pvld = dat_fifo_wr_pvld & (spt_posw==0) & (spt_posb == 1);
+assign dat0_fifo1_wr_pd = dp2wdma_dat_pd;
+
+// DATA FIFO INSTANCE
+NV_NVDLA_PDP_WDMA_DAT_fifo u_dat0_fifo1 (
+.nvdla_core_clk (nvdla_core_clk)
+,.nvdla_core_rstn (nvdla_core_rstn)
+,.dat_fifo_wr_prdy (dat0_fifo1_wr_prdy)
+,.dat_fifo_wr_pvld (dat0_fifo1_wr_pvld)
+,.dat_fifo_wr_pd (dat0_fifo1_wr_pd)
+,.dat_fifo_rd_prdy (dat0_fifo1_rd_prdy)
+,.dat_fifo_rd_pvld (dat0_fifo1_rd_pvld)
+,.dat_fifo_rd_pd (dat0_fifo1_rd_pd)
+,.pwrbus_ram_pd (pwrbus_ram_pd[31:0])
+);
+
+// ::assert never "when the first fifo is ready, all the left fifo should be ready" dat0_fifo0_wr_prdy & !dat0_fifo1_wr_prdy;
+// ::assert never "when the last fifo is not ready, all the previous fifo should not be ready" dat0_fifo1_wr_prdy & !dat0_fifo3_wr_prdy;
+
+wire [8-1:0] dat0_fifo2_wr_pd;
+wire dat0_fifo2_wr_prdy;
+wire dat0_fifo2_wr_pvld;
+// DATA FIFO WRITE SIDE
+// is last_b, then fifo idx large than count_b will need a push to fill in fake data to make up a full atomic_m
+assign dat0_fifo2_wr_pvld = dat_fifo_wr_pvld & (spt_posw==0) & (spt_posb == 2);
+assign dat0_fifo2_wr_pd = dp2wdma_dat_pd;
+
+// DATA FIFO INSTANCE
+NV_NVDLA_PDP_WDMA_DAT_fifo u_dat0_fifo2 (
+.nvdla_core_clk (nvdla_core_clk)
+,.nvdla_core_rstn (nvdla_core_rstn)
+,.dat_fifo_wr_prdy (dat0_fifo2_wr_prdy)
+,.dat_fifo_wr_pvld (dat0_fifo2_wr_pvld)
+,.dat_fifo_wr_pd (dat0_fifo2_wr_pd)
+,.dat_fifo_rd_prdy (dat0_fifo2_rd_prdy)
+,.dat_fifo_rd_pvld (dat0_fifo2_rd_pvld)
+,.dat_fifo_rd_pd (dat0_fifo2_rd_pd)
+,.pwrbus_ram_pd (pwrbus_ram_pd[31:0])
+);
+
+// ::assert never "when the first fifo is ready, all the left fifo should be ready" dat0_fifo0_wr_prdy & !dat0_fifo2_wr_prdy;
+// ::assert never "when the last fifo is not ready, all the previous fifo should not be ready" dat0_fifo2_wr_prdy & !dat0_fifo3_wr_prdy;
+
+wire [8-1:0] dat0_fifo3_wr_pd;
+wire dat0_fifo3_wr_prdy;
+wire dat0_fifo3_wr_pvld;
+// DATA FIFO WRITE SIDE
+// is last_b, then fifo idx large than count_b will need a push to fill in fake data to make up a full atomic_m
+assign dat0_fifo3_wr_pvld = dat_fifo_wr_pvld & (spt_posw==0) & (spt_posb == 3);
+assign dat0_fifo3_wr_pd = dp2wdma_dat_pd;
+
+// DATA FIFO INSTANCE
+NV_NVDLA_PDP_WDMA_DAT_fifo u_dat0_fifo3 (
+.nvdla_core_clk (nvdla_core_clk)
+,.nvdla_core_rstn (nvdla_core_rstn)
+,.dat_fifo_wr_prdy (dat0_fifo3_wr_prdy)
+,.dat_fifo_wr_pvld (dat0_fifo3_wr_pvld)
+,.dat_fifo_wr_pd (dat0_fifo3_wr_pd)
+,.dat_fifo_rd_prdy (dat0_fifo3_rd_prdy)
+,.dat_fifo_rd_pvld (dat0_fifo3_rd_pvld)
+,.dat_fifo_rd_pd (dat0_fifo3_rd_pd)
+,.pwrbus_ram_pd (pwrbus_ram_pd[31:0])
+);
+
+// ::assert never "when the first fifo is ready, all the left fifo should be ready" dat0_fifo0_wr_prdy & !dat0_fifo3_wr_prdy;
+// ::assert never "when the last fifo is not ready, all the previous fifo should not be ready" dat0_fifo3_wr_prdy & !dat0_fifo3_wr_prdy;
+
+wire [8-1:0] dat0_fifo4_wr_pd;
+wire dat0_fifo4_wr_prdy;
+wire dat0_fifo4_wr_pvld;
+// DATA FIFO WRITE SIDE
+// is last_b, then fifo idx large than count_b will need a push to fill in fake data to make up a full atomic_m
+assign dat0_fifo4_wr_pvld = dat_fifo_wr_pvld & (spt_posw==0) & (spt_posb == 4);
+assign dat0_fifo4_wr_pd = dp2wdma_dat_pd;
+
+// DATA FIFO INSTANCE
+NV_NVDLA_PDP_WDMA_DAT_fifo u_dat0_fifo4 (
+.nvdla_core_clk (nvdla_core_clk)
+,.nvdla_core_rstn (nvdla_core_rstn)
+,.dat_fifo_wr_prdy (dat0_fifo4_wr_prdy)
+,.dat_fifo_wr_pvld (dat0_fifo4_wr_pvld)
+,.dat_fifo_wr_pd (dat0_fifo4_wr_pd)
+,.dat_fifo_rd_prdy (dat0_fifo4_rd_prdy)
+,.dat_fifo_rd_pvld (dat0_fifo4_rd_pvld)
+,.dat_fifo_rd_pd (dat0_fifo4_rd_pd)
+,.pwrbus_ram_pd (pwrbus_ram_pd[31:0])
+);
+
+// ::assert never "when the first fifo is ready, all the left fifo should be ready" dat0_fifo0_wr_prdy & !dat0_fifo4_wr_prdy;
+// ::assert never "when the last fifo is not ready, all the previous fifo should not be ready" dat0_fifo4_wr_prdy & !dat0_fifo3_wr_prdy;
+
+wire [8-1:0] dat0_fifo5_wr_pd;
+wire dat0_fifo5_wr_prdy;
+wire dat0_fifo5_wr_pvld;
+// DATA FIFO WRITE SIDE
+// is last_b, then fifo idx large than count_b will need a push to fill in fake data to make up a full atomic_m
+assign dat0_fifo5_wr_pvld = dat_fifo_wr_pvld & (spt_posw==0) & (spt_posb == 5);
+assign dat0_fifo5_wr_pd = dp2wdma_dat_pd;
+
+// DATA FIFO INSTANCE
+NV_NVDLA_PDP_WDMA_DAT_fifo u_dat0_fifo5 (
+.nvdla_core_clk (nvdla_core_clk)
+,.nvdla_core_rstn (nvdla_core_rstn)
+,.dat_fifo_wr_prdy (dat0_fifo5_wr_prdy)
+,.dat_fifo_wr_pvld (dat0_fifo5_wr_pvld)
+,.dat_fifo_wr_pd (dat0_fifo5_wr_pd)
+,.dat_fifo_rd_prdy (dat0_fifo5_rd_prdy)
+,.dat_fifo_rd_pvld (dat0_fifo5_rd_pvld)
+,.dat_fifo_rd_pd (dat0_fifo5_rd_pd)
+,.pwrbus_ram_pd (pwrbus_ram_pd[31:0])
+);
+
+// ::assert never "when the first fifo is ready, all the left fifo should be ready" dat0_fifo0_wr_prdy & !dat0_fifo5_wr_prdy;
+// ::assert never "when the last fifo is not ready, all the previous fifo should not be ready" dat0_fifo5_wr_prdy & !dat0_fifo3_wr_prdy;
+
+wire [8-1:0] dat0_fifo6_wr_pd;
+wire dat0_fifo6_wr_prdy;
+wire dat0_fifo6_wr_pvld;
+// DATA FIFO WRITE SIDE
+// is last_b, then fifo idx large than count_b will need a push to fill in fake data to make up a full atomic_m
+assign dat0_fifo6_wr_pvld = dat_fifo_wr_pvld & (spt_posw==0) & (spt_posb == 6);
+assign dat0_fifo6_wr_pd = dp2wdma_dat_pd;
+
+// DATA FIFO INSTANCE
+NV_NVDLA_PDP_WDMA_DAT_fifo u_dat0_fifo6 (
+.nvdla_core_clk (nvdla_core_clk)
+,.nvdla_core_rstn (nvdla_core_rstn)
+,.dat_fifo_wr_prdy (dat0_fifo6_wr_prdy)
+,.dat_fifo_wr_pvld (dat0_fifo6_wr_pvld)
+,.dat_fifo_wr_pd (dat0_fifo6_wr_pd)
+,.dat_fifo_rd_prdy (dat0_fifo6_rd_prdy)
+,.dat_fifo_rd_pvld (dat0_fifo6_rd_pvld)
+,.dat_fifo_rd_pd (dat0_fifo6_rd_pd)
+,.pwrbus_ram_pd (pwrbus_ram_pd[31:0])
+);
+
+// ::assert never "when the first fifo is ready, all the left fifo should be ready" dat0_fifo0_wr_prdy & !dat0_fifo6_wr_prdy;
+// ::assert never "when the last fifo is not ready, all the previous fifo should not be ready" dat0_fifo6_wr_prdy & !dat0_fifo3_wr_prdy;
+
+wire [8-1:0] dat0_fifo7_wr_pd;
+wire dat0_fifo7_wr_prdy;
+wire dat0_fifo7_wr_pvld;
+// DATA FIFO WRITE SIDE
+// is last_b, then fifo idx large than count_b will need a push to fill in fake data to make up a full atomic_m
+assign dat0_fifo7_wr_pvld = dat_fifo_wr_pvld & (spt_posw==0) & (spt_posb == 7);
+assign dat0_fifo7_wr_pd = dp2wdma_dat_pd;
+
+// DATA FIFO INSTANCE
+NV_NVDLA_PDP_WDMA_DAT_fifo u_dat0_fifo7 (
+.nvdla_core_clk (nvdla_core_clk)
+,.nvdla_core_rstn (nvdla_core_rstn)
+,.dat_fifo_wr_prdy (dat0_fifo7_wr_prdy)
+,.dat_fifo_wr_pvld (dat0_fifo7_wr_pvld)
+,.dat_fifo_wr_pd (dat0_fifo7_wr_pd)
+,.dat_fifo_rd_prdy (dat0_fifo7_rd_prdy)
+,.dat_fifo_rd_pvld (dat0_fifo7_rd_pvld)
+,.dat_fifo_rd_pd (dat0_fifo7_rd_pd)
+,.pwrbus_ram_pd (pwrbus_ram_pd[31:0])
+);
+
+// ::assert never "when the first fifo is ready, all the left fifo should be ready" dat0_fifo0_wr_prdy & !dat0_fifo7_wr_prdy;
+// ::assert never "when the last fifo is not ready, all the previous fifo should not be ready" dat0_fifo7_wr_prdy & !dat0_fifo3_wr_prdy;
+assign dat_fifo_wr_prdy = ( dat0_fifo0_wr_prdy & (spt_posw==0) & (spt_posb == 0) ) 
+| ( dat0_fifo1_wr_prdy & (spt_posw==0) & (spt_posb == 1) ) 
+| ( dat0_fifo2_wr_prdy & (spt_posw==0) & (spt_posb == 2) ) 
+| ( dat0_fifo3_wr_prdy & (spt_posw==0) & (spt_posb == 3) ) 
+| ( dat0_fifo4_wr_prdy & (spt_posw==0) & (spt_posb == 4) ) 
+| ( dat0_fifo5_wr_prdy & (spt_posw==0) & (spt_posb == 5) ) 
+| ( dat0_fifo6_wr_prdy & (spt_posw==0) & (spt_posb == 6) ) 
+| ( dat0_fifo7_wr_prdy & (spt_posw==0) & (spt_posb == 7) );assign spt_dat_accept = dat_fifo_wr_pvld & dat_fifo_wr_prdy;
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 endmodule // NV_NVDLA_PDP_WDMA_dat
 // -w 64, 8byte each fifo
 // -d 3, depth=4 as we have rd_reg

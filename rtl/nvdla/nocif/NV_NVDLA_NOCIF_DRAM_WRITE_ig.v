@@ -33,6 +33,27 @@ module NV_NVDLA_NOCIF_DRAM_WRITE_ig (
 //:,client${i}2mcif_wr_axid
 //:);
 //:}
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+
+,client02mcif_wr_req_pd
+,client02mcif_wr_req_valid
+,client02mcif_wr_req_ready
+,client02mcif_wr_wt
+,client02mcif_wr_axid
+
+,client12mcif_wr_req_pd
+,client12mcif_wr_req_valid
+,client12mcif_wr_req_ready
+,client12mcif_wr_wt
+,client12mcif_wr_axid
+
+,client22mcif_wr_req_pd
+,client22mcif_wr_req_valid
+,client22mcif_wr_req_ready
+,client22mcif_wr_wt
+,client22mcif_wr_axid
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
   ,cq_wr_pvld
   ,cq_wr_prdy
   ,cq_wr_thread_id
@@ -60,6 +81,27 @@ module NV_NVDLA_NOCIF_DRAM_WRITE_ig (
 //:input [3:0] client${i}2mcif_wr_axid;
 //:);
 //:}
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+
+input client02mcif_wr_req_valid;
+output client02mcif_wr_req_ready;
+input [64 +1:0] client02mcif_wr_req_pd;
+input [7:0] client02mcif_wr_wt;
+input [3:0] client02mcif_wr_axid;
+
+input client12mcif_wr_req_valid;
+output client12mcif_wr_req_ready;
+input [64 +1:0] client12mcif_wr_req_pd;
+input [7:0] client12mcif_wr_wt;
+input [3:0] client12mcif_wr_axid;
+
+input client22mcif_wr_req_valid;
+output client22mcif_wr_req_ready;
+input [64 +1:0] client22mcif_wr_req_pd;
+input [7:0] client22mcif_wr_wt;
+input [3:0] client22mcif_wr_axid;
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 input nvdla_core_clk;
 input nvdla_core_rstn;
 input [31:0] pwrbus_ram_pd;
@@ -108,6 +150,75 @@ wire spt2cvt_dat_valid,spt2cvt_dat_ready;
 //:);
 //:);
 //:}
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+
+wire bpt2arb_cmd0_valid;
+wire bpt2arb_cmd0_ready;
+wire [32 +12:0] bpt2arb_cmd0_pd;
+wire bpt2arb_dat0_valid;
+wire bpt2arb_dat0_ready;
+wire [64:0] bpt2arb_dat0_pd;
+NV_NVDLA_NOCIF_DRAM_WRITE_IG_bpt u_bpt0 (
+.nvdla_core_clk (nvdla_core_clk)
+,.nvdla_core_rstn (nvdla_core_rstn)
+,.dma2bpt_req_valid (client02mcif_wr_req_valid)
+,.dma2bpt_req_ready (client02mcif_wr_req_ready)
+,.dma2bpt_req_pd (client02mcif_wr_req_pd)
+,.bpt2arb_cmd_valid (bpt2arb_cmd0_valid)
+,.bpt2arb_cmd_ready (bpt2arb_cmd0_ready)
+,.bpt2arb_cmd_pd (bpt2arb_cmd0_pd)
+,.bpt2arb_dat_valid (bpt2arb_dat0_valid)
+,.bpt2arb_dat_ready (bpt2arb_dat0_ready)
+,.bpt2arb_dat_pd (bpt2arb_dat0_pd)
+,.pwrbus_ram_pd (pwrbus_ram_pd)
+,.axid (client02mcif_wr_axid)
+);
+
+wire bpt2arb_cmd1_valid;
+wire bpt2arb_cmd1_ready;
+wire [32 +12:0] bpt2arb_cmd1_pd;
+wire bpt2arb_dat1_valid;
+wire bpt2arb_dat1_ready;
+wire [64:0] bpt2arb_dat1_pd;
+NV_NVDLA_NOCIF_DRAM_WRITE_IG_bpt u_bpt1 (
+.nvdla_core_clk (nvdla_core_clk)
+,.nvdla_core_rstn (nvdla_core_rstn)
+,.dma2bpt_req_valid (client12mcif_wr_req_valid)
+,.dma2bpt_req_ready (client12mcif_wr_req_ready)
+,.dma2bpt_req_pd (client12mcif_wr_req_pd)
+,.bpt2arb_cmd_valid (bpt2arb_cmd1_valid)
+,.bpt2arb_cmd_ready (bpt2arb_cmd1_ready)
+,.bpt2arb_cmd_pd (bpt2arb_cmd1_pd)
+,.bpt2arb_dat_valid (bpt2arb_dat1_valid)
+,.bpt2arb_dat_ready (bpt2arb_dat1_ready)
+,.bpt2arb_dat_pd (bpt2arb_dat1_pd)
+,.pwrbus_ram_pd (pwrbus_ram_pd)
+,.axid (client12mcif_wr_axid)
+);
+
+wire bpt2arb_cmd2_valid;
+wire bpt2arb_cmd2_ready;
+wire [32 +12:0] bpt2arb_cmd2_pd;
+wire bpt2arb_dat2_valid;
+wire bpt2arb_dat2_ready;
+wire [64:0] bpt2arb_dat2_pd;
+NV_NVDLA_NOCIF_DRAM_WRITE_IG_bpt u_bpt2 (
+.nvdla_core_clk (nvdla_core_clk)
+,.nvdla_core_rstn (nvdla_core_rstn)
+,.dma2bpt_req_valid (client22mcif_wr_req_valid)
+,.dma2bpt_req_ready (client22mcif_wr_req_ready)
+,.dma2bpt_req_pd (client22mcif_wr_req_pd)
+,.bpt2arb_cmd_valid (bpt2arb_cmd2_valid)
+,.bpt2arb_cmd_ready (bpt2arb_cmd2_ready)
+,.bpt2arb_cmd_pd (bpt2arb_cmd2_pd)
+,.bpt2arb_dat_valid (bpt2arb_dat2_valid)
+,.bpt2arb_dat_ready (bpt2arb_dat2_ready)
+,.bpt2arb_dat_pd (bpt2arb_dat2_pd)
+,.pwrbus_ram_pd (pwrbus_ram_pd)
+,.axid (client22mcif_wr_axid)
+);
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
 wire [32 +12:0] arb2spt_cmd_pd;
 wire [64:0] arb2spt_dat_pd;
 wire arb2spt_cmd_valid, arb2spt_cmd_ready;
@@ -127,6 +238,33 @@ NV_NVDLA_NOCIF_DRAM_WRITE_IG_arb u_arb (
 //:,.client${i}2mcif_wr_wt (client${i}2mcif_wr_wt)
 //:);
 //:}
+//| eperl: generated_beg (DO NOT EDIT BELOW)
+
+,.bpt2arb_cmd0_valid (bpt2arb_cmd0_valid)
+,.bpt2arb_cmd0_ready (bpt2arb_cmd0_ready)
+,.bpt2arb_cmd0_pd (bpt2arb_cmd0_pd)
+,.bpt2arb_dat0_valid (bpt2arb_dat0_valid)
+,.bpt2arb_dat0_ready (bpt2arb_dat0_ready)
+,.bpt2arb_dat0_pd (bpt2arb_dat0_pd)
+,.client02mcif_wr_wt (client02mcif_wr_wt)
+
+,.bpt2arb_cmd1_valid (bpt2arb_cmd1_valid)
+,.bpt2arb_cmd1_ready (bpt2arb_cmd1_ready)
+,.bpt2arb_cmd1_pd (bpt2arb_cmd1_pd)
+,.bpt2arb_dat1_valid (bpt2arb_dat1_valid)
+,.bpt2arb_dat1_ready (bpt2arb_dat1_ready)
+,.bpt2arb_dat1_pd (bpt2arb_dat1_pd)
+,.client12mcif_wr_wt (client12mcif_wr_wt)
+
+,.bpt2arb_cmd2_valid (bpt2arb_cmd2_valid)
+,.bpt2arb_cmd2_ready (bpt2arb_cmd2_ready)
+,.bpt2arb_cmd2_pd (bpt2arb_cmd2_pd)
+,.bpt2arb_dat2_valid (bpt2arb_dat2_valid)
+,.bpt2arb_dat2_ready (bpt2arb_dat2_ready)
+,.bpt2arb_dat2_pd (bpt2arb_dat2_pd)
+,.client22mcif_wr_wt (client22mcif_wr_wt)
+
+//| eperl: generated_end (DO NOT EDIT ABOVE)
   ,.arb2spt_cmd_valid (arb2spt_cmd_valid) //|> w
   ,.arb2spt_cmd_ready (arb2spt_cmd_ready) //|< w
   ,.arb2spt_cmd_pd (arb2spt_cmd_pd[32 +12:0]) //|> w
