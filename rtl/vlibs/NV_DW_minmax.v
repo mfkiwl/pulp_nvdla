@@ -7,6 +7,7 @@
 // ================================================================
 
 // File Name: NV_DW_minmax.v
+
 module NV_DW_minmax (a ,tc ,min_max ,value ,index);
   parameter width = 8;
   parameter num_inputs = 2;

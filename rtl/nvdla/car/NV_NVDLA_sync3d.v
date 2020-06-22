@@ -8,8 +8,6 @@
 
 // File Name: NV_NVDLA_sync3d.v
 
-`include "nvtools_sync2d_defines.vh"
-
 module NV_NVDLA_sync3d (
    clk
   ,sync_i
@@ -98,7 +96,7 @@ sync3d sync_0 (
 `ifdef SYNC_PL_NOSYNTHESIS_NOSYNTH_GCS
 
   `ifdef NVTOOLS_SYNC2D_GENERIC_CELL
-  defparam sync_0.NV_GENERIC_CELL.first_stage_of_sync.mode = 0;
+  //defparam sync_0.NV_GENERIC_CELL.first_stage_of_sync.mode = 0;
   `else
   defparam sync_0.first_stage_of_sync.mode = 0;
   `endif
