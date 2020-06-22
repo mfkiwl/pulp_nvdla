@@ -6,7 +6,7 @@
 // this distribution for more information.
 // ================================================================
 
-// File Name: NV_NVDLA_CDP_define.h
+// File Name: NV_NVDLA_CDP_define.vh
 
 `define NVDLA_CDP_BWPE NVDLA_BPE
 `define NVDLA_CDP_ICVTO_BWPE (NVDLA_CDP_BWPE+1)
@@ -17,10 +17,10 @@
 ///////////////////////////////////////////////////
 
 `ifdef NVDLA_FEATURE_DATA_TYPE_INT8
-`if ( NVDLA_CDP_THROUGHPUT  ==  8 )
+`ifdef NVDLA_CDP_THROUGHPUT_8
     `define LARGE_FIFO_RAM
 `endif
-`if ( NVDLA_CDP_THROUGHPUT == 1 )
+`ifdef NVDLA_CDP_THROUGHPUT_1
     `define SMALL_FIFO_RAM
 `endif
 `endif

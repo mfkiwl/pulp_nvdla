@@ -6,7 +6,7 @@
 // this distribution for more information.
 // ================================================================
 
-// File Name: NV_NVDLA_CSC.h
+// File Name: NV_NVDLA_CSC.vh
 
 `define CSC_ATOMC                                           NVDLA_MAC_ATOMIC_C_SIZE
 `define CSC_ATOMK                                           NVDLA_MAC_ATOMIC_K_SIZE
@@ -35,11 +35,12 @@
 `define NVDLA_MACCELL_NUMBER                                CSC_ATOMK
 `define CSC_DL_PRA_LATENCY                                  NVDLA_HLS_CSC_PRA_LATENCY
 `define CSC_WL_LATENCY                                      4
+`define CSC_WL_LATENCY_CSC_DL_PRA_LATENCY
 `define RT_CSC2CMAC_A_LATENCY                               2
 `define RT_CSC2CMAC_B_LATENCY                               1
 `define CSC_ENTRIES_NUM_WIDTH                               15
 
-`if (CSC_WL_LATENCY >= CSC_DL_PRA_LATENCY)
+`ifdef CSC_WL_LATENCY_CSC_DL_PRA_LATENCY
     `define CSC_DL_PIPELINE_ADDITION                        CSC_WL_LATENCY-CSC_DL_PRA_LATENCY
     `define CSC_WL_PIPELINE_ADDITION                        0
 `else
@@ -51,7 +52,7 @@
 `define CSC_SG_PEND_FLUSH                                   6'h20
 
 
-`if (NVDLA_MAC_ATOMIC_C_SIZE==64)
+`ifdef NVDLA_MAC_ATOMIC_C_SIZE_64
     //entry bits
     `define CSC_WMB_ELEMENTS                                    11'h200
     //atomC
@@ -68,7 +69,7 @@
     
     `define CSC_ATOMC_HEX                                       7'h40
     `define CSC_ATOMC_HEX_STR                                   "\"7'h40\""
-`elif (NVDLA_MAC_ATOMIC_C_SIZE==32)
+`elsif NVDLA_MAC_ATOMIC_C_SIZE_32
     //entry bits
     `define CSC_WMB_ELEMENTS                                    11'h100
     //atomC
@@ -85,7 +86,7 @@
 
     `define CSC_ATOMC_HEX                                       7'h20
     `define CSC_ATOMC_HEX_STR                                   "\"7'h20\""
-`elif (NVDLA_MAC_ATOMIC_C_SIZE==8) 
+`elsif NVDLA_MAC_ATOMIC_C_SIZE_8
     //entry bits
     `define CSC_WMB_ELEMENTS                                    11'h40
     //atomC
@@ -105,7 +106,7 @@
 `endif
 
 
-`if (NVDLA_MAC_ATOMIC_K_SIZE==32) 
+`ifdef NVDLA_MAC_ATOMIC_K_SIZE_32
     //atomK
     `define CSC_MIN_STRIPE                                      7'd32
     //atomK
@@ -114,7 +115,7 @@
     //atomK*2
     `define CSC_ATOMK_MUL2_HEX                                  7'h40
     `define CSC_ATOMK_MUL2_HEX_STR                              "\"7'h40\""
-`elif (NVDLA_MAC_ATOMIC_K_SIZE==8) 
+`elsif NVDLA_MAC_ATOMIC_K_SIZE_8
     //atomK
     `define CSC_MIN_STRIPE                                      7'd8
     //atomK
@@ -125,11 +126,11 @@
     `define CSC_ATOMK_MUL2_HEX_STR                              "\"7'h10\""
 `endif
 
-`if (NVDLA_CC_ATOMC_DIV_ATOMK==1)
+`ifdef NVDLA_CC_ATOMC_DIV_ATOMK_1
     `define CC_ATOMC_DIV_ATOMK_EQUAL_1
-`elif (NVDLA_CC_ATOMC_DIV_ATOMK==2)
+`elsif NVDLA_CC_ATOMC_DIV_ATOMK_2
     `define CC_ATOMC_DIV_ATOMK_EQUAL_2
-`elif (NVDLA_CC_ATOMC_DIV_ATOMK==4)
+`elsif NVDLA_CC_ATOMC_DIV_ATOMK_4
     `define CC_ATOMC_DIV_ATOMK_EQUAL_4
 `endif
 

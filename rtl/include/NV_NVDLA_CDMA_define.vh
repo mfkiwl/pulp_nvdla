@@ -6,7 +6,7 @@
 // this distribution for more information.
 // ================================================================
 
-// File Name: NV_NVDLA_CDMA_define.h
+// File Name: NV_NVDLA_CDMA_define.vh
 
 `ifndef _NV_NVDLA_CDMA_DEFINE_H_
 `define _NV_NVDLA_CDMA_DEFINE_H_
@@ -44,10 +44,10 @@
 
 
 //
-`if ( NVDLA_MEMORY_ATOMIC_SIZE  ==  32 )
+`ifdef NVDLA_MEMORY_ATOMIC_SIZE_32
     `define IMG_LARGE
 `endif
-`if ( NVDLA_MEMORY_ATOMIC_SIZE == 8 )
+`elsif NVDLA_MEMORY_ATOMIC_SIZE_8
     `define IMG_SMALL
 `endif
 //DorisL-E----------------

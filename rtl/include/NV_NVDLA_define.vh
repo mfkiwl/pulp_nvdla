@@ -20,9 +20,9 @@
 
 ///////////////////////////////////////////////////
 //
-`if ( NVDLA_PRIMARY_MEMIF_WIDTH  ==  512 )
+`ifdef NVDLA_PRIMARY_MEMIF_WIDTH_512
     `define LARGE_MEMBUS
 `endif
-`if ( NVDLA_PRIMARY_MEMIF_WIDTH  ==  64 )
+`ifdef NVDLA_PRIMARY_MEMIF_WIDTH_64
     `define SMALL_MEMBUS
 `endif

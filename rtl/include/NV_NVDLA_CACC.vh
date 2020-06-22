@@ -6,7 +6,7 @@
 // this distribution for more information.
 // ================================================================
 
-// File Name: NV_NVDLA_CACC.h
+// File Name: NV_NVDLA_CACC.vh
 
 `define CACC_IN_WIDTH                                   NVDLA_MAC_RESULT_WIDTH  //16+log2(atomC),sum result width for one atomic operation.
 `define SDP_MAX_THROUGHPUT                              NVDLA_SDP_MAX_THROUGHPUT  //2^n, no bigger than atomM
@@ -25,13 +25,13 @@
 `define NVDLA_CACC_D_MISC_CFG_0_PROC_PRECISION_INT8     2'h0
 `define CACC_CHANNEL_BITS                               12
 
-`if(NVDLA_CC_ATOMC_DIV_ATOMK==1)
+`ifdef NVDLA_CC_ATOMC_DIV_ATOMK_1
     `define CACC_ABUF_DEPTH                                 NVDLA_MAC_ATOMIC_K_SIZE*2  //2*atomK
     `define CACC_ABUF_AWIDTH                                NVDLA_MAC_ATOMIC_K_SIZE_LOG2+1   //log2(abuf_depth)
-`elif(NVDLA_CC_ATOMC_DIV_ATOMK==2)
+`elsif NVDLA_CC_ATOMC_DIV_ATOMK_2
     `define CACC_ABUF_DEPTH                                 NVDLA_MAC_ATOMIC_K_SIZE*2  //2*atomK
     `define CACC_ABUF_AWIDTH                                NVDLA_MAC_ATOMIC_K_SIZE_LOG2+1   //log2(abuf_depth)
-`elif(NVDLA_CC_ATOMC_DIV_ATOMK==4)
+`elsif NVDLA_CC_ATOMC_DIV_ATOMK_4
     `define CACC_ABUF_DEPTH                                 NVDLA_MAC_ATOMIC_K_SIZE*4  //4*atomK
     `define CACC_ABUF_AWIDTH                                NVDLA_MAC_ATOMIC_K_SIZE_LOG2+2   //log2(abuf_depth)
 `endif
