@@ -6,6 +6,7 @@
 // this distribution for more information.
 // ================================================================
 // File Name: NV_NVDLA_sync3d.v
+`define NVTOOLS_SYNC2D_GENERIC_CELL
 module NV_NVDLA_sync3d (
    clk
   ,sync_i
