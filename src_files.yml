@@ -242,9 +242,6 @@ nv_rams_model:
   ]
 
 nv_rams_synth:
-  flags: [
-    skip_simulation,
-  ]
   incdirs: [
     ../../rtl/includes,
   ]

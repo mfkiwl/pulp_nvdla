@@ -77,6 +77,8 @@ input nvdla_core_rstn;
 //: }
 //| eperl: generated_beg (DO NOT EDIT BELOW)
 
+wire cvt_in_prdy_0;
+wire cvt_out_pvld_0;
 
 //| eperl: generated_end (DO NOT EDIT ABOVE)
 assign cvt_in_prdy = cvt_in_prdy_0;

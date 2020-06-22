@@ -61,10 +61,10 @@ input nvdla_core_clk;
 input nvdla_core_rstn;
 output lut2inp_pvld; /* data valid */
 input lut2inp_prdy; /* data return handshake */
-output [185*0 -1:0] lut2inp_pd;
+output  lut2inp_pd;
 input idx2lut_pvld; /* data valid */
 output idx2lut_prdy; /* data return handshake */
-input [81*0 -1:0] idx2lut_pd;
+input  idx2lut_pd;
 input reg2dp_lut_int_access_type;
 input [9:0] reg2dp_lut_int_addr;
 input [15:0] reg2dp_lut_int_data;
@@ -95,12 +95,12 @@ output [31:0] dp2reg_lut_uflow;
 input [31:0] pwrbus_ram_pd;
 input op_en_load;
 reg idx2lut_prdy;
-reg [185*0 -1:0] lut2inp_pd;
+reg  lut2inp_pd;
 reg lut2inp_pvld;
-reg [81*0 -1:0] lut_in_pd;
+reg  lut_in_pd;
 reg lut_in_pvld;
 wire lut_in_prdy;
-wire [185*0 -1:0] lut_out_pd;
+wire  lut_out_pd;
 wire lut_out_pvld;
 reg lut_out_prdy;
 //: my $k = 0;
@@ -1069,7 +1069,27 @@ wire           lo_wr_en_252;
 wire           lo_wr_en_253; 
 wire           lo_wr_en_254; 
 wire           lo_wr_en_255; 
-wire           lo_wr_en_256; 
+wire           lo_wr_en_256;
+// Fix error of undeclared signals
+//: wire [8:0] lut_in_addr${i};
+//: wire [8:0] lut_in_addr${i}_0;
+//: wire [8:0] lut_in_addr${i}_1;
+//: wire [34:0] lut_in_fraction${i};
+wire lut_in_hybrid0;
+wire lut_in_le_hit0;
+wire lut_in_lo_hit0;
+wire lut_in_oflow0;
+//: wire lut_in_sel${i};
+wire lut_in_uflow0;
+//: wire [31:0] lut_in_x${i};
+//: wire out_flow${i};
+//: wire [34:0] out_fraction${i};
+//: wire out_oflow${i};
+//: wire out_sel${i};
+//: wire out_uflow${i};
+//: wire [31:0] out_x${i};
+//: wire [15:0] out_y0_${i};
+//: wire [15:0] out_y1_${i};
 
 //| eperl: generated_end (DO NOT EDIT ABOVE)
 wire lut_access_type;
@@ -21945,10 +21965,10 @@ NV_NVDLA_SDP_CORE_Y_lut_pipe_p1 pipe_p1 (
   ,.nvdla_core_rstn (nvdla_core_rstn)
   ,.idx2lut_pvld (idx2lut_pvld)
   ,.idx2lut_prdy (idx2lut_prdy)
-  ,.idx2lut_pd (idx2lut_pd[81*0 -1:0])
+  ,.idx2lut_pd (idx2lut_pd)
   ,.lut_in_pvld (lut_in_pvld)
   ,.lut_in_prdy (lut_in_prdy)
-  ,.lut_in_pd (lut_in_pd[81*0 -1:0])
+  ,.lut_in_pd (lut_in_pd)
   );
 // PKT_UNPACK_WIRE( sdp_y_lut_in , lut_in_ , lut_in_pd )
 //: my $k=0;
@@ -21984,6 +22004,8 @@ NV_NVDLA_SDP_CORE_Y_lut_pipe_p1 pipe_p1 (
 //: print "assign   lut_in_lo_hit${i}         =  lut_in_pd[${i}+${boh}]; \n";
 //: }
 //| eperl: generated_beg (DO NOT EDIT BELOW)
+
+
 
 //| eperl: generated_end (DO NOT EDIT ABOVE)
 //=======================================
@@ -22486,10 +22508,10 @@ NV_NVDLA_SDP_CORE_Y_lut_pipe_p2 pipe_p2 (
   ,.nvdla_core_rstn (nvdla_core_rstn)
   ,.lut_out_pvld (lut_out_pvld)
   ,.lut_out_prdy (lut_out_prdy)
-  ,.lut_out_pd (lut_out_pd[185*0 -1:0])
+  ,.lut_out_pd (lut_out_pd)
   ,.lut2inp_pvld (lut2inp_pvld)
   ,.lut2inp_prdy (lut2inp_prdy)
-  ,.lut2inp_pd (lut2inp_pd[185*0 -1:0])
+  ,.lut2inp_pd (lut2inp_pd)
   );
 //=======================================
 // Assertions
@@ -22645,10 +22667,10 @@ input nvdla_core_clk;
 input nvdla_core_rstn;
 input idx2lut_pvld;
 output idx2lut_prdy;
-input [81*0 -1:0] idx2lut_pd;
+input  idx2lut_pd;
 output lut_in_pvld;
 input lut_in_prdy;
-output [81*0 -1:0] lut_in_pd;
+output  lut_in_pd;
 //: my $dw = 81*0;
 //: &eperl::pipe("-is -wid $dw -do lut_in_pd -vo lut_in_pvld -ri lut_in_prdy -di idx2lut_pd -vi idx2lut_pvld -ro idx2lut_prdy");
 //| eperl: generated_beg (DO NOT EDIT BELOW)
@@ -22742,10 +22764,10 @@ input nvdla_core_clk;
 input nvdla_core_rstn;
 input lut_out_pvld;
 output lut_out_prdy;
-input [185*0 -1:0] lut_out_pd;
+input  lut_out_pd;
 output lut2inp_pvld;
 input lut2inp_prdy;
-output [185*0 -1:0] lut2inp_pd;
+output  lut2inp_pd;
 //: my $dw = 185*0;
 //: &eperl::pipe("-is -wid $dw -do lut2inp_pd -vo lut2inp_pvld -ri lut2inp_prdy -di lut_out_pd -vi lut_out_pvld -ro lut_out_prdy");
 //| eperl: generated_beg (DO NOT EDIT BELOW)

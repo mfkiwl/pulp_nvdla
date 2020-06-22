@@ -118,9 +118,8 @@ input nvdla_core_rstn;
 //: print "\n";
 //| eperl: generated_beg (DO NOT EDIT BELOW)
 
-
-
-
+wire chn_inp_in_prdy0;
+wire chn_inp_out_pvld0;
 
 //| eperl: generated_end (DO NOT EDIT ABOVE)
 assign chn_inp_in_prdy = chn_inp_in_prdy0;

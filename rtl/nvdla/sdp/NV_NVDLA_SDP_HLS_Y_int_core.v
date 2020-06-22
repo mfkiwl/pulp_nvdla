@@ -81,6 +81,11 @@ input nvdla_core_rstn;
 //: }
 //| eperl: generated_beg (DO NOT EDIT BELOW)
 
+wire chn_alu_op_prdy_0;
+wire chn_in_prdy_0;
+wire chn_mul_op_prdy_0;
+wire chn_out_pvld_0;
+
 //| eperl: generated_end (DO NOT EDIT ABOVE)
 assign chn_in_prdy = chn_in_prdy_0;
 assign chn_alu_op_prdy = chn_alu_op_prdy_0;
