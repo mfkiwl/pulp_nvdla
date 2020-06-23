@@ -140,7 +140,6 @@ module nvdla_hwpe2dbb (
                     flags_o.read_data_flags.last = '0;
                 end
                 if (dbb_i.valid & ctrl_i.read_data_ctrl.ready) begin
-                    wire[3:0] i = cnt % MEM_DATA_WIDTH_RATIO;
                     if(cnt == ctrl_i.read_request_ctrl.len - 1) begin
                         next_state = FSM_DBB_TERMINATE;
                         flags_o.read_data_flags.last = '1;
