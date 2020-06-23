@@ -58,9 +58,9 @@ package nvdla_package;
 
     typedef struct packed {
         logic valid;
-        logic unsigned [31:0] data;
+        logic unsigned [`NVDLA_PRIMARY_MEMIF_WIDTH - 1:0] data;
         logic last;
-        logic unsigned [3:0] strb;
+        logic unsigned [`NVDLA_PRIMARY_MEMIF_WIDTH / 8 - 1:0] strb;
     } ctrl_dbb_wdat_t;
 
     typedef struct packed {
@@ -73,7 +73,7 @@ package nvdla_package;
 
     typedef struct packed {
         logic valid;
-        logic unsigned [31:0] data;
+        logic unsigned [`NVDLA_PRIMARY_MEMIF_WIDTH - 1:0] data;
         logic last;
         logic unsigned [7:0] id;
     } flags_dbb_rdat_t;

@@ -19,7 +19,12 @@ module nvdla_hwpe2dbb (
 );
 
     logic [7:0] id;
-    logic unsigned [3:0] cnt;
+    logic unsigned [7:0] cnt;
+    logic unsigned [7:0] i;
+
+    localparam MEM_DATA_WIDTH_RATIO = `NVDLA_PRIMARY_MEMIF_WIDTH / 32;
+
+    assign i = cnt % MEM_DATA_WIDTH_RATIO;
 
     state_dbb_fsm_t curr_state, next_state;
 
@@ -38,9 +43,9 @@ module nvdla_hwpe2dbb (
 
     always_comb
     begin : main_dbb_fsm_comb
-        ctrl_streamer_o.dbb_sink_ctrl.addressgen_ctrl.trans_size   = ctrl_i.read_request_ctrl.len;
+        ctrl_streamer_o.dbb_sink_ctrl.addressgen_ctrl.trans_size   = ctrl_i.read_request_ctrl.len * MEM_DATA_WIDTH_RATIO;
         ctrl_streamer_o.dbb_sink_ctrl.addressgen_ctrl.line_stride  = '0;
-        ctrl_streamer_o.dbb_sink_ctrl.addressgen_ctrl.line_length  = ctrl_i.read_request_ctrl.len;
+        ctrl_streamer_o.dbb_sink_ctrl.addressgen_ctrl.line_length  = ctrl_i.read_request_ctrl.len * MEM_DATA_WIDTH_RATIO;
         ctrl_streamer_o.dbb_sink_ctrl.addressgen_ctrl.feat_stride  = '0;
         ctrl_streamer_o.dbb_sink_ctrl.addressgen_ctrl.feat_length  = 1;
         ctrl_streamer_o.dbb_sink_ctrl.addressgen_ctrl.base_addr    = ctrl_i.read_request_ctrl.addr;
@@ -48,9 +53,9 @@ module nvdla_hwpe2dbb (
         ctrl_streamer_o.dbb_sink_ctrl.addressgen_ctrl.loop_outer   = '0;
         ctrl_streamer_o.dbb_sink_ctrl.addressgen_ctrl.realign_type = '0;
 
-        ctrl_streamer_o.dbb_source_ctrl.addressgen_ctrl.trans_size   = ctrl_i.read_request_ctrl.len;
+        ctrl_streamer_o.dbb_source_ctrl.addressgen_ctrl.trans_size   = ctrl_i.read_request_ctrl.len * MEM_DATA_WIDTH_RATIO;
         ctrl_streamer_o.dbb_source_ctrl.addressgen_ctrl.line_stride  = '0;
-        ctrl_streamer_o.dbb_source_ctrl.addressgen_ctrl.line_length  = ctrl_i.read_request_ctrl.len;
+        ctrl_streamer_o.dbb_source_ctrl.addressgen_ctrl.line_length  = ctrl_i.read_request_ctrl.len * MEM_DATA_WIDTH_RATIO;
         ctrl_streamer_o.dbb_source_ctrl.addressgen_ctrl.feat_stride  = '0;
         ctrl_streamer_o.dbb_source_ctrl.addressgen_ctrl.feat_length  = 1;
         ctrl_streamer_o.dbb_source_ctrl.addressgen_ctrl.base_addr    = ctrl_i.read_request_ctrl.addr;
@@ -99,19 +104,21 @@ module nvdla_hwpe2dbb (
                     flags_o.write_request_flags.ready  = '1;
                 end
                 if (dbb_o.ready & ctrl_i.write_data_ctrl.valid) begin
+                    flags_o.write_data_flags.ready = '0;
+                    
                     if(ctrl_i.write_data_ctrl.last) begin
                         next_state = FSM_WRITE_RESPONSE;
                     end
-                    else begin
+                    else if(i == 0) begin
                         next_state = FSM_WAIT_WRITE;
                     end
 
-                    cnt = cnt + 1;
-                    
-                    dbb_o.data  = ctrl_i.write_data_ctrl.data;
-                    dbb_o.strb  = ctrl_i.write_data_ctrl.strb;
+                    dbb_o.data  = ctrl_i.write_data_ctrl.data[32*(i + 1):32*i];
+                    dbb_o.strb  = ctrl_i.write_data_ctrl.strb[8*(i + 1):8*i];
                     dbb_o.valid = ctrl_i.write_data_ctrl.valid;
-                    flags_o.write_data_flags.ready = '0;
+                    
+                    cnt = cnt + 1;
+                    flags_o.write_data_flags.ready = i == MEM_DATA_WIDTH_RATIO - 1;
                 end
             end
             FSM_WRITE_RESPONSE: begin
@@ -133,19 +140,20 @@ module nvdla_hwpe2dbb (
                     flags_o.read_data_flags.last = '0;
                 end
                 if (dbb_i.valid & ctrl_i.read_data_ctrl.ready) begin
+                    wire[3:0] i = cnt % MEM_DATA_WIDTH_RATIO;
                     if(cnt == ctrl_i.read_request_ctrl.len - 1) begin
                         next_state = FSM_DBB_TERMINATE;
                         flags_o.read_data_flags.last = '1;
                     end
-                    else begin
+                    else if(i == 0) begin
                         next_state = FSM_WAIT_READ;
                     end
 
-                    cnt = cnt + 1;
-
-                    flags_o.read_data_flags.data = dbb_i.data;
+                    flags_o.read_data_flags.data[32*(i + 1):32*i] = dbb_i.data;
                     flags_o.read_data_flags.id = id;
-                    flags_o.read_data_flags.valid = dbb_i.valid;
+                    flags_o.read_data_flags.valid = dbb_i.valid && i == MEM_DATA_WIDTH_RATIO - 1;
+
+                    cnt = cnt + 1;
                 end
             end
             FSM_WAIT_READ: begin
