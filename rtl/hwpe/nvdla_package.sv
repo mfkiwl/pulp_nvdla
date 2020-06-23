@@ -25,16 +25,22 @@ package nvdla_package;
     } flags_engine_t;
 
     typedef struct packed {
+        hwpe_stream_package::ctrl_sourcesink_t csb_sink_ctrl;
+    } ctrl_csb_streamer_t;
+
+    typedef struct packed {
+        hwpe_stream_package::flags_sourcesink_t csb_sink_flags;
+    } flags_csb_streamer_t;
+
+    typedef struct packed {
         hwpe_stream_package::ctrl_sourcesink_t dbb_source_ctrl;
         hwpe_stream_package::ctrl_sourcesink_t dbb_sink_ctrl;
-        hwpe_stream_package::ctrl_sourcesink_t csb_sink_ctrl;
-    } ctrl_streamer_t;
+    } ctrl_dbb_streamer_t;
 
     typedef struct packed {
         hwpe_stream_package::flags_sourcesink_t dbb_source_flags;
         hwpe_stream_package::flags_sourcesink_t dbb_sink_flags;
-        hwpe_stream_package::flags_sourcesink_t csb_sink_flags;
-    } flags_streamer_t;
+    } flags_dbb_streamer_t;
 
     typedef struct packed {
         logic valid;

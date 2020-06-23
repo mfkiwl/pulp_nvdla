@@ -8,8 +8,8 @@ module nvdla_hwpe2dbb (
     input  logic                test_mode_i,
     input  logic                clear_i,
     // ctrl & flags
-    output ctrl_streamer_t      ctrl_streamer_o,
-    input  flags_streamer_t     flags_streamer_i,
+    output ctrl_dbb_streamer_t      ctrl_streamer_o,
+    input  flags_dbb_streamer_t     flags_streamer_i,
     input  ctrl_dbb_t           ctrl_i,
     output flags_dbb_t          flags_o,
     // input dbb stream

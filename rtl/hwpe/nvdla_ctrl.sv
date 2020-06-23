@@ -17,8 +17,8 @@ module nvdla_ctrl
     // events
     output logic [N_CORES-1:0][REGFILE_N_EVT-1:0] evt_o,
     // ctrl & flags
-    output ctrl_streamer_t                        ctrl_streamer_o,
-    input  flags_streamer_t                       flags_streamer_i,
+    output ctrl_csb_streamer_t                    ctrl_streamer_o,
+    input  flags_csb_streamer_t                   flags_streamer_i,
     output ctrl_engine_t                          ctrl_engine_o,
     input  flags_engine_t                         flags_engine_i,
     // periph slave port

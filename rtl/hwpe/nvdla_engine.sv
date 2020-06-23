@@ -16,8 +16,8 @@ module nvdla_engine
     // output csb stream
     hwpe_stream_intf_stream.source csb_o,
     // stream control and flags for dbb
-    output ctrl_streamer_t         ctrl_streamer_o,
-    input  flags_streamer_t        flags_streamer_i,
+    output ctrl_dbb_streamer_t     ctrl_streamer_o,
+    input  flags_dbb_streamer_t    flags_streamer_i,
     // control channel
     input  ctrl_engine_t           ctrl_i,
     output flags_engine_t          flags_o

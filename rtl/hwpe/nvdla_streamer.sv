@@ -26,8 +26,10 @@ module nvdla_streamer
     hwpe_stream_intf_tcdm.master tcdm [MP-1:0],
 
     // control channel
-    input  ctrl_streamer_t  ctrl_i,
-    output flags_streamer_t flags_o
+    input  ctrl_csb_streamer_t  ctrl_csb_i,
+    output flags_csb_streamer_t flags_csb_o,
+    input  ctrl_dbb_streamer_t  ctrl_dbb_i,
+    output flags_dbb_streamer_t flags_dbb_o
 );
 
     logic dbb_tcdm_fifo_ready;
@@ -72,8 +74,8 @@ module nvdla_streamer
         .clear_i            ( clear_i                  ),
         .tcdm               ( tcdm_fifo_0              ), // this syntax is necessary for Verilator as hwpe_stream_source expects an array of interfaces
         .stream             ( dbb_prefifo.source       ),
-        .ctrl_i             ( ctrl_i.dbb_source_ctrl   ),
-        .flags_o            ( flags_o.dbb_source_flags ),
+        .ctrl_i             ( ctrl_dbb_i.dbb_source_ctrl   ),
+        .flags_o            ( flags_dbb_o.dbb_source_flags ),
         .tcdm_fifo_ready_o  ( dbb_tcdm_fifo_ready      )
     );
 
@@ -86,8 +88,8 @@ module nvdla_streamer
         .clear_i     ( clear_i                ),
         .tcdm        ( tcdm_fifo_1            ), // this syntax is necessary for Verilator as hwpe_stream_source expects an array of interfaces
         .stream      ( dbb_postfifo.sink      ),
-        .ctrl_i      ( ctrl_i.dbb_sink_ctrl   ),
-        .flags_o     ( flags_o.dbb_sink_flags )
+        .ctrl_i      ( ctrl_dbb_i.dbb_sink_ctrl   ),
+        .flags_o     ( flags_dbb_o.dbb_sink_flags )
     );
 
     hwpe_stream_sink #(
@@ -99,8 +101,8 @@ module nvdla_streamer
         .clear_i     ( clear_i                ),
         .tcdm        ( tcdm_fifo_2            ), // this syntax is necessary for Verilator as hwpe_stream_source expects an array of interfaces
         .stream      ( csb_postfifo.sink      ),
-        .ctrl_i      ( ctrl_i.csb_sink_ctrl   ),
-        .flags_o     ( flags_o.csb_sink_flags )
+        .ctrl_i      ( ctrl_csb_i.csb_sink_ctrl   ),
+        .flags_o     ( flags_csb_o.csb_sink_flags )
     );
 
     // TCDM-side FIFOs

@@ -23,8 +23,10 @@ module nvdla_top
 );
 
     logic enable, clear;
-    ctrl_streamer_t  streamer_ctrl;
-    flags_streamer_t streamer_flags;
+    ctrl_csb_streamer_t  streamer_csb_ctrl;
+    flags_csb_streamer_t streamer_csb_flags;
+    ctrl_dbb_streamer_t  streamer_dbb_ctrl;
+    flags_dbb_streamer_t streamer_dbb_flags;
     ctrl_engine_t    engine_ctrl;
     flags_engine_t   engine_flags;
 
@@ -53,8 +55,8 @@ module nvdla_top
         .dbb_i            ( dbb_i.sink     ),
         .dbb_o            ( dbb_o.source   ),
         .csb_o            ( csb.source     ),
-        .ctrl_streamer_o  ( streamer_ctrl  ),
-        .flags_streamer_i ( streamer_flags ),
+        .ctrl_streamer_o  ( streamer_dbb_ctrl  ),
+        .flags_streamer_i ( streamer_dbb_flags ),
         .ctrl_i           ( engine_ctrl    ),
         .flags_o          ( engine_flags   )
     );
@@ -71,8 +73,10 @@ module nvdla_top
         .dbb_i            ( dbb_o.sink     ),
         .csb_i            ( csb.sink       ),
         .tcdm             ( tcdm           ),
-        .ctrl_i           ( streamer_ctrl  ),
-        .flags_o          ( streamer_flags )
+        .ctrl_csb_i           ( streamer_csb_ctrl  ),
+        .flags_csb_o          ( streamer_csb_flags ),
+        .ctrl_dbb_i           ( streamer_dbb_ctrl  ),
+        .flags_dbb_o          ( streamer_dbb_flags )
     );
 
     nvdla_ctrl #(
@@ -86,8 +90,8 @@ module nvdla_top
         .test_mode_i      ( test_mode_i    ),
         .evt_o            ( evt_o          ),
         .clear_o          ( clear          ),
-        .ctrl_streamer_o  ( streamer_ctrl  ),
-        .flags_streamer_i ( streamer_flags ),
+        .ctrl_streamer_o  ( streamer_csb_ctrl  ),
+        .flags_streamer_i ( streamer_csb_flags ),
         .ctrl_engine_o    ( engine_ctrl    ),
         .flags_engine_i   ( engine_flags   ),
         .periph           ( periph         )
