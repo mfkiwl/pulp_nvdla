@@ -113,8 +113,8 @@ module nvdla_hwpe2dbb (
                         next_state = FSM_WAIT_WRITE;
                     end
 
-                    dbb_o.data  = ctrl_i.write_data_ctrl.data[32*(i + 1):32*i];
-                    dbb_o.strb  = ctrl_i.write_data_ctrl.strb[8*(i + 1):8*i];
+                    dbb_o.data  = ctrl_i.write_data_ctrl.data[(32*i) +: 31];
+                    dbb_o.strb  = ctrl_i.write_data_ctrl.strb[(8*i) +: 7];
                     dbb_o.valid = ctrl_i.write_data_ctrl.valid;
                     
                     cnt = cnt + 1;
@@ -148,7 +148,7 @@ module nvdla_hwpe2dbb (
                         next_state = FSM_WAIT_READ;
                     end
 
-                    flags_o.read_data_flags.data[32*(i + 1):32*i] = dbb_i.data;
+                    flags_o.read_data_flags.data[(32*i) +: 31] = dbb_i.data;
                     flags_o.read_data_flags.id = id;
                     flags_o.read_data_flags.valid = dbb_i.valid && i == MEM_DATA_WIDTH_RATIO - 1;
 
