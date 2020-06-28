@@ -19,6 +19,7 @@ package nvdla_package;
     } ctrl_engine_t; 
 
     typedef struct packed {
+        logic csb_ready;
         logic csb_valid;
         logic csb_wr_complete;
         logic intr;

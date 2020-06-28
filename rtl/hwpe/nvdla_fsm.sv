@@ -67,46 +67,58 @@ module nvdla_fsm (
                 // wait for a start signal
                 if(flags_slave_i.start) begin
                     next_state = FSM_START;
+                    $display("[NVDLA] Start received");
                 end
             end
             FSM_START: begin
                 if(~ctrl_i.wait_intr & ~ctrl_i.write &
-                   flags_streamer_i.csb_sink_flags.ready_start) begin
+                   flags_streamer_i.csb_sink_flags.ready_start &
+                   flags_engine_i.csb_ready) begin
                     next_state  = FSM_CONSUME;
                     ctrl_engine_o.start  = 1'b1;
                     ctrl_engine_o.clear  = 1'b0;
                     ctrl_engine_o.enable = 1'b1;
                     ctrl_streamer_o.csb_sink_ctrl.req_start = 1'b1;
+                    $display("[NVDLA] Read from CSB, data_addr=0x%h, addr=0x%h", 
+                        reg_file_i.hwpe_params[NVDLA_REG_CSB_RDATA_ADDR], ctrl_engine_o.addr);
                 end
-                else if(~ctrl_i.wait_intr & ctrl_i.write) begin
+                else if(~ctrl_i.wait_intr & 
+                        ctrl_i.write & 
+                        flags_engine_i.csb_ready) begin
                     next_state  = FSM_CONSUME;
                     ctrl_engine_o.start  = 1'b1;
                     ctrl_engine_o.clear  = 1'b0;
                     ctrl_engine_o.enable = 1'b1;
+                    $display("[NVDLA] Write to CSB, data=0x%h, addr=0x%h", ctrl_engine_o.wdat, ctrl_engine_o.addr);
                 end
                 else if(ctrl_i.wait_intr) begin
                     next_state  = FSM_WAIT_INTR;
                     ctrl_engine_o.start  = 1'b1;
                     ctrl_engine_o.clear  = 1'b0;
                     ctrl_engine_o.enable = 1'b1;
+                    $display("[NVDLA] Wait for interupt");
                 end
                 else begin
                     next_state = FSM_WAIT;
+                    $display("[NVDLA] Wait for hwpe to get ready");
                 end
             end
             FSM_CONSUME: begin
                 ctrl_engine_o.clear  = 1'b0;
                 if (ctrl_i.write & flags_engine_i.csb_wr_complete) begin
                     next_state = FSM_TERMINATE;
+                    $display("[NVDLA] Finished writing to CSB");
                 end
                 else if (~ctrl_i.write & flags_engine_i.csb_valid) begin
                     next_state = FSM_TERMINATE;
+                    $display("[NVDLA] Finished reading from CSB");
                 end
             end
             FSM_WAIT_INTR: begin
                 ctrl_engine_o.clear  = 1'b0;
                 if (flags_engine_i.intr) begin
                     next_state = FSM_TERMINATE;
+                    $display("[NVDLA] Finished waiting for interupt");
                 end
             end
             FSM_WAIT: begin
@@ -114,11 +126,25 @@ module nvdla_fsm (
                 ctrl_engine_o.clear  = 1'b0;
                 ctrl_engine_o.enable = 1'b0;
                 if(~ctrl_i.wait_intr & ~ctrl_i.write &
-                   flags_streamer_i.csb_sink_flags.ready_start) begin
+                   flags_streamer_i.csb_sink_flags.ready_start &
+                   flags_engine_i.csb_ready) begin
                     next_state  = FSM_CONSUME;
                     ctrl_engine_o.start  = 1'b1;
+                    ctrl_engine_o.clear  = 1'b0;
                     ctrl_engine_o.enable = 1'b1;
                     ctrl_streamer_o.csb_sink_ctrl.req_start = 1'b1;
+                    $display("[NVDLA] Finished waiting for engine to get ready");
+                    $display("[NVDLA] Read from CSB, addr=0x%h", reg_file_i.hwpe_params[NVDLA_REG_CSB_RDATA_ADDR]);
+                end
+                else if(~ctrl_i.wait_intr & 
+                        ctrl_i.write & 
+                        flags_engine_i.csb_ready) begin
+                    next_state  = FSM_CONSUME;
+                    ctrl_engine_o.start  = 1'b1;
+                    ctrl_engine_o.clear  = 1'b0;
+                    ctrl_engine_o.enable = 1'b1;
+                    $display("[NVDLA] Finished waiting for engine to get ready");
+                    $display("[NVDLA] Write to CSB, data=0x%h", ctrl_engine_o.wdat);
                 end
             end
             FSM_TERMINATE: begin
@@ -126,9 +152,16 @@ module nvdla_fsm (
                 ctrl_engine_o.clear  = 1'b0;
                 ctrl_engine_o.enable = 1'b0;
                 if(~ctrl_i.wait_intr & ~ctrl_i.write & 
-                   flags_streamer_i.csb_sink_flags.ready_start) begin
+                   flags_streamer_i.csb_sink_flags.ready_start &
+                   flags_engine_i.csb_ready) begin
                     next_state = FSM_IDLE;
                     ctrl_slave_o.done = 1'b1;
+                    $display("[NVDLA] All done, going to idle");
+                end
+                else if(ctrl_i.wait_intr | ctrl_i.write & flags_engine_i.csb_ready) begin
+                    next_state = FSM_IDLE;
+                    ctrl_slave_o.done = 1'b1;
+                    $display("[NVDLA] All done, going to idle");
                 end
             end
         endcase // curr_state

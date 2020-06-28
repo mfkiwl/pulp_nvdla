@@ -28,6 +28,12 @@ module nvdla_engine
     logic csb2nvdla_valid;
     logic csb2nvdla_ready;
     logic nvdla2csb_valid;
+    logic nvdla2csb_wr_complete;
+    logic unsigned [31:0] nvdla2csb_data;
+
+    logic unsigned [15:0] csb2nvdla_addr;
+    logic unsigned [31:0] csb2nvdla_wdat;
+    logic csb2nvdla_write;
 
     nvdla_hwpe2dbb hwpe2dbb (
         .clk_i            ( clk_i            ),
@@ -36,8 +42,8 @@ module nvdla_engine
         .clear_i          ( clear_i          ),
         .ctrl_streamer_o  ( ctrl_streamer_o  ),
         .flags_streamer_i ( flags_streamer_i ),
-        .ctrl_i           ( dbb_ctrl       ),
-        .flags_o          ( dbb_flags      ),
+        .ctrl_i           ( dbb_ctrl         ),
+        .flags_o          ( dbb_flags        ),
         .dbb_i            ( dbb_i            ),
         .dbb_o            ( dbb_o            )
     );
@@ -52,13 +58,13 @@ module nvdla_engine
         .test_mode                     ( test_mode_i                            ),
         .csb2nvdla_valid               ( csb2nvdla_valid                        ),              
         .csb2nvdla_ready               ( csb2nvdla_ready                        ),
-        .csb2nvdla_addr                ( ctrl_i.addr                            ),
-        .csb2nvdla_wdat                ( ctrl_i.wdat                            ),
-        .csb2nvdla_write               ( ctrl_i.write                           ),
-        .csb2nvdla_nposted             ( 1'b0                                   ),
+        .csb2nvdla_addr                ( csb2nvdla_addr                         ),
+        .csb2nvdla_wdat                ( csb2nvdla_wdat                         ),
+        .csb2nvdla_write               ( csb2nvdla_write                        ),
+        .csb2nvdla_nposted             ( 1'b1                                   ),
         .nvdla2csb_valid               ( nvdla2csb_valid                        ),
-        .nvdla2csb_data                ( csb_o.data                             ),
-        .nvdla2csb_wr_complete         ( flags_o.csb_wr_complete                ),
+        .nvdla2csb_data                ( nvdla2csb_data                         ),
+        .nvdla2csb_wr_complete         ( nvdla2csb_wr_complete                  ),
         .nvdla_core2dbb_aw_awvalid     ( dbb_ctrl.write_request_ctrl.valid      ),
         .nvdla_core2dbb_aw_awready     ( dbb_flags.write_request_flags.ready    ),
         .nvdla_core2dbb_aw_awaddr      ( dbb_ctrl.write_request_ctrl.addr       ),
@@ -101,12 +107,25 @@ module nvdla_engine
         end
         else if (ctrl_i.enable) begin
             if (ctrl_i.start) begin
+                $display("[NVDLA] CSB to NVDLA is valid, data=0x%h, addr=0x%h", csb2nvdla_wdat, csb2nvdla_addr);
                 csb2nvdla_valid <= '1;
             end
         end
     end
 
-    assign csb_o.valid = nvdla2csb_valid;
-    assign flags_o.csb_valid = nvdla2csb_valid;
+    always_comb
+    begin
+        csb_o.data  = nvdla2csb_data;
+        csb_o.valid = nvdla2csb_valid;
+        csb_o.strb  = '1; // for now, strb is always '1
+    end
+
+    assign csb2nvdla_addr  = ctrl_i.addr;
+    assign csb2nvdla_wdat  = ctrl_i.wdat;
+    assign csb2nvdla_write = ctrl_i.write;
+
+    assign flags_o.csb_ready       = csb2nvdla_ready;
+    assign flags_o.csb_valid       = csb_o.valid;
+    assign flags_o.csb_wr_complete = nvdla2csb_wr_complete;
 
 endmodule // nvdla_engine
