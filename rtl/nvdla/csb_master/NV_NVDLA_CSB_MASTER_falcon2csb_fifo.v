@@ -909,10 +909,18 @@ end
 reg [49:0] dout;
 always @(*) begin
     case( ra ) // synopsys infer_mux_override
-    2'd0: dout = ram_ff0;
-    2'd1: dout = ram_ff1;
-    2'd2: dout = ram_ff2;
-    2'd3: dout = ram_ff3;
+    2'd0: begin
+        dout = ram_ff0;
+    end 
+    2'd1: begin
+        dout = ram_ff1;
+    end 
+    2'd2: begin
+        dout = ram_ff2;
+    end 
+    2'd3: begin
+        dout = ram_ff3;
+    end 
 //VCS coverage off
     default: dout = {50{`x_or_0}};
 //VCS coverage on

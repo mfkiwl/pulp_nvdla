@@ -39,7 +39,6 @@ module nvdla_engine
         .clk_i            ( clk_i            ),
         .rst_ni           ( rst_ni           ),
         .test_mode_i      ( test_mode_i      ),
-        .clear_i          ( clear_i          ),
         .ctrl_streamer_o  ( ctrl_streamer_o  ),
         .flags_streamer_i ( flags_streamer_i ),
         .ctrl_i           ( dbb_ctrl         ),
@@ -106,8 +105,8 @@ module nvdla_engine
             csb2nvdla_valid <= '0;
         end
         else if (ctrl_i.enable) begin
-            if (ctrl_i.start) begin
-                $display("[NVDLA] CSB to NVDLA is valid, data=0x%h, addr=0x%h", csb2nvdla_wdat, csb2nvdla_addr);
+            if (ctrl_i.start & ~ctrl_i.wait_intr) begin
+                $display("[NVDLA] CSB to NVDLA is valid, data=0x%h, addr_shifted=0x%h, write_flag=0x%h", csb2nvdla_wdat, csb2nvdla_addr, csb2nvdla_write);
                 csb2nvdla_valid <= '1;
             end
         end
@@ -120,7 +119,7 @@ module nvdla_engine
         csb_o.strb  = '1; // for now, strb is always '1
     end
 
-    assign csb2nvdla_addr  = ctrl_i.addr;
+    assign csb2nvdla_addr  = ctrl_i.addr >> 2;
     assign csb2nvdla_wdat  = ctrl_i.wdat;
     assign csb2nvdla_write = ctrl_i.write;
 

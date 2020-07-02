@@ -115,7 +115,7 @@ module nvdla_fsm (
                 end
             end
             FSM_WAIT_INTR: begin
-                ctrl_engine_o.clear  = 1'b0;
+                ctrl_engine_o.clear = 1'b0;
                 if (flags_engine_i.intr) begin
                     next_state = FSM_TERMINATE;
                     $display("[NVDLA] Finished waiting for interupt");
@@ -152,13 +152,12 @@ module nvdla_fsm (
                 ctrl_engine_o.clear  = 1'b0;
                 ctrl_engine_o.enable = 1'b0;
                 if(~ctrl_i.wait_intr & ~ctrl_i.write & 
-                   flags_streamer_i.csb_sink_flags.ready_start &
-                   flags_engine_i.csb_ready) begin
+                   flags_streamer_i.csb_sink_flags.ready_start) begin
                     next_state = FSM_IDLE;
                     ctrl_slave_o.done = 1'b1;
                     $display("[NVDLA] All done, going to idle");
                 end
-                else if(ctrl_i.wait_intr | ctrl_i.write & flags_engine_i.csb_ready) begin
+                else if(ctrl_i.wait_intr | ctrl_i.write) begin
                     next_state = FSM_IDLE;
                     ctrl_slave_o.done = 1'b1;
                     $display("[NVDLA] All done, going to idle");

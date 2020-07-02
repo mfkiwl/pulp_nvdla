@@ -119,7 +119,6 @@ package nvdla_package;
 
     typedef enum { 
         FSM_DBB_IDLE,
-        FSM_REQUEST,
         FSM_WRITE,
         FSM_WRITE_RESPONSE,
         FSM_READ,

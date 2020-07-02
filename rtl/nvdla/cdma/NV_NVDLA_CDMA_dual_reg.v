@@ -1029,7 +1029,7 @@ end
 // synopsys translate_off
 // VCS coverage off
 initial begin
-  arreggen_dump = 1'b1; // $test$plusargs("arreggen_dump_wr");
+  arreggen_dump = $test$plusargs("arreggen_dump_wr");
   arreggen_abort_on_rowr = $test$plusargs("arreggen_abort_on_rowr");
   arreggen_abort_on_invalid_wr = $test$plusargs("arreggen_abort_on_invalid_wr");
 `ifdef VERILATOR
