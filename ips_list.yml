@@ -1,4 +1,4 @@
-hwpe-control:
+hwpe-ctrl:
   commit: v1.5
 
 hwpe-stream:
