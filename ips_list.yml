@@ -1,2 +1,5 @@
+hwpe-control:
+  commit: v1.5
+
 hwpe-stream:
   commit: v1.5
