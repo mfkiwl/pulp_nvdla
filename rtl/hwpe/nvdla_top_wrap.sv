@@ -4,7 +4,7 @@ import hwpe_ctrl_package::*;
 module nvdla_top_wrap
 #(
     parameter N_CORES = 2,
-    parameter MP  = 3,
+    parameter MP  = 5,
     parameter ID  = 10
 )
 (

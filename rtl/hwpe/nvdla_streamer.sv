@@ -3,7 +3,7 @@ import hwpe_ctrl_package::*;
 
 module nvdla_streamer
 #(
-    parameter int unsigned MP = 3, // number of master ports
+    parameter int unsigned MP = 5, // number of master ports
     parameter int unsigned FD = 2  // FIFO depth
 )
 (
@@ -32,15 +32,17 @@ module nvdla_streamer
     output flags_dbb_streamer_t flags_dbb_o
 );
 
-    logic dbb_tcdm_fifo_ready;
+    logic [1:0] dbb_tcdm_fifo_ready;
 
     hwpe_stream_intf_stream #(
-    .DATA_WIDTH ( 32 )
+        //.DATA_WIDTH ( 32 ),
+        .DATA_WIDTH ( `NVDLA_PRIMARY_MEMIF_WIDTH )
     ) dbb_prefifo (
         .clk ( clk_i )
     );
     hwpe_stream_intf_stream #(
-        .DATA_WIDTH ( 32 )
+        //.DATA_WIDTH ( 32 ),
+        .DATA_WIDTH ( `NVDLA_PRIMARY_MEMIF_WIDTH )
     ) dbb_postfifo (
         .clk ( clk_i )
     );
@@ -51,12 +53,12 @@ module nvdla_streamer
     );
 
     hwpe_stream_intf_tcdm tcdm_fifo [MP-1:0] (
-    .clk ( clk_i )
-    );
-    hwpe_stream_intf_tcdm tcdm_fifo_0 [0:0] (
         .clk ( clk_i )
     );
-    hwpe_stream_intf_tcdm tcdm_fifo_1 [0:0] (
+    hwpe_stream_intf_tcdm tcdm_fifo_0 [1:0] (
+        .clk ( clk_i )
+    );
+    hwpe_stream_intf_tcdm tcdm_fifo_1 [1:0] (
         .clk ( clk_i )
     );
     hwpe_stream_intf_tcdm tcdm_fifo_2 [0:0] (
@@ -65,29 +67,31 @@ module nvdla_streamer
 
     // source and sink modules
     hwpe_stream_source #(
-        .DATA_WIDTH ( 32 ),
-        .DECOUPLED  ( 1  )
+        //.DATA_WIDTH ( 32 ),
+        .DATA_WIDTH ( `NVDLA_PRIMARY_MEMIF_WIDTH ),
+        .DECOUPLED  ( 1                          )
     ) i_dbb_source (
-        .clk_i              ( clk_i                    ),
-        .rst_ni             ( rst_ni                   ),
-        .test_mode_i        ( test_mode_i              ),
-        .clear_i            ( clear_i                  ),
-        .tcdm               ( tcdm_fifo_0              ), // this syntax is necessary for Verilator as hwpe_stream_source expects an array of interfaces
-        .stream             ( dbb_prefifo.source       ),
+        .clk_i              ( clk_i                        ),
+        .rst_ni             ( rst_ni                       ),
+        .test_mode_i        ( test_mode_i                  ),
+        .clear_i            ( clear_i                      ),
+        .tcdm               ( tcdm_fifo_0                  ), // this syntax is necessary for Verilator as hwpe_stream_source expects an array of interfaces
+        .stream             ( dbb_prefifo.source           ),
         .ctrl_i             ( ctrl_dbb_i.dbb_source_ctrl   ),
         .flags_o            ( flags_dbb_o.dbb_source_flags ),
-        .tcdm_fifo_ready_o  ( dbb_tcdm_fifo_ready      )
+        .tcdm_fifo_ready_o  ( dbb_tcdm_fifo_ready          )
     );
 
     hwpe_stream_sink #(
-        .DATA_WIDTH ( 32 )
+        //.DATA_WIDTH ( 32 )
+        .DATA_WIDTH ( `NVDLA_PRIMARY_MEMIF_WIDTH )
     ) i_dbb_sink (
-        .clk_i       ( clk_i                  ),
-        .rst_ni      ( rst_ni                 ),
-        .test_mode_i ( test_mode_i            ),
-        .clear_i     ( clear_i                ),
-        .tcdm        ( tcdm_fifo_1            ), // this syntax is necessary for Verilator as hwpe_stream_source expects an array of interfaces
-        .stream      ( dbb_postfifo.sink      ),
+        .clk_i       ( clk_i                      ),
+        .rst_ni      ( rst_ni                     ),
+        .test_mode_i ( test_mode_i                ),
+        .clear_i     ( clear_i                    ),
+        .tcdm        ( tcdm_fifo_1                ), // this syntax is necessary for Verilator as hwpe_stream_source expects an array of interfaces
+        .stream      ( dbb_postfifo.sink          ),
         .ctrl_i      ( ctrl_dbb_i.dbb_sink_ctrl   ),
         .flags_o     ( flags_dbb_o.dbb_sink_flags )
     );
@@ -95,12 +99,12 @@ module nvdla_streamer
     hwpe_stream_sink #(
         .DATA_WIDTH ( 32 )
     ) i_csb_sink (
-        .clk_i       ( clk_i                  ),
-        .rst_ni      ( rst_ni                 ),
-        .test_mode_i ( test_mode_i            ),
-        .clear_i     ( clear_i                ),
-        .tcdm        ( tcdm_fifo_2            ), // this syntax is necessary for Verilator as hwpe_stream_source expects an array of interfaces
-        .stream      ( csb_postfifo.sink      ),
+        .clk_i       ( clk_i                      ),
+        .rst_ni      ( rst_ni                     ),
+        .test_mode_i ( test_mode_i                ),
+        .clear_i     ( clear_i                    ),
+        .tcdm        ( tcdm_fifo_2                ), // this syntax is necessary for Verilator as hwpe_stream_source expects an array of interfaces
+        .stream      ( csb_postfifo.sink          ),
         .ctrl_i      ( ctrl_csb_i.csb_sink_ctrl   ),
         .flags_o     ( flags_csb_o.csb_sink_flags )
     );
@@ -108,25 +112,48 @@ module nvdla_streamer
     // TCDM-side FIFOs
     hwpe_stream_tcdm_fifo_load #(
         .FIFO_DEPTH ( 4 )
-    ) i_dbb_tcdm_fifo_load (
-        .clk_i       ( clk_i               ),
-        .rst_ni      ( rst_ni              ),
-        .clear_i     ( clear_i             ),
-        .flags_o     (                     ),
-        .ready_i     ( dbb_tcdm_fifo_ready ),
-        .tcdm_slave  ( tcdm_fifo_0[0]      ),
-        .tcdm_master ( tcdm      [0]       )
+    ) i_dbb_tcdm_fifo_load_lower (
+        .clk_i       ( clk_i                  ),
+        .rst_ni      ( rst_ni                 ),
+        .clear_i     ( clear_i                ),
+        .flags_o     (                        ),
+        .ready_i     ( dbb_tcdm_fifo_ready[0] ),
+        .tcdm_slave  ( tcdm_fifo_0[0]         ),
+        .tcdm_master ( tcdm       [0]         )
+    );
+
+    hwpe_stream_tcdm_fifo_load #(
+        .FIFO_DEPTH ( 4 )
+    ) i_dbb_tcdm_fifo_load_higher (
+        .clk_i       ( clk_i                  ),
+        .rst_ni      ( rst_ni                 ),
+        .clear_i     ( clear_i                ),
+        .flags_o     (                        ),
+        .ready_i     ( dbb_tcdm_fifo_ready[1] ),
+        .tcdm_slave  ( tcdm_fifo_0[1]         ),
+        .tcdm_master ( tcdm       [1]         )
     );
 
     hwpe_stream_tcdm_fifo_store #(
         .FIFO_DEPTH ( 4 )
-    ) i_dbb_tcdm_fifo_store (
+    ) i_dbb_tcdm_fifo_store_lower (
         .clk_i       ( clk_i          ),
         .rst_ni      ( rst_ni         ),
         .clear_i     ( clear_i        ),
         .flags_o     (                ),
         .tcdm_slave  ( tcdm_fifo_1[0] ),
-        .tcdm_master ( tcdm       [1] )
+        .tcdm_master ( tcdm       [2] )
+    );
+
+    hwpe_stream_tcdm_fifo_store #(
+        .FIFO_DEPTH ( 4 )
+    ) i_dbb_tcdm_fifo_store_higher (
+        .clk_i       ( clk_i          ),
+        .rst_ni      ( rst_ni         ),
+        .clear_i     ( clear_i        ),
+        .flags_o     (                ),
+        .tcdm_slave  ( tcdm_fifo_1[1] ),
+        .tcdm_master ( tcdm       [3] )
     );
 
     hwpe_stream_tcdm_fifo_store #(
@@ -137,14 +164,15 @@ module nvdla_streamer
         .clear_i     ( clear_i        ),
         .flags_o     (                ),
         .tcdm_slave  ( tcdm_fifo_2[0] ),
-        .tcdm_master ( tcdm       [2] )
+        .tcdm_master ( tcdm       [4] )
     );
 
     // datapath-side FIFOs
     hwpe_stream_fifo #(
-        .DATA_WIDTH( 32 ),
-        .FIFO_DEPTH( 2  ),
-        .LATCH_FIFO( 0  )
+        //.DATA_WIDTH ( 32 ),
+        .DATA_WIDTH ( `NVDLA_PRIMARY_MEMIF_WIDTH ),
+        .FIFO_DEPTH ( 2                          ),
+        .LATCH_FIFO ( 0                          )
     ) i_dbb_o_fifo (
         .clk_i   ( clk_i            ),
         .rst_ni  ( rst_ni           ),
@@ -155,9 +183,10 @@ module nvdla_streamer
     );
 
     hwpe_stream_fifo #(
-        .DATA_WIDTH( 32 ),
-        .FIFO_DEPTH( 2  ),
-        .LATCH_FIFO( 0  )
+        //.DATA_WIDTH ( 32 ),
+        .DATA_WIDTH ( `NVDLA_PRIMARY_MEMIF_WIDTH ),
+        .FIFO_DEPTH ( 2                          ),
+        .LATCH_FIFO ( 0                          )
     ) i_dbb_fifo (
         .clk_i   ( clk_i               ),
         .rst_ni  ( rst_ni              ),
@@ -168,9 +197,9 @@ module nvdla_streamer
     );
 
     hwpe_stream_fifo #(
-        .DATA_WIDTH( 32 ),
-        .FIFO_DEPTH( 2  ),
-        .LATCH_FIFO( 0  )
+        .DATA_WIDTH ( 32 ),
+        .FIFO_DEPTH ( 2  ),
+        .LATCH_FIFO ( 0  )
     ) i_csb_fifo (
         .clk_i   ( clk_i               ),
         .rst_ni  ( rst_ni              ),

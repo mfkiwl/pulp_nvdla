@@ -483,7 +483,7 @@ end
 // PIPE DATA
 always @(posedge nvdla_core_clk) begin
     if (skid_out_rdy && skid_out_vld) begin
-        pipe_skid_out_pd[129-1:0] <= skid_out_pd[129-1:0];
+        pipe_skid_out_pd[129-1:0] <= skid_out_pd[129-1:0];        
     end
 end
 

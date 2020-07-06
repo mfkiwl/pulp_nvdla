@@ -4,7 +4,7 @@ import hwpe_ctrl_package::*;
 module nvdla_top
 #(
     parameter int unsigned N_CORES = 2,
-    parameter int unsigned MP  = 3,
+    parameter int unsigned MP  = 5,
     parameter int unsigned ID  = 10
 )
 (
@@ -31,12 +31,14 @@ module nvdla_top
     flags_engine_t   engine_flags;
 
     hwpe_stream_intf_stream #(
-        .DATA_WIDTH(32)
+        //.DATA_WIDTH ( 32 ),
+        .DATA_WIDTH ( `NVDLA_PRIMARY_MEMIF_WIDTH )
     ) dbb_i (
         .clk ( clk_i )
     );
     hwpe_stream_intf_stream #(
-        .DATA_WIDTH(32)
+        //.DATA_WIDTH ( 32 ),
+        .DATA_WIDTH ( `NVDLA_PRIMARY_MEMIF_WIDTH )
     ) dbb_o (
         .clk ( clk_i )
     );
@@ -47,36 +49,36 @@ module nvdla_top
     );
 
     nvdla_engine i_engine (
-        .clk_i            ( clk_i          ),
-        .core_clk_i       ( core_clk_i     ),
-        .csb_clk_i        ( csb_clk_i      ),
-        .rst_ni           ( rst_ni         ),
-        .test_mode_i      ( test_mode_i    ),
-        .dbb_i            ( dbb_i.sink     ),
-        .dbb_o            ( dbb_o.source   ),
-        .csb_o            ( csb.source     ),
+        .clk_i            ( clk_i              ),
+        .core_clk_i       ( core_clk_i         ),
+        .csb_clk_i        ( csb_clk_i          ),
+        .rst_ni           ( rst_ni             ),
+        .test_mode_i      ( test_mode_i        ),
+        .dbb_i            ( dbb_i.sink         ),
+        .dbb_o            ( dbb_o.source       ),
+        .csb_o            ( csb.source         ),
         .ctrl_streamer_o  ( streamer_dbb_ctrl  ),
         .flags_streamer_i ( streamer_dbb_flags ),
-        .ctrl_i           ( engine_ctrl    ),
-        .flags_o          ( engine_flags   )
+        .ctrl_i           ( engine_ctrl        ),
+        .flags_o          ( engine_flags       )
     );
 
     nvdla_streamer #(
         .MP ( MP )
     ) i_streamer (
-        .clk_i            ( clk_i          ),
-        .rst_ni           ( rst_ni         ),
-        .test_mode_i      ( test_mode_i    ),
-        .enable_i         ( enable         ),
-        .clear_i          ( clear          ),
-        .dbb_o            ( dbb_i.source   ),
-        .dbb_i            ( dbb_o.sink     ),
-        .csb_i            ( csb.sink       ),
-        .tcdm             ( tcdm           ),
-        .ctrl_csb_i           ( streamer_csb_ctrl  ),
-        .flags_csb_o          ( streamer_csb_flags ),
-        .ctrl_dbb_i           ( streamer_dbb_ctrl  ),
-        .flags_dbb_o          ( streamer_dbb_flags )
+        .clk_i            ( clk_i              ),
+        .rst_ni           ( rst_ni             ),
+        .test_mode_i      ( test_mode_i        ),
+        .enable_i         ( enable             ),
+        .clear_i          ( clear              ),
+        .dbb_o            ( dbb_i.source       ),
+        .dbb_i            ( dbb_o.sink         ),
+        .csb_i            ( csb.sink           ),
+        .tcdm             ( tcdm               ),
+        .ctrl_csb_i       ( streamer_csb_ctrl  ),
+        .flags_csb_o      ( streamer_csb_flags ),
+        .ctrl_dbb_i       ( streamer_dbb_ctrl  ),
+        .flags_dbb_o      ( streamer_dbb_flags )
     );
 
     nvdla_ctrl #(
@@ -85,16 +87,16 @@ module nvdla_top
         .N_IO_REGS ( 8 ),
         .ID ( ID )
     ) i_ctrl (
-        .clk_i            ( clk_i          ),
-        .rst_ni           ( rst_ni         ),
-        .test_mode_i      ( test_mode_i    ),
-        .evt_o            ( evt_o          ),
-        .clear_o          ( clear          ),
+        .clk_i            ( clk_i              ),
+        .rst_ni           ( rst_ni             ),
+        .test_mode_i      ( test_mode_i        ),
+        .evt_o            ( evt_o              ),
+        .clear_o          ( clear              ),
         .ctrl_streamer_o  ( streamer_csb_ctrl  ),
         .flags_streamer_i ( streamer_csb_flags ),
-        .ctrl_engine_o    ( engine_ctrl    ),
-        .flags_engine_i   ( engine_flags   ),
-        .periph           ( periph         )
+        .ctrl_engine_o    ( engine_ctrl        ),
+        .flags_engine_i   ( engine_flags       ),
+        .periph           ( periph             )
     );
 
     assign enable = 1'b1;

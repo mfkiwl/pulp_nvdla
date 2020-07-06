@@ -141,6 +141,7 @@ NV_NVDLA_HLS_saturate #(.IN_WIDTH(17 ),.OUT_WIDTH(8 )) c_saturate_int8 (
    .data_in (tru_out[16:0]) //|< w
   ,.data_out (dout_int8_sat[7:0]) //|> w
   );
+
 assign sub_in_pvld = cfg_mode_eql ? 1'b0 : cvt_in_pvld;
 assign cvt_in_prdy = cfg_mode_eql ? final_out_prdy : sub_in_prdy;
 assign tru_out_prdy = cfg_mode_eql ? 1'b1 : final_out_prdy;
@@ -148,6 +149,7 @@ assign final_out_pvld = cfg_mode_eql ? cvt_in_pvld : tru_out_pvld;
 assign cvt_dout = cfg_mode_eql ? cvt_data_in[15:0] :
                    (cfg_out_precision[1:0] == 1 ) ? dout_int16_sat[15:0] : {{(16 - 8 ){dout_int8_sat[8 -1]}},dout_int8_sat[7:0]};
 assign cvt_sat = cfg_mode_eql ? 1'b0 : sat_out;
+
 NV_NVDLA_SDP_HLS_C_INT_pipe_p4 pipe_p4 (
    .nvdla_core_clk (nvdla_core_clk) //|< i
   ,.nvdla_core_rstn (nvdla_core_rstn) //|< i
@@ -847,6 +849,7 @@ end
 always @(posedge nvdla_core_clk) begin
 // VCS sop_coverage_off start
   p4_skid_data <= (p4_skid_catch)? {cvt_sat,cvt_dout[15:0]} : p4_skid_data;
+
 // VCS sop_coverage_off end
 end
 always @(

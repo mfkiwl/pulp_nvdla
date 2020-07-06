@@ -1,4 +1,2 @@
-hwpe-ctrl:
-  commit: ec068eb
 hwpe-stream:
-  commit: 1a9b04f
+  commit: v1.5

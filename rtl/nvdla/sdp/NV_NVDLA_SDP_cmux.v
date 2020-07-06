@@ -288,7 +288,7 @@ assign skid_cmux2dp_pvld = (skid_flop_cmux2dp_prdy) ? cmux2dp_pvld : skid_flop_c
 // SKID DATA
 always @(posedge nvdla_core_clk) begin
     if (skid_flop_cmux2dp_prdy & cmux2dp_pvld) begin
-        skid_flop_cmux2dp_pd[32-1:0] <= cmux2dp_pd[32-1:0];
+        skid_flop_cmux2dp_pd[32-1:0] <= cmux2dp_pd[32-1:0];        
     end
 end
 assign skid_cmux2dp_pd[32-1:0] = (skid_flop_cmux2dp_prdy) ? cmux2dp_pd[32-1:0] : skid_flop_cmux2dp_pd[32-1:0];

@@ -48,4 +48,5 @@ assign tru_need_sat = ( data_sign & ~(&data_shift[IN_WIDTH-2:OUT_WIDTH-1])) |
 assign data_max = data_sign ? {1'b1, {(OUT_WIDTH-1){1'b0}}} : ~{1'b1, {(OUT_WIDTH-1){1'b0}}};
 assign data_out = (shift_num >= IN_WIDTH) ? {(OUT_WIDTH){1'b0}} : tru_need_sat ? data_max : data_round;
 assign sat_out = (shift_num >= IN_WIDTH) ? 1'b0: tru_need_sat;
+
 endmodule // NV_NVDLA_HLS_shiftrightsatsu

@@ -19,8 +19,7 @@ module nvdla_hwpe2dbb (
     localparam MEM_DATA_WIDTH_RATIO = `NVDLA_PRIMARY_MEMIF_WIDTH / 32;
 
     logic [7:0] id;
-    logic unsigned [7:0] cnt, r_cnt;
-    logic unsigned [7:0] cnt_i;
+    logic unsigned [7:0] r_cnt;
     logic unsigned [7:0] rd_len;
     logic unsigned [7:0] wr_len;
     logic clear;
@@ -46,7 +45,6 @@ module nvdla_hwpe2dbb (
         ctrl_streamer_o.dbb_sink_ctrl.addressgen_ctrl.line_length  = wr_len;
         ctrl_streamer_o.dbb_sink_ctrl.addressgen_ctrl.feat_stride  = '0;
         ctrl_streamer_o.dbb_sink_ctrl.addressgen_ctrl.feat_length  = 1;
-        ctrl_streamer_o.dbb_sink_ctrl.addressgen_ctrl.base_addr    = ctrl_i.write_request_ctrl.addr;
         ctrl_streamer_o.dbb_sink_ctrl.addressgen_ctrl.feat_roll    = '0;
         ctrl_streamer_o.dbb_sink_ctrl.addressgen_ctrl.loop_outer   = '0;
         ctrl_streamer_o.dbb_sink_ctrl.addressgen_ctrl.realign_type = '0;
@@ -56,7 +54,6 @@ module nvdla_hwpe2dbb (
         ctrl_streamer_o.dbb_source_ctrl.addressgen_ctrl.line_length  = rd_len;
         ctrl_streamer_o.dbb_source_ctrl.addressgen_ctrl.feat_stride  = '0;
         ctrl_streamer_o.dbb_source_ctrl.addressgen_ctrl.feat_length  = 1;
-        ctrl_streamer_o.dbb_source_ctrl.addressgen_ctrl.base_addr    = ctrl_i.read_request_ctrl.addr;
         ctrl_streamer_o.dbb_source_ctrl.addressgen_ctrl.feat_roll    = '0;
         ctrl_streamer_o.dbb_source_ctrl.addressgen_ctrl.loop_outer   = '0;
         ctrl_streamer_o.dbb_source_ctrl.addressgen_ctrl.realign_type = '0;
@@ -84,6 +81,7 @@ module nvdla_hwpe2dbb (
                 if(ctrl_i.write_request_ctrl.valid) begin
                     next_state = FSM_WAIT_WRITE;
                     id = ctrl_i.write_request_ctrl.id;
+                    ctrl_streamer_o.dbb_sink_ctrl.addressgen_ctrl.base_addr = ctrl_i.write_request_ctrl.addr;
                     $display("[NVDLA][DBB] Serving write request(addr=0x%h, len=%d)", 
                         ctrl_i.write_request_ctrl.addr,
                         wr_len);
@@ -91,6 +89,7 @@ module nvdla_hwpe2dbb (
                 else if (ctrl_i.read_request_ctrl.valid) begin
                     next_state = FSM_WAIT_READ;
                     id = ctrl_i.read_request_ctrl.id;
+                    ctrl_streamer_o.dbb_source_ctrl.addressgen_ctrl.base_addr = ctrl_i.read_request_ctrl.addr;
                     $display("[NVDLA][DBB] Serving read request(addr=0x%h, len=%d)", 
                         ctrl_i.read_request_ctrl.addr,
                         rd_len);
@@ -99,8 +98,7 @@ module nvdla_hwpe2dbb (
             FSM_WRITE: begin
                 clear = '0;
                 wr_en = '1;
-                $display("[NVDLA][DBB] Write cnt=%d r_cnt=%d cnt_i=%d wr_len=%d", cnt, r_cnt, cnt_i, wr_len);
-                if (wr_len + 1 == cnt) begin
+                if (wr_len == r_cnt) begin
                     $display("[NVDLA][DBB] Write finished.");
                     next_state = FSM_WRITE_RESPONSE;
                 end
@@ -117,14 +115,13 @@ module nvdla_hwpe2dbb (
                 clear = '0;
                 if (flags_streamer_i.dbb_sink_flags.ready_start) begin
                     next_state = FSM_WRITE;
-                    ctrl_streamer_o.dbb_sink_ctrl.req_start = '1;
+                    ctrl_streamer_o.dbb_sink_ctrl.req_start = 1'b1;
                 end
             end
             FSM_READ: begin
                 clear = '0;
                 rd_en = '1;
-                $display("[NVDLA][DBB] Read cnt=%d r_cnt=%d rd_len=%d", cnt, r_cnt, rd_len);
-                if (rd_len + 1 == cnt) begin
+                if (rd_len == r_cnt) begin
                     $display("[NVDLA][DBB] Read finished");
                     next_state = FSM_DBB_TERMINATE;
                 end
@@ -133,11 +130,12 @@ module nvdla_hwpe2dbb (
                 clear = '0;
                 if (flags_streamer_i.dbb_source_flags.ready_start) begin
                     next_state = FSM_READ;
-                    ctrl_streamer_o.dbb_source_ctrl.req_start = '1;
+                    ctrl_streamer_o.dbb_source_ctrl.req_start = 1'b1;
                 end
             end
             FSM_DBB_TERMINATE: begin
-                if (flags_streamer_i.dbb_sink_flags.ready_start & flags_streamer_i.dbb_source_flags.ready_start) begin
+                if (flags_streamer_i.dbb_sink_flags.ready_start & 
+                    flags_streamer_i.dbb_source_flags.ready_start) begin
                     $display("[NVDLA][DBB] Operation finished. Going idle...");
                     next_state = FSM_DBB_IDLE;
                 end
@@ -152,39 +150,103 @@ module nvdla_hwpe2dbb (
         else if(clear) begin
             r_cnt <= 0;
         end
+        else if(~wr_en & ~rd_en) begin
+            r_cnt <= 0;
+        end
+    end
+
+    always_ff @(posedge clk_i or negedge rst_ni) begin
+        if(~rst_ni) begin
+            dbb_i.ready <= '0;
+            flags_o.read_data_flags.valid <= '0;
+        end
+        else if(clear) begin
+            dbb_i.ready <= '0;
+            flags_o.read_data_flags.valid <= '0;
+        end
         else begin
-            if(dbb_o.valid) begin
-                r_cnt <= cnt;
+            if(rd_en & 
+               ctrl_i.read_data_ctrl.ready & 
+               ~dbb_i.ready & 
+               ~flags_o.read_data_flags.valid) begin
+               dbb_i.ready <= '1;
             end
-            else if(dbb_i.valid) begin
-                r_cnt <= cnt;
+            else if(rd_en & 
+                    ctrl_i.read_data_ctrl.ready & 
+                    dbb_i.ready & 
+                    dbb_i.valid) begin
+                dbb_i.ready <= '0;
+                flags_o.read_data_flags.data <= dbb_i.data;
+                flags_o.read_data_flags.id <= id;
+                flags_o.read_data_flags.valid <= '1;
+                flags_o.read_data_flags.last <= (r_cnt + 1 >= rd_len);
+                r_cnt <= r_cnt + 1;
+            end
+            else if(ctrl_i.read_data_ctrl.ready &
+                    flags_o.read_data_flags.valid) begin
+                flags_o.read_data_flags.valid <= '0;
+                $display("[NVDLA][DBB] Read data: %h ready %d valid: %d r_cnt %d last %d addr %h", 
+                    flags_o.read_data_flags.data, ctrl_i.read_data_ctrl.ready, 
+                    flags_o.read_data_flags.valid, r_cnt, flags_o.read_data_flags.last,
+                    ctrl_streamer_o.dbb_source_ctrl.addressgen_ctrl.base_addr);
             end
         end
     end
 
-    always_comb begin
-        cnt = r_cnt + 1;
+    always_ff @(posedge clk_i or negedge rst_ni) begin
+        if(~rst_ni) begin
+            flags_o.write_data_flags.ready <= '0;
+            dbb_o.valid <= '0;
+        end
+        else if(clear) begin
+            flags_o.write_data_flags.ready <= '0;
+            dbb_o.valid <= '0;
+        end
+        else begin
+            if(wr_en & 
+               dbb_o.ready & 
+               ~flags_o.write_data_flags.ready & 
+               ~dbb_o.valid) begin
+               flags_o.write_data_flags.ready <= '1;
+            end
+            else if(wr_en & 
+                    dbb_o.ready & 
+                    flags_o.write_data_flags.ready & 
+                    ctrl_i.write_data_ctrl.valid) begin
+                flags_o.write_data_flags.ready <= '0;
+                dbb_o.data <= ctrl_i.write_data_ctrl.data;
+                dbb_o.strb <= ctrl_i.write_data_ctrl.strb;
+                dbb_o.valid <= '1;
+            end
+            else if(wr_en & 
+                    dbb_o.ready &
+                    dbb_o.valid) begin
+                dbb_o.valid <= '0;
+                r_cnt <= r_cnt + 1;
+                $display("[NVDLA][DBB] Write data: %h strb %h ready %d valid: %d r_cnt %d last %d", 
+                    dbb_o.data, dbb_o.strb, dbb_o.ready, dbb_o.valid, r_cnt, ctrl_i.write_data_ctrl.last);
+            end
+        end
     end
 
-    always_comb begin
-        dbb_o.data  = ctrl_i.write_data_ctrl.data[(32*cnt_i) +: 31];
-        dbb_o.strb  = ctrl_i.write_data_ctrl.strb[(8*cnt_i) +: 7];
-    end
+    assign rd_len = 1;
+    assign wr_len = 1;
 
-    always_comb begin
-        flags_o.read_data_flags.data[(32*cnt_i) +: 31] = dbb_i.data;
-        dbb_o.valid = wr_en & (ctrl_i.write_data_ctrl.valid || ((cnt_i != 0) & dbb_o.ready));
-    end
+    // assign flags_o.write_data_flags.ready = wr_en & dbb_o.ready;
+    
+    // always_comb begin
+    //     dbb_o.data = ctrl_i.write_data_ctrl.data;
+    //     dbb_o.strb = ctrl_i.write_data_ctrl.strb;
+    //     dbb_o.valid = ctrl_i.write_data_ctrl.valid; 
+    // end
 
-    assign cnt_i = r_cnt % MEM_DATA_WIDTH_RATIO;
-    assign rd_len = MEM_DATA_WIDTH_RATIO;
-    assign wr_len = MEM_DATA_WIDTH_RATIO;
+    // assign dbb_i.ready = rd_en & ctrl_i.read_data_ctrl.ready;
 
-    assign flags_o.write_data_flags.ready = wr_en & dbb_o.ready & (cnt_i == 0);
-
-    assign flags_o.read_data_flags.id = id;
-    assign flags_o.read_data_flags.valid = rd_en & dbb_i.valid & (cnt_i == MEM_DATA_WIDTH_RATIO - 1);
-    assign flags_o.read_data_flags.last = (cnt == rd_len);
-    assign dbb_i.ready = rd_en & (ctrl_i.read_data_ctrl.ready | ((cnt_i != 0) & dbb_i.valid)); 
+    // always_comb begin
+    //     flags_o.read_data_flags.id = id;
+    //     flags_o.read_data_flags.data = dbb_i.data; 
+    //     flags_o.read_data_flags.last = (r_cnt + 1 >= rd_len);
+    //     flags_o.read_data_flags.valid = dbb_i.valid;
+    // end
     
 endmodule // nvdla_hwpe2dbb
