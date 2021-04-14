@@ -26,7 +26,7 @@ module nvdla_top_wrap
     input  logic [MP-1:0][31:0]                   tcdm_r_data,
     input  logic [MP-1:0]                         tcdm_r_valid,
     // periph slave port
-    input  logic                                  periph_req,
+    input  logic                                  periph_req, // APB ?
     output logic                                  periph_gnt,
     input  logic         [31:0]                   periph_add,
     input  logic                                  periph_wen,
@@ -49,18 +49,18 @@ module nvdla_top_wrap
     );
 
     // bindings
-    generate
-        for(genvar ii=0; ii<MP; ii++) begin: tcdm_binding
-        assign tcdm_req  [ii] = tcdm[ii].req;
-        assign tcdm_add  [ii] = tcdm[ii].add;
-        assign tcdm_wen  [ii] = tcdm[ii].wen;
-        assign tcdm_be   [ii] = tcdm[ii].be;
-        assign tcdm_data [ii] = tcdm[ii].data;
-        assign tcdm[ii].gnt     = tcdm_gnt     [ii];
-        assign tcdm[ii].r_data  = tcdm_r_data  [ii];
-        assign tcdm[ii].r_valid = tcdm_r_valid [ii];
+    // generate
+        for(genvar ii=0; ii<MP; ii++) begin: gen_tcdm_binding
+            assign tcdm_req  [ii] = tcdm[ii].req;
+            assign tcdm_add  [ii] = tcdm[ii].add;
+            assign tcdm_wen  [ii] = tcdm[ii].wen;
+            assign tcdm_be   [ii] = tcdm[ii].be;
+            assign tcdm_data [ii] = tcdm[ii].data;
+            assign tcdm[ii].gnt     = tcdm_gnt     [ii];
+            assign tcdm[ii].r_data  = tcdm_r_data  [ii];
+            assign tcdm[ii].r_valid = tcdm_r_valid [ii];
         end
-    endgenerate
+    // endgenerate
     always_comb
     begin
         periph.req  = periph_req;

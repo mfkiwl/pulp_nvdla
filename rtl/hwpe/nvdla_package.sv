@@ -27,10 +27,12 @@ package nvdla_package;
 
     typedef struct packed {
         hwpe_stream_package::ctrl_sourcesink_t csb_sink_ctrl;
+        hwpe_stream_package::ctrl_sourcesink_t csb_source_ctrl;
     } ctrl_csb_streamer_t;
 
     typedef struct packed {
         hwpe_stream_package::flags_sourcesink_t csb_sink_flags;
+        hwpe_stream_package::flags_sourcesink_t csb_source_flags;
     } flags_csb_streamer_t;
 
     typedef struct packed {
