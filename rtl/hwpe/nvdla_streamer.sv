@@ -20,6 +20,8 @@ module nvdla_streamer
     // output dbb stream + handshake
     hwpe_stream_intf_stream.sink   dbb_i,
     // output csb stream + handshake
+    hwpe_stream_intf_stream.source csb_o,
+    // output csb stream + handshake
     hwpe_stream_intf_stream.sink   csb_i,
 
     // TCDM ports
@@ -32,7 +34,7 @@ module nvdla_streamer
     output flags_dbb_streamer_t flags_dbb_o
 );
 
-    logic [1:0] dbb_tcdm_fifo_ready;
+    logic dbb_tcdm_fifo_ready, csb_tcdm_fifo_ready;
 
     hwpe_stream_intf_stream #(
         //.DATA_WIDTH ( 32 ),
@@ -40,35 +42,46 @@ module nvdla_streamer
     ) dbb_prefifo (
         .clk ( clk_i )
     );
+
     hwpe_stream_intf_stream #(
         //.DATA_WIDTH ( 32 ),
         .DATA_WIDTH ( `NVDLA_PRIMARY_MEMIF_WIDTH )
     ) dbb_postfifo (
         .clk ( clk_i )
     );
+    
+    hwpe_stream_intf_stream #(
+        .DATA_WIDTH ( 32 )
+    ) csb_prefifo (
+        .clk ( clk_i )
+    );
+
     hwpe_stream_intf_stream #(
         .DATA_WIDTH ( 32 )
     ) csb_postfifo (
         .clk ( clk_i )
     );
 
-    hwpe_stream_intf_tcdm tcdm_fifo [MP-1:0] (
+    hwpe_stream_intf_tcdm tcdm_fifo_0 [0:0] (
         .clk ( clk_i )
     );
-    hwpe_stream_intf_tcdm tcdm_fifo_0 [1:0] (
+
+    hwpe_stream_intf_tcdm tcdm_fifo_1 [0:0] (
         .clk ( clk_i )
     );
-    hwpe_stream_intf_tcdm tcdm_fifo_1 [1:0] (
-        .clk ( clk_i )
-    );
+
     hwpe_stream_intf_tcdm tcdm_fifo_2 [0:0] (
+        .clk ( clk_i )
+    );
+
+    hwpe_stream_intf_tcdm tcdm_fifo_3 [0:0] (
         .clk ( clk_i )
     );
 
     // source and sink modules
     hwpe_stream_source #(
-        //.DATA_WIDTH ( 32 ),
-        .DATA_WIDTH ( `NVDLA_PRIMARY_MEMIF_WIDTH ),
+        .DATA_WIDTH ( 32 ),
+        // .DATA_WIDTH ( `NVDLA_PRIMARY_MEMIF_WIDTH ),
         .DECOUPLED  ( 1                          )
     ) i_dbb_source (
         .clk_i              ( clk_i                        ),
@@ -83,8 +96,8 @@ module nvdla_streamer
     );
 
     hwpe_stream_sink #(
-        //.DATA_WIDTH ( 32 )
-        .DATA_WIDTH ( `NVDLA_PRIMARY_MEMIF_WIDTH )
+        .DATA_WIDTH ( 32 )
+        // .DATA_WIDTH ( `NVDLA_PRIMARY_MEMIF_WIDTH )
     ) i_dbb_sink (
         .clk_i       ( clk_i                      ),
         .rst_ni      ( rst_ni                     ),
@@ -109,71 +122,76 @@ module nvdla_streamer
         .flags_o     ( flags_csb_o.csb_sink_flags )
     );
 
+    hwpe_stream_source #(
+        .DATA_WIDTH ( 32 ),
+        // .DATA_WIDTH ( `NVDLA_PRIMARY_MEMIF_WIDTH ),
+        .DECOUPLED  ( 1                          )
+    ) i_dbb_source (
+        .clk_i              ( clk_i                        ),
+        .rst_ni             ( rst_ni                       ),
+        .test_mode_i        ( test_mode_i                  ),
+        .clear_i            ( clear_i                      ),
+        .tcdm               ( tcdm_fifo_3                  ), // this syntax is necessary for Verilator as hwpe_stream_source expects an array of interfaces
+        .stream             ( csb_prefifo.source           ),
+        .ctrl_i             ( ctrl_csb_i.csb_source_ctrl   ),
+        .flags_o            ( flags_csb_o.csb_source_flags ),
+        .tcdm_fifo_ready_o  ( csb_tcdm_fifo_ready          )
+    );
+
     // TCDM-side FIFOs
     hwpe_stream_tcdm_fifo_load #(
         .FIFO_DEPTH ( 4 )
-    ) i_dbb_tcdm_fifo_load_lower (
-        .clk_i       ( clk_i                  ),
-        .rst_ni      ( rst_ni                 ),
-        .clear_i     ( clear_i                ),
-        .flags_o     (                        ),
-        .ready_i     ( dbb_tcdm_fifo_ready[0] ),
-        .tcdm_slave  ( tcdm_fifo_0[0]         ),
-        .tcdm_master ( tcdm       [0]         )
-    );
-
-    hwpe_stream_tcdm_fifo_load #(
-        .FIFO_DEPTH ( 4 )
-    ) i_dbb_tcdm_fifo_load_higher (
-        .clk_i       ( clk_i                  ),
-        .rst_ni      ( rst_ni                 ),
-        .clear_i     ( clear_i                ),
-        .flags_o     (                        ),
-        .ready_i     ( dbb_tcdm_fifo_ready[1] ),
-        .tcdm_slave  ( tcdm_fifo_0[1]         ),
-        .tcdm_master ( tcdm       [1]         )
+    ) i_dbb_fifo_load (
+        .clk_i       ( clk_i               ),
+        .rst_ni      ( rst_ni              ),
+        .clear_i     ( clear_i             ),
+        .flags_o     (                     ),
+        .ready_i     ( dbb_tcdm_fifo_ready ),
+        .tcdm_slave  ( tcdm_fifo_0[0]      ),
+        .tcdm_master ( tcdm[0]             )
     );
 
     hwpe_stream_tcdm_fifo_store #(
         .FIFO_DEPTH ( 4 )
-    ) i_dbb_tcdm_fifo_store_lower (
+    ) i_dbb_tcdm_fifo_store (
         .clk_i       ( clk_i          ),
         .rst_ni      ( rst_ni         ),
         .clear_i     ( clear_i        ),
         .flags_o     (                ),
         .tcdm_slave  ( tcdm_fifo_1[0] ),
-        .tcdm_master ( tcdm       [2] )
+        .tcdm_master ( tcdm[1]        )
+    );
+
+    hwpe_stream_tcdm_fifo_load #(
+        .FIFO_DEPTH ( 4 )
+    ) i_csb_fifo_load (
+        .clk_i       ( clk_i               ),
+        .rst_ni      ( rst_ni              ),
+        .clear_i     ( clear_i             ),
+        .flags_o     (                     ),
+        .ready_i     ( csb_tcdm_fifo_ready ),
+        .tcdm_slave  ( tcdm_fifo_2[0]      ),
+        .tcdm_master ( tcdm[2]             )
     );
 
     hwpe_stream_tcdm_fifo_store #(
         .FIFO_DEPTH ( 4 )
-    ) i_dbb_tcdm_fifo_store_higher (
+    ) i_dbb_tcdm_fifo_store (
         .clk_i       ( clk_i          ),
         .rst_ni      ( rst_ni         ),
         .clear_i     ( clear_i        ),
         .flags_o     (                ),
-        .tcdm_slave  ( tcdm_fifo_1[1] ),
-        .tcdm_master ( tcdm       [3] )
-    );
-
-    hwpe_stream_tcdm_fifo_store #(
-        .FIFO_DEPTH ( 4 )
-    ) i_csb_tcdm_fifo_store (
-        .clk_i       ( clk_i          ),
-        .rst_ni      ( rst_ni         ),
-        .clear_i     ( clear_i        ),
-        .flags_o     (                ),
-        .tcdm_slave  ( tcdm_fifo_2[0] ),
-        .tcdm_master ( tcdm       [4] )
+        .tcdm_slave  ( tcdm_fifo_3[0] ),
+        .tcdm_master ( tcdm[3]        )
     );
 
     // datapath-side FIFOs
     hwpe_stream_fifo #(
-        //.DATA_WIDTH ( 32 ),
-        .DATA_WIDTH ( `NVDLA_PRIMARY_MEMIF_WIDTH ),
+        .DATA_WIDTH ( 32 ),
+        // .DATA_WIDTH ( `NVDLA_PRIMARY_MEMIF_WIDTH ),
         .FIFO_DEPTH ( 2                          ),
         .LATCH_FIFO ( 0                          )
-    ) i_dbb_o_fifo (
+    ) i_dbb_fifo (
         .clk_i   ( clk_i            ),
         .rst_ni  ( rst_ni           ),
         .clear_i ( clear_i          ),
@@ -183,11 +201,11 @@ module nvdla_streamer
     );
 
     hwpe_stream_fifo #(
-        //.DATA_WIDTH ( 32 ),
-        .DATA_WIDTH ( `NVDLA_PRIMARY_MEMIF_WIDTH ),
+        .DATA_WIDTH ( 32 ),
+        // .DATA_WIDTH ( `NVDLA_PRIMARY_MEMIF_WIDTH ),
         .FIFO_DEPTH ( 2                          ),
         .LATCH_FIFO ( 0                          )
-    ) i_dbb_fifo (
+    ) i_dbb_o_fifo (
         .clk_i   ( clk_i               ),
         .rst_ni  ( rst_ni              ),
         .clear_i ( clear_i             ),
@@ -201,6 +219,19 @@ module nvdla_streamer
         .FIFO_DEPTH ( 2  ),
         .LATCH_FIFO ( 0  )
     ) i_csb_fifo (
+        .clk_i   ( clk_i               ),
+        .rst_ni  ( rst_ni              ),
+        .clear_i ( clear_i             ),
+        .push_i  ( csb_prefifo.sink    ),
+        .pop_o   ( csb_o               ),
+        .flags_o (                     )
+    );
+
+    hwpe_stream_fifo #(
+        .DATA_WIDTH ( 32 ),
+        .FIFO_DEPTH ( 2 ),
+        .LATCH_FIFO ( 0 )
+    ) i_csb_o_fifo (
         .clk_i   ( clk_i               ),
         .rst_ni  ( rst_ni              ),
         .clear_i ( clear_i             ),

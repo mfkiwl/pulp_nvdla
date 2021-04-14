@@ -31,20 +31,25 @@ module nvdla_top
     flags_engine_t   engine_flags;
 
     hwpe_stream_intf_stream #(
-        //.DATA_WIDTH ( 32 ),
-        .DATA_WIDTH ( `NVDLA_PRIMARY_MEMIF_WIDTH )
+        .DATA_WIDTH ( 32 )
+        // .DATA_WIDTH ( `NVDLA_PRIMARY_MEMIF_WIDTH )
     ) dbb_i (
         .clk ( clk_i )
     );
     hwpe_stream_intf_stream #(
-        //.DATA_WIDTH ( 32 ),
-        .DATA_WIDTH ( `NVDLA_PRIMARY_MEMIF_WIDTH )
+        .DATA_WIDTH ( 32 )
+        // .DATA_WIDTH ( `NVDLA_PRIMARY_MEMIF_WIDTH )
     ) dbb_o (
         .clk ( clk_i )
     );
     hwpe_stream_intf_stream #(
-        .DATA_WIDTH(32)
-    ) csb (
+        .DATA_WIDTH ( 32 )
+    ) csb_i (
+        .clk ( clk_i )
+    );
+    hwpe_stream_intf_stream #(
+        .DATA_WIDTH ( 32 )
+    ) csb_o (
         .clk ( clk_i )
     );
 
@@ -56,7 +61,8 @@ module nvdla_top
         .test_mode_i      ( test_mode_i        ),
         .dbb_i            ( dbb_i.sink         ),
         .dbb_o            ( dbb_o.source       ),
-        .csb_o            ( csb.source         ),
+        .csb_i            ( csb_i.sink         ),
+        .csb_o            ( csb_o.source       ),
         .ctrl_streamer_o  ( streamer_dbb_ctrl  ),
         .flags_streamer_i ( streamer_dbb_flags ),
         .ctrl_i           ( engine_ctrl        ),
@@ -73,7 +79,8 @@ module nvdla_top
         .clear_i          ( clear              ),
         .dbb_o            ( dbb_i.source       ),
         .dbb_i            ( dbb_o.sink         ),
-        .csb_i            ( csb.sink           ),
+        .csb_o            ( csb_i.source       ),
+        .csb_i            ( csb_o.sink         ),
         .tcdm             ( tcdm               ),
         .ctrl_csb_i       ( streamer_csb_ctrl  ),
         .flags_csb_o      ( streamer_csb_flags ),
